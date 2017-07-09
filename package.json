@@ -1,0 +1,42 @@
+{
+    "name": "live-sass",
+    "displayName": "Live Sass Compiler",
+    "description": "Live S[a|c]ss ",
+    "version": "0.0.0",
+    "publisher": "ritwickdey",
+    "engines": {
+        "vscode": "^1.13.0"
+    },
+    "categories": [
+        "Other",
+        "Extension Packs"
+    ],
+    "activationEvents": [
+        "*"
+    ],
+    "preview": true,
+    "main": "./out/src/extension",
+    "contributes": {
+        "commands": [{
+            "command": "extension.liveSass.transpile",
+            "title": "Compile Sass",
+            "category": "Live Sass"
+        }]
+    },
+    "scripts": {
+        "vscode:prepublish": "tsc -p ./",
+        "compile": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "node ./node_modules/vscode/bin/test"
+    },
+    "extensionDependencies": [
+       
+    ],
+    "devDependencies": {
+        "typescript": "^2.4.1",
+        "vscode": "^1.0.0",
+        "mocha": "^2.3.3",
+        "@types/node": "^6.0.40",
+        "@types/mocha": "^2.2.32"
+    }
+}
