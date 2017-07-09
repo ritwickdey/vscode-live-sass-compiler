@@ -4,18 +4,29 @@ import { AppModel } from './appModel';
 
 export function activate(context: vscode.ExtensionContext) {
 
-    console.log('Congratulations, your extension "live-sass" is now active!');
+    console.log('"live-sass-compiler" is now actived! Go and Debug :P ');
+
     var appModel = new AppModel();
 
-    let disposable = vscode.commands.registerCommand('extension.liveSass.transpile', () => {
-        appModel.compileAllFiles();
-    });
+    let disposablecompileAll =
+        vscode.commands.registerCommand('liveSass.command.watchMySass', () => {
+            appModel.compileAllFiles();
+        });
 
-    vscode.workspace.onDidSaveTextDocument(()=>{
-        appModel.compileOnSave();
-    });
+    let disposableStopWaching =
+        vscode.commands.registerCommand('liveSass.command.donotWatchMySass', () => {
+            appModel.StopWaching();
+        });
 
-    context.subscriptions.push(disposable,appModel);
+    let disposableOnDivSave =
+        vscode.workspace.onDidSaveTextDocument(() => {
+            appModel.compileOnSave();
+        });
+
+    context.subscriptions.push(disposablecompileAll,
+        disposableStopWaching,
+        disposableOnDivSave,
+        appModel);
 }
 
 

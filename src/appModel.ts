@@ -4,12 +4,28 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 export class AppModel {
+    statusBarItem: vscode.StatusBarItem;
+    isWatching: boolean;
+    constructor() {
+        this.Init()
+    }
+
+    Init() {
+        this.isWatching = false;
+        if (!this.statusBarItem) {
+            this.statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 200);
+            this.statusBarItem.text = `$(eye) Watch my Sass`;
+            this.statusBarItem.command = 'liveSass.command.watchMySass';
+            this.statusBarItem.tooltip = "live complile SASS or SCSS to CSS";
+            this.statusBarItem.show();
+        }
+    }
 
     compileAllFiles() {
         let options = {
             style: SassCompile.Sass.style.expanded,
         };
-        this.findAllSaasFiles((sassPaths: string[]) => {
+        this.findAllSaasFilesAsync((sassPaths: string[]) => {
             console.log(sassPaths);
 
             sassPaths.forEach((sassPath) => {
@@ -17,10 +33,16 @@ export class AppModel {
                 this.compileOneSassFile(sassPath, targetPath, options)
             });
 
+            this.toggleStatus();
+
         });
     }
 
     compileOnSave() {
+        if (!this.isWatching) {
+            return;
+        }
+
         let fileUri = vscode.window.activeTextEditor.document.fileName;
 
         if ((fileUri.endsWith('.scss') || fileUri.endsWith('.sass'))
@@ -36,7 +58,29 @@ export class AppModel {
         }
     }
 
-    private findAllSaasFiles(callback) {
+    StopWaching() {
+        if (this.isWatching) {
+            this.toggleStatus();
+        }
+    }
+
+    private toggleStatus() {
+        this.isWatching = !this.isWatching;
+
+        if (!this.isWatching) {
+            this.statusBarItem.text = `$(eye) Watch my Sass`;
+            this.statusBarItem.command = 'liveSass.command.watchMySass';
+            this.statusBarItem.tooltip = "live compile SASS or SCSS to CSS";
+        }
+        else {
+            this.statusBarItem.text = `$(x) Stop Watching Sass`;
+            this.statusBarItem.command = 'liveSass.command.donotWatchMySass';
+            this.statusBarItem.tooltip = "Stop live compile SASS or SCSS to CSS";
+        }
+
+    }
+
+    private findAllSaasFilesAsync(callback) {
         let FilePaths: string[] = [];
         vscode.workspace.findFiles("**/*.s[a|c]ss", "**/node_modules/**")
             .then((files) => {
