@@ -34,6 +34,10 @@ Open VSCode Editor and Press `ctrl+P`, type `ext install live-sass`.
 This extension has dependency on _[Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)_ extension for live browser reload.
 
 ## What's new ?
+
+### Version 0.0.2 (11.07.2017)
+* Small description updated.
+
 ### Version 0.0.1 (11.07.2017)
 * Initial Preview Release with following key features 
     * Live SASS & SCSS Compile.
