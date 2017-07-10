@@ -63,7 +63,7 @@
                     "type":["null", "string"],
                     "default" : "null",
                     "pattern": "null|/|/[^\\/]",
-                    "description": "Absulate Path From Workspace Root.\n '/' stands for your workspace root. \n Example: /subfolder1/subfolder2. All CSS file will be saved at 'subfolder2'. \nCSS will be generated at same directory of every SASS/SCSS. If value is null (default)."
+                    "description": "Absulate Path From Workspace Root.\n '/' stands for your workspace root. \n Example: /subfolder1/subfolder2. All CSS file will be saved at 'subfolder2'. \n(NOTE: if folder does not exist, folder will be created as well). \nIf value is null, CSS will be generated at same directory of every SASS/SCSS. (default)."
                 }
             }
         }

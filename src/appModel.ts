@@ -32,6 +32,7 @@ export class AppModel {
             vscode.window.showInformationMessage("already watching...");
             return;
         }
+        this.ShowWorkingStage();
         let options = this.generateTargetCssFormatOptions();
         this.findAllSaasFilesAsync((sassPaths: string[]) => {
             console.log(sassPaths);
@@ -91,6 +92,12 @@ export class AppModel {
             this.showMsgToOutputWindow("Watching...", [], true);
         }
 
+    }
+
+    private ShowWorkingStage() {
+        this.statusBarItem.text = "$(pulse) Working on it...";
+        this.statusBarItem.tooltip = "In case if it takes long time, Show output window and report.";
+        this.statusBarItem.command = null;
     }
 
     private findAllSaasFilesAsync(callback) {
