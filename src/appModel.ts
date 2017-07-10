@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import * as SassCompile from 'SassLib/sass.node';
+import * as SassCompile from './lib/SassLib/sass.node.js';
 import * as fs from 'fs';
 import * as path from 'path';
 

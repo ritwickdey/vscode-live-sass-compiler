@@ -4,14 +4,20 @@
         "target": "es6",
         "outDir": "out",
         "lib": [
-            "es6"
+            "es6",
+            "es5"
         ],
-        "sourceMap": true,
+        "sourceMap": false,
         "rootDir": ".",
-        "allowJs": false
+        "allowJs": true
     },
+    "files" : [
+        "./src/extension.ts",
+        "./src/appModel.ts"
+    ],
     "exclude": [
         "node_modules",
-        ".vscode-test"
+        ".vscode-test",
+        "./src/lib"
     ]
 }
