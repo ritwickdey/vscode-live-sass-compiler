@@ -4,9 +4,11 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 export class AppModel {
+
     statusBarItem: vscode.StatusBarItem;
     isWatching: boolean;
     outputWindow: vscode.OutputChannel;
+
     constructor() {
         this.Init()
     }
@@ -106,13 +108,13 @@ export class AppModel {
 
     private compileOneSassFileAsync(SassPath: string, TargetCssFile: string, options) {
         SassCompile(SassPath, options, (result) => {
-           // console.log(result);
+            // console.log(result);
 
             if (result.status == 0) {
                 this.writeToFileAsync(TargetCssFile, result.text || "/*No CSS*/");
             }
             else {
-                this.showMsgToOutputWindow("Compilation Error",[result.formatted], true);
+                this.showMsgToOutputWindow("Compilation Error", [result.formatted], true);
                 console.log(result.formatted);
             }
 
@@ -137,12 +139,49 @@ export class AppModel {
     }
 
     private generateTargetCssFileUri(filePath: string) {
+
+        let saveLocation = vscode.workspace.getConfiguration('liveSassCompile')
+            .get('settings.savePath') as string;
+
+        if (saveLocation != "null") {
+
+            try {
+                let workspaceRoot = vscode.workspace.rootPath;
+                let fileUri = path.join(workspaceRoot, saveLocation);
+
+                if (!fs.existsSync(fileUri)) {
+                    this.mkdirRecursiveSync(fileUri);
+                }
+
+                filePath = path.join(fileUri, path.basename(filePath));
+            }
+            catch (err) {
+                console.log(err);
+
+                this.showMsgToOutputWindow("Error:", [
+                    err.errno.toString(),
+                    err.path,
+                    err.message
+                ], true);
+
+                throw Error("Something Went Wrong.");
+            }
+
+        }
+
         return filePath.substring(0, filePath.lastIndexOf('.')) + ".css";
+    }
+
+    private mkdirRecursiveSync(dir) {
+        if (!fs.existsSync(path.dirname(dir))) {
+            this.mkdirRecursiveSync(path.dirname(dir));
+        }
+        fs.mkdirSync(dir);
     }
 
     private generateTargetCssFormatOptions() {
         let outputStyleFormat = vscode.workspace.getConfiguration("liveSassCompile")
-            .get("generatedCss.Format") as string;
+            .get("settings.format") as string;
 
         return {
             style: SassCompile.Sass.style[outputStyleFormat],
@@ -164,6 +203,7 @@ export class AppModel {
     }
 
     dispose() {
-
+        this.statusBarItem.dispose();
+        this.outputWindow.dispose();
     }
 }

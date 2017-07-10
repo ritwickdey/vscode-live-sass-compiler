@@ -48,7 +48,7 @@
         "configuration": {
             "title": "Live Sass Compile Config",
             "properties": {
-                "liveSassCompile.generatedCss.Format" :  {
+                "liveSassCompile.settings.format" :  {
                     "type":"string",
                     "default" : "expanded",
                     "enum": [
@@ -57,7 +57,13 @@
                         "compressed",
                         "nested"
                     ],
-                    "description": "Set Your Generated CSS format. Default is expanded."
+                    "description": "Set Your Generated CSS format. \nDefault is expanded."
+                },
+                "liveSassCompile.settings.savePath" :  {
+                    "type":["null", "string"],
+                    "default" : "null",
+                    "pattern": "null|/|/[^\\/]",
+                    "description": "Absulate Path From Workspace Root.\n '/' stands for your workspace root. \n Example: /subfolder1/subfolder2. All CSS file will be saved at 'subfolder2'. \nCSS will be generated at same directory of every SASS/SCSS. If value is null (default)."
                 }
             }
         }
