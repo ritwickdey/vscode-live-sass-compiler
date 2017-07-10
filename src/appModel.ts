@@ -6,6 +6,7 @@ import * as path from 'path';
 export class AppModel {
     statusBarItem: vscode.StatusBarItem;
     isWatching: boolean;
+    outputWindow: vscode.OutputChannel;
     constructor() {
         this.Init()
     }
@@ -19,16 +20,24 @@ export class AppModel {
             this.statusBarItem.tooltip = "live complile SASS or SCSS to CSS";
             this.statusBarItem.show();
         }
+        if (!this.outputWindow) {
+            this.outputWindow = vscode.window.createOutputChannel("Live Sass Compile - Output Window");
+        }
     }
 
     compileAllFiles() {
+        if (this.isWatching) {
+            vscode.window.showInformationMessage("already watching...");
+            return;
+        }
         let options = this.generateTargetCssFormatOptions();
         this.findAllSaasFilesAsync((sassPaths: string[]) => {
             console.log(sassPaths);
+            this.showMsgToOutputWindow("Found Sass/Scss Files: ", sassPaths, true);
 
             sassPaths.forEach((sassPath) => {
                 let targetPath = this.generateTargetCssFileUri(sassPath);
-                this.compileOneSassFile(sassPath, targetPath, options)
+                this.compileOneSassFileAsync(sassPath, targetPath, options)
             });
 
             this.toggleStatus();
@@ -49,14 +58,18 @@ export class AppModel {
             let sassPath = fileUri;
             let options = this.generateTargetCssFormatOptions();
             let targetPath = this.generateTargetCssFileUri(sassPath);
-            this.compileOneSassFile(sassPath, targetPath, options);
+            this.compileOneSassFileAsync(sassPath, targetPath, options);
 
+            this.showMsgToOutputWindow("Compiling...", [sassPath]);
         }
     }
 
     StopWaching() {
         if (this.isWatching) {
             this.toggleStatus();
+        }
+        else {
+            vscode.window.showInformationMessage("not watching...");
         }
     }
 
@@ -67,11 +80,13 @@ export class AppModel {
             this.statusBarItem.text = `$(eye) Watch my Sass`;
             this.statusBarItem.command = 'liveSass.command.watchMySass';
             this.statusBarItem.tooltip = "live compile SASS or SCSS to CSS";
+            this.showMsgToOutputWindow("Stop Watching...", [], true);
         }
         else {
             this.statusBarItem.text = `$(x) Stop Watching Sass`;
             this.statusBarItem.command = 'liveSass.command.donotWatchMySass';
             this.statusBarItem.tooltip = "Stop live compile SASS or SCSS to CSS";
+            this.showMsgToOutputWindow("Watching...", [], true);
         }
 
     }
@@ -89,14 +104,15 @@ export class AppModel {
             });
     }
 
-    private compileOneSassFile(SassPath: string, TargetCssFile: string, options) {
+    private compileOneSassFileAsync(SassPath: string, TargetCssFile: string, options) {
         SassCompile(SassPath, options, (result) => {
-            console.log(result);
+           // console.log(result);
 
             if (result.status == 0) {
-                this.writeToFileAsync(TargetCssFile, result.text);
+                this.writeToFileAsync(TargetCssFile, result.text || "/*No CSS*/");
             }
             else {
+                this.showMsgToOutputWindow("Compilation Error",[result.formatted], true);
                 console.log(result.formatted);
             }
 
@@ -104,11 +120,18 @@ export class AppModel {
     }
 
     private writeToFileAsync(TargetFile, data) {
-      
+
         fs.writeFile(TargetFile, data, (err) => {
             if (err) {
+                this.showMsgToOutputWindow("Error:", [
+                    err.errno.toString(),
+                    err.path,
+                    err.message
+                ], true);
                 return console.error("error :", err);
             }
+
+            this.showMsgToOutputWindow("CSS Generated: ", [TargetFile]);
             console.log("File saved");
         });
     }
@@ -125,6 +148,19 @@ export class AppModel {
             style: SassCompile.Sass.style[outputStyleFormat],
         }
 
+    }
+
+    private showMsgToOutputWindow(headMsg: string, bodyMsgs: string[], willShowToUI: boolean = false) {
+        this.outputWindow.appendLine(headMsg);
+
+        bodyMsgs.forEach(msg => {
+            this.outputWindow.appendLine(msg);
+        });
+
+        if (willShowToUI) {
+            this.outputWindow.show(true);
+        }
+        this.outputWindow.appendLine("--------------------")
     }
 
     dispose() {
