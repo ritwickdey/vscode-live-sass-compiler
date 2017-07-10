@@ -29,7 +29,7 @@
         "theme": "dark"
     },
     "activationEvents": [
-        "*"
+        "workspaceContains:**/*.s[ac]ss"
     ],
 
     "main": "./out/src/extension",
@@ -44,7 +44,23 @@
                 "title": "Stop watching Sass files",
                 "category": "Live Sass"
             }
-        ]
+        ],
+        "configuration": {
+            "title": "Live Sass Compile Config",
+            "properties": {
+                "liveSassCompile.generatedCss.Format" :  {
+                    "type":"string",
+                    "default" : "expanded",
+                    "enum": [
+                        "expanded",
+                        "compact",
+                        "compressed",
+                        "nested"
+                    ],
+                    "description": "Set Your Generated CSS format. Default is expanded."
+                }
+            }
+        }
     },
 
     "license": "MIT",

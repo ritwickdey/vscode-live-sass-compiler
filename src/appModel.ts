@@ -22,9 +22,7 @@ export class AppModel {
     }
 
     compileAllFiles() {
-        let options = {
-            style: SassCompile.Sass.style.expanded,
-        };
+        let options = this.generateTargetCssFormatOptions();
         this.findAllSaasFilesAsync((sassPaths: string[]) => {
             console.log(sassPaths);
 
@@ -49,9 +47,7 @@ export class AppModel {
             && !path.basename(fileUri).startsWith('_')) {
 
             let sassPath = fileUri;
-            let options = {
-                style: SassCompile.Sass.style.expanded,
-            };
+            let options = this.generateTargetCssFormatOptions();
             let targetPath = this.generateTargetCssFileUri(sassPath);
             this.compileOneSassFile(sassPath, targetPath, options);
 
@@ -95,7 +91,7 @@ export class AppModel {
 
     private compileOneSassFile(SassPath: string, TargetCssFile: string, options) {
         SassCompile(SassPath, options, (result) => {
-            //console.log(result);
+            console.log(result);
 
             if (result.status == 0) {
                 this.writeToFileAsync(TargetCssFile, result.text);
@@ -108,7 +104,7 @@ export class AppModel {
     }
 
     private writeToFileAsync(TargetFile, data) {
-
+      
         fs.writeFile(TargetFile, data, (err) => {
             if (err) {
                 return console.error("error :", err);
@@ -119,6 +115,16 @@ export class AppModel {
 
     private generateTargetCssFileUri(filePath: string) {
         return filePath.substring(0, filePath.lastIndexOf('.')) + ".css";
+    }
+
+    private generateTargetCssFormatOptions() {
+        let outputStyleFormat = vscode.workspace.getConfiguration("liveSassCompile")
+            .get("generatedCss.Format") as string;
+
+        return {
+            style: SassCompile.Sass.style[outputStyleFormat],
+        }
+
     }
 
     dispose() {
