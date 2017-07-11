@@ -1,7 +1,7 @@
 {
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
-    "description": "A Sass and Scss Watcher. Compile SASS and SCSS file to CSS at realtime with live browser reload.",
+    "description": "Compile SASS and SCSS file to CSS at realtime with live browser reload.",
     "version": "0.0.3",
     "publisher": "ritwickdey",
     "author": {
