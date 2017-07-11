@@ -1,3 +1,4 @@
+'use strict';
 import * as vscode from 'vscode';
 import * as SassCompile from './lib/SassLib/sass.node.js';
 import * as fs from 'fs';
@@ -10,7 +11,7 @@ export class AppModel {
     outputWindow: vscode.OutputChannel;
 
     constructor() {
-        this.Init()
+        this.Init();
     }
 
     Init() {
@@ -19,28 +20,28 @@ export class AppModel {
             this.statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 200);
             this.statusBarItem.text = `$(eye) Watch my Sass`;
             this.statusBarItem.command = 'liveSass.command.watchMySass';
-            this.statusBarItem.tooltip = "live complile SASS or SCSS to CSS";
+            this.statusBarItem.tooltip = 'live complile SASS or SCSS to CSS';
             this.statusBarItem.show();
         }
         if (!this.outputWindow) {
-            this.outputWindow = vscode.window.createOutputChannel("Live Sass Compile - Output Window");
+            this.outputWindow = vscode.window.createOutputChannel('Live Sass Compile - Output Window');
         }
     }
 
     compileAllFiles() {
         if (this.isWatching) {
-            vscode.window.showInformationMessage("already watching...");
+            vscode.window.showInformationMessage('already watching...');
             return;
         }
         this.ShowWorkingStage();
         let options = this.generateTargetCssFormatOptions();
         this.findAllSaasFilesAsync((sassPaths: string[]) => {
             console.log(sassPaths);
-            this.showMsgToOutputWindow("Found Sass/Scss Files: ", sassPaths, true);
+            this.showMsgToOutputWindow('Found Sass/Scss Files: ', sassPaths, true);
 
             sassPaths.forEach((sassPath) => {
                 let targetPath = this.generateTargetCssFileUri(sassPath);
-                this.compileOneSassFileAsync(sassPath, targetPath, options)
+                this.compileOneSassFileAsync(sassPath, targetPath, options);
             });
 
             this.toggleStatus();
@@ -63,7 +64,7 @@ export class AppModel {
             let targetPath = this.generateTargetCssFileUri(sassPath);
             this.compileOneSassFileAsync(sassPath, targetPath, options);
 
-            this.showMsgToOutputWindow("Compiling...", [sassPath]);
+            this.showMsgToOutputWindow('Compiling...', [sassPath]);
         }
     }
 
@@ -72,7 +73,7 @@ export class AppModel {
             this.toggleStatus();
         }
         else {
-            vscode.window.showInformationMessage("not watching...");
+            vscode.window.showInformationMessage('not watching...');
         }
     }
 
@@ -82,30 +83,30 @@ export class AppModel {
         if (!this.isWatching) {
             this.statusBarItem.text = `$(eye) Watch my Sass`;
             this.statusBarItem.command = 'liveSass.command.watchMySass';
-            this.statusBarItem.tooltip = "live compile SASS or SCSS to CSS";
-            this.showMsgToOutputWindow("Stop Watching...", [], true);
+            this.statusBarItem.tooltip = 'live compile SASS or SCSS to CSS';
+            this.showMsgToOutputWindow('Stop Watching...', [], true);
         }
         else {
             this.statusBarItem.text = `$(x) Stop Watching Sass`;
             this.statusBarItem.command = 'liveSass.command.donotWatchMySass';
-            this.statusBarItem.tooltip = "Stop live compile SASS or SCSS to CSS";
-            this.showMsgToOutputWindow("Watching...", [], true);
+            this.statusBarItem.tooltip = 'Stop live compile SASS or SCSS to CSS';
+            this.showMsgToOutputWindow('Watching...', [], true);
         }
 
     }
 
     private ShowWorkingStage() {
-        this.statusBarItem.text = "$(pulse) Working on it...";
-        this.statusBarItem.tooltip = "In case if it takes long time, Show output window and report.";
+        this.statusBarItem.text = '$(pulse) Working on it...';
+        this.statusBarItem.tooltip = 'In case if it takes long time, Show output window and report.';
         this.statusBarItem.command = null;
     }
 
     private findAllSaasFilesAsync(callback) {
         let FilePaths: string[] = [];
-        vscode.workspace.findFiles("**/*.s[a|c]ss", "**/node_modules/**")
+        vscode.workspace.findFiles('**/*.s[a|c]ss', '**/node_modules/**')
             .then((files) => {
                 files.forEach((file) => {
-                    if (!path.basename(file.fsPath).startsWith("_")) {
+                    if (!path.basename(file.fsPath).startsWith('_')) {
                         FilePaths.push(file.fsPath);
                     }
                 });
@@ -117,11 +118,11 @@ export class AppModel {
         SassCompile(SassPath, options, (result) => {
             // console.log(result);
 
-            if (result.status == 0) {
-                this.writeToFileAsync(TargetCssFile, result.text || "/*No CSS*/");
+            if (result.status === 0) {
+                this.writeToFileAsync(TargetCssFile, result.text || '/*No CSS*/');
             }
             else {
-                this.showMsgToOutputWindow("Compilation Error", [result.formatted], true);
+                this.showMsgToOutputWindow('Compilation Error', [result.formatted], true);
                 console.log(result.formatted);
             }
 
@@ -132,16 +133,16 @@ export class AppModel {
 
         fs.writeFile(TargetFile, data, (err) => {
             if (err) {
-                this.showMsgToOutputWindow("Error:", [
+                this.showMsgToOutputWindow('Error:', [
                     err.errno.toString(),
                     err.path,
                     err.message
                 ], true);
-                return console.error("error :", err);
+                return console.error('error :', err);
             }
 
-            this.showMsgToOutputWindow("CSS Generated: ", [TargetFile]);
-            console.log("File saved");
+            this.showMsgToOutputWindow('CSS Generated: ', [TargetFile]);
+            console.log('File saved');
         });
     }
 
@@ -150,7 +151,7 @@ export class AppModel {
         let saveLocation = vscode.workspace.getConfiguration('liveSassCompile')
             .get('settings.savePath') as string;
 
-        if (saveLocation != "null") {
+        if (saveLocation !== 'null') {
 
             try {
                 let workspaceRoot = vscode.workspace.rootPath;
@@ -165,18 +166,18 @@ export class AppModel {
             catch (err) {
                 console.log(err);
 
-                this.showMsgToOutputWindow("Error:", [
+                this.showMsgToOutputWindow('Error:', [
                     err.errno.toString(),
                     err.path,
                     err.message
                 ], true);
 
-                throw Error("Something Went Wrong.");
+                throw Error('Something Went Wrong.');
             }
 
         }
 
-        return filePath.substring(0, filePath.lastIndexOf('.')) + ".css";
+        return filePath.substring(0, filePath.lastIndexOf('.')) + '.css';
     }
 
     private mkdirRecursiveSync(dir) {
@@ -187,8 +188,8 @@ export class AppModel {
     }
 
     private generateTargetCssFormatOptions() {
-        let outputStyleFormat = vscode.workspace.getConfiguration("liveSassCompile")
-            .get("settings.format") as string;
+        let outputStyleFormat = vscode.workspace.getConfiguration('liveSassCompile')
+            .get('settings.format') as string;
 
         return {
             style: SassCompile.Sass.style[outputStyleFormat],
@@ -206,7 +207,7 @@ export class AppModel {
         if (willShowToUI) {
             this.outputWindow.show(true);
         }
-        this.outputWindow.appendLine("--------------------")
+        this.outputWindow.appendLine('--------------------')
     }
 
     dispose() {
