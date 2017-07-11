@@ -35,6 +35,9 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 
 ## What's new ?
 
+### Version 0.0.4 (11.07.2017)
+* Icon updated
+
 ### Version 0.0.3 (11.07.2017)
 * Fix update for Linux environment.
  

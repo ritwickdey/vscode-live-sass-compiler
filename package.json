@@ -2,7 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile SASS and SCSS file to CSS at realtime with live browser reload.",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "publisher": "ritwickdey",
     "author": {
         "name": "Ritwick Dey",
@@ -25,7 +25,7 @@
     ],
     "preview": true,
     "galleryBanner": {
-        "color": "#233a68",
+        "color": "#41205f",
         "theme": "dark"
     },
     "activationEvents": [
@@ -72,7 +72,7 @@
     },
 
     "license": "MIT",
-    "icon": "images/icon.png",
+    "icon": "images/icon2.png",
     "bugs": {
         "url": "https://github.com/ritwickdey/vscode-live-sass-compiler/issues",
         "email": "ritwickdey@outlook.com"
