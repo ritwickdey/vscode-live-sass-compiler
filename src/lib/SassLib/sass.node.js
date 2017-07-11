@@ -40,24 +40,24 @@ function importFileToSass(originalPath, path, done) {
 }
 
 function importerCallback(originalPath, request, done) {
-  //EDITED
-  // sass.js works in the "/sass/" directory, make that relative to CWD
-  // var requestedPath = request.resolved.replace(/^\/sass\//, '' );
-  // importFileToSass(requestedPath, done);
+    //EDITED
+    // sass.js works in the "/sass/" directory, make that relative to CWD
+    // var requestedPath = request.resolved.replace(/^\/sass\//, '' );
+    // importFileToSass(requestedPath, done);
+    //var requestedPath = request.current.replace(/^\/sass/, '');
+    var requestedPath = request.current;
+    if(!requestedPath.startsWith("/")) {
+        requestedPath = "/"+requestedPath;
+    }
 
-  var requestedPath = request.resolved.replace(/^\/sass/, '');
-
-  var indexOfSlash = requestedPath.lastIndexOf("/");
-  var tempRequestedPath = requestedPath.substring(0, indexOfSlash + 1) + '_' + requestedPath.substring(indexOfSlash + 1);
-  var fullTempRequestedPath = pathModule.join(originalPath, tempRequestedPath)
-
-  if (fs.existsSync(fullTempRequestedPath + '.scss')
-    || fs.existsSync(fullTempRequestedPath + '.sass')) {
-   requestedPath = tempRequestedPath;
-  }
-  
-
-  importFileToSass(originalPath, requestedPath, done);
+    var indexOfSlash = requestedPath.lastIndexOf("/");
+    var tempRequestedPath = requestedPath.substring(0, indexOfSlash + 1) + '_' + requestedPath.substring(indexOfSlash + 1);
+    var fullTempRequestedPath = pathModule.join(originalPath, tempRequestedPath);
+    if (fs.existsSync(fullTempRequestedPath + '.scss')
+        || fs.existsSync(fullTempRequestedPath + '.sass')) {
+        requestedPath = tempRequestedPath;
+    }
+    importFileToSass(originalPath, requestedPath, done);
 }
 
 function compileFile(path, options, callback) {
