@@ -114,12 +114,12 @@ export class AppModel {
             });
     }
 
-    private compileOneSassFileAsync(SassPath: string, TargetCssFile: string, options) {
+    private compileOneSassFileAsync(SassPath: string, targetCssUri: string, options) {
         SassCompile(SassPath, options, (result) => {
-            // console.log(result);
-
+            console.log(result);
             if (result.status === 0) {
-                this.writeToFileAsync(TargetCssFile, result.text || '/*No CSS*/');
+                this.writeToFileAsync(targetCssUri, `${result.text || '/*No CSS*/'} \n\n\n  /*# sourceMappingURL=${path.basename(targetCssUri)}.map */` );
+                this.GenerateOneMapFile(result.map, targetCssUri);
             }
             else {
                 this.showMsgToOutputWindow('Compilation Error', [result.formatted], true);
@@ -129,9 +129,44 @@ export class AppModel {
         });
     }
 
+    private GenerateOneMapFile(mapObject, targetCssUri: string) {
+        let mapFileUri = targetCssUri + '.map';
+        console.log(mapObject);
+        let map = {
+            'version': 3,
+            'mappings': '',
+            'sources': [],
+            'names': [],
+            'file': ''
+        }
+        map.mappings = mapObject.mappings;
+        map.file = path.basename(targetCssUri);
+        mapObject.sources.forEach((source: string)=>{
+            //path starts with ../saas/<abs path> or ../<abs path>
+            if (source.startsWith('../sass/')) {
+                source = source.substring('../sass/'.length);
+            }
+            else if (source.startsWith('../')) {
+                source = source.substring('../'.length);
+            }
+            if(process.platform != 'win32') {
+                source = '/'+source; //for linux, maybe for MAC too
+            }
+            
+            let testpath = path.relative(
+                path.dirname(targetCssUri), source);
+            testpath = testpath.replace(/\\/gi, '/');
+            map.sources.push(testpath);
+        });
+        
+
+
+        this.writeToFileAsync(mapFileUri, JSON.stringify(map, null, 4));
+    }
+
     private writeToFileAsync(TargetFile, data) {
 
-        fs.writeFile(TargetFile, data, (err) => {
+        fs.writeFile(TargetFile, data, 'utf8' , (err) => {
             if (err) {
                 this.showMsgToOutputWindow('Error:', [
                     err.errno.toString(),

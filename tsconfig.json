@@ -11,6 +11,7 @@
         "rootDir": ".",
         "allowJs": true
     },
+   
     "files" : [
         "./src/extension.ts",
         "./src/appModel.ts"
