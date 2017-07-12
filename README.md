@@ -16,41 +16,50 @@ A Visual Studio Code Extension that help you to compile/transpile your SASS/SCSS
 * Live SASS & SCSS Compile.
 * Customizable file location of exported CSS.
 * Customizable exported CSS Style (`expanded`, `compact`, `compressed`, `nested`).
+* Customizable extension name (`.css` or `.min.css`).
 * Quick Status bar control.
 * Live Reload to browser (Dependency on `Live Server` extension).
 
+## Installation
+Open VSCode Editor and Press `ctrl+P`, type `ext install live-sass`.
+
 ## Settings
-* `liveSassCompile.settings.format` : To customize exported CSS style - _`expanded`_, _`compact`_, _`compressed`_ or _`nested`_. Default is  _`expanded`_.
+* `liveSassCompile.settings.format` : To customize exported CSS style - _`expanded`_, _`compact`_, _`compressed`_ or _`nested`_.
+    * _Default is  `expanded`._
+
 * `liveSassCompile.settings.savePath` : To customizable file location of exported CSS. Set absulate path from workspace Root.`'/'` stands for your workspace root.
     * _Example: `/subfolder1/subfolder2`. All generated CSS file will be saved at `subfolder2`._
     * _NOTE: If destination folder does not exist, folder will be created as well._ 
     * _Default value is `null`, CSS will be generated at same directory of every SASS/SCSS files._
+* `liveSassCompile.settings.extensionName` : To customize extension name (`.css` or `.min.css`) of generated CSS. 
+    * _Default is `.css`._
 
+## How to config the settings in my project? (FAQ):
+Create a `.vscode` folder in the root of project. Inside of `.vscode` folder create a json file named `settings.json`.
+Inside of the `settings.json`, type following key-value pairs. By the way you'll get intelli-sense.
 
-## Installation
-Open VSCode Editor and Press `ctrl+P`, type `ext install live-sass`.
+```json
+{
+    "liveSassCompile.settings.savePath": "/dist/css",
+    "liveSassCompile.settings.format": "compressed",
+    "liveSassCompile.settings.extensionName" : ".min.css"
+}
+```
 
 ## Extension Dependency 
 This extension has dependency on _[Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)_ extension for live browser reload.
 
 ## What's new ?
 
+### Version 0.0.5 (12.07.2017)
+* `liveSassCompile.settings.extensionName` settings added.
+
 ### Version 0.0.4 (11.07.2017)
 * Icon updated
 
 ### Version 0.0.3 (11.07.2017)
 * Fix update for Linux environment.
- 
-### Version 0.0.2 (11.07.2017)
-* Small description updated.
 
-### Version 0.0.1 (11.07.2017)
-* Initial Preview Release with following key features 
-    * Live SASS & SCSS Compile.
-    * Customizable file location of exported CSS.
-    * Customizable exported CSS Style (`expanded`, `compact`, `compressed`, `nested`.)
-    * Quick Status bar control.
-    * Live Reload to browser (`Live Server` extension).
 
 ## Changelog
 To check full changelog click here [changelog](CHANGELOG.md).

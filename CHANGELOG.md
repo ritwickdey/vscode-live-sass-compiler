@@ -2,6 +2,7 @@
 
 | Version | Date | Changelog|
 | ------- | -------- | ------ |
+|0.0.5| 11.07.17 |`liveSassCompile.settings.extensionName` settings added. |
 |0.0.4 | 11.07.17 | Icon updated.|
 |0.0.3 | 11.07.17 | Fix update for Linux environment.|
 |0.0.2 | 11.07.17 | Small description updated.|

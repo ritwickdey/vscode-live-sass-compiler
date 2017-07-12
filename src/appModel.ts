@@ -177,7 +177,10 @@ export class AppModel {
 
         }
 
-        return filePath.substring(0, filePath.lastIndexOf('.')) + '.css';
+        let extensionName = vscode.workspace.getConfiguration('liveSassCompile')
+                .get('settings.extensionName') as string;
+
+        return filePath.substring(0, filePath.lastIndexOf('.')) + extensionName;
     }
 
     private mkdirRecursiveSync(dir) {
