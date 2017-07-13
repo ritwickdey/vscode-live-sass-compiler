@@ -1,6 +1,8 @@
 # Live Sass Compiler
 
-**_[NOTE: I am able to compile full `Bootstrap 4` scss files with extension. If you found any bug or if you have any suggetion, feel free to report or suggest me. If you like the extension, don't forgot to rate it.]_**
+**_[NOTE: I am able to compile full `Bootstrap 4` scss files with the extension. If you found any bug or if you have any suggetion, feel free to report or suggest me. If you like the extension, don't forgot to rate it.]_**
+
+**_[[I need your help]](README.md#help)_**
 
 A Visual Studio Code Extension that help you to compile/transpile your SASS/SCSS files to CSS files at realtime with live browser reload.
 
@@ -51,14 +53,14 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 
 ## What's new ?
 
+### Version 0.1.0 (13.07.2017)
+* Now the extesion will also generate `Linker Address Map (.map)` files in the same directory of `.css`.
+
 ### Version 0.0.5 (12.07.2017)
 * `liveSassCompile.settings.extensionName` settings added.
 
 ### Version 0.0.4 (11.07.2017)
 * Icon updated
-
-### Version 0.0.3 (11.07.2017)
-* Fix update for Linux environment.
 
 
 ## Changelog
@@ -66,3 +68,6 @@ To check full changelog click here [changelog](CHANGELOG.md).
 
 ## LICENSE
 This extension is licensed under the [MIT License](LICENSE)
+
+> ## HELP : 
+> I am using Sass.js library to compile SASS to CSS. This libary is not avaliable through NPM. So, I manually put the JS files in project folder. Now, TypeScript tries to generate `.map` file of the library (library size 3MB) and I get compile time error (`Memory out of heap` - like that). So, I set `"sourceMap": false,` . Now I'm not getting the error. But problem is that while debugging. I have to go `out` folder to debug. Another problem is that on every single save TypeScript always copy the library to `out` directory while cause slow performce of VScode while debugging.
