@@ -1,8 +1,8 @@
 # Live Sass Compiler
 
-**_[NOTE: I am able to compile full `Bootstrap 4` scss files with the extension. If you found any bug or if you have any suggetion, feel free to report or suggest me. If you like the extension, don't forgot to rate it.]_**
+**_[NOTE: I am able to compile full `Bootstrap 4` scss files with the extension. If you found any bug or if you have any suggestion, feel free to report or suggest me. If you like the extension, don't forgot to rate it.]_**
 
-**_[[I need your help]](README.md#help)_**
+**_[[I need your guide/help]](https://github.com/ritwickdey/vscode-live-sass-compiler/blob/master/README.md#help-)_**
 
 A Visual Studio Code Extension that help you to compile/transpile your SASS/SCSS files to CSS files at realtime with live browser reload.
 
@@ -53,21 +53,23 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 
 ## What's new ?
 
+### Version 0.1.1 (14.07.2017)
+* Fixed [#2](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/2) - Partial Sass/Sass files are not compiling in watching mode. (Thanks again, _[Kerry Smyth](https://github.com/Kerrys7777) :p_)
+
 ### Version 0.1.0 (13.07.2017)
-* Now the extesion will also generate `Linker Address Map (.map)` files in the same directory of `.css`.
+* Feature Added [#1](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/1) - Now the extesion will also generate `Linker Address Map (.map)` files in the same directory of `.css`. (Thanks, _[Kerry Smyth](https://github.com/Kerrys7777)_)
 
 ### Version 0.0.5 (12.07.2017)
 * `liveSassCompile.settings.extensionName` settings added.
-
-### Version 0.0.4 (11.07.2017)
-* Icon updated
-
 
 ## Changelog
 To check full changelog click here [changelog](CHANGELOG.md).
 
 ## LICENSE
 This extension is licensed under the [MIT License](LICENSE)
+
+<br>
+<br>
 
 > ## HELP : 
 > I am using Sass.js library to compile SASS to CSS. This libary is not avaliable through NPM. So, I manually put the JS files in project folder. Now, TypeScript tries to generate `.map` file of the library (library size 3MB) and I get compile time error (`Memory out of heap` - like that). So, I set `"sourceMap": false,` . Now I'm not getting the error. But problem is that while debugging. I have to go `out` folder to debug. Another problem is that on every single save TypeScript always copy the library to `out` directory while cause slow performce of VScode while debugging.

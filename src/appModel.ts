@@ -33,19 +33,10 @@ export class AppModel {
             vscode.window.showInformationMessage('already watching...');
             return;
         }
-        this.ShowWorkingStage();
+        this.ShowWorkingStageUI();
         let options = this.generateTargetCssFormatOptions();
-        this.findAllSaasFilesAsync((sassPaths: string[]) => {
-            console.log(sassPaths);
-            this.showMsgToOutputWindow('Found Sass/Scss Files: ', sassPaths, true);
-
-            sassPaths.forEach((sassPath) => {
-                let targetPath = this.generateTargetCssFileUri(sassPath);
-                this.compileOneSassFileAsync(sassPath, targetPath, options);
-            });
-
-            this.toggleStatus();
-
+        this.compileAllSassFileAsync(()=>{
+            this.toggleStatusUI();
         });
     }
 
@@ -56,28 +47,32 @@ export class AppModel {
 
         let fileUri = vscode.window.activeTextEditor.document.fileName;
 
-        if ((fileUri.endsWith('.scss') || fileUri.endsWith('.sass'))
-            && !path.basename(fileUri).startsWith('_')) {
-
-            let sassPath = fileUri;
-            let options = this.generateTargetCssFormatOptions();
-            let targetPath = this.generateTargetCssFileUri(sassPath);
-            this.compileOneSassFileAsync(sassPath, targetPath, options);
-
-            this.showMsgToOutputWindow('Compiling...', [sassPath]);
+        if (fileUri.endsWith('.scss') || fileUri.endsWith('.sass')) {
+            
+            this.showMsgToOutputWindow('Change Detected...', [path.basename(fileUri)]); 
+            
+            if(path.basename(fileUri).startsWith('_')) {
+                this.compileAllSassFileAsync(null,false);
+            }
+            else {    
+                let sassPath = fileUri;
+                let options = this.generateTargetCssFormatOptions();
+                let targetPath = this.generateTargetCssFileUri(sassPath);
+                this.compileOneSassFileAsync(sassPath, targetPath, options);
+            }
         }
     }
 
     StopWaching() {
         if (this.isWatching) {
-            this.toggleStatus();
+            this.toggleStatusUI();
         }
         else {
             vscode.window.showInformationMessage('not watching...');
         }
     }
 
-    private toggleStatus() {
+    private toggleStatusUI() {
         this.isWatching = !this.isWatching;
 
         if (!this.isWatching) {
@@ -95,7 +90,7 @@ export class AppModel {
 
     }
 
-    private ShowWorkingStage() {
+    private ShowWorkingStageUI() {
         this.statusBarItem.text = '$(pulse) Working on it...';
         this.statusBarItem.tooltip = 'In case if it takes long time, Show output window and report.';
         this.statusBarItem.command = null;
@@ -116,7 +111,7 @@ export class AppModel {
 
     private compileOneSassFileAsync(SassPath: string, targetCssUri: string, options) {
         SassCompile(SassPath, options, (result) => {
-            console.log(result);
+            //console.log(result);
             if (result.status === 0) {
                 this.writeToFileAsync(targetCssUri, `${result.text || '/*No CSS*/'} \n\n\n  /*# sourceMappingURL=${path.basename(targetCssUri)}.map */` );
                 this.GenerateOneMapFile(result.map, targetCssUri);
@@ -126,6 +121,24 @@ export class AppModel {
                 console.log(result.formatted);
             }
 
+        });
+    }
+
+    private compileAllSassFileAsync(callback?, logMsgWindowFocusUI=true) {
+        
+        let options = this.generateTargetCssFormatOptions();
+        this.findAllSaasFilesAsync((sassPaths: string[]) => {
+          //  console.log(sassPaths);
+            this.showMsgToOutputWindow('Compiling Sass/Scss Files: ', sassPaths, logMsgWindowFocusUI);
+
+            sassPaths.forEach((sassPath) => {
+                let targetPath = this.generateTargetCssFileUri(sassPath);
+                this.compileOneSassFileAsync(sassPath, targetPath, options);
+            });
+
+            if(callback) {
+                callback();
+            }
         });
     }
 
@@ -176,7 +189,7 @@ export class AppModel {
                 return console.error('error :', err);
             }
 
-            this.showMsgToOutputWindow('CSS Generated: ', [TargetFile]);
+            this.showMsgToOutputWindow('Generated: ', [TargetFile]);
             console.log('File saved');
         });
     }
