@@ -9,7 +9,7 @@ A Visual Studio Code Extension that help you to compile/transpile your SASS/SCSS
 ![App Preview](./images/Screenshot/AnimatedPreview.gif)
 
 ## Usage/Shortcuts
-1. Click to `Watch my Sass` from Statusbar to turn on the live compilation and then click to `Stop Watching Sass` from Statusbar to turn on live compilation . 
+1. Click to `Watch Sass` from Statusbar to turn on the live compilation and then click to `Stop Watching Sass` from Statusbar to turn on live compilation . 
 ![Statusbar control](./images/Screenshot/statusbar.jpg)
 
 2. Press `F1` or `ctrl+shift+P` and type `Live Sass: Watch Sass` to start live compilation or, type `Live Sass: Stop Watching Sass` to stop a live compilation.
@@ -53,14 +53,14 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 
 ## What's new ?
 
+### Version 0.1.2 (19.07.2017)
+* Small Fix (Rename) update.
+
 ### Version 0.1.1 (14.07.2017)
 * Fixed [#2](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/2) - Partial Sass/Sass files are not compiling in watching mode. (Thanks again, _[Kerry Smyth](https://github.com/Kerrys7777) :p_)
 
 ### Version 0.1.0 (13.07.2017)
 * Feature Added [#1](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/1) - Now the extesion will also generate `Linker Address Map (.map)` files in the same directory of `.css`. (Thanks, _[Kerry Smyth](https://github.com/Kerrys7777)_)
-
-### Version 0.0.5 (12.07.2017)
-* `liveSassCompile.settings.extensionName` settings added.
 
 ## Changelog
 To check full changelog click here [changelog](CHANGELOG.md).

@@ -2,6 +2,7 @@
 
 | Version | Date | Changelog|
 | ------- | -------- | ------ |
+|0.1.2|19.07.17| Small Fix (Rename) update.|
 | 0.1.1 | 14.07.17 | Fixed [#2](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/2) - Partial Sass/Sass files are not compiling in watching mode. (Thanks again, _[Kerry Smyth](https://github.com/Kerrys7777) :p_) |
 |0.1.0| 13.07.17| Feature Added [#1](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/1) - Now the extesion will also generate `Linker Address Map (.map)` files in the same directory of `.css` (Thanks, _[Kerry Smyth](https://github.com/Kerrys7777)_). |
 |0.0.5| 11.07.17 |`liveSassCompile.settings.extensionName` settings added. |

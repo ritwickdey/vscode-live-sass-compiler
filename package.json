@@ -2,7 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile SASS or SCSS to CSS at realtime with live browser reload.",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "publisher": "ritwickdey",
     "author": {
         "name": "Ritwick Dey",
@@ -43,7 +43,7 @@
             },
             {
                 "command": "liveSass.command.donotWatchMySass",
-                "title": "Stop Watching Sass",
+                "title": "Stop Watching",
                 "category": "Live Sass"
             }
         ],

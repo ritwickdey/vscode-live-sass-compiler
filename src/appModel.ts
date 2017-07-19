@@ -18,7 +18,7 @@ export class AppModel {
         this.isWatching = false;
         if (!this.statusBarItem) {
             this.statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 200);
-            this.statusBarItem.text = `$(eye) Watch my Sass`;
+            this.statusBarItem.text = `$(eye) Watch Sass`;
             this.statusBarItem.command = 'liveSass.command.watchMySass';
             this.statusBarItem.tooltip = 'live complile SASS or SCSS to CSS';
             this.statusBarItem.show();
@@ -76,7 +76,7 @@ export class AppModel {
         this.isWatching = !this.isWatching;
 
         if (!this.isWatching) {
-            this.statusBarItem.text = `$(eye) Watch my Sass`;
+            this.statusBarItem.text = `$(eye) Watch Sass`;
             this.statusBarItem.command = 'liveSass.command.watchMySass';
             this.statusBarItem.tooltip = 'live compile SASS or SCSS to CSS';
             this.showMsgToOutputWindow('Stop Watching...', [], true);
