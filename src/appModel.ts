@@ -98,13 +98,17 @@ export class AppModel {
 
     private findAllSaasFilesAsync(callback) {
         let FilePaths: string[] = [];
-    vscode.workspace.findFiles('**/[^_]*.s[a|c]ss', '**/node_modules/**')
-            .then((files) => {
-            files.forEach((file) => {
-                FilePaths.push(file.fsPath);
+        let excludedList =  vscode.workspace.getConfiguration('liveSassCompile')
+            .get('settings.excludeFolders') as String[];
+        let excludeByGlobString = `{${excludedList.join(',')}}`;
+
+        vscode.workspace.findFiles('**/[^_]*.s[a|c]ss', excludeByGlobString)
+                .then((files) => {
+                files.forEach((file) => {
+                    FilePaths.push(file.fsPath);
+                });
+                return callback(FilePaths);
             });
-            return callback(FilePaths);
-        });
     }
 
     private compileOneSassFileAsync(SassPath: string, targetCssUri: string, options) {

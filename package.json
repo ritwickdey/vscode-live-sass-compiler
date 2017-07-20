@@ -75,6 +75,15 @@
                         ".css", ".min.css"
                     ],
                     "description": "Customize extension name.\nDefault is .css"
+                },
+
+                "liveSassCompile.settings.excludeFolders" :  {
+                    "type":"array",
+                    "default" : [
+                       "**/node_modules/**",
+                       ".vscode/**"
+                    ],
+                    "description": "All Sass/Scss files inside the folders will be excluded. \n\nExamples: \n'**/node_modules/**',\n'.vscode/**', \n'.history/**' \n\nGlob Patterns are accepted"
                 }
             }
         }
