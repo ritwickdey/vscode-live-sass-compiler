@@ -98,15 +98,13 @@ export class AppModel {
 
     private findAllSaasFilesAsync(callback) {
         let FilePaths: string[] = [];
-        vscode.workspace.findFiles('**/*.s[a|c]ss', '**/node_modules/**')
+    vscode.workspace.findFiles('**/[^_]*.s[a|c]ss', '**/node_modules/**')
             .then((files) => {
-                files.forEach((file) => {
-                    if (!path.basename(file.fsPath).startsWith('_')) {
-                        FilePaths.push(file.fsPath);
-                    }
-                });
-                return callback(FilePaths);
+            files.forEach((file) => {
+                FilePaths.push(file.fsPath);
             });
+            return callback(FilePaths);
+        });
     }
 
     private compileOneSassFileAsync(SassPath: string, targetCssUri: string, options) {
