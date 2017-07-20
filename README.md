@@ -20,21 +20,30 @@ A Visual Studio Code Extension that help you to compile/transpile your SASS/SCSS
 * Customizable exported CSS Style (`expanded`, `compact`, `compressed`, `nested`).
 * Customizable extension name (`.css` or `.min.css`).
 * Quick Status bar control.
+* Exclude Specific Folders by settings. 
 * Live Reload to browser (Dependency on `Live Server` extension).
 
 ## Installation
 Open VSCode Editor and Press `ctrl+P`, type `ext install live-sass`.
 
 ## Settings
-* `liveSassCompile.settings.format` : To customize exported CSS style - _`expanded`_, _`compact`_, _`compressed`_ or _`nested`_.
+* **`liveSassCompile.settings.format` :** To customize exported CSS style - _`expanded`_, _`compact`_, _`compressed`_ or _`nested`_.
     * _Default is  `expanded`._
 
-* `liveSassCompile.settings.savePath` : To customizable file location of exported CSS. Set absulate path from workspace Root.`'/'` stands for your workspace root.
+* **`liveSassCompile.settings.savePath` :** To customizable file location of exported CSS. Set absulate path from workspace Root.`'/'` stands for your workspace root.
     * _Example: `/subfolder1/subfolder2`. All generated CSS file will be saved at `subfolder2`._
     * _NOTE: If destination folder does not exist, folder will be created as well._ 
     * _Default value is `null`, CSS will be generated at same directory of every SASS/SCSS files._
-* `liveSassCompile.settings.extensionName` : To customize extension name (`.css` or `.min.css`) of generated CSS. 
+* **`liveSassCompile.settings.extensionName` :** To customize extension name (`.css` or `.min.css`) of generated CSS. 
     * _Default is `.css`._
+* **`liveSassCompile.settings.excludeFolders` :** To Exclude specific folders. All Sass/Scss files inside the folders will be ignored.
+    * _default value :_
+        ```json
+            [ 
+                "**/node_modules/**",
+                ".vscode/**" 
+            ]
+        ```
 
 ## How to config the settings in my project? (FAQ):
 Create a `.vscode` folder in the root of project. Inside of `.vscode` folder create a json file named `settings.json`.
@@ -44,7 +53,11 @@ Inside of the `settings.json`, type following key-value pairs. By the way you'll
 {
     "liveSassCompile.settings.savePath": "/dist/css",
     "liveSassCompile.settings.format": "compressed",
-    "liveSassCompile.settings.extensionName" : ".min.css"
+    "liveSassCompile.settings.extensionName" : ".min.css",
+    "liveSassCompile.settings.excludeFolders": [
+       "**/node_modules/**",
+       ".vscode/**"
+    ]
 }
 ```
 
@@ -53,14 +66,15 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 
 ## What's new ?
 
+### Version 0.2.0 (20.07.2017)
+* [[#3](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/3)] New settings added to exclude specific folders from workspace. All Sass/Scss files inside the folders will be ignored. [Thanks _[Cassio Cabral](https://github.com/cassioscabral) for the suggestion_] .
+
 ### Version 0.1.2 (19.07.2017)
 * Small Fix (Rename) update.
 
 ### Version 0.1.1 (14.07.2017)
 * Fixed [#2](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/2) - Partial Sass/Sass files are not compiling in watching mode. (Thanks again, _[Kerry Smyth](https://github.com/Kerrys7777) :p_)
 
-### Version 0.1.0 (13.07.2017)
-* Feature Added [#1](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/1) - Now the extesion will also generate `Linker Address Map (.map)` files in the same directory of `.css`. (Thanks, _[Kerry Smyth](https://github.com/Kerrys7777)_)
 
 ## Changelog
 To check full changelog click here [changelog](CHANGELOG.md).
