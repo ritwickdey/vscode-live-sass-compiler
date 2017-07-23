@@ -66,16 +66,15 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 
 ## What's new ?
 
-### Version 0.2.1 (21.07.2017)
-* [[#4](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/4)] Critical Bug Fixed update. [Thanks _[Cassio Cabral](https://github.com/cassioscabral)_].
+* #### Version 0.2.1 (21.07.2017)
+    * [[#4](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/4)] Critical Bug Fixed update. [Thanks _[Cassio Cabral](https://github.com/cassioscabral)_].
 
-### Version 0.2.0 (20.07.2017)
+* #### Version 0.2.0 (20.07.2017)
  
+    * [[#3](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/3)] New settings added to exclude specific folders from workspace. All Sass/Scss files inside the folders will be ignored. [Thanks _[Cassio Cabral](https://github.com/cassioscabral) for the suggestion_] .
 
-* [[#3](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/3)] New settings added to exclude specific folders from workspace. All Sass/Scss files inside the folders will be ignored. [Thanks _[Cassio Cabral](https://github.com/cassioscabral) for the suggestion_] .
-
-### Version 0.1.2 (19.07.2017)
-* Small Fix (Rename) update.
+* #### Version 0.1.2 (19.07.2017)
+    * Small Fix (Rename) update.
 
 
 ## Changelog
