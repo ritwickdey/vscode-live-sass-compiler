@@ -20,7 +20,7 @@ social:
     - https://ritwickdey.github.io
     - https://github.com/ritwickdey/vscode-live-sass-compiler
     - https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass
-lang: "en"
+lang: en_IN
 
 ## Uncomment below for local test
 # github: [metadata]
