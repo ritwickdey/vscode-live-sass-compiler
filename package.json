@@ -2,7 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile SASS or SCSS to CSS at realtime with live browser reload.",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "publisher": "ritwickdey",
     "author": {
         "name": "Ritwick Dey",
@@ -44,6 +44,11 @@
             {
                 "command": "liveSass.command.donotWatchMySass",
                 "title": "Stop Watching",
+                "category": "Live Sass"
+            },
+            {
+                "command": "liveSass.command.oneTimeCompileSass",
+                "title": "Compile Sass - Without Watch Mode",
                 "category": "Live Sass"
             }
         ],
@@ -99,7 +104,7 @@
         "type": "git",
         "url": "https://github.com/ritwickdey/vscode-live-sass-compiler.git"
     },
-    "homepage": "https://github.com/ritwickdey/vscode-live-sass-compiler/blob/master/README.md",
+    "homepage": "https://ritwickdey.github.io/vscode-live-sass-compiler/",
 
     "extensionDependencies": [
         "ritwickdey.LiveServer"

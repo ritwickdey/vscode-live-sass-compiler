@@ -18,6 +18,11 @@ export function activate(context: vscode.ExtensionContext) {
             appModel.StopWaching();
         });
 
+    let disposableOneTimeCompileSass =
+        vscode.commands.registerCommand('liveSass.command.oneTimeCompileSass', () => {
+            appModel.compileAllFiles(false);
+        });
+
     let disposableOnDivSave =
         vscode.workspace.onDidSaveTextDocument(() => {
             appModel.compileOnSave();
@@ -26,6 +31,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(disposablecompileAll,
         disposableStopWaching,
         disposableOnDivSave,
+        disposableOneTimeCompileSass,
         appModel);
 }
 

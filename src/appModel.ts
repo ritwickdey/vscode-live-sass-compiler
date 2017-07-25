@@ -28,7 +28,7 @@ export class AppModel {
         }
     }
 
-    compileAllFiles() {
+    compileAllFiles(isWatchMode =  true) {
         if (this.isWatching) {
             vscode.window.showInformationMessage('already watching...');
             return;
@@ -36,6 +36,9 @@ export class AppModel {
         this.ShowWorkingStageUI();
         let options = this.generateTargetCssFormatOptions();
         this.compileAllSassFileAsync(()=>{
+            if(!isWatchMode) {
+                this.isWatching = true;
+            }
             this.toggleStatusUI();
         });
     }

@@ -15,6 +15,7 @@ A Visual Studio Code Extension that help you to compile/transpile your SASS/SCSS
 ![Statusbar control](./images/Screenshot/statusbar.jpg)
 
 2. Press `F1` or `ctrl+shift+P` and type `Live Sass: Watch Sass` to start live compilation or, type `Live Sass: Stop Watching Sass` to stop a live compilation.
+3. Press `F1` or `ctrl+shift+P` and type `Live Sass: Compile Sass - Without Watch Mode ` to compile Sass or Scss for one time.
 
 ## Features
 * Live SASS & SCSS Compile.
@@ -68,6 +69,9 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 
 ## What's new ?
 
+* #### Version 0.2.2 (19.07.2017)
+    * New Command added for one time Sass/Scss compilation - Press `F1` or `ctrl+shift+p` and enter `Compile Sass - Without Watch Mode`.
+
 * #### Version 0.2.1 (21.07.2017)
     * [[#4](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/4)] Critical Bug Fixed update. [Thanks _[Cassio Cabral](https://github.com/cassioscabral)_].
 
@@ -75,8 +79,6 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
  
     * [[#3](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/3)] New settings added to exclude specific folders from workspace. All Sass/Scss files inside the folders will be ignored. [Thanks _[Cassio Cabral](https://github.com/cassioscabral) for the suggestion_] .
 
-* #### Version 0.1.2 (19.07.2017)
-    * Small Fix (Rename) update.
 
 
 ## Changelog

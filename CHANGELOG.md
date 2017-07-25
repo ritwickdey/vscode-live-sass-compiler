@@ -2,6 +2,7 @@
 
 | Version | Date | Changelog|
 | ------- | -------- | ------ |
+|0.2.2|25.07.17|New Command added for one time Sass/Scss compilation. - Press `F1` or `ctrl+shift+p` and enter `Compile Sass - Without Watch Mode`.|
 | 0.2.1 | 21.07.17 |[[#4](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/4)] Critical Bug Fixed update. [Thanks _[Cassio Cabral](https://github.com/cassioscabral)_].|
 |0.2.0|20.07.17|[[#3](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/3)] New settings added to exclude specific folders from workspace. All Sass/Scss files inside the folders will be ignored. [Thanks _[Cassio Cabral](https://github.com/cassioscabral) for the suggestion_]. |
 |0.1.2|19.07.17| Small Fix (Rename) update.|
