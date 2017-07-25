@@ -1,8 +1,10 @@
 # Live Sass Compiler
 
-**_[NOTE: I am able to compile full `Bootstrap 4` scss files with the extension. If you found any bug or if you have any suggestion, feel free to report or suggest me. If you like the extension, don't forgot to rate it.]_**
+**_[If you found any bug or if you have any suggestion, feel free to report or suggest me. If you like the extension, don't forgot to rate it.]_**
 
 **_[[I need your guide/help]](https://github.com/ritwickdey/vscode-live-sass-compiler/blob/master/README.md#help-)_**
+
+[![VSCode Marketplace Badge](https://vsmarketplacebadge.apphb.com/version/ritwickdey.live-sass.svg)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![Total Install](https://vsmarketplacebadge.apphb.com/installs/ritwickdey.live-sass.svg)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![Avarage Rating Badge](https://vsmarketplacebadge.apphb.com/rating-short/ritwickdey.live-sass.svg)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ritwickdey/vscode-live-sass-compiler/)
 
 A Visual Studio Code Extension that help you to compile/transpile your SASS/SCSS files to CSS files at realtime with live browser reload.
 
