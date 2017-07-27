@@ -8,3 +8,12 @@ src/**
 images/Screenshot/**
 tsconfig.json
 vsc-extension-quickstart.md
+
+_layouts/**
+Gemfile
+Gemfile.lock
+_site/**
+assets/**
+_config.yml
+_site
+Gemfile.lock

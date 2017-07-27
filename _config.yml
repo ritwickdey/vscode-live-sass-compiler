@@ -1,6 +1,4 @@
 theme: jekyll-theme-cayman
-title: Live Sass Compiler | VSCode Extension
-description: Compile Sass or Scss to CSS at realtime with live browser reload.
 repository: ritwickdey/vscode-live-sass-compiler
 
 gems:

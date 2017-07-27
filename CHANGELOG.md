@@ -1,5 +1,6 @@
 # Changelog
 
+
 | Version | Date | Changelog|
 | ------- | -------- | ------ |
 |0.2.2|25.07.17|New Command added for one time Sass/Scss compilation. - Press `F1` or `ctrl+shift+p` and enter `Compile Sass - Without Watch Mode`.|
@@ -12,7 +13,9 @@
 |0.0.4 | 11.07.17 | Icon updated.|
 |0.0.3 | 11.07.17 | Fix update for Linux environment.|
 |0.0.2 | 11.07.17 | Small description updated.|
-| 0.0.1 | 11.07.17 | Initial Preview Release with following key features <ul><li>Live SASS & SCSS Compile.</li><li>Customizable file location of exported CSS.</li>Customizable exported CSS Style (`expanded`, `compact`, `compressed`, `nested`.)<li>Quick Status bar control.</li><li>Live Reload to browser (`Live Server` extension dependency).</li></ul> |
+| 0.0.1 | 11.07.17 | Initial Preview Release with following key features. <br> &mdash; Live SASS & SCSS Compile. <br> &mdash; Customizable file location of exported CSS. <br> &mdash; Customizable exported CSS Style (`expanded`, `compact`, `compressed`, `nested`.)<br> &mdash; Quick Status bar control.<br> &mdash; Live Reload to browser (`Live Server` extension dependency). |
+
+
 <br>
 
 >#### [Released] (11.07.2017)
