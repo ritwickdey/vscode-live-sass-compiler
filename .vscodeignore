@@ -9,6 +9,8 @@ images/Screenshot/**
 tsconfig.json
 vsc-extension-quickstart.md
 
+lib/**
+
 _layouts/**
 Gemfile
 Gemfile.lock

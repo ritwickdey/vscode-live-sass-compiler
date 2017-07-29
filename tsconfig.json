@@ -7,9 +7,8 @@
             "es6",
             "es5"
         ],
-        "sourceMap": false,
-        "rootDir": ".",
-        "allowJs": true
+        "sourceMap": true,
+        "rootDir": "."
     },
    
     "files" : [
@@ -18,7 +17,6 @@
     ],
     "exclude": [
         "node_modules",
-        ".vscode-test",
-        "./src/lib"
+        ".vscode-test"
     ]
 }
