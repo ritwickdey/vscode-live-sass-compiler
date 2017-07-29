@@ -10,17 +10,15 @@ export class AppModel {
     isWatching: boolean;
     outputWindow: vscode.OutputChannel;
 
-    constructor() {
-        this.Init();
+    get configSettings() {
+        return vscode.workspace.getConfiguration('liveSassCompile.settings');
     }
 
-    Init() {
+    constructor() {
         this.isWatching = false;
         if (!this.statusBarItem) {
             this.statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 200);
-            this.statusBarItem.text = `$(eye) Watch Sass`;
-            this.statusBarItem.command = 'liveSass.command.watchMySass';
-            this.statusBarItem.tooltip = 'live complile SASS or SCSS to CSS';
+            this.notWatchingUI();
             this.statusBarItem.show();
         }
         if (!this.outputWindow) {
@@ -28,16 +26,17 @@ export class AppModel {
         }
     }
 
-    compileAllFiles(isWatchMode =  true) {
+
+    compileAllFiles(withWatchingMode = true) {
         if (this.isWatching) {
             vscode.window.showInformationMessage('already watching...');
             return;
         }
-        this.ShowWorkingStageUI();
+        this.showWorkingStageUI();
         let options = this.generateTargetCssFormatOptions();
-        this.compileAllSassFileAsync(()=>{
-            if(!isWatchMode) {
-                this.isWatching = true;
+        this.compileAllSassFileAsync(() => {
+            if (!withWatchingMode) {
+                this.isWatching = true; //tricky to toggle status
             }
             this.toggleStatusUI();
         });
@@ -51,13 +50,13 @@ export class AppModel {
         let fileUri = vscode.window.activeTextEditor.document.fileName;
 
         if (fileUri.endsWith('.scss') || fileUri.endsWith('.sass')) {
-            
-            this.showMsgToOutputWindow('Change Detected...', [path.basename(fileUri)]); 
-            
-            if(path.basename(fileUri).startsWith('_')) {
-                this.compileAllSassFileAsync(null,false);
+
+            this.showMsgToOutputWindow('Change Detected...', [path.basename(fileUri)]);
+
+            if (path.basename(fileUri).startsWith('_')) {
+                this.compileAllSassFileAsync(null, false);
             }
-            else {    
+            else {
                 let sassPath = fileUri;
                 let options = this.generateTargetCssFormatOptions();
                 let targetPath = this.generateTargetCssFileUri(sassPath);
@@ -79,38 +78,46 @@ export class AppModel {
         this.isWatching = !this.isWatching;
 
         if (!this.isWatching) {
-            this.statusBarItem.text = `$(eye) Watch Sass`;
-            this.statusBarItem.command = 'liveSass.command.watchMySass';
-            this.statusBarItem.tooltip = 'live compile SASS or SCSS to CSS';
-            this.showMsgToOutputWindow('Stop Watching...', [], true);
+            this.notWatchingUI();
         }
         else {
-            this.statusBarItem.text = `$(x) Stop Watching Sass`;
-            this.statusBarItem.command = 'liveSass.command.donotWatchMySass';
-            this.statusBarItem.tooltip = 'Stop live compile SASS or SCSS to CSS';
-            this.showMsgToOutputWindow('Watching...', [], true);
+            this.watchingUI();
         }
 
     }
 
-    private ShowWorkingStageUI() {
-        this.statusBarItem.text = '$(pulse) Working on it...';
+    private watchingUI() {
+        this.statusBarItem.text = `$(x) Watching...`;
+        this.statusBarItem.command = 'liveSass.command.donotWatchMySass';
+        this.statusBarItem.tooltip = 'Stop live compilation of SASS or SCSS to CSS';
+        this.showMsgToOutputWindow('Watching...', [], true);
+    }
+
+    private notWatchingUI() {
+        this.statusBarItem.text = `$(eye) Watch Sass`;
+        this.statusBarItem.command = 'liveSass.command.watchMySass';
+        this.statusBarItem.tooltip = 'live compilation of SASS or SCSS to CSS';
+        this.showMsgToOutputWindow('Not Watching...', [], true);
+    }
+
+    private showWorkingStageUI() {
+        this.statusBarItem.text = '$(pulse) Working...';
         this.statusBarItem.tooltip = 'In case if it takes long time, Show output window and report.';
         this.statusBarItem.command = null;
     }
 
     private findAllSaasFilesAsync(callback) {
-        let FilePaths: string[] = [];
-        let excludedList =  vscode.workspace.getConfiguration('liveSassCompile')
-            .get('settings.excludeFolders') as String[];
+        let filePaths: string[] = [];
+        let excludedList = this.configSettings
+            .get('excludeFolders') as String[];
         let excludeByGlobString = `{${excludedList.join(',')}}`;
 
         vscode.workspace.findFiles('**/[^_]*.s[a|c]ss', excludeByGlobString)
-                .then((files) => {
+            .then((files) => {
                 files.forEach((file) => {
-                    FilePaths.push(file.fsPath);
+                    filePaths.push(file.fsPath);
                 });
-                return callback(FilePaths);
+                return callback(filePaths);
             });
     }
 
@@ -118,7 +125,7 @@ export class AppModel {
         SassCompile(SassPath, options, (result) => {
             //console.log(result);
             if (result.status === 0) {
-                this.writeToFileAsync(targetCssUri, `${result.text || '/*No CSS*/'} \n\n\n  /*# sourceMappingURL=${path.basename(targetCssUri)}.map */` );
+                this.writeToFileAsync(targetCssUri, `${result.text || '/*No CSS*/'} \n\n\n  /*# sourceMappingURL=${path.basename(targetCssUri)}.map */`);
                 this.GenerateOneMapFile(result.map, targetCssUri);
             }
             else {
@@ -129,11 +136,11 @@ export class AppModel {
         });
     }
 
-    private compileAllSassFileAsync(callback?, logMsgWindowFocusUI=true) {
-        
+    private compileAllSassFileAsync(callback?, logMsgWindowFocusUI = true) {
+
         let options = this.generateTargetCssFormatOptions();
         this.findAllSaasFilesAsync((sassPaths: string[]) => {
-          //  console.log(sassPaths);
+            //  console.log(sassPaths);
             this.showMsgToOutputWindow('Compiling Sass/Scss Files: ', sassPaths, logMsgWindowFocusUI);
 
             sassPaths.forEach((sassPath) => {
@@ -141,7 +148,7 @@ export class AppModel {
                 this.compileOneSassFileAsync(sassPath, targetPath, options);
             });
 
-            if(callback) {
+            if (callback) {
                 callback();
             }
         });
@@ -159,7 +166,7 @@ export class AppModel {
         }
         map.mappings = mapObject.mappings;
         map.file = path.basename(targetCssUri);
-        mapObject.sources.forEach((source: string)=>{
+        mapObject.sources.forEach((source: string) => {
             //path starts with ../saas/<abs path> or ../<abs path>
             if (source.startsWith('../sass/')) {
                 source = source.substring('../sass/'.length);
@@ -167,16 +174,16 @@ export class AppModel {
             else if (source.startsWith('../')) {
                 source = source.substring('../'.length);
             }
-            if(process.platform != 'win32') {
-                source = '/'+source; //for linux, maybe for MAC too
+            if (process.platform != 'win32') {
+                source = '/' + source; //for linux, maybe for MAC too
             }
-            
+
             let testpath = path.relative(
                 path.dirname(targetCssUri), source);
             testpath = testpath.replace(/\\/gi, '/');
             map.sources.push(testpath);
         });
-        
+
 
 
         this.writeToFileAsync(mapFileUri, JSON.stringify(map, null, 4));
@@ -184,7 +191,7 @@ export class AppModel {
 
     private writeToFileAsync(TargetFile, data) {
 
-        fs.writeFile(TargetFile, data, 'utf8' , (err) => {
+        fs.writeFile(TargetFile, data, 'utf8', (err) => {
             if (err) {
                 this.showMsgToOutputWindow('Error:', [
                     err.errno.toString(),
@@ -201,8 +208,7 @@ export class AppModel {
 
     private generateTargetCssFileUri(filePath: string) {
 
-        let saveLocation = vscode.workspace.getConfiguration('liveSassCompile')
-            .get('settings.savePath') as string;
+        let saveLocation = this.configSettings.get('savePath') as string;
 
         if (saveLocation !== 'null') {
 
@@ -230,14 +236,13 @@ export class AppModel {
 
         }
 
-        let extensionName = vscode.workspace.getConfiguration('liveSassCompile')
-                .get('settings.extensionName') as string;
+        let extensionName = this.configSettings.get('extensionName') as string;
 
         return filePath.substring(0, filePath.lastIndexOf('.')) + extensionName;
     }
 
     private mkdirRecursiveSync(dir) {
-        
+
         if (!fs.existsSync(path.dirname(dir))) {
             this.mkdirRecursiveSync(path.dirname(dir));
         }
@@ -245,8 +250,7 @@ export class AppModel {
     }
 
     private generateTargetCssFormatOptions() {
-        let outputStyleFormat = vscode.workspace.getConfiguration('liveSassCompile')
-            .get('settings.format') as string;
+        let outputStyleFormat = this.configSettings.get('format') as string;
 
         return {
             style: SassCompile.Sass.style[outputStyleFormat],
@@ -254,14 +258,19 @@ export class AppModel {
 
     }
 
-    private showMsgToOutputWindow(headMsg: string, bodyMsgs: string[], willShowToUI: boolean = false) {
+    private showMsgToOutputWindow(headMsg: string, bodyMsgs: string[], popUpToUI: boolean = false) {
+        
+        if(!this.outputWindow) return;
+
         this.outputWindow.appendLine(headMsg);
 
-        bodyMsgs.forEach(msg => {
-            this.outputWindow.appendLine(msg);
-        });
+        if (bodyMsgs) {
+            bodyMsgs.forEach(msg => {
+                this.outputWindow.appendLine(msg);
+            });
+        }
 
-        if (willShowToUI) {
+        if (popUpToUI) {
             this.outputWindow.show(true);
         }
         this.outputWindow.appendLine('--------------------')
