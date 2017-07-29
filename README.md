@@ -1,13 +1,14 @@
 
 # Live Sass Compiler
 
-**_[If you found any bug or if you have any suggestion, feel free to report or suggest me. If you like the extension, don't forgot to rate it.]_**
+**_[If you like the extension, [please leave a review](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass#review-details), it puts a smile on my face.]_**
 
-**_[[I need your guide/help]](https://github.com/ritwickdey/vscode-live-sass-compiler/blob/master/README.md#help-)_**
+**_[If you found any bug or if you have any suggestion, feel free to report or suggest me.]_**
+
 
 [![VSCode Marketplace Badge](https://vsmarketplacebadge.apphb.com/version/ritwickdey.live-sass.svg)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![Total Install](https://vsmarketplacebadge.apphb.com/installs/ritwickdey.live-sass.svg)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![Avarage Rating Badge](https://vsmarketplacebadge.apphb.com/rating-short/ritwickdey.live-sass.svg)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ritwickdey/vscode-live-sass-compiler/)
 
-A Visual Studio Code Extension that help you to compile/transpile your SASS/SCSS files to CSS files at realtime with live browser reload.
+A VSCode Extension that help you to compile/transpile your SASS/SCSS files to CSS files at realtime with live browser reload.
 
 ![App Preview](./images/Screenshot/AnimatedPreview.gif)
 
@@ -49,7 +50,35 @@ Open VSCode Editor and Press `ctrl+P`, type `ext install live-sass`.
             ]
         ```
 
-## How to config the settings in my project? (FAQ):
+## Extension Dependency 
+This extension has dependency on _[Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)_ extension for live browser reload.
+
+## What's new ?
+
+* #### Version 0.3.0 (29.07.2017)
+    * This update does not include any new feature or major fix but a big fix in source code setup. I was facing a big configuration issue between TypeScript and non-NPM third-party library since I released the extension - even I was not able to debug extension directly from TypeScript codes. Finally I am able to fix it. (I promise, more updates are coming soon...).
+    * Statusbar text (at watching mode) has been changed.
+    * Package size reduced to more than 50%.
+
+
+* #### Version 0.2.2 (19.07.2017)
+    * New Command added for one time Sass/Scss compilation - Press `F1` or `ctrl+shift+p` and enter `Compile Sass - Without Watch Mode`.
+
+* #### Version 0.2.1 (21.07.2017)
+    * [[#4](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/4)] Critical Bug Fixed update. [Thanks _[Cassio Cabral](https://github.com/cassioscabral)_].
+
+
+
+## Changelog
+To check full changelog click here [changelog](CHANGELOG.md).
+
+## LICENSE
+This extension is licensed under the [MIT License](LICENSE)
+
+## FAQ (For Beginners)
+
+### How to config the settings in my project?
+
 Create a `.vscode` folder in the root of project. Inside of `.vscode` folder create a json file named `settings.json`.
 Inside of the `settings.json`, type following key-value pairs. By the way you'll get intelli-sense.
 
@@ -64,32 +93,3 @@ Inside of the `settings.json`, type following key-value pairs. By the way you'll
     ]
 }
 ```
-
-## Extension Dependency 
-This extension has dependency on _[Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)_ extension for live browser reload.
-
-## What's new ?
-
-* #### Version 0.2.2 (19.07.2017)
-    * New Command added for one time Sass/Scss compilation - Press `F1` or `ctrl+shift+p` and enter `Compile Sass - Without Watch Mode`.
-
-* #### Version 0.2.1 (21.07.2017)
-    * [[#4](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/4)] Critical Bug Fixed update. [Thanks _[Cassio Cabral](https://github.com/cassioscabral)_].
-
-* #### Version 0.2.0 (20.07.2017)
- 
-    * [[#3](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/3)] New settings added to exclude specific folders from workspace. All Sass/Scss files inside the folders will be ignored. [Thanks _[Cassio Cabral](https://github.com/cassioscabral) for the suggestion_] .
-
-
-
-## Changelog
-To check full changelog click here [changelog](CHANGELOG.md).
-
-## LICENSE
-This extension is licensed under the [MIT License](LICENSE)
-
-<br>
-<br>
-
-> ## HELP : 
-> I am using Sass.js library to compile SASS to CSS. This libary is not avaliable through NPM. So, I manually put the JS files in project folder. Now, TypeScript tries to generate `.map` file of the library (library size 3MB) and I get compile time error (`Memory out of heap` - like that). So, I set `"sourceMap": false,` . Now I'm not getting the error. But problem is that while debugging. I have to go `out` folder to debug. Another problem is that on every single save TypeScript always copy the library to `out` directory while cause slow performce of VScode while debugging.

@@ -26,7 +26,7 @@ export class AppModel {
         }
     }
 
-
+    //Compile All file with watch mode. Set @'withWatchingMode' = false for without watch mode.
     compileAllFiles(withWatchingMode = true) {
         if (this.isWatching) {
             vscode.window.showInformationMessage('already watching...');
@@ -101,7 +101,7 @@ export class AppModel {
     }
 
     private showWorkingStageUI() {
-        this.statusBarItem.text = '$(pulse) Working...';
+        this.statusBarItem.text = '$(pulse) Working on it...';
         this.statusBarItem.tooltip = 'In case if it takes long time, Show output window and report.';
         this.statusBarItem.command = null;
     }
