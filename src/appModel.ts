@@ -237,6 +237,7 @@ export class AppModel {
     }
 
     private mkdirRecursiveSync(dir) {
+        
         if (!fs.existsSync(path.dirname(dir))) {
             this.mkdirRecursiveSync(path.dirname(dir));
         }

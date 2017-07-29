@@ -1,7 +1,3 @@
----
-title: "Home Page"
-permalink : "/index.html"
----
 
 # Live Sass Compiler
 
