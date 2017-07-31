@@ -1,12 +1,12 @@
 'use strict';
 import * as vscode from 'vscode';
-import * as SassCompile from "SassLib/sass.node.js";
-import * as fs from 'fs';
 import * as path from 'path';
 
+import { FileHelper, IFileResolver } from './FileHelper';
+import { SassHelper } from './SassCompileHelper';
 import { OutputWindow } from './OuputWindow';
 import { Helper } from './helper';
-import {StatusBarUi} from './StatubarUi'
+import { StatusBarUi } from './StatubarUi'
 
 export class AppModel {
 
@@ -17,16 +17,18 @@ export class AppModel {
         StatusBarUi.init();
     }
 
-    //Compile All file with watch mode. Set @'withWatchingMode' = false for without watch mode.
-    compileAllFiles(withWatchingMode = true) {
+    /**
+     * Compile All file with watch mode.
+     * @param WatchingMode WatchingMode = false for without watch mode.
+     */
+    compileAllFiles(WatchingMode = true) {
         if (this.isWatching) {
             vscode.window.showInformationMessage('already watching...');
             return;
         }
         StatusBarUi.working();
-        let options = this.generateTargetCssFormatOptions();
-        this.compileAllSassFileAsync(() => {
-            if (!withWatchingMode) {
+        this.GenerateAllCssAndMap().then(() => {
+            if (!WatchingMode) {
                 this.isWatching = true; //tricky to toggle status
             }
             this.toggleStatusUI();
@@ -45,13 +47,18 @@ export class AppModel {
             OutputWindow.Show('Change Detected...', [path.basename(fileUri)]);
 
             if (path.basename(fileUri).startsWith('_')) {
-                this.compileAllSassFileAsync(null, false);
+                this.GenerateAllCssAndMap(false).then(()=>{
+                    OutputWindow.Show("Watching...",null);
+                });
             }
             else {
                 let sassPath = fileUri;
-                let options = this.generateTargetCssFormatOptions();
-                let targetPath = this.generateTargetCssFileUri(sassPath);
-                this.compileOneSassFileAsync(sassPath, targetPath, options);
+                let options = this.generateCssStyle();
+                let cssMapPath = this.generateCssAndMapUri(sassPath);
+                this.GenerateCssAndMap(sassPath, cssMapPath.css, cssMapPath.map, options)
+                .then(()=>{
+                     OutputWindow.Show("Watching...",null);
+                });
             }
         }
     }
@@ -67,10 +74,9 @@ export class AppModel {
 
     private toggleStatusUI() {
         this.isWatching = !this.isWatching;
-
         if (!this.isWatching) {
             StatusBarUi.notWatching();
-             OutputWindow.Show('Not Watching...', null, true);
+            OutputWindow.Show('Not Watching...', null, true);
         }
         else {
             StatusBarUi.watching();
@@ -82,7 +88,7 @@ export class AppModel {
     private findAllSaasFilesAsync(callback) {
         let filePaths: string[] = [];
         let excludedList = Helper.getConfigSettings<string[]>('excludeFolders');
-        
+
         let excludeByGlobString = `{${excludedList.join(',')}}`;
 
         vscode.workspace.findFiles('**/[^_]*.s[a|c]ss', excludeByGlobString)
@@ -94,40 +100,63 @@ export class AppModel {
             });
     }
 
-    private compileOneSassFileAsync(SassPath: string, targetCssUri: string, options) {
-        SassCompile(SassPath, options, (result) => {
-            //console.log(result);
-            if (result.status === 0) {
-                this.writeToFileAsync(targetCssUri, `${result.text || '/*No CSS*/'} \n\n\n  /*# sourceMappingURL=${path.basename(targetCssUri)}.map */`);
-                this.GenerateOneMapFile(result.map, targetCssUri);
-            }
-            else {
-                OutputWindow.Show('Compilation Error', [result.formatted], true);
-                console.log(result.formatted);
-            }
+    private GenerateCssAndMap(SassPath: string, targetCssUri: string, mapFileUri: string, options) {
+        return new Promise(resolve => {
+            SassHelper.instance.compileOne(SassPath, options)
+                .then((result) => {
+                    if (result.status !== 0) {
+                        OutputWindow.Show('Compilation Error', [result.formatted], true);
+                        resolve(true);
+                    }
+                    else {
+                        let promises: Promise<IFileResolver>[] = [];
 
+                        promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, result.text));
+
+                        let map = this.GenerateMapObject(result.map, targetCssUri);
+                        promises.push(FileHelper.Instance.writeToOneFile(mapFileUri, JSON.stringify(map, null, 4)));
+
+                        Promise.all(promises).then(fileResolvers => {
+                            OutputWindow.Show("Generated :", null,false,false);
+                            fileResolvers.forEach(fileResolver => {
+                                if (fileResolver.Exception) {
+                                    OutputWindow.Show('Error:', [
+                                        fileResolver.Exception.errno.toString(),
+                                        fileResolver.Exception.path,
+                                        fileResolver.Exception.message
+                                    ], true);
+                                    console.error('error :', fileResolver);
+                                }
+                                else {
+                                    OutputWindow.Show(null, [fileResolver.FileUri],false,false);
+                                }
+                            });
+                            OutputWindow.Show(null, null,false,true);
+                            resolve(true);
+                        });
+                    }
+                });
         });
     }
 
-    private compileAllSassFileAsync(callback?, logMsgWindowFocusUI = true) {
+    private GenerateAllCssAndMap(logMsgWindowFocusUI = true) {
+        return new Promise((resolve) => {
+            let options = this.generateCssStyle();
+            this.findAllSaasFilesAsync((sassPaths: string[]) => {
+                OutputWindow.Show('Compiling Sass/Scss Files: ', sassPaths, logMsgWindowFocusUI);
 
-        let options = this.generateTargetCssFormatOptions();
-        this.findAllSaasFilesAsync((sassPaths: string[]) => {
-            //  console.log(sassPaths);
-            OutputWindow.Show('Compiling Sass/Scss Files: ', sassPaths, logMsgWindowFocusUI);
+                let promises = [];
+                sassPaths.forEach((sassPath) => {
+                    let cssMapUri = this.generateCssAndMapUri(sassPath);
+                    promises.push(this.GenerateCssAndMap(sassPath, cssMapUri.css, cssMapUri.map, options));
+                });
 
-            sassPaths.forEach((sassPath) => {
-                let targetPath = this.generateTargetCssFileUri(sassPath);
-                this.compileOneSassFileAsync(sassPath, targetPath, options);
+                Promise.all(promises).then((e)=>resolve(e));
             });
-
-            if (callback) {
-                callback();
-            }
         });
     }
 
-    private GenerateOneMapFile(mapObject, targetCssUri: string) {
+    private GenerateMapObject(mapObject, targetCssUri: string) {
         let mapFileUri = targetCssUri + '.map';
         console.log(mapObject);
         let map = {
@@ -157,41 +186,22 @@ export class AppModel {
             map.sources.push(testpath);
         });
 
+        return map;
 
-
-        this.writeToFileAsync(mapFileUri, JSON.stringify(map, null, 4));
+        //  this.writeToFileAsync(mapFileUri, JSON.stringify(map, null, 4));
     }
 
-    private writeToFileAsync(TargetFile, data) {
+    private generateCssAndMapUri(filePath: string) {
 
-        fs.writeFile(TargetFile, data, 'utf8', (err) => {
-            if (err) {
-                OutputWindow.Show('Error:', [
-                    err.errno.toString(),
-                    err.path,
-                    err.message
-                ], true);
-                return console.error('error :', err);
-            }
+        let savePath = Helper.getConfigSettings<string>('savePath');
+        let extensionName = Helper.getConfigSettings<string>('extensionName');
 
-            OutputWindow.Show('Generated: ', [TargetFile]);
-            console.log('File saved');
-        });
-    }
-
-    private generateTargetCssFileUri(filePath: string) {
-
-        let saveLocation = Helper.getConfigSettings<string>('savePath');
-
-        if (saveLocation !== 'null') {
-
+        if (savePath !== 'null') {
             try {
                 let workspaceRoot = vscode.workspace.rootPath;
-                let fileUri = path.join(workspaceRoot, saveLocation);
+                let fileUri = path.join(workspaceRoot, savePath);
 
-                if (!fs.existsSync(fileUri)) {
-                    this.mkdirRecursiveSync(fileUri);
-                }
+                FileHelper.Instance.MakeDirIfNotAvailable(fileUri);
 
                 filePath = path.join(fileUri, path.basename(filePath));
             }
@@ -209,28 +219,18 @@ export class AppModel {
 
         }
 
-        let extensionName = Helper.getConfigSettings<string>('extensionName');
-
-        return filePath.substring(0, filePath.lastIndexOf('.')) + extensionName;
-    }
-
-    private mkdirRecursiveSync(dir) {
-
-        if (!fs.existsSync(path.dirname(dir))) {
-            this.mkdirRecursiveSync(path.dirname(dir));
-        }
-        fs.mkdirSync(dir);
-    }
-
-    private generateTargetCssFormatOptions() {
-        let outputStyleFormat = Helper.getConfigSettings<string>('format');
-
+        let cssUri = filePath.substring(0, filePath.lastIndexOf('.')) + extensionName;
         return {
-            style: SassCompile.Sass.style[outputStyleFormat],
-        }
-
+            css: cssUri,
+            map: cssUri + '.map'
+        };
     }
-    
+
+    private generateCssStyle() {
+        let outputStyleFormat = Helper.getConfigSettings<string>('format');
+        return SassHelper.targetCssFormat(outputStyleFormat);
+    }
+
     dispose() {
         StatusBarUi.dispose();
         OutputWindow.dispose();
