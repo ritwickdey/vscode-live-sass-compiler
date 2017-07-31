@@ -5,22 +5,16 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import { Helper } from './helper';
+import {StatusBarUi} from './StatubarUi'
 
 export class AppModel {
 
-    statusBarItem: vscode.StatusBarItem;
     isWatching: boolean;
     outputWindow: vscode.OutputChannel;
 
-    
-
     constructor() {
         this.isWatching = false;
-        if (!this.statusBarItem) {
-            this.statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 200);
-            this.notWatchingUI();
-            this.statusBarItem.show();
-        }
+        StatusBarUi.init();
         if (!this.outputWindow) {
             this.outputWindow = vscode.window.createOutputChannel('Live Sass Compile - Output Window');
         }
@@ -32,7 +26,7 @@ export class AppModel {
             vscode.window.showInformationMessage('already watching...');
             return;
         }
-        this.showWorkingStageUI();
+        StatusBarUi.working();
         let options = this.generateTargetCssFormatOptions();
         this.compileAllSassFileAsync(() => {
             if (!withWatchingMode) {
@@ -78,32 +72,14 @@ export class AppModel {
         this.isWatching = !this.isWatching;
 
         if (!this.isWatching) {
-            this.notWatchingUI();
+            StatusBarUi.notWatching();
+             this.showMsgToOutputWindow('Not Watching...', [], true);
         }
         else {
-            this.watchingUI();
+            StatusBarUi.watching();
+            this.showMsgToOutputWindow('Watching...', [], true);
         }
 
-    }
-
-    private watchingUI() {
-        this.statusBarItem.text = `$(x) Watching...`;
-        this.statusBarItem.command = 'liveSass.command.donotWatchMySass';
-        this.statusBarItem.tooltip = 'Stop live compilation of SASS or SCSS to CSS';
-        this.showMsgToOutputWindow('Watching...', [], true);
-    }
-
-    private notWatchingUI() {
-        this.statusBarItem.text = `$(eye) Watch Sass`;
-        this.statusBarItem.command = 'liveSass.command.watchMySass';
-        this.statusBarItem.tooltip = 'live compilation of SASS or SCSS to CSS';
-        this.showMsgToOutputWindow('Not Watching...', [], true);
-    }
-
-    private showWorkingStageUI() {
-        this.statusBarItem.text = '$(pulse) Working on it...';
-        this.statusBarItem.tooltip = 'In case if it takes long time, Show output window and report.';
-        this.statusBarItem.command = null;
     }
 
     private findAllSaasFilesAsync(callback) {
@@ -277,7 +253,7 @@ export class AppModel {
     }
 
     dispose() {
-        this.statusBarItem.dispose();
+        StatusBarUi.dispose();
         this.outputWindow.dispose();
     }
 }
