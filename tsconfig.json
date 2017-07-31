@@ -11,12 +11,10 @@
         "rootDir": "."
     },
    
-    "files" : [
-        "./src/extension.ts",
-        "./src/appModel.ts"
-    ],
     "exclude": [
         "node_modules",
-        ".vscode-test"
+        ".vscode-test",
+        "lib",
+        "_site"
     ]
 }
