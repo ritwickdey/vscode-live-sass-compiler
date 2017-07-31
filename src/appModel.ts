@@ -85,6 +85,10 @@ export class AppModel {
 
     }
 
+    /**
+     * Find ALL Sass & Scss from workspace & It also exclude Sass/Scss from exclude list settings
+     * @param callback - callback(filepaths) with be called with Uri(s) of Sass/Scss(s) (string[]).
+     */
     private findAllSaasFilesAsync(callback) {
         let filePaths: string[] = [];
         let excludedList = Helper.getConfigSettings<string[]>('excludeFolders');
@@ -100,6 +104,13 @@ export class AppModel {
             });
     }
 
+    /**
+     * To Generate one One Css & Map file from Sass/Scss
+     * @param SassPath Sass/Scss file URI (string) 
+     * @param targetCssUri Target CSS file URI (string)
+     * @param mapFileUri Target MAP file URI (string)
+     * @param options - Object - It includes target CSS style and some more. 
+     */
     private GenerateCssAndMap(SassPath: string, targetCssUri: string, mapFileUri: string, options) {
         return new Promise(resolve => {
             SassHelper.instance.compileOne(SassPath, options)
@@ -139,11 +150,15 @@ export class AppModel {
         });
     }
 
-    private GenerateAllCssAndMap(logMsgWindowFocusUI = true) {
+    /**
+     * To compile all Sass/scss files 
+     * @param popUpOutputWindow To control output window. default value is true.
+     */
+    private GenerateAllCssAndMap(popUpOutputWindow = true) {
         return new Promise((resolve) => {
             let options = this.generateCssStyle();
             this.findAllSaasFilesAsync((sassPaths: string[]) => {
-                OutputWindow.Show('Compiling Sass/Scss Files: ', sassPaths, logMsgWindowFocusUI);
+                OutputWindow.Show('Compiling Sass/Scss Files: ', sassPaths, popUpOutputWindow);
 
                 let promises = [];
                 sassPaths.forEach((sassPath) => {
@@ -156,9 +171,12 @@ export class AppModel {
         });
     }
 
+    /**
+     * Generate Map Object
+     * @param mapObject Generated Map object form Sass.js library
+     * @param targetCssUri Css URI 
+     */
     private GenerateMapObject(mapObject, targetCssUri: string) {
-        let mapFileUri = targetCssUri + '.map';
-        console.log(mapObject);
         let map = {
             'version': 3,
             'mappings': '',
@@ -169,7 +187,7 @@ export class AppModel {
         map.mappings = mapObject.mappings;
         map.file = path.basename(targetCssUri);
         mapObject.sources.forEach((source: string) => {
-            //path starts with ../saas/<abs path> or ../<abs path>
+            //path starts with ../saas/<path> or ../< path>
             if (source.startsWith('../sass/')) {
                 source = source.substring('../sass/'.length);
             }
