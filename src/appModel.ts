@@ -4,15 +4,15 @@ import * as SassCompile from "SassLib/sass.node.js";
 import * as fs from 'fs';
 import * as path from 'path';
 
+import { Helper } from './helper';
+
 export class AppModel {
 
     statusBarItem: vscode.StatusBarItem;
     isWatching: boolean;
     outputWindow: vscode.OutputChannel;
 
-    get configSettings() {
-        return vscode.workspace.getConfiguration('liveSassCompile.settings');
-    }
+    
 
     constructor() {
         this.isWatching = false;
@@ -108,8 +108,8 @@ export class AppModel {
 
     private findAllSaasFilesAsync(callback) {
         let filePaths: string[] = [];
-        let excludedList = this.configSettings
-            .get('excludeFolders') as String[];
+        let excludedList = Helper.getConfigSettings<string[]>('excludeFolders');
+        
         let excludeByGlobString = `{${excludedList.join(',')}}`;
 
         vscode.workspace.findFiles('**/[^_]*.s[a|c]ss', excludeByGlobString)
@@ -208,7 +208,7 @@ export class AppModel {
 
     private generateTargetCssFileUri(filePath: string) {
 
-        let saveLocation = this.configSettings.get('savePath') as string;
+        let saveLocation = Helper.getConfigSettings<string>('savePath');
 
         if (saveLocation !== 'null') {
 
@@ -236,7 +236,7 @@ export class AppModel {
 
         }
 
-        let extensionName = this.configSettings.get('extensionName') as string;
+        let extensionName = Helper.getConfigSettings<string>('extensionName');
 
         return filePath.substring(0, filePath.lastIndexOf('.')) + extensionName;
     }
@@ -250,7 +250,7 @@ export class AppModel {
     }
 
     private generateTargetCssFormatOptions() {
-        let outputStyleFormat = this.configSettings.get('format') as string;
+        let outputStyleFormat = Helper.getConfigSettings<string>('format');
 
         return {
             style: SassCompile.Sass.style[outputStyleFormat],
