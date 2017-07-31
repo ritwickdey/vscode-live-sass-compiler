@@ -4,20 +4,17 @@ import * as SassCompile from "SassLib/sass.node.js";
 import * as fs from 'fs';
 import * as path from 'path';
 
+import { OutputWindow } from './OuputWindow';
 import { Helper } from './helper';
 import {StatusBarUi} from './StatubarUi'
 
 export class AppModel {
 
     isWatching: boolean;
-    outputWindow: vscode.OutputChannel;
 
     constructor() {
         this.isWatching = false;
         StatusBarUi.init();
-        if (!this.outputWindow) {
-            this.outputWindow = vscode.window.createOutputChannel('Live Sass Compile - Output Window');
-        }
     }
 
     //Compile All file with watch mode. Set @'withWatchingMode' = false for without watch mode.
@@ -45,7 +42,7 @@ export class AppModel {
 
         if (fileUri.endsWith('.scss') || fileUri.endsWith('.sass')) {
 
-            this.showMsgToOutputWindow('Change Detected...', [path.basename(fileUri)]);
+            OutputWindow.Show('Change Detected...', [path.basename(fileUri)]);
 
             if (path.basename(fileUri).startsWith('_')) {
                 this.compileAllSassFileAsync(null, false);
@@ -73,11 +70,11 @@ export class AppModel {
 
         if (!this.isWatching) {
             StatusBarUi.notWatching();
-             this.showMsgToOutputWindow('Not Watching...', [], true);
+             OutputWindow.Show('Not Watching...', null, true);
         }
         else {
             StatusBarUi.watching();
-            this.showMsgToOutputWindow('Watching...', [], true);
+            OutputWindow.Show('Watching...', null, true);
         }
 
     }
@@ -105,7 +102,7 @@ export class AppModel {
                 this.GenerateOneMapFile(result.map, targetCssUri);
             }
             else {
-                this.showMsgToOutputWindow('Compilation Error', [result.formatted], true);
+                OutputWindow.Show('Compilation Error', [result.formatted], true);
                 console.log(result.formatted);
             }
 
@@ -117,7 +114,7 @@ export class AppModel {
         let options = this.generateTargetCssFormatOptions();
         this.findAllSaasFilesAsync((sassPaths: string[]) => {
             //  console.log(sassPaths);
-            this.showMsgToOutputWindow('Compiling Sass/Scss Files: ', sassPaths, logMsgWindowFocusUI);
+            OutputWindow.Show('Compiling Sass/Scss Files: ', sassPaths, logMsgWindowFocusUI);
 
             sassPaths.forEach((sassPath) => {
                 let targetPath = this.generateTargetCssFileUri(sassPath);
@@ -169,7 +166,7 @@ export class AppModel {
 
         fs.writeFile(TargetFile, data, 'utf8', (err) => {
             if (err) {
-                this.showMsgToOutputWindow('Error:', [
+                OutputWindow.Show('Error:', [
                     err.errno.toString(),
                     err.path,
                     err.message
@@ -177,7 +174,7 @@ export class AppModel {
                 return console.error('error :', err);
             }
 
-            this.showMsgToOutputWindow('Generated: ', [TargetFile]);
+            OutputWindow.Show('Generated: ', [TargetFile]);
             console.log('File saved');
         });
     }
@@ -201,7 +198,7 @@ export class AppModel {
             catch (err) {
                 console.log(err);
 
-                this.showMsgToOutputWindow('Error:', [
+                OutputWindow.Show('Error:', [
                     err.errno.toString(),
                     err.path,
                     err.message
@@ -233,27 +230,9 @@ export class AppModel {
         }
 
     }
-
-    private showMsgToOutputWindow(headMsg: string, bodyMsgs: string[], popUpToUI: boolean = false) {
-        
-        if(!this.outputWindow) return;
-
-        this.outputWindow.appendLine(headMsg);
-
-        if (bodyMsgs) {
-            bodyMsgs.forEach(msg => {
-                this.outputWindow.appendLine(msg);
-            });
-        }
-
-        if (popUpToUI) {
-            this.outputWindow.show(true);
-        }
-        this.outputWindow.appendLine('--------------------')
-    }
-
+    
     dispose() {
         StatusBarUi.dispose();
-        this.outputWindow.dispose();
+        OutputWindow.dispose();
     }
 }
