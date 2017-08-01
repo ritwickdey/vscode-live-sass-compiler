@@ -117,7 +117,7 @@
         "test": "node ./node_modules/vscode/bin/test"
     },
     "dependencies": {
-        "sasslib": "file:lib\\SassLib"
+        "sasslib": "file:lib\\sasslib"
     },
     "devDependencies": {
         "typescript": "^2.4.1",

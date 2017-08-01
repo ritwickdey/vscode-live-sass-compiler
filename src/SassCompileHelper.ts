@@ -1,4 +1,4 @@
-import * as SassCompiler from "SassLib/sass.node.js";
+import * as SassCompiler from "sasslib/sass.node.js";
 
 
 export class SassHelper {
