@@ -47,8 +47,8 @@ export class AppModel {
             OutputWindow.Show('Change Detected...', [path.basename(fileUri)]);
 
             if (path.basename(fileUri).startsWith('_')) {
-                this.GenerateAllCssAndMap(false).then(()=>{
-                    OutputWindow.Show("Watching...",null);
+                this.GenerateAllCssAndMap(false).then(() => {
+                    OutputWindow.Show("Watching...", null);
                 });
             }
             else {
@@ -56,9 +56,9 @@ export class AppModel {
                 let options = this.generateCssStyle();
                 let cssMapPath = this.generateCssAndMapUri(sassPath);
                 this.GenerateCssAndMap(sassPath, cssMapPath.css, cssMapPath.map, options)
-                .then(()=>{
-                     OutputWindow.Show("Watching...",null);
-                });
+                    .then(() => {
+                        OutputWindow.Show("Watching...", null);
+                    });
             }
         }
     }
@@ -121,14 +121,15 @@ export class AppModel {
                     }
                     else {
                         let promises: Promise<IFileResolver>[] = [];
-
-                        promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, result.text));
+                        let mapFileTag = `/*# sourceMappingURL= ${path.basename(targetCssUri)}.map */`
+                        promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.text} \n\n ${mapFileTag}`));
 
                         let map = this.GenerateMapObject(result.map, targetCssUri);
-                        promises.push(FileHelper.Instance.writeToOneFile(mapFileUri, JSON.stringify(map, null, 4)));
+                        promises.push(FileHelper.Instance.writeToOneFile(mapFileUri,
+                            JSON.stringify(map, null, 4)));
 
                         Promise.all(promises).then(fileResolvers => {
-                            OutputWindow.Show("Generated :", null,false,false);
+                            OutputWindow.Show("Generated :", null, false, false);
                             fileResolvers.forEach(fileResolver => {
                                 if (fileResolver.Exception) {
                                     OutputWindow.Show('Error:', [
@@ -139,10 +140,10 @@ export class AppModel {
                                     console.error('error :', fileResolver);
                                 }
                                 else {
-                                    OutputWindow.Show(null, [fileResolver.FileUri],false,false);
+                                    OutputWindow.Show(null, [fileResolver.FileUri], false, false);
                                 }
                             });
-                            OutputWindow.Show(null, null,false,true);
+                            OutputWindow.Show(null, null, false, true);
                             resolve(true);
                         });
                     }
@@ -166,7 +167,7 @@ export class AppModel {
                     promises.push(this.GenerateCssAndMap(sassPath, cssMapUri.css, cssMapUri.map, options));
                 });
 
-                Promise.all(promises).then((e)=>resolve(e));
+                Promise.all(promises).then((e) => resolve(e));
             });
         });
     }

@@ -55,9 +55,12 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 
 ## What's new ?
 
+* #### Version 0.3.2 (01.08.2017)
+    * [Hot Fix] CSS & map link was broken.
+
 * #### Version 0.3.1 (31.07.2017)
     *  Ordering of Output log is fixed.
-     >  NOTE : Lots of code (almost 50%) is changed as I refactored the source code. So, if anything is broken (Gopefully NOT :D), feel free to open a issue request on GitHub. I'm happy to resolve the bugs.
+     >  Lot of code (almost full code) is changed as I've refactored the source code. So, if anything is broken (Hopefully NOT :D ), feel free to open a issue request on GitHub. I'm happy to resolve the bugs.
 
 * #### Version 0.3.0 (29.07.2017)
     * This update does not include any new feature or major fix but a big fix in source code setup. I was facing a big configuration issue between TypeScript and non-NPM third-party library since I released the extension - even I was not able to debug extension directly from TypeScript codes. Finally I am able to fix it. (I promise, more updates are coming soon...).

@@ -15,14 +15,14 @@ export class StatusBarUi {
     }
 
     static init() {
-        StatusBarUi.working("Loading...");
+        StatusBarUi.working("Starting...");
         setTimeout(function(){
             StatusBarUi.notWatching();
         },1000);
     }
 
     static watching() {
-        StatusBarUi.statusBarItem.text = `$(x) Watching...`;
+        StatusBarUi.statusBarItem.text = `$(telescope) Watching...`;
         StatusBarUi.statusBarItem.command = 'liveSass.command.donotWatchMySass';
         StatusBarUi.statusBarItem.tooltip = 'Stop live compilation of SASS or SCSS to CSS';
     }
