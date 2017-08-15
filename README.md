@@ -1,6 +1,8 @@
 
 # Live Sass Compiler
 
+**_Lot of code (almost full code) is changed as I've refactored the source code. So, if anything is broken (Hopefully NOT :D ), feel free to open a issue request on GitHub. I'm happy to resolve the bugs._**
+
 **_[If you like the extension, [please leave a review](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass#review-details), it puts a smile on my face.]_**
 
 **_[If you found any bug or if you have any suggestion, feel free to report or suggest me.]_**
@@ -55,15 +57,14 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 
 ## What's new ?
 
+* #### Version 0.3.4 (15.08.2017)
+    * **[Fixed [#7](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/7)]** Duplicate Output.  _[Thanks [Tomekk-hnm](https://github.com/tomekk-hnm)]_.
+
 * #### Version 0.3.3 (01.08.2017)
     * [[#5](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/5)] Critical Fix Update for Linux & macOS. (Thanks a lot to [Shea Fitzek](https://github.com/sheafitzek)). 
 
 * #### Version 0.3.2 (01.08.2017)
     * [Hot Fix] CSS & map link was broken.
-
-* #### Version 0.3.1 (31.07.2017)
-    *  Ordering of Output log is fixed.
-     >  Lot of code (almost full code) is changed as I've refactored the source code. So, if anything is broken (Hopefully NOT :D ), feel free to open a issue request on GitHub. I'm happy to resolve the bugs.
 
 
 ## Changelog

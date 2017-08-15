@@ -3,6 +3,7 @@
 
 | Version | Date | Changelog|
 | ------- | -------- | ------ |
+|0.3.4|15.08.17|**[Fixed [#7](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/7)]** Duplicate Output. _[Thanks [Tomekk-hnm](https://github.com/tomekk-hnm)]_.|
 |0.3.3|01.08.17|[[#5](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/5)] Critical Fix Update for Linux & macOS. (Thanks a lot to [Shea Fitzek](https://github.com/sheafitzek)). |
 |0.3.2 | 01.08.17 | [Hot Fix] CSS & map link was broken. |
 |0.3.1 | 30.07.17 | &mdash; Ordering of Output log is fixed.<br><br>NOTE : Lot of code (almost full code) is changed as I've refactored the source code. So, if anything is broken (Hopefully NOT :D ), feel free to open a issue request on GitHub. I'm happy to resolve the bugs. |
