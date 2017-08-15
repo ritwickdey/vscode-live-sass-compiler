@@ -157,12 +157,11 @@ export class AppModel {
      */
     private GenerateAllCssAndMap(popUpOutputWindow = true) {
         return new Promise((resolve) => {
-            let options = this.generateCssStyle();
             this.findAllSaasFilesAsync((sassPaths: string[]) => {
                 OutputWindow.Show('Compiling Sass/Scss Files: ', sassPaths, popUpOutputWindow);
-
                 let promises = [];
                 sassPaths.forEach((sassPath) => {
+                    let options = this.generateCssStyle();
                     let cssMapUri = this.generateCssAndMapUri(sassPath);
                     promises.push(this.GenerateCssAndMap(sassPath, cssMapUri.css, cssMapUri.map, options));
                 });
