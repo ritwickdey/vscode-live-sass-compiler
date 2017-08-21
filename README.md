@@ -1,8 +1,6 @@
 
 # Live Sass Compiler
 
-**_Lot of code (almost full code) is changed as I've refactored the source code. So, if anything is broken (Hopefully NOT :D ), feel free to open a issue request on GitHub. I'm happy to resolve the bugs._**
-
 **_[If you like the extension, [please leave a review](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass#review-details), it puts a smile on my face.]_**
 
 **_[If you found any bug or if you have any suggestion, feel free to report or suggest me.]_**
