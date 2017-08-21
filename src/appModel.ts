@@ -93,25 +93,31 @@ export class AppModel {
     private findAllSaasFilesAsync(callback) {
         let filePaths: string[] = [];
         let excludedList = Helper.getConfigSettings<string[]>('excludeList');
+        let includeItems = Helper.getConfigSettings<string[] | null>('includeItems');
         let excludeByGlobString = `{${excludedList.join(',')}}`;
 
         let basePath = vscode.workspace.rootPath || path.basename(vscode.window.activeTextEditor.document.fileName);
 
-        let excludedList2 = [];
-        excludedList.forEach(item => {
-            //excludedList2.push(path.join(basePath, item));
-            excludedList2.push( item);
-        });
-
         let options = {
-            ignore: excludedList2,
+            ignore: excludedList,
             mark: true,
-            cwd  : basePath
+            cwd: basePath
         }
 
-        glob("**/[^_]*.s[a|c]ss", options, function (er, files) {
+        let queryPatten = '**/[^_]*.s[a|c]ss';
+
+        if (includeItems && includeItems.length) {
+            queryPatten = `{${includeItems.join(',')}}`;
+        }
+
+        glob(queryPatten, options, function (er, files) {
             files.forEach((file) => {
-                filePaths.push(path.join(basePath,file));
+                let filepath = path.join(basePath, file);
+                let basename = path.basename(filepath);
+                let extName = path.extname(filepath);
+                if (!basename.startsWith('_') && (extName.endsWith('sass') || extName.endsWith('scss'))) {
+                    filePaths.push(filepath);
+                }
             });
             return callback(filePaths);
         });
