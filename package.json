@@ -85,13 +85,13 @@
                     ],
                     "description": "Customize extension name.\nDefault is .css"
                 },
-                "liveSassCompile.settings.excludeFolders": {
+                "liveSassCompile.settings.excludeList": {
                     "type": "array",
                     "default": [
                         "**/node_modules/**",
                         ".vscode/**"
                     ],
-                    "description": "All Sass/Scss files inside the folders will be excluded. \n\nExamples: \n'**/node_modules/**',\n'.vscode/**', \n'.history/**' \n\nGlob Patterns are accepted"
+                    "description": "All Sass/Scss files inside the folders will be excluded. \n\nExamples: \n'**/node_modules/**',\n'.vscode/**', \n'.history/**' \n\nGlob Patterns are accepted."
                 }
             }
         }
@@ -117,6 +117,7 @@
         "test": "node ./node_modules/vscode/bin/test"
     },
     "dependencies": {
+        "glob": "^7.1.2",
         "sasslib": "file:lib\\sasslib"
     },
     "devDependencies": {

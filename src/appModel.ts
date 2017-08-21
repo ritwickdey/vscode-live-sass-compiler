@@ -1,6 +1,7 @@
 'use strict';
 import * as vscode from 'vscode';
 import * as path from 'path';
+import * as glob from 'glob';
 
 import { FileHelper, IFileResolver } from './FileHelper';
 import { SassHelper } from './SassCompileHelper';
@@ -91,17 +92,29 @@ export class AppModel {
      */
     private findAllSaasFilesAsync(callback) {
         let filePaths: string[] = [];
-        let excludedList = Helper.getConfigSettings<string[]>('excludeFolders');
-
+        let excludedList = Helper.getConfigSettings<string[]>('excludeList');
         let excludeByGlobString = `{${excludedList.join(',')}}`;
 
-        vscode.workspace.findFiles('**/[^_]*.s[a|c]ss', excludeByGlobString)
-            .then((files) => {
-                files.forEach((file) => {
-                    filePaths.push(file.fsPath);
-                });
-                return callback(filePaths);
+        let basePath = vscode.workspace.rootPath || path.basename(vscode.window.activeTextEditor.document.fileName);
+
+        let excludedList2 = [];
+        excludedList.forEach(item => {
+            //excludedList2.push(path.join(basePath, item));
+            excludedList2.push( item);
+        });
+
+        let options = {
+            ignore: excludedList2,
+            mark: true,
+            cwd  : basePath
+        }
+
+        glob("**/[^_]*.s[a|c]ss", options, function (er, files) {
+            files.forEach((file) => {
+                filePaths.push(path.join(basePath,file));
             });
+            return callback(filePaths);
+        });
     }
 
     /**
