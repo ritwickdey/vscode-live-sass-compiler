@@ -94,7 +94,10 @@
                     "description": "All Sass/Scss files inside the folders will be excluded. \n\nExamples: \n'**/node_modules/**',\n'.vscode/**', \n'.history/**' \n\nGlob Patterns are accepted."
                 },
                 "liveSassCompile.settings.includeItems": {
-                    "type": ["array", "null"],
+                    "type": [
+                        "array",
+                        "null"
+                    ],
                     "default": null,
                     "description": "This setting is useful when you deals with only few of sass files. Only mentioned Sass files will be included. \nNOTE: No need to include partial sass files."
                 }
