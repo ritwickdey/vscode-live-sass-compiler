@@ -94,7 +94,6 @@ export class AppModel {
         let filePaths: string[] = [];
         let excludedList = Helper.getConfigSettings<string[]>('excludeList');
         let includeItems = Helper.getConfigSettings<string[] | null>('includeItems');
-        let excludeByGlobString = `{${excludedList.join(',')}}`;
 
         let basePath = vscode.workspace.rootPath || path.basename(vscode.window.activeTextEditor.document.fileName);
 
@@ -107,7 +106,13 @@ export class AppModel {
         let queryPatten = '**/[^_]*.s[a|c]ss';
 
         if (includeItems && includeItems.length) {
-            queryPatten = `{${includeItems.join(',')}}`;
+            if (includeItems.length == 1) {
+                queryPatten = queryPatten[0];
+            }
+            else {
+
+                queryPatten = `{${includeItems.join(',')}}`;
+            }
         }
 
         glob(queryPatten, options, function (er, files) {
