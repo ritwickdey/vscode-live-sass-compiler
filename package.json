@@ -1,8 +1,8 @@
 {
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
-    "description": "Compile SASS or SCSS to CSS at realtime with live browser reload.",
-    "version": "0.3.4",
+    "description": "Compile Sass or Scss to CSS at realtime with live browser reload.",
+    "version": "0.4.0",
     "publisher": "ritwickdey",
     "author": {
         "name": "Ritwick Dey",
@@ -96,7 +96,7 @@
                 "liveSassCompile.settings.includeItems": {
                     "type": ["array", "null"],
                     "default": null,
-                    "description": "Only this Sass files will be included. \nNo need to include partial sass files."
+                    "description": "This setting is useful when you deals with only few of sass files. Only mentioned Sass files will be included. \nNOTE: No need to include partial sass files."
                 }
             }
         }

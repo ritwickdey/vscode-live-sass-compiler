@@ -43,7 +43,7 @@ Open VSCode Editor and Press `ctrl+P`, type `ext install live-sass`.
     * _Default value is `null`, CSS will be generated at same directory of every SASS/SCSS files._
 * **`liveSassCompile.settings.extensionName` :** To customize extension name (`.css` or `.min.css`) of generated CSS. 
     * _Default is `.css`._
-* **`liveSassCompile.settings.excludeFolders` :** To Exclude specific folders. All Sass/Scss files inside the folders will be ignored.
+* **`liveSassCompile.settings.excludeList` :** To Exclude specific folders. All Sass/Scss files inside the folders will be ignored.
     * _default value :_
         ```json
             [ 
@@ -51,11 +51,48 @@ Open VSCode Editor and Press `ctrl+P`, type `ext install live-sass`.
                 ".vscode/**" 
             ]
         ```
+    * You can use negative glob pattern.
+        
+        * _Example : if you want exclude all file except `file1.scss` & `file2.scss` from `path/subpath` directory, you can use the expression -_  
+        
+        ```json
+        [
+            "path/subpath/*[!(file1|file2)].scss"
+        ]
+        ```
+* **`liveSassCompile.settings.includeItems` :** This setting is useful when you deals with only few of sass files. Only mentioned Sass files will be included. 
+
+    * *NOTE: No need to include partial sass files.*
+    * *Default value is `null`*
+    * Example :
+    ```json
+        [
+            "path/subpath/a.scss",
+            "path/subpath/b.scss",
+        ]
+    ``` 
 
 ## Extension Dependency 
 This extension has dependency on _[Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)_ extension for live browser reload.
 
 ## What's new ?
+
+* #### Version 0.4.0 (21.08.2017)
+    *  ***[Renamed]*** `liveSassCompile.settings.excludeFolders` is renamed to `liveSassCompile.settings.excludeList`.
+    
+    * ***[Fixed]*** You can set glob pattern to exclude files through `liveSassCompile.settings.excludeList` settings. You can use negative glob pattern.
+        
+        * _Example : if you want exclude all file except `file1.scss` & `file2.scss` from `path/subpath` directory, you can use the expression_  -  
+        ```json 
+            [
+                "path/subpath/*[!(file1|file2)].scss"
+            ]
+        ```
+        
+
+    * ***[New Settings [#8](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/8)  ]*** `liveSassCompile.settings.includeItems` : This setting is useful when you deals with only few of sass files. Only mentioned Sass files will be included. NOTE: No need to include partial sass files. *[Thanks [PatrickPahlke](https://github.com/PatrickPahlke)]*.
+    
+
 
 * #### Version 0.3.4 (15.08.2017)
     * **[Fixed [#7](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/7)]** Duplicate Output.  _[Thanks [Tomekk-hnm](https://github.com/tomekk-hnm)]_.
@@ -85,7 +122,7 @@ Inside of the `settings.json`, type following key-value pairs. By the way you'll
     "liveSassCompile.settings.savePath": "/dist/css",
     "liveSassCompile.settings.format": "compressed",
     "liveSassCompile.settings.extensionName" : ".min.css",
-    "liveSassCompile.settings.excludeFolders": [
+    "liveSassCompile.settings.excludeList": [
        "**/node_modules/**",
        ".vscode/**"
     ]
