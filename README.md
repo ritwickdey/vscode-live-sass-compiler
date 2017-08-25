@@ -32,16 +32,16 @@ A VSCode Extension that help you to compile/transpile your SASS/SCSS files to CS
 Open VSCode Editor and Press `ctrl+P`, type `ext install live-sass`.
 
 ## Settings
-* **`liveSassCompile.settings.format` :** To customize exported CSS style - _`expanded`_, _`compact`_, _`compressed`_ or _`nested`_.
+* **`liveSassCompile.settings.format`:** To customize exported CSS style - _`expanded`_, _`compact`_, _`compressed`_ or _`nested`_.
     * _Default is  `expanded`._
 
-* **`liveSassCompile.settings.savePath` :** To customizable file location of exported CSS. Set absulate path from workspace Root.`'/'` stands for your workspace root.
+* **`liveSassCompile.settings.savePath`:** To customizable file location of exported CSS. Set absulate path from workspace Root.`'/'` stands for your workspace root.
     * _Example: `/subfolder1/subfolder2`. All generated CSS file will be saved at `subfolder2`._
     * _NOTE: If destination folder does not exist, folder will be created as well._ 
     * _Default value is `null`, CSS will be generated at same directory of every SASS/SCSS files._
-* **`liveSassCompile.settings.extensionName` :** To customize extension name (`.css` or `.min.css`) of generated CSS. 
+* **`liveSassCompile.settings.extensionName`:** To customize extension name (`.css` or `.min.css`) of generated CSS. 
     * _Default is `.css`._
-* **`liveSassCompile.settings.excludeList` :** To Exclude specific folders. All Sass/Scss files inside the folders will be ignored.
+* **`liveSassCompile.settings.excludeList`:** To Exclude specific folders. All Sass/Scss files inside the folders will be ignored.
     * _default value :_
         ```json
             [ 
@@ -58,7 +58,7 @@ Open VSCode Editor and Press `ctrl+P`, type `ext install live-sass`.
             "path/subpath/*[!(file1|file2)].scss"
         ]
         ```
-* **`liveSassCompile.settings.includeItems` :** This setting is useful when you deals with only few of sass files. Only mentioned Sass files will be included. 
+* **`liveSassCompile.settings.includeItems`:** This setting is useful when you deals with only few of sass files. Only mentioned Sass files will be included. 
 
     * *NOTE: No need to include partial sass files.*
     * *Default value is `null`*
@@ -69,12 +69,16 @@ Open VSCode Editor and Press `ctrl+P`, type `ext install live-sass`.
             "path/subpath/b.scss",
         ]
     ``` 
+* **`liveSassCompile.settings.generateMap`:** Set it as `false` if you don't want `.map` file for compiled CSS. 
+    * _Default is `true`._
 
 ## Extension Dependency 
 This extension has dependency on _[Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)_ extension for live browser reload.
 
 ## What's new ?
 
+* #### Version 0.5.0 (25.08.2017)
+    * ***[New Settings]*** `liveSassCompile.settings.generateMap` : Set it as `false` if you don't want `.map` file for compiled CSS. Default is `true`. *[[#9](https://github.com/ritwickdey/vscode-live-sass-compiler/pull/9) Thanks [Mark Hewitt](https://github.com/mhco) for the PR].*
 
 * #### Version 0.4.0 (21.08.2017)
     *  ***[Renamed]*** `liveSassCompile.settings.excludeFolders` is renamed to `liveSassCompile.settings.excludeList`.
@@ -117,6 +121,7 @@ Inside of the `settings.json`, type following key-value pairs. By the way you'll
     "liveSassCompile.settings.excludeList": [
        "**/node_modules/**",
        ".vscode/**"
-    ]
+    ],
+    "liveSassCompile.settings.generateMap" : true
 }
 ```
