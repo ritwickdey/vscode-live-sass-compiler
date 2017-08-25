@@ -136,6 +136,7 @@ export class AppModel {
      * @param options - Object - It includes target CSS style and some more. 
      */
     private GenerateCssAndMap(SassPath: string, targetCssUri: string, mapFileUri: string, options) {
+        let generateMap = Helper.getConfigSettings<boolean>('generateMap');
         return new Promise(resolve => {
             SassHelper.instance.compileOne(SassPath, options)
                 .then((result) => {
@@ -146,11 +147,15 @@ export class AppModel {
                     else {
                         let promises: Promise<IFileResolver>[] = [];
                         let mapFileTag = `/*# sourceMappingURL= ${path.basename(targetCssUri)}.map */`
-                        promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.text} \n\n ${mapFileTag}`));
 
-                        let map = this.GenerateMapObject(result.map, targetCssUri);
-                        promises.push(FileHelper.Instance.writeToOneFile(mapFileUri,
-                            JSON.stringify(map, null, 4)));
+                        if (!generateMap) {
+                            promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.text}`));
+                        }
+                        else {
+                            promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.text} \n\n ${mapFileTag}`));
+                            let map = this.GenerateMapObject(result.map, targetCssUri);
+                            promises.push(FileHelper.Instance.writeToOneFile(mapFileUri, JSON.stringify(map, null, 4)));
+                        }
 
                         Promise.all(promises).then(fileResolvers => {
                             OutputWindow.Show("Generated :", null, false, false);

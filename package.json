@@ -100,6 +100,13 @@
                     ],
                     "default": null,
                     "description": "This setting is useful when you deals with only few of sass files. Only mentioned Sass files will be included. \nNOTE: No need to include partial sass files."
+                },
+                "liveSassCompile.settings.generateMap": {
+                    "type": [
+                        "boolean"
+                    ],
+                    "default": true,
+                    "description": "Set it as `false` if you don't want `.map` file for compiled CSS. \nDefault is `true`"
                 }
             }
         }
