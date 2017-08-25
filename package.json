@@ -106,7 +106,7 @@
                         "boolean"
                     ],
                     "default": true,
-                    "description": "Choose whether this script automatically comiles map files for the CSS generated from the compiler."
+                    "description": "Set it as `false` if you don't want `.map` file for compiled CSS. \nDefault is `true`"
                 }
             }
         }

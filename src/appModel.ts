@@ -136,7 +136,7 @@ export class AppModel {
      * @param options - Object - It includes target CSS style and some more. 
      */
     private GenerateCssAndMap(SassPath: string, targetCssUri: string, mapFileUri: string, options) {
-        let generateMap = helper_1.Helper.getConfigSettings('generateMap');
+        let generateMap = Helper.getConfigSettings<boolean>('generateMap');
         return new Promise(resolve => {
             SassHelper.instance.compileOne(SassPath, options)
                 .then((result) => {
@@ -148,13 +148,13 @@ export class AppModel {
                         let promises: Promise<IFileResolver>[] = [];
                         let mapFileTag = `/*# sourceMappingURL= ${path.basename(targetCssUri)}.map */`
 
-                        if (generateMap === false) {
-                            promises.push(FileHelper_1.FileHelper.Instance.writeToOneFile(targetCssUri, `${result.text}`));
+                        if (!generateMap) {
+                            promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.text}`));
                         }
                         else {
-                            promises.push(FileHelper_1.FileHelper.Instance.writeToOneFile(targetCssUri, `${result.text} \n\n ${mapFileTag}`));
+                            promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.text} \n\n ${mapFileTag}`));
                             let map = this.GenerateMapObject(result.map, targetCssUri);
-                            promises.push(FileHelper_1.FileHelper.Instance.writeToOneFile(mapFileUri, JSON.stringify(map, null, 4)));
+                            promises.push(FileHelper.Instance.writeToOneFile(mapFileUri, JSON.stringify(map, null, 4)));
                         }
 
                         Promise.all(promises).then(fileResolvers => {
