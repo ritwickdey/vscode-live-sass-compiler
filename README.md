@@ -75,6 +75,7 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 
 ## What's new ?
 
+
 * #### Version 0.4.0 (21.08.2017)
     *  ***[Renamed]*** `liveSassCompile.settings.excludeFolders` is renamed to `liveSassCompile.settings.excludeList`.
     
@@ -86,20 +87,13 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
                 "path/subpath/*[!(file1|file2)].scss"
             ]
         ```
-        
 
-    * ***[New Settings [#8](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/8)  ]*** `liveSassCompile.settings.includeItems` : This setting is useful when you deals with only few of sass files. Only mentioned Sass files will be included. NOTE: No need to include partial sass files. *[Thanks [PatrickPahlke](https://github.com/PatrickPahlke)]*.
+    * ***[New Settings]*** `liveSassCompile.settings.includeItems` : This setting is useful when you deals with only few of sass files. Only mentioned Sass files will be included. NOTE: No need to include partial sass files. *[ [#8](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/8) Thanks [PatrickPahlke](https://github.com/PatrickPahlke)].*
     
 
 
 * #### Version 0.3.4 (15.08.2017)
     * **[Fixed [#7](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/7)]** Duplicate Output.  _[Thanks [Tomekk-hnm](https://github.com/tomekk-hnm)]_.
-
-* #### Version 0.3.3 (01.08.2017)
-    * [[#5](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/5)] Critical Fix Update for Linux & macOS. (Thanks a lot to [Shea Fitzek](https://github.com/sheafitzek)). 
-
-* #### Version 0.3.2 (01.08.2017)
-    * [Hot Fix] CSS & map link was broken.
 
 
 ## Changelog
