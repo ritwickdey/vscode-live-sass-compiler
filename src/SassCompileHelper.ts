@@ -1,4 +1,4 @@
-import * as SassCompiler from "sasslib/sass.node.js";
+import * as SassCompiler from 'sasslib/sass.node.js';
 
 
 export class SassHelper {
@@ -7,13 +7,19 @@ export class SassHelper {
         return new SassHelper();
     }
 
+    static targetCssFormat(format) {
+        return {
+            style: SassCompiler.Sass.style[format],
+        }
+    }
+
     compileOne(SassPath: string, options) {
 
         return new Promise<any>((resolve, reject) => {
             SassCompiler(SassPath, options, (result) => {
                 if (result.status === 0) {
                     if (!result.text) {
-                        result.text = "/* No CSS */";
+                        result.text = '/* No CSS */';
                     }
                 }
                 else {
@@ -42,11 +48,6 @@ export class SassHelper {
 
     }
 
-    static targetCssFormat(format) {
-        return {
-            style: SassCompiler.Sass.style[format],
-        }
-    }
 
 
 

@@ -30,7 +30,7 @@ export class AppModel {
         StatusBarUi.working();
         this.GenerateAllCssAndMap().then(() => {
             if (!WatchingMode) {
-                this.isWatching = true; //tricky to toggle status
+                this.isWatching = true; // tricky to toggle status
             }
             this.toggleStatusUI();
         });
@@ -49,7 +49,7 @@ export class AppModel {
 
             if (path.basename(fileUri).startsWith('_')) {
                 this.GenerateAllCssAndMap(false).then(() => {
-                    OutputWindow.Show("Watching...", null);
+                    OutputWindow.Show('Watching...', null);
                 });
             }
             else {
@@ -58,7 +58,7 @@ export class AppModel {
                 let cssMapPath = this.generateCssAndMapUri(sassPath);
                 this.GenerateCssAndMap(sassPath, cssMapPath.css, cssMapPath.map, options)
                     .then(() => {
-                        OutputWindow.Show("Watching...", null);
+                        OutputWindow.Show('Watching...', null);
                     });
             }
         }
@@ -106,7 +106,7 @@ export class AppModel {
         let queryPatten = '**/[^_]*.s[a|c]ss';
 
         if (includeItems && includeItems.length) {
-            if (includeItems.length == 1) {
+            if (includeItems.length === 1) {
                 queryPatten = queryPatten[0];
             }
             else {
@@ -130,10 +130,10 @@ export class AppModel {
 
     /**
      * To Generate one One Css & Map file from Sass/Scss
-     * @param SassPath Sass/Scss file URI (string) 
+     * @param SassPath Sass/Scss file URI (string)
      * @param targetCssUri Target CSS file URI (string)
      * @param mapFileUri Target MAP file URI (string)
-     * @param options - Object - It includes target CSS style and some more. 
+     * @param options - Object - It includes target CSS style and some more.
      */
     private GenerateCssAndMap(SassPath: string, targetCssUri: string, mapFileUri: string, options) {
         let generateMap = Helper.getConfigSettings<boolean>('generateMap');
@@ -158,7 +158,7 @@ export class AppModel {
                         }
 
                         Promise.all(promises).then(fileResolvers => {
-                            OutputWindow.Show("Generated :", null, false, false);
+                            OutputWindow.Show('Generated :', null, false, false);
                             fileResolvers.forEach(fileResolver => {
                                 if (fileResolver.Exception) {
                                     OutputWindow.Show('Error:', [
@@ -181,7 +181,7 @@ export class AppModel {
     }
 
     /**
-     * To compile all Sass/scss files 
+     * To compile all Sass/scss files
      * @param popUpOutputWindow To control output window. default value is true.
      */
     private GenerateAllCssAndMap(popUpOutputWindow = true) {
@@ -203,7 +203,7 @@ export class AppModel {
     /**
      * Generate Map Object
      * @param mapObject Generated Map object form Sass.js library
-     * @param targetCssUri Css URI 
+     * @param targetCssUri Css URI
      */
     private GenerateMapObject(mapObject, targetCssUri: string) {
         let map = {
@@ -216,15 +216,15 @@ export class AppModel {
         map.mappings = mapObject.mappings;
         map.file = path.basename(targetCssUri);
         mapObject.sources.forEach((source: string) => {
-            //path starts with ../saas/<path> or ../< path>
+            // path starts with ../saas/<path> or ../< path>
             if (source.startsWith('../sass/')) {
                 source = source.substring('../sass/'.length);
             }
             else if (source.startsWith('../')) {
                 source = source.substring('../'.length);
             }
-            if (process.platform != 'win32') {
-                source = '/' + source; //for linux, maybe for MAC too
+            if (process.platform !== 'win32') {
+                source = '/' + source; // for linux, maybe for MAC too
             }
 
             let testpath = path.relative(

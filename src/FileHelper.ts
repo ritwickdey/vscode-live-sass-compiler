@@ -2,8 +2,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 export interface IFileResolver {
-    FileUri : string,
-    Exception : NodeJS.ErrnoException
+    FileUri: string,
+    Exception: NodeJS.ErrnoException
 }
 
 export class FileHelper {
@@ -29,15 +29,15 @@ export class FileHelper {
             let promises: Promise<IFileResolver>[] = [];
 
             for (let i = 0; i < targetFileUris.length; i++) {
-                promises.push(this.writeToOneFile(targetFileUris[i],data[i]));
+                promises.push(this.writeToOneFile(targetFileUris[i], data[i]));
             }
 
-            Promise.all(promises).then((errList)=>resolve(errList));
+            Promise.all(promises).then((errList) => resolve(errList));
         });
     }
 
     MakeDirIfNotAvailable(dir) {
-        if(fs.existsSync(dir)) return;
+        if (fs.existsSync(dir)) return;
         if (!fs.existsSync(path.dirname(dir))) {
             this.MakeDirIfNotAvailable(path.dirname(dir));
         }
