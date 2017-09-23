@@ -18,6 +18,10 @@ export class AppModel {
         StatusBarUi.init();
     }
 
+    static get basePath(): string {
+        return vscode.workspace.rootPath || path.basename(vscode.window.activeTextEditor.document.fileName);
+    }
+
     /**
      * Compile All file with watch mode.
      * @param WatchingMode WatchingMode = false for without watch mode.
@@ -36,7 +40,7 @@ export class AppModel {
         });
     }
 
-    compileOnSave() {
+    async compileOnSave() {
         if (!this.isWatching) {
             return;
         }
@@ -44,7 +48,7 @@ export class AppModel {
         let fileUri = vscode.window.activeTextEditor.document.fileName;
 
         if (fileUri.endsWith('.scss') || fileUri.endsWith('.sass')) {
-
+            if (!(await this.isSassFileIncluded(fileUri,'**/*.s[a|c]ss'))) return;
             OutputWindow.Show('Change Detected...', [path.basename(fileUri)]);
 
             if (path.basename(fileUri).startsWith('_')) {
@@ -54,7 +58,7 @@ export class AppModel {
             }
             else {
                 let sassPath = fileUri;
-                let options = this.generateCssStyle();
+                let options = this.getCssStyle();
                 let cssMapPath = this.generateCssAndMapUri(sassPath);
                 this.GenerateCssAndMap(sassPath, cssMapPath.css, cssMapPath.map, options)
                     .then(() => {
@@ -86,46 +90,52 @@ export class AppModel {
 
     }
 
-    /**
-     * Find ALL Sass & Scss from workspace & It also exclude Sass/Scss from exclude list settings
-     * @param callback - callback(filepaths) with be called with Uri(s) of Sass/Scss(s) (string[]).
-     */
-    private findAllSaasFilesAsync(callback) {
-        let filePaths: string[] = [];
+    async isSassFileIncluded(sassPath: string, queryPatten = '**/[^_]*.s[a|c]ss') {
+        let files = await this.getSassFiles(queryPatten);
+        return files.find(e => e === sassPath) ? true : false;
+    }
+
+    getSassFiles(queryPatten = '**/[^_]*.s[a|c]ss'): Thenable<string[]> {
         let excludedList = Helper.getConfigSettings<string[]>('excludeList');
         let includeItems = Helper.getConfigSettings<string[] | null>('includeItems');
-
-        let basePath = vscode.workspace.rootPath || path.basename(vscode.window.activeTextEditor.document.fileName);
 
         let options = {
             ignore: excludedList,
             mark: true,
-            cwd: basePath
+            cwd: AppModel.basePath
         }
-
-        let queryPatten = '**/[^_]*.s[a|c]ss';
 
         if (includeItems && includeItems.length) {
             if (includeItems.length === 1) {
                 queryPatten = queryPatten[0];
             }
             else {
-
                 queryPatten = `{${includeItems.join(',')}}`;
             }
         }
 
-        glob(queryPatten, options, function (er, files) {
-            files.forEach((file) => {
-                let filepath = path.join(basePath, file);
-                let basename = path.basename(filepath);
-                let extName = path.extname(filepath);
-                if (!basename.startsWith('_') && (extName.endsWith('sass') || extName.endsWith('scss'))) {
-                    filePaths.push(filepath);
+        return new Promise(resolve => {
+            glob(queryPatten, options, function (err, files: string[]) {
+                if (err) {
+                    resolve([]);
+                    return;
                 }
+
+                let filePaths: string[] = files.map(file => path.join(AppModel.basePath, file));
+                resolve(filePaths || []);
+                return;
             });
-            return callback(filePaths);
-        });
+        })
+    }
+
+    /**
+     * [Deprecated]
+     * Find ALL Sass & Scss from workspace & It also exclude Sass/Scss from exclude list settings
+     * @param callback - callback(filepaths) with be called with Uri(s) of Sass/Scss(s) (string[]).
+     */
+    private findAllSaasFilesAsync(callback) {
+
+        this.getSassFiles().then(files => callback(files));
     }
 
     /**
@@ -190,7 +200,7 @@ export class AppModel {
                 OutputWindow.Show('Compiling Sass/Scss Files: ', sassPaths, popUpOutputWindow);
                 let promises = [];
                 sassPaths.forEach((sassPath) => {
-                    let options = this.generateCssStyle();
+                    let options = this.getCssStyle();
                     let cssMapUri = this.generateCssAndMapUri(sassPath);
                     promises.push(this.GenerateCssAndMap(sassPath, cssMapUri.css, cssMapUri.map, options));
                 });
@@ -273,7 +283,7 @@ export class AppModel {
         };
     }
 
-    private generateCssStyle() {
+    private getCssStyle() {
         let outputStyleFormat = Helper.getConfigSettings<string>('format');
         return SassHelper.targetCssFormat(outputStyleFormat);
     }
