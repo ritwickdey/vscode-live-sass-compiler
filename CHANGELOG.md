@@ -3,6 +3,7 @@
 
 | Version | Date | Changelog|
 | ------- | -------- | ------ |
+|0.5.1|23.09.17| &mdash; ***[Bug Fixed [#12](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/12)]*** Sass files from excluded list was compiled on individual savings. _[Thanks [Braedin Jared](https://github.com/ImBaedin)]_ |
 |0.5.0|25.08.17| &mdash; ***[New Settings]*** `liveSassCompile.settings.generateMap` : Set it as `false` if you don't want `.map` file for compiled CSS. Default is `true`. *[[#9](https://github.com/ritwickdey/vscode-live-sass-compiler/pull/9) Thanks [Mark Hewitt](https://github.com/mhco) for the PR].*|
 |0.4.0|21.08.17|&mdash; ***[Renamed]*** `liveSassCompile.settings.excludeFolders` is renamed to `liveSassCompile.settings.excludeList`. <br><br>&mdash; ***[Fixed]*** You can set glob pattern to exclude files through `liveSassCompile.settings.excludeList` settings. You can also use negative glob pattern.*[For More details, follow settings section]* <br><br>&mdash; ***[New Settings [#8](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/8)  ]*** `liveSassCompile.settings.includeItems` : This setting is useful when you deals with only few of sass files. Only mentioned Sass files will be included. NOTE: No need to include partial sass files. *[Thanks [PatrickPahlke](https://github.com/PatrickPahlke)]*.|
 |0.3.4|15.08.17|**[Fixed [#7](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/7)]** Duplicate Output. _[Thanks [Tomekk-hnm](https://github.com/tomekk-hnm)]_.|
