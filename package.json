@@ -63,8 +63,8 @@
                             "extensionName": ".css"
                         },
                         {
-                            "format": "expanded",
-                            "extensionName": ".css"
+                            "format": "compressed",
+                            "extensionName": ".min.css"
                         }
                     ],
                     "description": "Set your exported CSS Style & Format. (expanded,compact,compressed,nested) \nDefault is expanded."
