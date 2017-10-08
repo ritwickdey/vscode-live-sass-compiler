@@ -57,13 +57,16 @@ export class AppModel {
                 });
             }
             else {
+                let formats = Helper.getConfigSettings<Array<any>>("formats");
                 let sassPath = fileUri;
-                let options = this.getCssStyle();
-                let cssMapPath = this.generateCssAndMapUri(sassPath);
-                this.GenerateCssAndMap(sassPath, cssMapPath.css, cssMapPath.map, options)
-                    .then(() => {
-                        OutputWindow.Show('Watching...', null);
-                    });
+                formats.forEach(format => { //Each format
+                    let options = this.getCssStyle(format.format);
+                    let cssMapPath = this.generateCssAndMapUri(sassPath, format.extensionName);
+                    this.GenerateCssAndMap(sassPath, cssMapPath.css, cssMapPath.map, options)
+                        .then(() => {
+                            OutputWindow.Show('Watching...', null);
+                        });
+                });
             }
         }
     }
