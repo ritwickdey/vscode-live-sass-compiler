@@ -6,7 +6,7 @@
 **_[If you found any bug or if you have any suggestion, feel free to report or suggest me.]_**
 
 
-[![VSCode Marketplace Badge](https://vsmarketplacebadge.apphb.com/version/ritwickdey.live-sass.svg)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![Total Install](https://vsmarketplacebadge.apphb.com/installs/ritwickdey.live-sass.svg)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![Avarage Rating Badge](https://vsmarketplacebadge.apphb.com/rating-short/ritwickdey.live-sass.svg)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ritwickdey/vscode-live-sass-compiler/)
+[![VSCode Marketplace Badge](https://img.shields.io/vscode-marketplace/v/ritwickdey.live-sass.svg?label=VSCode%20Marketplace&style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![Total Install](https://vsmarketplacebadge.apphb.com/installs-short/ritwickdey.live-sass.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![Avarage Rating Badge](https://img.shields.io/vscode-marketplace/r/ritwickdey.live-sass.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/ritwickdey/vscode-live-sass-compiler/)
 
 A VSCode Extension that help you to compile/transpile your SASS/SCSS files to CSS files at realtime with live browser reload.
 
