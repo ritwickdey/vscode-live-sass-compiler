@@ -256,9 +256,8 @@ export class AppModel {
 
     private generateCssAndMapUri(filePath: string, savePath: string, _extensionName?: string) {
 
-        savePath = savePath || '';
+        savePath = savePath || '/';
         let extensionName = _extensionName || ".css"; //Helper.getConfigSettings<string>('extensionName');
-
 
         try {
             let workspaceRoot = vscode.workspace.rootPath;
@@ -279,8 +278,6 @@ export class AppModel {
 
             throw Error('Something Went Wrong.');
         }
-
-
 
         let cssUri = filePath.substring(0, filePath.lastIndexOf('.')) + extensionName;
         return {
