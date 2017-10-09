@@ -3,7 +3,9 @@
 
 **_[If you like the extension, [please leave a review](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass#review-details), it puts a smile on my face.]_**
 
-**_[If you found any bug or if you have any suggestion, feel free to report or suggest me.]_**
+<!-- **_[If you found any bug or if you have any suggestion, feel free to report or suggest me.]_** -->
+
+***[NOTE : From v1.0.0, the `liveSassCompile.settings.format`, `.savePath`, `.extensionName` settings are dropped. (See settings section for the new setting.)]***
 
 
 [![VSCode Marketplace Badge](https://img.shields.io/vscode-marketplace/v/ritwickdey.live-sass.svg?label=VSCode%20Marketplace&style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![Total Install](https://vsmarketplacebadge.apphb.com/installs-short/ritwickdey.live-sass.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![Avarage Rating Badge](https://img.shields.io/vscode-marketplace/r/ritwickdey.live-sass.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/ritwickdey/vscode-live-sass-compiler/)
@@ -32,15 +34,41 @@ A VSCode Extension that help you to compile/transpile your SASS/SCSS files to CS
 Open VSCode Editor and Press `ctrl+P`, type `ext install live-sass`.
 
 ## Settings
-* **`liveSassCompile.settings.format`:** To customize exported CSS style - _`expanded`_, _`compact`_, _`compressed`_ or _`nested`_.
-    * _Default is  `expanded`._
+* ~~**`liveSassCompile.settings.format`:** To customize exported CSS style - _`expanded`_, _`compact`_, _`compressed`_ or _`nested`_.~~
+    * ~~_Default is  `expanded`._~~
 
-* **`liveSassCompile.settings.savePath`:** To customizable file location of exported CSS. Set absulate path from workspace Root.`'/'` stands for your workspace root.
-    * _Example: `/subfolder1/subfolder2`. All generated CSS file will be saved at `subfolder2`._
-    * _NOTE: If destination folder does not exist, folder will be created as well._ 
-    * _Default value is `null`, CSS will be generated at same directory of every SASS/SCSS files._
-* **`liveSassCompile.settings.extensionName`:** To customize extension name (`.css` or `.min.css`) of generated CSS. 
-    * _Default is `.css`._
+* ~~**`liveSassCompile.settings.savePath`:** To customizable file location of exported CSS. Set absulate path from workspace Root.`'/'` stands for your workspace root.~~
+    * ~~_Example: `/subfolder1/subfolder2`. All generated CSS file will be saved at `subfolder2`._~~
+    * ~~_NOTE: If destination folder does not exist, folder will be created as well._~~
+    * ~~_Default value is `null`, CSS will be generated at same directory of every SASS/SCSS files._~~
+* ~~**`liveSassCompile.settings.extensionName`:** To customize extension name (`.css` or `.min.css`) of generated CSS.~~ 
+    * ~~_Default is `.css`._~~
+
+* *[NEW]*   **`liveSassCompile.settings.formats`** :  To setup Format (style), Extension Name & Save location for exported css [Multiple Format Supported].
+
+    * *Format can be _`expanded`_, _`compact`_, _`compressed`_ or _`nested`_. _Default is  `expanded`._*
+
+    * *Extension Name can be `.css` or `.min.css`. Default is `.css`.*
+     
+    * *Save location is relative from workspace root. Default value is `/` (workspace root).*
+        
+    * *Example :*
+        
+        ```json
+            "liveSassCompile.settings.formats":[
+                {
+                    "format": "expanded",
+                    "extensionName": ".css",
+                    "savePath": "/css"
+                },
+                {
+                    "format": "compressed",
+                    "extensionName": ".min.css",
+                    "savePath": "/dist/css"
+                }
+            ]
+        ```
+
 * **`liveSassCompile.settings.excludeList`:** To Exclude specific folders. All Sass/Scss files inside the folders will be ignored.
     * _default value :_
         ```json
@@ -77,10 +105,10 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 
 ## What's new ?
 
-* #### Version 0.6.0 (09.10.2017)
-    * ***[New Features [#10](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/10)]*** Support for multiple extensionName & formats. *[Thanks to [Trinh Xuan Manh](https://github.com/ShadowFoOrm) for the suggestion and a Special Thanks to [###](https://github.com/ibsenleo) for  the PR [#16](https://github.com/ritwickdey/vscode-live-sass-compiler/pull/16).]*
+* #### Version 1.0.0 (10.10.2017)
+    * ***[New Features/settings [#10](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/10)]*** Support for multiple extensionName, formats & save location . *[Thanks to [Trinh Xuan Manh](https://github.com/ShadowFoOrm) for the suggestion and a Special Thanks to [###](https://github.com/ibsenleo) for  the PR [#16](https://github.com/ritwickdey/vscode-live-sass-compiler/pull/16).]*
 
-    **NOTE : Due to enable this feature, the `liveSassCompile.settings.format` settings is changed **
+    ***NOTE : Due to enable this feature, the `liveSassCompile.settings.format`, `.savePath`, `.extensionName` settings are dropped. [See settings section for the new setting.]***
 
 * #### Version 0.5.1 (23.09.2017)
     * ***[Bug Fixed [#12](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/12)]*** Sass files from excluded list was compiled on individual savings. _[Thanks [Braedin Jared](https://github.com/ImBaedin)]_
@@ -104,9 +132,18 @@ Inside of the `settings.json`, type following key-value pairs. By the way you'll
 
 ```json
 {
-    "liveSassCompile.settings.savePath": "/dist/css",
-    "liveSassCompile.settings.format": "compressed",
-    "liveSassCompile.settings.extensionName" : ".min.css",
+     "liveSassCompile.settings.formats":[
+        {
+            "format": "expanded",
+            "extensionName": ".css",
+            "savePath": "/css"
+        },
+        {
+            "extensionName": ".min.css",
+            "format": "compressed",
+            "savePath": "/dist/css"
+        }
+    ],
     "liveSassCompile.settings.excludeList": [
        "**/node_modules/**",
        ".vscode/**"
