@@ -63,6 +63,36 @@
                             "extensionName": ".css"
                         }
                     ],
+                    "minItems": 1,
+                    "maxItems": 2,
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "format": {
+                                "description": "Style of exported css",
+                                "type": "string",
+                                "enum": [
+                                    "expanded",
+                                    "compact",
+                                    "compressed",
+                                    "nested"
+                                ]
+                            },
+                            "extensionName": {
+                                "description": "Extension Name of exported css",
+                                "type": "string",
+                                "enum": [
+                                    ".css",
+                                    ".min.css"
+                                ]
+                            }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                            "format",
+                            "extensionName"
+                        ]
+                    },
                     "description": "Set your exported CSS Style & Format. (expanded,compact,compressed,nested) \nDefault is expanded."
                 },
                 "liveSassCompile.settings.savePath": {
