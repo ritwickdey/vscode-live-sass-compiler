@@ -1,5 +1,11 @@
 import * as vscode from 'vscode';
 
+export interface IFormat {
+    format: string,
+    extensionName: string,
+    savePath: string
+}
+
 export class Helper {
 
     private static get configSettings() {

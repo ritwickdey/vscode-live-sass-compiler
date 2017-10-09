@@ -6,7 +6,7 @@ import * as glob from 'glob';
 import { FileHelper, IFileResolver } from './FileHelper';
 import { SassHelper } from './SassCompileHelper';
 import { OutputWindow } from './OuputWindow';
-import { Helper } from './helper';
+import { Helper, IFormat } from './helper';
 import { StatusBarUi } from './StatubarUi'
 
 export class AppModel {
@@ -48,7 +48,7 @@ export class AppModel {
         let fileUri = vscode.window.activeTextEditor.document.fileName;
 
         if (fileUri.endsWith('.scss') || fileUri.endsWith('.sass')) {
-            if (!(await this.isSassFileIncluded(fileUri,'**/*.s[a|c]ss'))) return;
+            if (!(await this.isSassFileIncluded(fileUri, '**/*.s[a|c]ss'))) return;
             OutputWindow.Show('Change Detected...', [path.basename(fileUri)]);
 
             if (path.basename(fileUri).startsWith('_')) {
@@ -57,11 +57,11 @@ export class AppModel {
                 });
             }
             else {
-                let formats = Helper.getConfigSettings<Array<any>>("formats");
+                let formats = Helper.getConfigSettings<IFormat[]>("formats");
                 let sassPath = fileUri;
                 formats.forEach(format => { //Each format
                     let options = this.getCssStyle(format.format);
-                    let cssMapPath = this.generateCssAndMapUri(sassPath, format.savePath ,format.extensionName);
+                    let cssMapPath = this.generateCssAndMapUri(sassPath, format.savePath, format.extensionName);
                     this.GenerateCssAndMap(sassPath, cssMapPath.css, cssMapPath.map, options)
                         .then(() => {
                             OutputWindow.Show('Watching...', null);
@@ -198,7 +198,7 @@ export class AppModel {
      * @param popUpOutputWindow To control output window. default value is true.
      */
     private GenerateAllCssAndMap(popUpOutputWindow = true) {
-        let formats = Helper.getConfigSettings<Array<any>>("formats");
+        let formats = Helper.getConfigSettings<IFormat[]>("formats");
         return new Promise((resolve) => {
             this.findAllSaasFilesAsync((sassPaths: string[]) => {
                 OutputWindow.Show('Compiling Sass/Scss Files: ', sassPaths, popUpOutputWindow);
@@ -206,7 +206,7 @@ export class AppModel {
                 sassPaths.forEach((sassPath) => {
                     formats.forEach(format => { //Each format
                         let options = this.getCssStyle(format.format);
-                        let cssMapUri = this.generateCssAndMapUri(sassPath,format.savePath ,format.extensionName);
+                        let cssMapUri = this.generateCssAndMapUri(sassPath, format.savePath, format.extensionName);
                         promises.push(this.GenerateCssAndMap(sassPath, cssMapUri.css, cssMapUri.map, options));
                     });
                 });
@@ -254,33 +254,33 @@ export class AppModel {
         //  this.writeToFileAsync(mapFileUri, JSON.stringify(map, null, 4));
     }
 
-    private generateCssAndMapUri(filePath: string, savePath: string, _extensionName? : string) {
+    private generateCssAndMapUri(filePath: string, savePath: string, _extensionName?: string) {
 
         savePath = savePath || '';
         let extensionName = _extensionName || ".css"; //Helper.getConfigSettings<string>('extensionName');
 
-     
-            try {
-                let workspaceRoot = vscode.workspace.rootPath;
-                let fileUri = path.join(workspaceRoot, savePath);
 
-                FileHelper.Instance.MakeDirIfNotAvailable(fileUri);
+        try {
+            let workspaceRoot = vscode.workspace.rootPath;
+            let fileUri = path.join(workspaceRoot, savePath);
 
-                filePath = path.join(fileUri, path.basename(filePath));
-            }
-            catch (err) {
-                console.log(err);
+            FileHelper.Instance.MakeDirIfNotAvailable(fileUri);
 
-                OutputWindow.Show('Error:', [
-                    err.errno.toString(),
-                    err.path,
-                    err.message
-                ], true);
+            filePath = path.join(fileUri, path.basename(filePath));
+        }
+        catch (err) {
+            console.log(err);
 
-                throw Error('Something Went Wrong.');
-            }
+            OutputWindow.Show('Error:', [
+                err.errno.toString(),
+                err.path,
+                err.message
+            ], true);
 
-        
+            throw Error('Something Went Wrong.');
+        }
+
+
 
         let cssUri = filePath.substring(0, filePath.lastIndexOf('.')) + extensionName;
         return {
@@ -289,7 +289,7 @@ export class AppModel {
         };
     }
 
-    private getCssStyle(format? : string) {
+    private getCssStyle(format?: string) {
         let outputStyleFormat = format || "expanded"; //Helper.getConfigSettings<string>('format');
         return SassHelper.targetCssFormat(outputStyleFormat);
     }
