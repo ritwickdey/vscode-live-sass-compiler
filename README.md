@@ -44,7 +44,7 @@ Open VSCode Editor and Press `ctrl+P`, type `ext install live-sass`.
 * ~~**`liveSassCompile.settings.extensionName`:** To customize extension name (`.css` or `.min.css`) of generated CSS.~~ 
     * ~~_Default is `.css`._~~
 
-* *[NEW]*   **`liveSassCompile.settings.formats`** :  To setup Format (style), Extension Name & Save location for exported css [Multiple Format Supported].
+* ***[NEW]***   **`liveSassCompile.settings.formats`** :  To setup Format (style), Extension Name & Save location for exported css [Multiple Format Supported].
 
     * *Format can be _`expanded`_, _`compact`_, _`compressed`_ or _`nested`_. _Default is  `expanded`._*
 
@@ -106,7 +106,7 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 ## What's new ?
 
 * #### Version 1.0.0 (10.10.2017)
-    * ***[New Features/settings [#10](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/10)]*** Support for multiple extensionName, formats & save location . *[Thanks to [Trinh Xuan Manh](https://github.com/ShadowFoOrm) for the suggestion and a Special Thanks to [###](https://github.com/ibsenleo) for  the PR [#16](https://github.com/ritwickdey/vscode-live-sass-compiler/pull/16).]*
+    * ***[New Features/settings [#10](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/10)]*** Support for multiple extensionName, formats & save locations . *[Thanks to [Trinh Xuan Manh](https://github.com/ShadowFoOrm) for the suggestion and a Special Thanks to [Ibsenleo](https://github.com/ibsenleo) for  the PR [#16](https://github.com/ritwickdey/vscode-live-sass-compiler/pull/16).]*
 
     ***NOTE : Due to enable this feature, the `liveSassCompile.settings.format`, `.savePath`, `.extensionName` settings are dropped. [See settings section for the new setting.]***
 
