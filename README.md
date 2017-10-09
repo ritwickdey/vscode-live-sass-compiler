@@ -44,6 +44,7 @@ Open VSCode Editor and Press `ctrl+P`, type `ext install live-sass`.
 * ~~**`liveSassCompile.settings.extensionName`:** To customize extension name (`.css` or `.min.css`) of generated CSS.~~ 
     * ~~_Default is `.css`._~~
 
+    <hr>
 * ***[NEW]***   **`liveSassCompile.settings.formats`** :  To setup Format (style), Extension Name & Save location for exported css [Multiple Format Supported].
 
     * *Format can be _`expanded`_, _`compact`_, _`compressed`_ or _`nested`_. _Default is  `expanded`._*
@@ -68,7 +69,7 @@ Open VSCode Editor and Press `ctrl+P`, type `ext install live-sass`.
                 }
             ]
         ```
-
+    <hr>
 * **`liveSassCompile.settings.excludeList`:** To Exclude specific folders. All Sass/Scss files inside the folders will be ignored.
     * _default value :_
         ```json
@@ -86,6 +87,7 @@ Open VSCode Editor and Press `ctrl+P`, type `ext install live-sass`.
             "path/subpath/*[!(file1|file2)].scss"
         ]
         ```
+    <hr>
 * **`liveSassCompile.settings.includeItems`:** This setting is useful when you deals with only few of sass files. Only mentioned Sass files will be included. 
 
     * *NOTE: No need to include partial sass files.*
@@ -97,6 +99,7 @@ Open VSCode Editor and Press `ctrl+P`, type `ext install live-sass`.
             "path/subpath/b.scss",
         ]
     ``` 
+    <hr>
 * **`liveSassCompile.settings.generateMap`:** Set it as `false` if you don't want `.map` file for compiled CSS. 
     * _Default is `true`._
 
@@ -108,7 +111,7 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 * #### Version 1.0.0 (10.10.2017)
     * ***[New Features/settings [#10](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/10)]*** Support for multiple extensionName, formats & save locations . *[Thanks to [Trinh Xuan Manh](https://github.com/ShadowFoOrm) for the suggestion and a Special Thanks to [Ibsenleo](https://github.com/ibsenleo) for  the PR [#16](https://github.com/ritwickdey/vscode-live-sass-compiler/pull/16).]*
 
-    ***NOTE : Due to enable this feature, the `liveSassCompile.settings.format`, `.savePath`, `.extensionName` settings are dropped. [See settings section for the new setting.]***
+         ***NOTE : Due to enable this feature, the `liveSassCompile.settings.format`, `.savePath`, `.extensionName` settings are dropped. [See settings section for the new setting.]***
 
 * #### Version 0.5.1 (23.09.2017)
     * ***[Bug Fixed [#12](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/12)]*** Sass files from excluded list was compiled on individual savings. _[Thanks [Braedin Jared](https://github.com/ImBaedin)]_
