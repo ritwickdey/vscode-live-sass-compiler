@@ -57,13 +57,16 @@ export class AppModel {
                 });
             }
             else {
+                let formats = Helper.getConfigSettings<Array<any>>("formats");
                 let sassPath = fileUri;
-                let options = this.getCssStyle();
-                let cssMapPath = this.generateCssAndMapUri(sassPath);
-                this.GenerateCssAndMap(sassPath, cssMapPath.css, cssMapPath.map, options)
-                    .then(() => {
-                        OutputWindow.Show('Watching...', null);
-                    });
+                formats.forEach(format => { //Each format
+                    let options = this.getCssStyle(format.format);
+                    let cssMapPath = this.generateCssAndMapUri(sassPath, format.extensionName);
+                    this.GenerateCssAndMap(sassPath, cssMapPath.css, cssMapPath.map, options)
+                        .then(() => {
+                            OutputWindow.Show('Watching...', null);
+                        });
+                });
             }
         }
     }
@@ -195,14 +198,17 @@ export class AppModel {
      * @param popUpOutputWindow To control output window. default value is true.
      */
     private GenerateAllCssAndMap(popUpOutputWindow = true) {
+        let formats = Helper.getConfigSettings<Array<any>>("formats");
         return new Promise((resolve) => {
             this.findAllSaasFilesAsync((sassPaths: string[]) => {
                 OutputWindow.Show('Compiling Sass/Scss Files: ', sassPaths, popUpOutputWindow);
                 let promises = [];
                 sassPaths.forEach((sassPath) => {
-                    let options = this.getCssStyle();
-                    let cssMapUri = this.generateCssAndMapUri(sassPath);
-                    promises.push(this.GenerateCssAndMap(sassPath, cssMapUri.css, cssMapUri.map, options));
+                    formats.forEach(format => { //Each format
+                        let options = this.getCssStyle(format.format);
+                        let cssMapUri = this.generateCssAndMapUri(sassPath, format.extensionName);
+                        promises.push(this.GenerateCssAndMap(sassPath, cssMapUri.css, cssMapUri.map, options));
+                    });
                 });
 
                 Promise.all(promises).then((e) => resolve(e));
@@ -248,10 +254,10 @@ export class AppModel {
         //  this.writeToFileAsync(mapFileUri, JSON.stringify(map, null, 4));
     }
 
-    private generateCssAndMapUri(filePath: string) {
+    private generateCssAndMapUri(filePath: string, _extensionName? : string) {
 
         let savePath = Helper.getConfigSettings<string>('savePath');
-        let extensionName = Helper.getConfigSettings<string>('extensionName');
+        let extensionName = _extensionName || ".css"; //Helper.getConfigSettings<string>('extensionName');
 
         if (savePath !== 'null') {
             try {
@@ -283,8 +289,8 @@ export class AppModel {
         };
     }
 
-    private getCssStyle() {
-        let outputStyleFormat = Helper.getConfigSettings<string>('format');
+    private getCssStyle(format? : string) {
+        let outputStyleFormat = format || "expanded"; //Helper.getConfigSettings<string>('format');
         return SassHelper.targetCssFormat(outputStyleFormat);
     }
 

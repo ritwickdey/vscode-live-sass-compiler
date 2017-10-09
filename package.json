@@ -55,16 +55,15 @@
         "configuration": {
             "title": "Live Sass Compile Config",
             "properties": {
-                "liveSassCompile.settings.format": {
-                    "type": "string",
-                    "default": "expanded",
-                    "enum": [
-                        "expanded",
-                        "compact",
-                        "compressed",
-                        "nested"
+                "liveSassCompile.settings.formats": {
+                    "type": "array",
+                    "default": [
+                        {
+                            "format": "expanded",
+                            "extensionName": ".css"
+                        }
                     ],
-                    "description": "Set your exported CSS Style. \nDefault is expanded."
+                    "description": "Set your exported CSS Style & Format. (expanded,compact,compressed,nested) \nDefault is expanded."
                 },
                 "liveSassCompile.settings.savePath": {
                     "type": [
@@ -73,17 +72,6 @@
                     "default": "null",
                     "pattern": "null|/|/[^\\/]",
                     "description": "Customize file location of exported CSS.\n Set absulate Path From Workspace Root.\n '/' stands for your workspace root. \n Example: /subfolder1/subfolder2. All CSS file will be saved at 'subfolder2'. \n(NOTE: if folder does not exist, folder will be created as well). \nIf value is null, CSS will be generated at same directory of every SASS/SCSS. (default)."
-                },
-                "liveSassCompile.settings.extensionName": {
-                    "type": [
-                        "string"
-                    ],
-                    "default": ".css",
-                    "enum": [
-                        ".css",
-                        ".min.css"
-                    ],
-                    "description": "Customize extension name.\nDefault is .css"
                 },
                 "liveSassCompile.settings.excludeList": {
                     "type": "array",
