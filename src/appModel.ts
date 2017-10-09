@@ -61,7 +61,7 @@ export class AppModel {
                 let sassPath = fileUri;
                 formats.forEach(format => { //Each format
                     let options = this.getCssStyle(format.format);
-                    let cssMapPath = this.generateCssAndMapUri(sassPath, format.extensionName);
+                    let cssMapPath = this.generateCssAndMapUri(sassPath, format.savePath ,format.extensionName);
                     this.GenerateCssAndMap(sassPath, cssMapPath.css, cssMapPath.map, options)
                         .then(() => {
                             OutputWindow.Show('Watching...', null);
@@ -206,7 +206,7 @@ export class AppModel {
                 sassPaths.forEach((sassPath) => {
                     formats.forEach(format => { //Each format
                         let options = this.getCssStyle(format.format);
-                        let cssMapUri = this.generateCssAndMapUri(sassPath, format.extensionName);
+                        let cssMapUri = this.generateCssAndMapUri(sassPath,format.savePath ,format.extensionName);
                         promises.push(this.GenerateCssAndMap(sassPath, cssMapUri.css, cssMapUri.map, options));
                     });
                 });
@@ -254,12 +254,12 @@ export class AppModel {
         //  this.writeToFileAsync(mapFileUri, JSON.stringify(map, null, 4));
     }
 
-    private generateCssAndMapUri(filePath: string, _extensionName? : string) {
+    private generateCssAndMapUri(filePath: string, savePath: string, _extensionName? : string) {
 
-        let savePath = Helper.getConfigSettings<string>('savePath');
+        savePath = savePath || '';
         let extensionName = _extensionName || ".css"; //Helper.getConfigSettings<string>('extensionName');
 
-        if (savePath !== 'null') {
+     
             try {
                 let workspaceRoot = vscode.workspace.rootPath;
                 let fileUri = path.join(workspaceRoot, savePath);
@@ -280,7 +280,7 @@ export class AppModel {
                 throw Error('Something Went Wrong.');
             }
 
-        }
+        
 
         let cssUri = filePath.substring(0, filePath.lastIndexOf('.')) + extensionName;
         return {
