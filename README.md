@@ -51,17 +51,19 @@ Open VSCode Editor and Press `ctrl+P`, type `ext install live-sass`.
 
     * *Extension Name can be `.css` or `.min.css`. Default is `.css`.*
      
-    * *Save location is relative from workspace root. Default value is `/` (workspace root).*
+    * *Save location is relative from workspace root. Default value is `null` (it will generate CSS in the location of scss/sass. By The Way, It is `null`, NOT `"null"`).*
         
     * *Example :*
         
         ```json
             "liveSassCompile.settings.formats":[
+                // This is Default.
                 {
                     "format": "expanded",
                     "extensionName": ".css",
-                    "savePath": "/css"
+                    "savePath": null
                 },
+                // You can add more
                 {
                     "format": "compressed",
                     "extensionName": ".min.css",
@@ -108,6 +110,10 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 
 ## What's new ?
 
+* #### Version 1.0.1 (10.10.2017)
+    *  ***[Revised/Fixed [#17](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/17)]*** Default value `savePath` from new settings (`.formats`) is revised. If you don't set any value it will generate CSS at the same location of sass/scss as it was before. _(See settings section for more details)_.
+    *[Thanks [2289034325](https://github.com/2289034325) & [Ibsenleo](https://github.com/ibsenleo) for the feedback]*
+
 * #### Version 1.0.0 (10.10.2017)
     * ***[New Features/settings [#10](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/10)]*** Support for multiple extensionName, formats & save locations . *[Thanks to [Trinh Xuan Manh](https://github.com/ShadowFoOrm) for the suggestion and a Special Thanks to [Ibsenleo](https://github.com/ibsenleo) for  the PR [#16](https://github.com/ritwickdey/vscode-live-sass-compiler/pull/16).]*
 
@@ -116,8 +122,6 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 * #### Version 0.5.1 (23.09.2017)
     * ***[Bug Fixed [#12](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/12)]*** Sass files from excluded list was compiled on individual savings. _[Thanks [Braedin Jared](https://github.com/ImBaedin)]_
 
-* #### Version 0.5.0 (25.08.2017)
-    * ***[New Settings]*** `liveSassCompile.settings.generateMap` : Set it as `false` if you don't want `.map` file for compiled CSS. Default is `true`. *[[#9](https://github.com/ritwickdey/vscode-live-sass-compiler/pull/9) Thanks [Mark Hewitt](https://github.com/mhco) for the PR].*
     
 
 ## Changelog
