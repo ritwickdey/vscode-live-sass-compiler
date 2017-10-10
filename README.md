@@ -51,11 +51,11 @@ Open VSCode Editor and Press `ctrl+P`, type `ext install live-sass`.
 
     * *Extension Name can be `.css` or `.min.css`. Default is `.css`.*
      
-    * *Save location is relative from workspace root. Default value is `null` (it will generate CSS in the location of scss/sass. By The Way, It is `null`, NOT `"null"`).*
+    * *Save location is relative from workspace root. Default value is `null`. (`null` means, it will generate CSS in the location of scss/sass. By The Way, It is `null`, NOT `"null"`).*
         
     * *Example :*
         
-        ```json
+        ```js
             "liveSassCompile.settings.formats":[
                 // This is Default.
                 {
