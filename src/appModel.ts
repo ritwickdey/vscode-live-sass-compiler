@@ -256,27 +256,28 @@ export class AppModel {
 
     private generateCssAndMapUri(filePath: string, savePath: string, _extensionName?: string) {
 
-        savePath = savePath || '/';
         let extensionName = _extensionName || ".css"; //Helper.getConfigSettings<string>('extensionName');
 
-        try {
-            let workspaceRoot = vscode.workspace.rootPath;
-            let fileUri = path.join(workspaceRoot, savePath);
+        if (savePath) {
+            try {
+                let workspaceRoot = vscode.workspace.rootPath;
+                let fileUri = path.join(workspaceRoot, savePath);
 
-            FileHelper.Instance.MakeDirIfNotAvailable(fileUri);
+                FileHelper.Instance.MakeDirIfNotAvailable(fileUri);
 
-            filePath = path.join(fileUri, path.basename(filePath));
-        }
-        catch (err) {
-            console.log(err);
+                filePath = path.join(fileUri, path.basename(filePath));
+            }
+            catch (err) {
+                console.log(err);
 
-            OutputWindow.Show('Error:', [
-                err.errno.toString(),
-                err.path,
-                err.message
-            ], true);
+                OutputWindow.Show('Error:', [
+                    err.errno.toString(),
+                    err.path,
+                    err.message
+                ], true);
 
-            throw Error('Something Went Wrong.');
+                throw Error('Something Went Wrong.');
+            }
         }
 
         let cssUri = filePath.substring(0, filePath.lastIndexOf('.')) + extensionName;

@@ -61,7 +61,7 @@
                         {
                             "format": "expanded",
                             "extensionName": ".css",
-                            "savePath" : "/"
+                            "savePath": null
                         }
                     ],
                     "minItems": 1,
@@ -88,9 +88,12 @@
                                 ],
                                 "default": ".css"
                             },
-                            "savePath" : {
+                            "savePath": {
                                 "description": "Set the save location of exported CSS.\n Set the relative path from Workspace Root.\n '/' stands for your workspace root. \n Example: /subfolder1/subfolder2. (NOTE: if folder does not exist, folder will be created as well).",
-                                "type": "string",
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
                                 "pattern": "/|/[^\\/]",
                                 "default": "/"
                             }
