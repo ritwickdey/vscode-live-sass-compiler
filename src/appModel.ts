@@ -258,6 +258,7 @@ export class AppModel {
 
         let extensionName = _extensionName || ".css"; //Helper.getConfigSettings<string>('extensionName');
 
+        // If SavePath is NULL, CSS uri will be same location of SASS.
         if (savePath) {
             try {
                 let workspaceRoot = vscode.workspace.rootPath;
