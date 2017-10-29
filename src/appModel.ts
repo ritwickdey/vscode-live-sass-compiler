@@ -1,7 +1,10 @@
 'use strict';
+
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as glob from 'glob';
+import * as autoprefixer from 'autoprefixer';
+import * as postcss from 'postcss';
 
 import { FileHelper, IFileResolver } from './FileHelper';
 import { SassHelper } from './SassCompileHelper';
@@ -150,9 +153,11 @@ export class AppModel {
      */
     private GenerateCssAndMap(SassPath: string, targetCssUri: string, mapFileUri: string, options) {
         let generateMap = Helper.getConfigSettings<boolean>('generateMap');
+        let autoprefixerTarget = Helper.getConfigSettings<string>('autoprefix');
+
         return new Promise(resolve => {
             SassHelper.instance.compileOne(SassPath, options)
-                .then((result) => {
+                .then(async result => {
                     if (result.status !== 0) {
                         OutputWindow.Show('Compilation Error', [result.formatted], true);
                         resolve(true);
@@ -160,6 +165,10 @@ export class AppModel {
                     else {
                         let promises: Promise<IFileResolver>[] = [];
                         let mapFileTag = `/*# sourceMappingURL= ${path.basename(targetCssUri)}.map */`
+
+                        if (autoprefixerTarget) {
+                            result.text = await this.autoprefix(result.text, autoprefixerTarget);
+                        }
 
                         if (!generateMap) {
                             promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.text}`));
@@ -291,6 +300,25 @@ export class AppModel {
     private getCssStyle(format?: string) {
         let outputStyleFormat = format || "expanded"; //Helper.getConfigSettings<string>('format');
         return SassHelper.targetCssFormat(outputStyleFormat);
+    }
+
+    /**
+     * Autoprefixes CSS properties
+     * 
+     * @param css String representation of CSS to transform 
+     * @param target What browsers to be targeted, as supported by [Browserslist](https://github.com/ai/browserslist)
+     */
+    private async autoprefix(css: string, target: string): Promise<string> {
+        let result = '';
+
+        return await postcss([ autoprefixer ])
+            .process(css)
+            .then(res => {
+                res.warnings().forEach(warn => {
+                    OutputWindow.Show('Autoprefix Error', [warn.text], true);
+                });
+                return res.css;
+            });
     }
 
     dispose() {

@@ -1,166 +1,176 @@
 {
-    "name": "live-sass",
-    "displayName": "Live Sass Compiler",
-    "description": "Compile Sass or Scss to CSS at realtime with live browser reload.",
-    "version": "1.0.1",
-    "publisher": "ritwickdey",
-    "author": {
-        "name": "Ritwick Dey",
-        "email": "ritwickdey@outlook.com",
-        "url": "http://twitter.com/Dey_Ritwick"
-    },
-    "engines": {
-        "vscode": "^1.0.0"
-    },
-    "keywords": [
-        "SASS",
-        "SCSS",
-        "Compiler",
-        "Transpiler",
-        "SASS Compiler"
+  "name": "live-sass",
+  "displayName": "Live Sass Compiler",
+  "description": "Compile Sass or Scss to CSS at realtime with live browser reload.",
+  "version": "1.0.1",
+  "publisher": "ritwickdey",
+  "author": {
+    "name": "Ritwick Dey",
+    "email": "ritwickdey@outlook.com",
+    "url": "http://twitter.com/Dey_Ritwick"
+  },
+  "engines": {
+    "vscode": "^1.0.0"
+  },
+  "keywords": [
+    "SASS",
+    "SCSS",
+    "Compiler",
+    "Transpiler",
+    "SASS Compiler"
+  ],
+  "categories": [
+    "Other",
+    "Extension Packs"
+  ],
+  "preview": true,
+  "galleryBanner": {
+    "color": "#41205f",
+    "theme": "dark"
+  },
+  "activationEvents": [
+    "workspaceContains:**/*.s[ac]ss",
+    "onLanguage:scss",
+    "onLanguage:sass"
+  ],
+  "main": "./out/src/extension",
+  "contributes": {
+    "commands": [
+      {
+        "command": "liveSass.command.watchMySass",
+        "title": "Watch Sass",
+        "category": "Live Sass"
+      },
+      {
+        "command": "liveSass.command.donotWatchMySass",
+        "title": "Stop Watching",
+        "category": "Live Sass"
+      },
+      {
+        "command": "liveSass.command.oneTimeCompileSass",
+        "title": "Compile Sass - Without Watch Mode",
+        "category": "Live Sass"
+      }
     ],
-    "categories": [
-        "Other",
-        "Extension Packs"
-    ],
-    "preview": true,
-    "galleryBanner": {
-        "color": "#41205f",
-        "theme": "dark"
-    },
-    "activationEvents": [
-        "workspaceContains:**/*.s[ac]ss",
-        "onLanguage:scss",
-        "onLanguage:sass"
-    ],
-    "main": "./out/src/extension",
-    "contributes": {
-        "commands": [
+    "configuration": {
+      "title": "Live Sass Compile Config",
+      "properties": {
+        "liveSassCompile.settings.formats": {
+          "type": "array",
+          "default": [
             {
-                "command": "liveSass.command.watchMySass",
-                "title": "Watch Sass",
-                "category": "Live Sass"
-            },
-            {
-                "command": "liveSass.command.donotWatchMySass",
-                "title": "Stop Watching",
-                "category": "Live Sass"
-            },
-            {
-                "command": "liveSass.command.oneTimeCompileSass",
-                "title": "Compile Sass - Without Watch Mode",
-                "category": "Live Sass"
+              "format": "expanded",
+              "extensionName": ".css",
+              "savePath": null
             }
-        ],
-        "configuration": {
-            "title": "Live Sass Compile Config",
+          ],
+          "minItems": 1,
+          "items": {
+            "type": "object",
             "properties": {
-                "liveSassCompile.settings.formats": {
-                    "type": "array",
-                    "default": [
-                        {
-                            "format": "expanded",
-                            "extensionName": ".css",
-                            "savePath": null
-                        }
-                    ],
-                    "minItems": 1,
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "format": {
-                                "description": "Style of exported css",
-                                "type": "string",
-                                "enum": [
-                                    "expanded",
-                                    "compact",
-                                    "compressed",
-                                    "nested"
-                                ],
-                                "default": "expanded"
-                            },
-                            "extensionName": {
-                                "description": "Extension Name of exported css",
-                                "type": "string",
-                                "enum": [
-                                    ".css",
-                                    ".min.css"
-                                ],
-                                "default": ".css"
-                            },
-                            "savePath": {
-                                "description": "Set the save location of exported CSS.\n Set the relative path from Workspace Root.\n '/' stands for your workspace root. \n Example: /subfolder1/subfolder2. (NOTE: if folder does not exist, folder will be created as well).",
-                                "type": [
-                                    "string",
-                                    "null"
-                                ],
-                                "pattern": "/|/[^\\/]",
-                                "default": null
-                            }
-                        },
-                        "additionalProperties": false,
-                        "required": [
-                            "format",
-                            "extensionName"
-                        ]
-                    },
-                    "description": "Set your exported CSS Styles, Formats & save location."
-                },
-                "liveSassCompile.settings.excludeList": {
-                    "type": "array",
-                    "default": [
-                        "**/node_modules/**",
-                        ".vscode/**"
-                    ],
-                    "description": "All Sass/Scss files inside the folders will be excluded. \n\nExamples: \n'**/node_modules/**',\n'.vscode/**', \n'.history/**' \n\nGlob Patterns are accepted."
-                },
-                "liveSassCompile.settings.includeItems": {
-                    "type": [
-                        "array",
-                        "null"
-                    ],
-                    "default": null,
-                    "description": "This setting is useful when you deals with only few of sass files. Only mentioned Sass files will be included. \nNOTE: No need to include partial sass files."
-                },
-                "liveSassCompile.settings.generateMap": {
-                    "type": [
-                        "boolean"
-                    ],
-                    "default": true,
-                    "description": "Set it as `false` if you don't want `.map` file for compiled CSS. \nDefault is `true`"
-                }
-            }
+              "format": {
+                "description": "Style of exported css",
+                "type": "string",
+                "enum": [
+                  "expanded",
+                  "compact",
+                  "compressed",
+                  "nested"
+                ],
+                "default": "expanded"
+              },
+              "extensionName": {
+                "description": "Extension Name of exported css",
+                "type": "string",
+                "enum": [
+                  ".css",
+                  ".min.css"
+                ],
+                "default": ".css"
+              },
+              "savePath": {
+                "description": "Set the save location of exported CSS.\n Set the relative path from Workspace Root.\n '/' stands for your workspace root. \n Example: /subfolder1/subfolder2. (NOTE: if folder does not exist, folder will be created as well).",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "pattern": "/|/[^\\/]",
+                "default": null
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "format",
+              "extensionName"
+            ]
+          },
+          "description": "Set your exported CSS Styles, Formats & save location."
+        },
+        "liveSassCompile.settings.excludeList": {
+          "type": "array",
+          "default": [
+            "**/node_modules/**",
+            ".vscode/**"
+          ],
+          "description": "All Sass/Scss files inside the folders will be excluded. \n\nExamples: \n'**/node_modules/**',\n'.vscode/**', \n'.history/**' \n\nGlob Patterns are accepted."
+        },
+        "liveSassCompile.settings.includeItems": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "default": null,
+          "description": "This setting is useful when you deals with only few of sass files. Only mentioned Sass files will be included. \nNOTE: No need to include partial sass files."
+        },
+        "liveSassCompile.settings.generateMap": {
+          "type": [
+            "boolean"
+          ],
+          "default": true,
+          "description": "Set it as `false` if you don't want `.map` file for compiled CSS. \nDefault is `true`"
+        },
+        "liveSassCompile.settings.autoprefix": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null,
+          "description": "Automatically add vendor prefixes to unsupported CSS properties (e. g. transform -> -ms-transform). Specify what browsers to target with a string (uses Browserslist https://github.com/ai/browserslist). Pass `null` to turn off. \nDefault is `null`"
         }
-    },
-    "license": "MIT",
-    "icon": "images/icon2.png",
-    "bugs": {
-        "url": "https://github.com/ritwickdey/vscode-live-sass-compiler/issues",
-        "email": "ritwickdey@outlook.com"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/ritwickdey/vscode-live-sass-compiler.git"
-    },
-    "homepage": "https://ritwickdey.github.io/vscode-live-sass-compiler/",
-    "extensionDependencies": [
-        "ritwickdey.LiveServer"
-    ],
-    "scripts": {
-        "vscode:prepublish": "tsc -p ./",
-        "compile": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "node ./node_modules/vscode/bin/test"
-    },
-    "dependencies": {
-        "glob": "^7.1.2",
-        "sasslib": "file:lib\\sasslib"
-    },
-    "devDependencies": {
-        "typescript": "^2.4.1",
-        "vscode": "^1.0.0",
-        "mocha": "^2.3.3",
-        "@types/node": "^6.0.40",
-        "@types/mocha": "^2.2.32"
+      }
     }
+  },
+  "license": "MIT",
+  "icon": "images/icon2.png",
+  "bugs": {
+    "url": "https://github.com/ritwickdey/vscode-live-sass-compiler/issues",
+    "email": "ritwickdey@outlook.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ritwickdey/vscode-live-sass-compiler.git"
+  },
+  "homepage": "https://ritwickdey.github.io/vscode-live-sass-compiler/",
+  "extensionDependencies": [
+    "ritwickdey.LiveServer"
+  ],
+  "scripts": {
+    "vscode:prepublish": "tsc -p ./",
+    "compile": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "node ./node_modules/vscode/bin/test"
+  },
+  "dependencies": {
+    "autoprefixer": "^7.1.6",
+    "glob": "^7.1.2",
+    "postcss": "^6.0.13",
+    "sasslib": "file:lib\\sasslib"
+  },
+  "devDependencies": {
+    "typescript": "^2.4.1",
+    "vscode": "^1.0.0",
+    "mocha": "^2.3.3",
+    "@types/node": "^6.0.40",
+    "@types/mocha": "^2.2.32"
+  }
 }
