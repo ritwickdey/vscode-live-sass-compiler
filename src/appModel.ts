@@ -153,7 +153,7 @@ export class AppModel {
      */
     private GenerateCssAndMap(SassPath: string, targetCssUri: string, mapFileUri: string, options) {
         let generateMap = Helper.getConfigSettings<boolean>('generateMap');
-        let autoprefixerTarget = Helper.getConfigSettings<string>('autoprefix');
+        let autoprefixerTarget = Helper.getConfigSettings<Array<string>>('autoprefix');
 
         return new Promise(resolve => {
             SassHelper.instance.compileOne(SassPath, options)
@@ -308,10 +308,14 @@ export class AppModel {
      * @param css String representation of CSS to transform 
      * @param target What browsers to be targeted, as supported by [Browserslist](https://github.com/ai/browserslist)
      */
-    private async autoprefix(css: string, target: string): Promise<string> {
-        let result = '';
+    private async autoprefix(css: string, browsers: Array<string>): Promise<string> {
+        const prefixer = postcss([
+            autoprefixer({
+                browsers
+            })
+        ]);
 
-        return await postcss([ autoprefixer ])
+        return await prefixer
             .process(css)
             .then(res => {
                 res.warnings().forEach(warn => {

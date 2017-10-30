@@ -59,11 +59,11 @@
                     "type": "array",
                     "default": [
                         {
-                        "format": "expanded",
-                        "extensionName": ".css",
-                        "savePath": null
-                    }
-                ],
+                            "format": "expanded",
+                            "extensionName": ".css",
+                            "savePath": null
+                        }
+                    ],
                     "minItems": 1,
                     "items": {
                         "type": "object",
@@ -131,11 +131,11 @@
                 },
                 "liveSassCompile.settings.autoprefix": {
                     "type": [
-                        "string",
+                        "array",
                         "null"
                     ],
                     "default": null,
-                    "description": "Automatically add vendor prefixes to unsupported CSS properties (e. g. transform -> -ms-transform). Specify what browsers to target with a string (uses Browserslist https://github.com/ai/browserslist). Pass `null` to turn off. \nDefault is `null`"
+                    "description": "Automatically add vendor prefixes to unsupported CSS properties (e. g. transform -> -ms-transform). Specify what browsers to target with an array of strings (uses [Browserslist](https://github.com/ai/browserslist)). Pass `null` to turn off. \nDefault is `null`"
                 }
             }
         }
