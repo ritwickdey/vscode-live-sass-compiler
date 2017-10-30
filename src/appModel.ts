@@ -110,7 +110,7 @@ export class AppModel {
 
         if (includeItems && includeItems.length) {
             if (includeItems.length === 1) {
-                queryPatten = queryPatten[0];
+                queryPatten = includeItems[0];
             }
             else {
                 queryPatten = `{${includeItems.join(',')}}`;
