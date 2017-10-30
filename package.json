@@ -128,6 +128,14 @@
                     ],
                     "default": true,
                     "description": "Set it as `false` if you don't want `.map` file for compiled CSS. \nDefault is `true`"
+                },
+                "liveSassCompile.settings.autoprefix": {
+                    "type": [
+                        "array",
+                        "null"
+                    ],
+                    "default": null,
+                    "description": "Automatically add vendor prefixes to unsupported CSS properties (e. g. transform -> -ms-transform). Specify what browsers to target with an array of strings (uses [Browserslist](https://github.com/ai/browserslist)). Pass `null` to turn off. \nDefault is `null`"
                 }
             }
         }
@@ -153,7 +161,9 @@
         "test": "node ./node_modules/vscode/bin/test"
     },
     "dependencies": {
+        "autoprefixer": "^7.1.6",
         "glob": "^7.1.2",
+        "postcss": "^6.0.13",
         "sasslib": "file:lib\\sasslib"
     },
     "devDependencies": {
