@@ -8,7 +8,7 @@
 ***[NOTE : From v1.0.0, the `liveSassCompile.settings.format`, `.savePath`, `.extensionName` settings are dropped. (See settings section for the new setting.)]***
 
 
-[![VSCode Marketplace Badge](https://img.shields.io/vscode-marketplace/v/ritwickdey.live-sass.svg?label=VSCode%20Marketplace&style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![Total Install](https://vsmarketplacebadge.apphb.com/installs-short/ritwickdey.live-sass.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![Avarage Rating Badge](https://img.shields.io/vscode-marketplace/r/ritwickdey.live-sass.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/ritwickdey/vscode-live-sass-compiler/)
+[![VSCode Marketplace Badge](https://img.shields.io/vscode-marketplace/v/ritwickdey.live-sass.svg?label=VSCode%20Marketplace&style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![Total Install](https://img.shields.io/vscode-marketplace/d/ritwickdey.live-sass.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![Avarage Rating Badge](https://img.shields.io/vscode-marketplace/r/ritwickdey.live-sass.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/ritwickdey/vscode-live-sass-compiler/)
 
 A VSCode Extension that help you to compile/transpile your SASS/SCSS files to CSS files at realtime with live browser reload.
 
@@ -29,6 +29,7 @@ A VSCode Extension that help you to compile/transpile your SASS/SCSS files to CS
 * Quick Status bar control.
 * Exclude Specific Folders by settings. 
 * Live Reload to browser (Dependency on `Live Server` extension).
+* Autoprefix Supported (See setting section)
 
 ## Installation
 Open VSCode Editor and Press `ctrl+P`, type `ext install live-sass`.
@@ -75,7 +76,7 @@ Open VSCode Editor and Press `ctrl+P`, type `ext install live-sass`.
 * **`liveSassCompile.settings.excludeList`:** To Exclude specific folders. All Sass/Scss files inside the folders will be ignored.
     * _default value :_
         ```json
-            [ 
+            "liveSassCompile.settings.excludeList": [ 
                 "**/node_modules/**",
                 ".vscode/**" 
             ]
@@ -85,7 +86,7 @@ Open VSCode Editor and Press `ctrl+P`, type `ext install live-sass`.
         * _Example : if you want exclude all file except `file1.scss` & `file2.scss` from `path/subpath` directory, you can use the expression -_  
         
         ```json
-        [
+        "liveSassCompile.settings.excludeList": [
             "path/subpath/*[!(file1|file2)].scss"
         ]
         ```
@@ -96,7 +97,7 @@ Open VSCode Editor and Press `ctrl+P`, type `ext install live-sass`.
     * *Default value is `null`*
     * Example :
     ```json
-        [
+        "liveSassCompile.settings.includeItems": [
             "path/subpath/a.scss",
             "path/subpath/b.scss",
         ]
@@ -104,25 +105,38 @@ Open VSCode Editor and Press `ctrl+P`, type `ext install live-sass`.
     <hr>
 * **`liveSassCompile.settings.generateMap`:** Set it as `false` if you don't want `.map` file for compiled CSS. 
     * _Default is `true`._
+    
+    <hr>
+* **`liveSassCompile.settings.autoprefix` :**
+    Automatically add vendor prefixes to unsupported CSS properties (e. g. `transform` -> `-ms-transform`). 
+    
+    * _Specify what browsers to target with an array of strings (uses [Browserslist](https://github.com/ai/browserslist))._ 
+    * _Set `null` to turn off. (Default is `null`)_
+
+    * Example: 
+     ```json
+       "liveSassCompile.settings.autoprefix": [
+            "> 1%",
+            "last 2 versions"
+        ]
+     ``` 
+     <hr>
 
 ## Extension Dependency 
 This extension has dependency on _[Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)_ extension for live browser reload.
 
 ## What's new ?
 
+* #### Version 1.1.0 (01.11.2017)
+    * ***[NEW [#19](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/19)]*** Support for autoprefix in generated CSS. (see settings section for more) _[Thanks a lot to [boyum](https://github.com/boyum) for sumitting the PR [#22](https://github.com/ritwickdey/vscode-live-sass-compiler/pull/22)]_
+    
+    * ***[Bug fixed [#20](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/20)]*** : Fixed `liveSassCompile.settings.includeItems` settings. *[Thanks [Hoàng Nam](https://github.com/hoangnamitc)]*
+
 * #### Version 1.0.1 (10.10.2017)
     *  ***[Revised/Fixed [#17](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/17)]*** Default value `savePath` from new settings (`.formats`) is revised. If you don't set any value it will generate CSS at the same location of sass/scss as it was before. _(See settings section for more details)_.
     *[Thanks [2289034325](https://github.com/2289034325) & [Ibsenleo](https://github.com/ibsenleo) for the feedback]*
 
-* #### Version 1.0.0 (10.10.2017)
-    * ***[New Features/settings [#10](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/10)]*** Support for multiple extensionName, formats & save locations . *[Thanks to [Trinh Xuan Manh](https://github.com/ShadowFoOrm) for the suggestion and a Special Thanks to [Ibsenleo](https://github.com/ibsenleo) for  the PR [#16](https://github.com/ritwickdey/vscode-live-sass-compiler/pull/16).]*
 
-         ***NOTE : Due to enable this feature, the `liveSassCompile.settings.format`, `.savePath`, `.extensionName` settings are dropped. [See settings section for the new setting.]***
-
-* #### Version 0.5.1 (23.09.2017)
-    * ***[Bug Fixed [#12](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/12)]*** Sass files from excluded list was compiled on individual savings. _[Thanks [Braedin Jared](https://github.com/ImBaedin)]_
-
-    
 
 ## Changelog
 To check full changelog click here [changelog](CHANGELOG.md).
@@ -155,6 +169,10 @@ Inside of the `settings.json`, type following key-value pairs. By the way you'll
        "**/node_modules/**",
        ".vscode/**"
     ],
-    "liveSassCompile.settings.generateMap" : true
+    "liveSassCompile.settings.generateMap": true,
+    "liveSassCompile.settings.autoprefix": [
+        "> 1%",
+        "last 2 versions"
+    ]
 }
 ```
