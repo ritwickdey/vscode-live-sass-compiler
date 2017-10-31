@@ -172,5 +172,9 @@
         "mocha": "^2.3.3",
         "@types/node": "^6.0.40",
         "@types/mocha": "^2.2.32"
+    },
+    "announcement": {
+        "onVersion": "1.1.0",
+        "message": "Autoprefix is now supported in Live Sass Compiler."
     }
 }
