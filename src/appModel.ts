@@ -271,11 +271,16 @@ export class AppModel {
         if (savePath) {
             try {
                 let workspaceRoot = vscode.workspace.rootPath;
-                let fileUri = path.join(workspaceRoot, savePath);
+                let generatedUri = null;
 
-                FileHelper.Instance.MakeDirIfNotAvailable(fileUri);
+                if (savePath.startsWith('~'))
+                    generatedUri = path.join(path.dirname(filePath), savePath.substring(1));
+                else
+                    generatedUri = path.join(workspaceRoot, savePath);
 
-                filePath = path.join(fileUri, path.basename(filePath));
+                FileHelper.Instance.MakeDirIfNotAvailable(generatedUri);
+
+                filePath = path.join(generatedUri, path.basename(filePath));
             }
             catch (err) {
                 console.log(err);
