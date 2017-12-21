@@ -60,9 +60,9 @@ export class AppModel {
                 });
             }
             else {
-                let formats = Helper.getConfigSettings<IFormat[]>("formats");
+                let formats = Helper.getConfigSettings<IFormat[]>('formats');
                 let sassPath = fileUri;
-                formats.forEach(format => { //Each format
+                formats.forEach(format => { // Each format
                     let options = this.getCssStyle(format.format);
                     let cssMapPath = this.generateCssAndMapUri(sassPath, format.savePath, format.extensionName);
                     this.GenerateCssAndMap(sassPath, cssMapPath.css, cssMapPath.map, options)
@@ -207,13 +207,13 @@ export class AppModel {
      * @param popUpOutputWindow To control output window. default value is true.
      */
     private GenerateAllCssAndMap(popUpOutputWindow = true) {
-        let formats = Helper.getConfigSettings<IFormat[]>("formats");
+        let formats = Helper.getConfigSettings<IFormat[]>('formats');
         return new Promise((resolve) => {
             this.findAllSaasFilesAsync((sassPaths: string[]) => {
                 OutputWindow.Show('Compiling Sass/Scss Files: ', sassPaths, popUpOutputWindow);
                 let promises = [];
                 sassPaths.forEach((sassPath) => {
-                    formats.forEach(format => { //Each format
+                    formats.forEach(format => { // Each format
                         let options = this.getCssStyle(format.format);
                         let cssMapUri = this.generateCssAndMapUri(sassPath, format.savePath, format.extensionName);
                         promises.push(this.GenerateCssAndMap(sassPath, cssMapUri.css, cssMapUri.map, options));
@@ -265,7 +265,7 @@ export class AppModel {
 
     private generateCssAndMapUri(filePath: string, savePath: string, _extensionName?: string) {
 
-        let extensionName = _extensionName || ".css"; //Helper.getConfigSettings<string>('extensionName');
+        let extensionName = _extensionName || '.css'; // Helper.getConfigSettings<string>('extensionName');
 
         // If SavePath is NULL, CSS uri will be same location of SASS.
         if (savePath) {
@@ -298,14 +298,14 @@ export class AppModel {
     }
 
     private getCssStyle(format?: string) {
-        let outputStyleFormat = format || "expanded"; //Helper.getConfigSettings<string>('format');
+        let outputStyleFormat = format || 'expanded'; // Helper.getConfigSettings<string>('format');
         return SassHelper.targetCssFormat(outputStyleFormat);
     }
 
     /**
      * Autoprefixes CSS properties
-     * 
-     * @param css String representation of CSS to transform 
+     *
+     * @param css String representation of CSS to transform
      * @param target What browsers to be targeted, as supported by [Browserslist](https://github.com/ai/browserslist)
      */
     private async autoprefix(css: string, browsers: Array<string>): Promise<string> {
