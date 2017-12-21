@@ -48,7 +48,12 @@ Open VSCode Editor and Press `ctrl+P`, type `ext install live-sass`.
 
     * *Extension Name can be `.css` or `.min.css`. Default is `.css`.*
      
-    * *Save location is relative from workspace root. Default value is `null`. (`null` means, it will generate CSS in the location of scss/sass. By The Way, It is `null`, NOT `"null"`).*
+    * ***[New]***   Save location is relative from workspace root or your Sass files. 
+        * Default value is `null`. (`null` means, it will generate CSS in the location of scss/sass. By The Way, It is `null`, NOT `"null"`).
+        
+        * "`/`" denotes relative to root.
+        
+        * "`~`" denotes relative to every sass file. - Complex Scenario. *([Checkout the example](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/26#issue-274641546))*
         
     * *Example :*
         
@@ -65,6 +70,12 @@ Open VSCode Editor and Press `ctrl+P`, type `ext install live-sass`.
                     "format": "compressed",
                     "extensionName": ".min.css",
                     "savePath": "/dist/css"
+                },
+                // More Complex
+                {
+                    "format": "compressed",
+                    "extensionName": ".min.css",
+                    "savePath": "~/../css/"
                 }
             ]
         ```
@@ -123,14 +134,20 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 
 ## What's new ?
 
+* #### Version 1.2.0 (21.12.2017)
+
+    * ***[New Features [#26](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/26)]*** `savePath` setting updated. You can now specify `savePath` location relative to your Sass files. *See Settings section for more details* *[Thanks [Marius](https://github.com/morsanu)]*
+
+    * ***[Bug Fixed [#25](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/25)]*** No more extra new line in generated CSS. *[Thanks [Shahril Amri](https://github.com/redemption024)]*
+    
+    * ***[Bug Fixed [#33](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/33)]*** Now firefox is recognizing source scss file. *[Thanks [Felix](https://github.com/felix007)]*
+    
+    * ***[Bug Fixed]*** Regex pattern fixed for `savePath`.
+
 * #### Version 1.1.0 (01.11.2017)
     * ***[NEW [#19](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/19)]*** Support for autoprefix in generated CSS. (see settings section for more) _[Thanks a lot to [boyum](https://github.com/boyum) for sumitting the PR [#22](https://github.com/ritwickdey/vscode-live-sass-compiler/pull/22)]_
     
     * ***[Bug fixed [#20](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/20)]*** : Fixed `liveSassCompile.settings.includeItems` settings. *[Thanks [Hoàng Nam](https://github.com/hoangnamitc)]*
-
-* #### Version 1.0.1 (10.10.2017)
-    *  ***[Revised/Fixed [#17](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/17)]*** Default value `savePath` from new settings (`.formats`) is revised. If you don't set any value it will generate CSS at the same location of sass/scss as it was before. _(See settings section for more details)_.
-    *[Thanks [2289034325](https://github.com/2289034325) & [Ibsenleo](https://github.com/ibsenleo) for the feedback]*
 
 
 
