@@ -164,7 +164,7 @@ export class AppModel {
                     }
                     else {
                         let promises: Promise<IFileResolver>[] = [];
-                        let mapFileTag = `/*# sourceMappingURL= ${path.basename(targetCssUri)}.map */`
+                        let mapFileTag = `/*# sourceMappingURL=${path.basename(targetCssUri)}.map */`
 
                         if (autoprefixerTarget) {
                             result.text = await this.autoprefix(result.text, autoprefixerTarget);
