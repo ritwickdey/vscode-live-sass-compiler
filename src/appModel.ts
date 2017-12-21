@@ -174,7 +174,7 @@ export class AppModel {
                             promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.text}`));
                         }
                         else {
-                            promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.text} \n\n ${mapFileTag}`));
+                            promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.text}${mapFileTag}`));
                             let map = this.GenerateMapObject(result.map, targetCssUri);
                             promises.push(FileHelper.Instance.writeToOneFile(mapFileUri, JSON.stringify(map, null, 4)));
                         }
