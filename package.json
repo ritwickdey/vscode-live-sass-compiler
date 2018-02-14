@@ -50,6 +50,11 @@
                 "command": "liveSass.command.oneTimeCompileSass",
                 "title": "Compile Sass - Without Watch Mode",
                 "category": "Live Sass"
+            },
+            {
+                "command": "liveSass.command.openOutputWindow",
+                "title": "Open Live Sass Output Window",
+                "category": "Live Sass"
             }
         ],
         "configuration": {
@@ -136,6 +141,11 @@
                     ],
                     "default": null,
                     "description": "Automatically add vendor prefixes to unsupported CSS properties (e. g. transform -> -ms-transform). Specify what browsers to target with an array of strings (uses [Browserslist](https://github.com/ai/browserslist)). Pass `null` to turn off. \nDefault is `null`"
+                },
+                "liveSassCompile.settings.showOutputWindow": {
+                    "type" : "boolean",
+                    "default": true,
+                    "description": "Set this to `false` if you do not want the output window to show.\nNote: You can use the command palette to open the Live Sass output window.\nDefault is `true`"
                 }
             }
         }
