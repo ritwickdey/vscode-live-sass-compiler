@@ -136,6 +136,11 @@
                     ],
                     "default": null,
                     "description": "Automatically add vendor prefixes to unsupported CSS properties (e. g. transform -> -ms-transform). Specify what browsers to target with an array of strings (uses [Browserslist](https://github.com/ai/browserslist)). Pass `null` to turn off. \nDefault is `null`"
+                },
+                "liveSassCompile.settings.watchOnLaunch": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Set this to `true` if you want Live Sass Compiler to automatically start watching your .sass or .scss file when you open an applicable workspace\nDefault is `false`"
                 }
             }
         }
