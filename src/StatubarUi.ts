@@ -42,25 +42,35 @@ export class StatusBarUi {
     }
 
     // Quick status bar messages after compile success or error
-    static compilationSuccess() {
+    static compilationSuccess(isWatching) {
         StatusBarUi.statusBarItem.text = `$(check) Success`;
         StatusBarUi.statusBarItem.color = '#33ff00';
         StatusBarUi.statusBarItem.command = null;
 
-        setTimeout( function() {
-            StatusBarUi.statusBarItem.color = 'inherit';
-            StatusBarUi.watching();
-        }, 4500);
+        if(isWatching) {
+            setTimeout( function() {
+                StatusBarUi.statusBarItem.color = 'inherit';
+                StatusBarUi.watching();
+            }, 4500);
+        }
+        else {
+            StatusBarUi.notWatching();
+        }   
     }
-    static compilationError() {
+    static compilationError(isWatching) {
         StatusBarUi.statusBarItem.text = `$(x) Error`;
         StatusBarUi.statusBarItem.color = '#ff0033';
         StatusBarUi.statusBarItem.command = null;
 
-        setTimeout( function() {
-            StatusBarUi.statusBarItem.color = 'inherit';
-            StatusBarUi.watching();
-        }, 4500);
+        if(isWatching) {
+            setTimeout( function() {
+                StatusBarUi.statusBarItem.color = 'inherit';
+                StatusBarUi.watching();
+            }, 4500);
+        }
+        else {
+            StatusBarUi.notWatching();
+        }
     }
 
     static dispose() {

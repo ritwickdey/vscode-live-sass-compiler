@@ -170,7 +170,7 @@ export class AppModel {
                 .then(async result => {
                     if (result.status !== 0) {
                         OutputWindow.Show('Compilation Error', [result.formatted], showOutputWindow);
-                        StatusBarUi.compilationError();
+                        StatusBarUi.compilationError(this.isWatching);
 
                         if(!showOutputWindow) {
                             vscode.window.setStatusBarMessage(result.formatted.split('\n')[0], 4500);
@@ -197,6 +197,7 @@ export class AppModel {
 
                         Promise.all(promises).then(fileResolvers => {
                             OutputWindow.Show('Generated :', null, false, false);
+                            StatusBarUi.compilationSuccess(this.isWatching);
                             fileResolvers.forEach(fileResolver => {
                                 if (fileResolver.Exception) {
                                     OutputWindow.Show('Error:', [
