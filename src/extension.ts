@@ -26,6 +26,10 @@ export function activate(context: vscode.ExtensionContext) {
             appModel.compileAllFiles(false);
         });
 
+    let disposableOpenOutputWindow =
+        vscode.commands.registerCommand('liveSass.command.openOutputWindow', () => {
+            appModel.openOutputWindow();
+        })
     let disposableOnDivSave =
         vscode.workspace.onDidSaveTextDocument(() => {
             appModel.compileOnSave();
@@ -35,6 +39,7 @@ export function activate(context: vscode.ExtensionContext) {
         disposableStopWaching,
         disposableOnDivSave,
         disposableOneTimeCompileSass,
+        disposableOpenOutputWindow,
         appModel);
 }
 

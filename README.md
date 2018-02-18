@@ -125,6 +125,11 @@ Open VSCode Editor and Press `ctrl+P`, type `ext install live-sass`.
         ]
      ``` 
      <hr>
+* **`liveSassCompile.settings.showOutputWindow` :** Set this to `false` if you do not want the output window to show.    
+    * *NOTE: You can use the command palette to open the Live Sass output window.*
+    * *Default value is `true`*
+
+     <hr>
 
 ## Extension Dependency 
 This extension has dependency on _[Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)_ extension for live browser reload.

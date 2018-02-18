@@ -35,12 +35,19 @@ export class AppModel {
             return;
         }
         StatusBarUi.working();
-        this.GenerateAllCssAndMap().then(() => {
+
+        let showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
+
+        this.GenerateAllCssAndMap(showOutputWindow).then(() => {
             if (!WatchingMode) {
                 this.isWatching = true; // tricky to toggle status
             }
             this.toggleStatusUI();
         });
+    }
+    
+    openOutputWindow() {
+        OutputWindow.Show(null, null, true);
     }
 
     async compileOnSave() {
@@ -85,13 +92,15 @@ export class AppModel {
 
     private toggleStatusUI() {
         this.isWatching = !this.isWatching;
+        let showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
+        
         if (!this.isWatching) {
             StatusBarUi.notWatching();
-            OutputWindow.Show('Not Watching...', null, true);
+            OutputWindow.Show('Not Watching...', null, showOutputWindow);
         }
         else {
             StatusBarUi.watching();
-            OutputWindow.Show('Watching...', null, true);
+            OutputWindow.Show('Watching...', null, showOutputWindow);
         }
 
     }
@@ -154,12 +163,19 @@ export class AppModel {
     private GenerateCssAndMap(SassPath: string, targetCssUri: string, mapFileUri: string, options) {
         let generateMap = Helper.getConfigSettings<boolean>('generateMap');
         let autoprefixerTarget = Helper.getConfigSettings<Array<string>>('autoprefix');
+        let showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
 
         return new Promise(resolve => {
             SassHelper.instance.compileOne(SassPath, options)
                 .then(async result => {
                     if (result.status !== 0) {
-                        OutputWindow.Show('Compilation Error', [result.formatted], true);
+                        OutputWindow.Show('Compilation Error', [result.formatted], showOutputWindow);
+                        StatusBarUi.compilationError(this.isWatching);
+
+                        if(!showOutputWindow) {
+                            vscode.window.setStatusBarMessage(result.formatted.split('\n')[0], 4500);
+                        }
+
                         resolve(true);
                     }
                     else {
@@ -181,6 +197,7 @@ export class AppModel {
 
                         Promise.all(promises).then(fileResolvers => {
                             OutputWindow.Show('Generated :', null, false, false);
+                            StatusBarUi.compilationSuccess(this.isWatching);
                             fileResolvers.forEach(fileResolver => {
                                 if (fileResolver.Exception) {
                                     OutputWindow.Show('Error:', [
@@ -204,10 +221,11 @@ export class AppModel {
 
     /**
      * To compile all Sass/scss files
-     * @param popUpOutputWindow To control output window. default value is true.
+     * @param popUpOutputWindow To control output window. 
      */
-    private GenerateAllCssAndMap(popUpOutputWindow = true) {
+    private GenerateAllCssAndMap(popUpOutputWindow) {
         let formats = Helper.getConfigSettings<IFormat[]>('formats');
+
         return new Promise((resolve) => {
             this.findAllSaasFilesAsync((sassPaths: string[]) => {
                 OutputWindow.Show('Compiling Sass/Scss Files: ', sassPaths, popUpOutputWindow);
@@ -314,6 +332,7 @@ export class AppModel {
      * @param target What browsers to be targeted, as supported by [Browserslist](https://github.com/ai/browserslist)
      */
     private async autoprefix(css: string, browsers: Array<string>): Promise<string> {
+        let showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
         const prefixer = postcss([
             autoprefixer({
                 browsers
@@ -324,7 +343,7 @@ export class AppModel {
             .process(css)
             .then(res => {
                 res.warnings().forEach(warn => {
-                    OutputWindow.Show('Autoprefix Error', [warn.text], true);
+                    OutputWindow.Show('Autoprefix Error', [warn.text], showOutputWindow);
                 });
                 return res.css;
             });
