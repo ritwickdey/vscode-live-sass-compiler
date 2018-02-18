@@ -136,21 +136,13 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 
 ## What's new ?
 
-* #### Version 1.2.0 (21.12.2017)
-
-    * ***[New Features [#26](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/26)]*** `savePath` setting updated. You can now specify `savePath` location relative to your Sass files. *See Settings section for more details* *[Thanks [Marius](https://github.com/morsanu)]*
-
-    * ***[Bug Fixed [#25](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/25)]*** No more extra new line in generated CSS. *[Thanks [Shahril Amri](https://github.com/redemption024)]*
+* #### Version 1.3.0 (09.02.2018)
+    * ***[NEW [#41](https://github.com/ritwickdey/vscode-live-sass-compiler/pull/41)]***
+        - added ability to suppress the output window
+        - Statusbar button Color change based on `Success` and `error`.
+     
+     _[Thanks a lot to [Brandon Baker](https://github.com/bmwigglestein) for sumitting the PR ]_
     
-    * ***[Bug Fixed [#33](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/33)]*** Now firefox is recognizing source scss file. *[Thanks [Felix](https://github.com/felix007)]*
-    
-    * ***[Bug Fixed]*** Regex pattern fixed for `savePath`.
-
-* #### Version 1.1.0 (01.11.2017)
-    * ***[NEW [#19](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/19)]*** Support for autoprefix in generated CSS. (see settings section for more) _[Thanks a lot to [boyum](https://github.com/boyum) for sumitting the PR [#22](https://github.com/ritwickdey/vscode-live-sass-compiler/pull/22)]_
-    
-    * ***[Bug fixed [#20](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/20)]*** : Fixed `liveSassCompile.settings.includeItems` settings. *[Thanks [Hoàng Nam](https://github.com/hoangnamitc)]*
-
 
 
 ## Changelog
