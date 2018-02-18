@@ -127,7 +127,7 @@ Open VSCode Editor and Press `ctrl+P`, type `ext install live-sass`.
      <hr>
 
 * **`liveSassCompile.settings.watchOnLaunch` :** Set this to `true` if you want Live Sass Compiler to automatically start watching your .sass or .scss file when you open an applicable workspace.
-    * *Default value is `true`*
+    * *Default value is `false`*
 
     <hr>
 
