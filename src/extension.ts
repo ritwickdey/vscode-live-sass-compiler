@@ -1,7 +1,7 @@
 'use strict';
 import * as vscode from 'vscode';
 import { AppModel } from './appModel';
-// import { checkNewAnnouncement } from './announcement/index';
+import { checkNewAnnouncement } from './announcement/index';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -9,7 +9,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     let appModel = new AppModel();
 
-    // checkNewAnnouncement(context.globalState);
+    checkNewAnnouncement(context.globalState);
 
     let disposablecompileAll =
         vscode.commands.registerCommand('liveSass.command.watchMySass', () => {
@@ -26,6 +26,10 @@ export function activate(context: vscode.ExtensionContext) {
             appModel.compileAllFiles(false);
         });
 
+    let disposableOpenOutputWindow =
+        vscode.commands.registerCommand('liveSass.command.openOutputWindow', () => {
+            appModel.openOutputWindow();
+        })
     let disposableOnDivSave =
         vscode.workspace.onDidSaveTextDocument(() => {
             appModel.compileOnSave();
@@ -35,6 +39,7 @@ export function activate(context: vscode.ExtensionContext) {
         disposableStopWaching,
         disposableOnDivSave,
         disposableOneTimeCompileSass,
+        disposableOpenOutputWindow,
         appModel);
 }
 
