@@ -45,7 +45,7 @@ export class AppModel {
             this.toggleStatusUI();
         });
     }
-    
+
     openOutputWindow() {
         OutputWindow.Show(null, null, true);
     }
@@ -93,7 +93,7 @@ export class AppModel {
     private toggleStatusUI() {
         this.isWatching = !this.isWatching;
         let showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
-        
+
         if (!this.isWatching) {
             StatusBarUi.notWatching();
             OutputWindow.Show('Not Watching...', null, showOutputWindow);
@@ -172,7 +172,7 @@ export class AppModel {
                         OutputWindow.Show('Compilation Error', [result.formatted], showOutputWindow);
                         StatusBarUi.compilationError(this.isWatching);
 
-                        if(!showOutputWindow) {
+                        if (!showOutputWindow) {
                             vscode.window.setStatusBarMessage(result.formatted.split('\n')[0], 4500);
                         }
 
@@ -221,7 +221,7 @@ export class AppModel {
 
     /**
      * To compile all Sass/scss files
-     * @param popUpOutputWindow To control output window. 
+     * @param popUpOutputWindow To control output window.
      */
     private GenerateAllCssAndMap(popUpOutputWindow) {
         let formats = Helper.getConfigSettings<IFormat[]>('formats');
@@ -335,7 +335,8 @@ export class AppModel {
         let showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
         const prefixer = postcss([
             autoprefixer({
-                browsers
+                browsers,
+                grid: true
             })
         ]);
 
