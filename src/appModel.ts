@@ -110,6 +110,11 @@ export class AppModel {
         return files.find(e => e === sassPath) ? true : false;
     }
 
+    isSassFile(pathUrl): boolean {
+        const filename = path.basename(pathUrl);
+        return !filename.startsWith('_') && (filename.endsWith('sass') || filename.endsWith('scss'))
+    }
+
     getSassFiles(queryPatten = '**/[^_]*.s[a|c]ss'): Thenable<string[]> {
         let excludedList = Helper.getConfigSettings<string[]>('excludeList');
         let includeItems = Helper.getConfigSettings<string[] | null>('includeItems');
@@ -130,15 +135,16 @@ export class AppModel {
         }
 
         return new Promise(resolve => {
-            glob(queryPatten, options, function (err, files: string[]) {
+            glob(queryPatten, options, (err, files: string[]) => {
                 if (err) {
+                    OutputWindow.Show('Error To Seach Files', err, true);
                     resolve([]);
                     return;
                 }
-
-                let filePaths: string[] = files.map(file => path.join(AppModel.basePath, file));
-                resolve(filePaths || []);
-                return;
+                const filePaths = files
+                    .filter(file => this.isSassFile(file))
+                    .map(file => path.join(AppModel.basePath, file));
+                return resolve(filePaths || []);
             });
         })
     }
