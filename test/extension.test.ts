@@ -1,7 +1,35 @@
 import * as assert from 'assert';
 import * as vscode from 'vscode';
+import { exec } from 'child_process';
+import * as path from 'path';
 
-suite('Extension Tests', () => {
+suite('Extension Tests', function() {
+  this.timeout(5 * 60 * 1000);
+  suiteSetup(done => {
+    // if (!process.env.CI) return console.log('Not CI env');
+    let testRunFolder = path.join('.vscode-test', 'stable');
+    let testRunFolderAbsolute = path.join(process.cwd(), testRunFolder);
+    let darwinExecutable = path.join(
+      testRunFolderAbsolute,
+      'Visual Studio Code.app',
+      'Contents',
+      'MacOS',
+      'Electron'
+    );
+    let linuxExecutable = path.join(testRunFolderAbsolute, 'VSCode-linux-x64', 'code');
+    let executable = process.platform === 'darwin' ? darwinExecutable : linuxExecutable;
+
+    exec(`'${executable}' -v`, (err, result) => {
+      if (err) throw err;
+      console.log(result);
+    });
+    exec(`'${executable}' --install-extension ritwickdey.LiveServer`, (err, result) => {
+      if (err) throw err;
+      console.log(result);
+      done();
+    });
+  });
+
   test('Extension should be present', () => {
     assert.ok(vscode.extensions.getExtension('ritwickdey.live-sass'));
   });

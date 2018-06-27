@@ -24,6 +24,7 @@ before_install:
     fi
 
 install:
+  - export CI=true
   - npm i -g vsce
   - npm install
   - npm run vscode:prepublish
