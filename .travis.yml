@@ -30,7 +30,6 @@ install:
   - npm run vscode:prepublish
 
 script:
-  - npm test --silent
   - vsce package -o LiveServer-$TRAVIS_TAG-$TRAVIS_OS_NAME.vsix
 
 deploy:
