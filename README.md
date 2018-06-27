@@ -136,12 +136,11 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 
 ## What's new ?
 
-* #### Version 1.3.0 (09.02.2018)
-    * ***[NEW [#41](https://github.com/ritwickdey/vscode-live-sass-compiler/pull/41)]***
-        - added ability to suppress the output window
-        - Statusbar button Color change based on `Success` and `error`.
-     
-     _[Thanks a lot to [Brandon Baker](https://github.com/bmwigglestein) for sumitting the PR ]_
+* #### Version 2.0.0 (27.06.2018)
+    * Fixes [#6](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/6) [#62](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/62) 
+    * Include Path Fixes
+    * Grid Autoprefix
+    * Autoprefix is now on by default
     
 
 
