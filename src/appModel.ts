@@ -51,34 +51,31 @@ export class AppModel {
     }
 
     async compileOnSave() {
-        if (!this.isWatching) {
-            return;
+        if (!this.isWatching) return;
+
+        let currentFile = vscode.window.activeTextEditor.document.fileName;
+        if (!this.isASassFile(currentFile, true)) return;
+        // if (!(await this.isSassFileIncluded(fileUri, '**/*.s[a|c]ss'))) return;
+        OutputWindow.Show('Change Detected...', [path.basename(currentFile)]);
+
+        if (!this.isASassFile(currentFile)) { // Partial Or not
+            this.GenerateAllCssAndMap(false).then(() => {
+                OutputWindow.Show('Watching...', null);
+            });
+        }
+        else {
+            let formats = Helper.getConfigSettings<IFormat[]>('formats');
+            let sassPath = currentFile;
+            formats.forEach(format => { // Each format
+                let options = this.getCssStyle(format.format);
+                let cssMapPath = this.generateCssAndMapUri(sassPath, format.savePath, format.extensionName);
+                this.GenerateCssAndMap(sassPath, cssMapPath.css, cssMapPath.map, options)
+                    .then(() => {
+                        OutputWindow.Show('Watching...', null);
+                    });
+            });
         }
 
-        let fileUri = vscode.window.activeTextEditor.document.fileName;
-
-        if (fileUri.endsWith('.scss') || fileUri.endsWith('.sass')) {
-            if (!(await this.isSassFileIncluded(fileUri, '**/*.s[a|c]ss'))) return;
-            OutputWindow.Show('Change Detected...', [path.basename(fileUri)]);
-
-            if (path.basename(fileUri).startsWith('_')) {
-                this.GenerateAllCssAndMap(false).then(() => {
-                    OutputWindow.Show('Watching...', null);
-                });
-            }
-            else {
-                let formats = Helper.getConfigSettings<IFormat[]>('formats');
-                let sassPath = fileUri;
-                formats.forEach(format => { // Each format
-                    let options = this.getCssStyle(format.format);
-                    let cssMapPath = this.generateCssAndMapUri(sassPath, format.savePath, format.extensionName);
-                    this.GenerateCssAndMap(sassPath, cssMapPath.css, cssMapPath.map, options)
-                        .then(() => {
-                            OutputWindow.Show('Watching...', null);
-                        });
-                });
-            }
-        }
     }
 
     StopWaching() {
@@ -110,9 +107,9 @@ export class AppModel {
         return files.find(e => e === sassPath) ? true : false;
     }
 
-    isSassFile(pathUrl): boolean {
+    isASassFile(pathUrl: string, partialSass = false): boolean {
         const filename = path.basename(pathUrl);
-        return !filename.startsWith('_') && (filename.endsWith('sass') || filename.endsWith('scss'))
+        return  (partialSass || !filename.startsWith('_')) && (filename.endsWith('sass') || filename.endsWith('scss'))
     }
 
     getSassFiles(queryPatten = '**/[^_]*.s[a|c]ss'): Thenable<string[]> {
@@ -142,7 +139,7 @@ export class AppModel {
                     return;
                 }
                 const filePaths = files
-                    .filter(file => this.isSassFile(file))
+                    .filter(file => this.isASassFile(file))
                     .map(file => path.join(AppModel.basePath, file));
                 return resolve(filePaths || []);
             });
