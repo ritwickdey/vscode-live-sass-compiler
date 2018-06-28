@@ -3,6 +3,7 @@
 
 | Version | Date | Changelog|
 | ------- | -------- | ------ |
+|2.1.0| 28.06.2018 | &mdash; ***[Fixes [#73](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/73)]*** Change detection of Partial Sass was missing in `v2.0.0` |
 |2.0.0|27.06.2018|  &mdash; Fixes [#6](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/6) [#62](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/62)  <br>&mdash; Include Path Fixes  <br>&mdash; Grid Autoprefix  <br>&mdash; Autoprefix is now on by default|
 |1.3.0|19.02.2018| &mdash;  ***[NEW [#41](https://github.com/ritwickdey/vscode-live-sass-compiler/pull/41)]*** <br> - added ability to suppress the output window<br> - Statusbar button Color change based on `Success` and `error`.<br><br>_[Thanks a lot to [Brandon Baker](https://github.com/bmwigglestein) for sumitting the PR ]_|
 |1.2.0|21.12.17| &mdash; ***[New Features [#26](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/26)]*** `savePath` setting updated. You can now specify `savePath` location relative to your Sass files. *See Settings section for more details* *[Thanks [Marius](https://github.com/morsanu)]*  <br><br>&mdash; ***[Bug Fixed [#25](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/25)]*** No more extra new line in generated CSS. *[Thanks [Shahril Amri](https://github.com/redemption024)]* <br><br>&mdash;**[Bug Fixed [#33](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/33)]** Now firefox is recognizing source scss file. *[Thanks [Felix](https://github.com/felix007)]*|
