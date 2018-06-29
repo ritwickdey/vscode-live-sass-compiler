@@ -2,7 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime with live browser reload.",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "publisher": "ritwickdey",
     "author": {
         "name": "Ritwick Dey",
@@ -188,6 +188,6 @@
     },
     "announcement": {
         "onVersion": "2.1.0",
-        "message": "SassCompiler@2.1.0: Fixes Partial Sass Issue"
+        "message": "SassCompiler@2.2.0: Fixes mixin issue"
     }
 }

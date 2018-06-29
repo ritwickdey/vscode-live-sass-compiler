@@ -3,6 +3,7 @@
 
 | Version | Date | Changelog|
 | ------- | -------- | ------ |
+|2.2.0 | 29.06.2018 | &mdash; ***[Fixes [#76](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/76)]*** (That was library issue. Sass.js is downgraded to `v0.10.8`)|
 |2.1.0| 28.06.2018 | &mdash; ***[Fixes [#73](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/73)]*** Change detection of Partial Sass was missing in `v2.0.0` |
 |2.0.0|27.06.2018|  &mdash; Fixes [#6](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/6) [#62](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/62)  <br>&mdash; Include Path Fixes  <br>&mdash; Grid Autoprefix  <br>&mdash; Autoprefix is now on by default|
 |1.3.0|19.02.2018| &mdash;  ***[NEW [#41](https://github.com/ritwickdey/vscode-live-sass-compiler/pull/41)]*** <br> - added ability to suppress the output window<br> - Statusbar button Color change based on `Success` and `error`.<br><br>_[Thanks a lot to [Brandon Baker](https://github.com/bmwigglestein) for sumitting the PR ]_|
