@@ -42,8 +42,8 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 
 ## What's new ?
 
-* #### Version 2.2.0 (29.06.2018)
-    * ***[Fixes [#76](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/76)]*** (That was library issue. Sass.js is downgraded to `v0.10.8`)
+* #### Version 2.2.1 (30.06.2018)
+    *  ***[Fixes [#77](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/77)]*** Rebuild the package. 
 
 ## Changelog
 To check full changelog click here [changelog](CHANGELOG.md).
