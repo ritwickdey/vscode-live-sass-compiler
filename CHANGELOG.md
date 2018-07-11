@@ -3,6 +3,7 @@
 
 | Version | Date | Changelog|
 | ------- | -------- | ------ |
+|3.0.0 | 11.07.2018 | &mdash; Upgrade `sass.js` library that included fixes for 8 digit Hex code & grid name. [Fixes [#39](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/39), [#40](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/40), [#78](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/77)] |
 |2.2.1 | 29.06.2018 | &mdash; ***[Fixes [#77](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/77)]*** Rebuild the package |
 |2.2.0 | 29.06.2018 | &mdash; ***[Fixes [#76](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/76)]*** (That was library issue. Sass.js is downgraded to `v0.10.8`)|
 |2.1.0| 28.06.2018 | &mdash; ***[Fixes [#73](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/73)]*** Change detection of Partial Sass was missing in `v2.0.0` |
