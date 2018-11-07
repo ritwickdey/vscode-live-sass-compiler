@@ -75,7 +75,6 @@ export class AppModel {
                     });
             });
         }
-
     }
 
     StopWaching() {

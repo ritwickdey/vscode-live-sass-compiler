@@ -16,12 +16,11 @@ export class FileHelper {
         return new Promise<IFileResolver>((resolve) => {
             fs.writeFile(targetFileUri, data, 'utf8', (err) => {
                 resolve({
-                    FileUri : targetFileUri,
+                    FileUri: targetFileUri,
                     Exception: err
                 });
             });
-        })
-
+        });
     }
 
     writeToMultipleFile(targetFileUris: string[], data: any[]) {
@@ -43,6 +42,4 @@ export class FileHelper {
         }
         fs.mkdirSync(dir);
     }
-
-
 }

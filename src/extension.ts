@@ -45,6 +45,5 @@ export function activate(context: vscode.ExtensionContext) {
         appModel);
 }
 
-
 export function deactivate() {
 }
