@@ -98,7 +98,6 @@ export class AppModel {
             StatusBarUi.watching();
             OutputWindow.Show('Watching...', null, showOutputWindow);
         }
-
     }
 
     async isSassFileIncluded(sassPath: string, queryPattern = '**/[^_]*.s[a|c]ss') {

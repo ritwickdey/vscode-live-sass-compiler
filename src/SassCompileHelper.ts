@@ -26,9 +26,7 @@ export class SassHelper {
                 }
                 resolve(result);
             });
-
         });
-
     }
 
     compileMultiple(sassPaths: string[], option) {
@@ -41,14 +39,6 @@ export class SassHelper {
             });
 
             Promise.all(promises).then(results => resolve(results));
-
         });
-
-
     }
-
-
-
-
-
 }
