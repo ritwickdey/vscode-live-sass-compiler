@@ -58,12 +58,7 @@ export class AppModel {
         if (!this.isASassFile(currentFile, true)) return;
         OutputWindow.Show('Change Detected...', [path.basename(currentFile)]);
 
-        if (!this.isASassFile(currentFile)) { // Partial Or not
-            this.GenerateAllCssAndMap(false).then(() => {
-                OutputWindow.Show('Watching...', null);
-            });
-        }
-        else {
+        if (this.isASassFile(currentFile)) {
             const formats = Helper.getConfigSettings<IFormat[]>('formats');
             const sassPath = currentFile;
             formats.forEach(format => { // Each format
@@ -73,6 +68,11 @@ export class AppModel {
                     .then(() => {
                         OutputWindow.Show('Watching...', null);
                     });
+            });
+        }
+        else { // Partial Or not            
+            this.GenerateAllCssAndMap(false).then(() => {
+                OutputWindow.Show('Watching...', null);
             });
         }
     }
@@ -187,13 +187,13 @@ export class AppModel {
                             result.text = await this.autoprefix(result.text, autoprefixerTarget);
                         }
 
-                        if (!generateMap) {
-                            promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.text}`));
-                        }
-                        else {
+                        if (generateMap) {
                             promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.text}${mapFileTag}`));
                             const map = this.GenerateMapObject(result.map, targetCssUri);
                             promises.push(FileHelper.Instance.writeToOneFile(mapFileUri, JSON.stringify(map, null, 4)));
+                        }
+                        else {
+                            promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.text}`));
                         }
 
                         Promise.all(promises).then(fileResolvers => {
