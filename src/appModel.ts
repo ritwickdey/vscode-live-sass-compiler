@@ -101,8 +101,8 @@ export class AppModel {
 
     }
 
-    async isSassFileIncluded(sassPath: string, queryPatten = '**/[^_]*.s[a|c]ss') {
-        const files = await this.getSassFiles(queryPatten);
+    async isSassFileIncluded(sassPath: string, queryPattern = '**/[^_]*.s[a|c]ss') {
+        const files = await this.getSassFiles(queryPattern);
         return files.find(e => e === sassPath) ? true : false;
     }
 
@@ -111,7 +111,7 @@ export class AppModel {
         return (partialSass || !filename.startsWith('_')) && (filename.endsWith('sass') || filename.endsWith('scss'))
     }
 
-    getSassFiles(queryPatten = '**/[^_]*.s[a|c]ss'): Thenable<string[]> {
+    getSassFiles(queryPattern = '**/[^_]*.s[a|c]ss'): Thenable<string[]> {
         const excludedList = Helper.getConfigSettings<string[]>('excludeList');
         const includeItems = Helper.getConfigSettings<string[] | null>('includeItems');
 
@@ -123,17 +123,17 @@ export class AppModel {
 
         if (includeItems && includeItems.length) {
             if (includeItems.length === 1) {
-                queryPatten = includeItems[0];
+                queryPattern = includeItems[0];
             }
             else {
-                queryPatten = `{${includeItems.join(',')}}`;
+                queryPattern = `{${includeItems.join(',')}}`;
             }
         }
 
         return new Promise(resolve => {
-            glob(queryPatten, options, (err, files: string[]) => {
+            glob(queryPattern, options, (err, files: string[]) => {
                 if (err) {
-                    OutputWindow.Show('Error To Seach Files', err, true);
+                    OutputWindow.Show('Error To Search Files', err, true);
                     resolve([]);
                     return;
                 }
@@ -150,7 +150,7 @@ export class AppModel {
      * Find ALL Sass & Scss from workspace & It also exclude Sass/Scss from exclude list settings
      * @param callback - callback(filepaths) with be called with Uri(s) of Sass/Scss(s) (string[]).
      */
-    private findAllSaasFilesAsync(callback) {
+    private findAllSassFilesAsync(callback) {
         this.getSassFiles().then(files => callback(files));
     }
 
@@ -228,7 +228,7 @@ export class AppModel {
         const formats = Helper.getConfigSettings<IFormat[]>('formats');
 
         return new Promise((resolve) => {
-            this.findAllSaasFilesAsync((sassPaths: string[]) => {
+            this.findAllSassFilesAsync((sassPaths: string[]) => {
                 OutputWindow.Show('Compiling Sass/Scss Files: ', sassPaths, popUpOutputWindow);
                 const promises = [];
                 sassPaths.forEach((sassPath) => {
