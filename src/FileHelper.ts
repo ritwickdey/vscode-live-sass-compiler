@@ -26,7 +26,7 @@ export class FileHelper {
 
     writeToMultipleFile(targetFileUris: string[], data: any[]) {
         return new Promise<IFileResolver[]>((resolve) => {
-            let promises: Promise<IFileResolver>[] = [];
+            const promises: Promise<IFileResolver>[] = [];
 
             for (let i = 0; i < targetFileUris.length; i++) {
                 promises.push(this.writeToOneFile(targetFileUris[i], data[i]));

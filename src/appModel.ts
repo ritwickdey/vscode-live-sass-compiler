@@ -1,15 +1,16 @@
 'use strict';
 
-import * as vscode from 'vscode';
-import * as path from 'path';
-import * as glob from 'glob';
 import * as autoprefixer from 'autoprefixer';
+import * as glob from 'glob';
+import * as path from 'path';
 import * as postcss from 'postcss';
+import * as vscode from 'vscode';
 
 import { FileHelper, IFileResolver } from './FileHelper';
-import { SassHelper } from './SassCompileHelper';
-import { OutputWindow } from './OuputWindow';
 import { Helper, IFormat } from './helper';
+
+import { OutputWindow } from './OuputWindow';
+import { SassHelper } from './SassCompileHelper';
 import { StatusBarUi } from './StatubarUi'
 
 export class AppModel {
@@ -36,7 +37,7 @@ export class AppModel {
         }
         StatusBarUi.working();
 
-        let showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
+        const showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
 
         this.GenerateAllCssAndMap(showOutputWindow).then(() => {
             if (!WatchingMode) {
@@ -53,9 +54,8 @@ export class AppModel {
     async compileOnSave() {
         if (!this.isWatching) return;
 
-        let currentFile = vscode.window.activeTextEditor.document.fileName;
+        const currentFile = vscode.window.activeTextEditor.document.fileName;
         if (!this.isASassFile(currentFile, true)) return;
-        // if (!(await this.isSassFileIncluded(fileUri, '**/*.s[a|c]ss'))) return;
         OutputWindow.Show('Change Detected...', [path.basename(currentFile)]);
 
         if (!this.isASassFile(currentFile)) { // Partial Or not
@@ -64,11 +64,11 @@ export class AppModel {
             });
         }
         else {
-            let formats = Helper.getConfigSettings<IFormat[]>('formats');
-            let sassPath = currentFile;
+            const formats = Helper.getConfigSettings<IFormat[]>('formats');
+            const sassPath = currentFile;
             formats.forEach(format => { // Each format
-                let options = this.getCssStyle(format.format);
-                let cssMapPath = this.generateCssAndMapUri(sassPath, format.savePath, format.extensionName);
+                const options = this.getCssStyle(format.format);
+                const cssMapPath = this.generateCssAndMapUri(sassPath, format.savePath, format.extensionName);
                 this.GenerateCssAndMap(sassPath, cssMapPath.css, cssMapPath.map, options)
                     .then(() => {
                         OutputWindow.Show('Watching...', null);
@@ -89,7 +89,7 @@ export class AppModel {
 
     private toggleStatusUI() {
         this.isWatching = !this.isWatching;
-        let showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
+        const showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
 
         if (!this.isWatching) {
             StatusBarUi.notWatching();
@@ -103,20 +103,20 @@ export class AppModel {
     }
 
     async isSassFileIncluded(sassPath: string, queryPatten = '**/[^_]*.s[a|c]ss') {
-        let files = await this.getSassFiles(queryPatten);
+        const files = await this.getSassFiles(queryPatten);
         return files.find(e => e === sassPath) ? true : false;
     }
 
     isASassFile(pathUrl: string, partialSass = false): boolean {
         const filename = path.basename(pathUrl);
-        return  (partialSass || !filename.startsWith('_')) && (filename.endsWith('sass') || filename.endsWith('scss'))
+        return (partialSass || !filename.startsWith('_')) && (filename.endsWith('sass') || filename.endsWith('scss'))
     }
 
     getSassFiles(queryPatten = '**/[^_]*.s[a|c]ss'): Thenable<string[]> {
-        let excludedList = Helper.getConfigSettings<string[]>('excludeList');
-        let includeItems = Helper.getConfigSettings<string[] | null>('includeItems');
+        const excludedList = Helper.getConfigSettings<string[]>('excludeList');
+        const includeItems = Helper.getConfigSettings<string[] | null>('includeItems');
 
-        let options = {
+        const options = {
             ignore: excludedList,
             mark: true,
             cwd: AppModel.basePath
@@ -152,7 +152,6 @@ export class AppModel {
      * @param callback - callback(filepaths) with be called with Uri(s) of Sass/Scss(s) (string[]).
      */
     private findAllSaasFilesAsync(callback) {
-
         this.getSassFiles().then(files => callback(files));
     }
 
@@ -164,9 +163,9 @@ export class AppModel {
      * @param options - Object - It includes target CSS style and some more.
      */
     private GenerateCssAndMap(SassPath: string, targetCssUri: string, mapFileUri: string, options) {
-        let generateMap = Helper.getConfigSettings<boolean>('generateMap');
-        let autoprefixerTarget = Helper.getConfigSettings<Array<string>>('autoprefix');
-        let showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
+        const generateMap = Helper.getConfigSettings<boolean>('generateMap');
+        const autoprefixerTarget = Helper.getConfigSettings<Array<string>>('autoprefix');
+        const showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
 
         return new Promise(resolve => {
             SassHelper.instance.compileOne(SassPath, options)
@@ -182,8 +181,8 @@ export class AppModel {
                         resolve(true);
                     }
                     else {
-                        let promises: Promise<IFileResolver>[] = [];
-                        let mapFileTag = `/*# sourceMappingURL=${path.basename(targetCssUri)}.map */`
+                        const promises: Promise<IFileResolver>[] = [];
+                        const mapFileTag = `/*# sourceMappingURL=${path.basename(targetCssUri)}.map */`
 
                         if (autoprefixerTarget) {
                             result.text = await this.autoprefix(result.text, autoprefixerTarget);
@@ -194,7 +193,7 @@ export class AppModel {
                         }
                         else {
                             promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.text}${mapFileTag}`));
-                            let map = this.GenerateMapObject(result.map, targetCssUri);
+                            const map = this.GenerateMapObject(result.map, targetCssUri);
                             promises.push(FileHelper.Instance.writeToOneFile(mapFileUri, JSON.stringify(map, null, 4)));
                         }
 
@@ -227,16 +226,16 @@ export class AppModel {
      * @param popUpOutputWindow To control output window.
      */
     private GenerateAllCssAndMap(popUpOutputWindow) {
-        let formats = Helper.getConfigSettings<IFormat[]>('formats');
+        const formats = Helper.getConfigSettings<IFormat[]>('formats');
 
         return new Promise((resolve) => {
             this.findAllSaasFilesAsync((sassPaths: string[]) => {
                 OutputWindow.Show('Compiling Sass/Scss Files: ', sassPaths, popUpOutputWindow);
-                let promises = [];
+                const promises = [];
                 sassPaths.forEach((sassPath) => {
                     formats.forEach(format => { // Each format
-                        let options = this.getCssStyle(format.format);
-                        let cssMapUri = this.generateCssAndMapUri(sassPath, format.savePath, format.extensionName);
+                        const options = this.getCssStyle(format.format);
+                        const cssMapUri = this.generateCssAndMapUri(sassPath, format.savePath, format.extensionName);
                         promises.push(this.GenerateCssAndMap(sassPath, cssMapUri.css, cssMapUri.map, options));
                     });
                 });
@@ -252,7 +251,7 @@ export class AppModel {
      * @param targetCssUri Css URI
      */
     private GenerateMapObject(mapObject, targetCssUri: string) {
-        let map = {
+        const map = {
             'version': 3,
             'mappings': '',
             'sources': [],
@@ -286,12 +285,12 @@ export class AppModel {
 
     private generateCssAndMapUri(filePath: string, savePath: string, _extensionName?: string) {
 
-        let extensionName = _extensionName || '.css'; // Helper.getConfigSettings<string>('extensionName');
+        const extensionName = _extensionName || '.css'; // Helper.getConfigSettings<string>('extensionName');
 
         // If SavePath is NULL, CSS uri will be same location of SASS.
         if (savePath) {
             try {
-                let workspaceRoot = vscode.workspace.rootPath;
+                const workspaceRoot = vscode.workspace.rootPath;
                 let generatedUri = null;
 
                 if (savePath.startsWith('~'))
@@ -316,7 +315,7 @@ export class AppModel {
             }
         }
 
-        let cssUri = filePath.substring(0, filePath.lastIndexOf('.')) + extensionName;
+        const cssUri = filePath.substring(0, filePath.lastIndexOf('.')) + extensionName;
         return {
             css: cssUri,
             map: cssUri + '.map'
@@ -324,7 +323,7 @@ export class AppModel {
     }
 
     private getCssStyle(format?: string) {
-        let outputStyleFormat = format || 'expanded'; // Helper.getConfigSettings<string>('format');
+        const outputStyleFormat = format || 'expanded'; // Helper.getConfigSettings<string>('format');
         return SassHelper.targetCssFormat(outputStyleFormat);
     }
 
@@ -335,7 +334,7 @@ export class AppModel {
      * @param target What browsers to be targeted, as supported by [Browserslist](https://github.com/ai/browserslist)
      */
     private async autoprefix(css: string, browsers: Array<string>): Promise<string> {
-        let showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
+        const showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
         const prefixer = postcss([
             autoprefixer({
                 browsers,

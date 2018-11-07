@@ -1,6 +1,5 @@
 import * as SassCompiler from 'sasslib/sass.node.js';
 
-
 export class SassHelper {
 
     static get instance() {
@@ -35,7 +34,7 @@ export class SassHelper {
     compileMultiple(sassPaths: string[], option) {
 
         return new Promise<any[]>((resolve, reject) => {
-            let promises: Promise<{}>[] = [];
+            const promises: Promise<{}>[] = [];
 
             sassPaths.forEach(sassPath => {
                 promises.push(this.compileOne(sassPath, option));
