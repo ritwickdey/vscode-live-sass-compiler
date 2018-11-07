@@ -165,57 +165,56 @@ export class AppModel {
         const autoprefixerTarget = Helper.getConfigSettings<Array<string>>('autoprefix');
         const showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
 
-        return new Promise(resolve => {
-            SassHelper.instance.compileOne(SassPath, options)
-                .then(async result => {
-                    if (result.status !== 0) {
-                        OutputWindow.Show('Compilation Error', [result.formatted], showOutputWindow);
-                        StatusBarUi.compilationError(this.isWatching);
+        return new Promise(async resolve => {
+            const result = await SassHelper.instance.compileOne(SassPath, options);
 
-                        if (!showOutputWindow) {
-                            vscode.window.setStatusBarMessage(result.formatted.split('\n')[0], 4500);
-                        }
+            if (result.status !== 0) {
+                OutputWindow.Show('Compilation Error', [result.formatted], showOutputWindow);
+                StatusBarUi.compilationError(this.isWatching);
 
-                        resolve(true);
+                if (!showOutputWindow) {
+                    vscode.window.setStatusBarMessage(result.formatted.split('\n')[0], 4500);
+                }
+
+                resolve(true);
+                return;
+            }
+
+            const promises: Promise<IFileResolver>[] = [];
+            const mapFileTag = `/*# sourceMappingURL=${path.basename(targetCssUri)}.map */`
+
+            if (autoprefixerTarget) {
+                result.text = await this.autoprefix(result.text, autoprefixerTarget);
+            }
+
+            if (generateMap) {
+                promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.text}${mapFileTag}`));
+                const map = this.GenerateMapObject(result.map, targetCssUri);
+                promises.push(FileHelper.Instance.writeToOneFile(mapFileUri, JSON.stringify(map, null, 4)));
+            }
+            else {
+                promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.text}`));
+            }
+
+            Promise.all(promises).then(fileResolvers => {
+                OutputWindow.Show('Generated :', null, false, false);
+                StatusBarUi.compilationSuccess(this.isWatching);
+                fileResolvers.forEach(fileResolver => {
+                    if (fileResolver.Exception) {
+                        OutputWindow.Show('Error:', [
+                            fileResolver.Exception.errno.toString(),
+                            fileResolver.Exception.path,
+                            fileResolver.Exception.message
+                        ], true);
+                        console.error('error :', fileResolver);
                     }
                     else {
-                        const promises: Promise<IFileResolver>[] = [];
-                        const mapFileTag = `/*# sourceMappingURL=${path.basename(targetCssUri)}.map */`
-
-                        if (autoprefixerTarget) {
-                            result.text = await this.autoprefix(result.text, autoprefixerTarget);
-                        }
-
-                        if (generateMap) {
-                            promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.text}${mapFileTag}`));
-                            const map = this.GenerateMapObject(result.map, targetCssUri);
-                            promises.push(FileHelper.Instance.writeToOneFile(mapFileUri, JSON.stringify(map, null, 4)));
-                        }
-                        else {
-                            promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.text}`));
-                        }
-
-                        Promise.all(promises).then(fileResolvers => {
-                            OutputWindow.Show('Generated :', null, false, false);
-                            StatusBarUi.compilationSuccess(this.isWatching);
-                            fileResolvers.forEach(fileResolver => {
-                                if (fileResolver.Exception) {
-                                    OutputWindow.Show('Error:', [
-                                        fileResolver.Exception.errno.toString(),
-                                        fileResolver.Exception.path,
-                                        fileResolver.Exception.message
-                                    ], true);
-                                    console.error('error :', fileResolver);
-                                }
-                                else {
-                                    OutputWindow.Show(null, [fileResolver.FileUri], false, false);
-                                }
-                            });
-                            OutputWindow.Show(null, null, false, true);
-                            resolve(true);
-                        });
+                        OutputWindow.Show(null, [fileResolver.FileUri], false, false);
                     }
                 });
+                OutputWindow.Show(null, null, false, true);
+                resolve(true);
+            });
         });
     }
 
