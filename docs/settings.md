@@ -83,9 +83,9 @@
     Automatically add vendor prefixes to unsupported CSS properties (e. g. `transform` -> `-ms-transform`). 
     
     * _Specify what browsers to target with an array of strings (uses [Browserslist](https://github.com/ai/browserslist))._ 
-    * _Set `null` to turn off. (Default is `null`)_
+    * _Set `null` to turn off._
 
-    * Example: 
+    * Default: 
      ```json
        "liveSassCompile.settings.autoprefix": [
             "> 1%",
