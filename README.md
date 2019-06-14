@@ -13,7 +13,7 @@ A VSCode Extension that help you to compile/transpile your SASS/SCSS files to CS
 ![App Preview](./images/Screenshot/AnimatedPreview.gif)
 
 ## Usage/Shortcuts
-1. Click to `Watch Sass` from Statusbar to turn on the live compilation and then click to `Stop Watching Sass` from Statusbar to turn on live compilation . 
+1. Click to `Watch Sass` from Statusbar to turn on the live compilation and then click to `Stop Watching Sass` from Statusbar to turn off live compilation. 
 ![Statusbar control](./images/Screenshot/statusbar.jpg)
 
 2. Press `F1` or `ctrl+shift+P` and type `Live Sass: Watch Sass` to start live compilation or, type `Live Sass: Stop Watching Sass` to stop a live compilation.
