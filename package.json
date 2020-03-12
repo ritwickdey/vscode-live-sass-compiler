@@ -180,11 +180,11 @@
         "sasslib": "file:lib\\sasslib"
     },
     "devDependencies": {
-        "typescript": "^2.4.1",
-        "vscode": "^1.0.0",
-        "mocha": "^2.3.3",
-        "@types/node": "^6.0.40",
-        "@types/mocha": "^2.2.32"
+        "@types/mocha": "^2.2.48",
+        "@types/node": "^6.14.9",
+        "mocha": "^7.1.0",
+        "typescript": "^2.9.2",
+        "vscode": "^1.1.36"
     },
     "announcement": {
         "onVersion": "3.0.0",
