@@ -14,10 +14,10 @@ export class StatusBarUi {
         return StatusBarUi._statusBarItem;
     }
 
-    static init() {
+    static init(watchOnLaunch) {
         StatusBarUi.working("Starting...");
         setTimeout(function(){
-            StatusBarUi.notWatching();
+            watchOnLaunch ? StatusBarUi.watching() : StatusBarUi.notWatching();
         },1000);
     }
 
@@ -37,7 +37,7 @@ export class StatusBarUi {
 
     static working(workingMsg:string = "Working on it...") {
         StatusBarUi.statusBarItem.text = `$(pulse) ${workingMsg}`;
-        StatusBarUi.statusBarItem.tooltip = 'In case if it takes long time, Show output window and report.';
+        StatusBarUi.statusBarItem.tooltip = 'In case it takes a long time, show output window and report.';
         StatusBarUi.statusBarItem.command = null;
     }
 

@@ -17,8 +17,9 @@ export class AppModel {
     isWatching: boolean;
 
     constructor() {
-        this.isWatching = false;
-        StatusBarUi.init();
+        this.isWatching = Helper.getConfigSettings<boolean>('watchOnLaunch');
+
+        StatusBarUi.init(this.isWatching);
     }
 
     static get basePath(): string {
@@ -30,6 +31,7 @@ export class AppModel {
      * @param WatchingMode WatchingMode = false for without watch mode.
      */
     compileAllFiles(WatchingMode = true) {
+
         if (this.isWatching) {
             vscode.window.showInformationMessage('already watching...');
             return;
@@ -44,6 +46,7 @@ export class AppModel {
             }
             this.toggleStatusUI();
         });
+        
     }
 
     openOutputWindow() {
