@@ -50,6 +50,7 @@
 //         'liveSass.command.watchMySass',
 //         'liveSass.command.donotWatchMySass',
 //         'liveSass.command.oneTimeCompileSass',
+//         'liveSass.command.compileCurrentSass',
 //         'liveSass.command.openOutputWindow'
 //       ];
 //       const foundLiveServerCommands = commands.filter(value => {

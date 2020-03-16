@@ -43,8 +43,9 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 
 ## What's new ?
 
-* #### Version 3.0.0 (11.07.2018)
-    *  Upgrade `sass.js` library that included fixes for 8 digit Hex code & grid name. [Fixes [#39](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/39), [#40](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/40), [#78](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/77)]  
+// TODO: Add date
+* #### Version 3.1.0 (XX.03.2020)
+    *  Added new setting `liveSassCompile.settings.watchOnLaunch`: When `true` it will automatically start watching your .sass or .scss files on launch. *Default value is `false`*
 
 ## Changelog
 To check full changelog click here [changelog](CHANGELOG.md).

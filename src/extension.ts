@@ -26,19 +26,27 @@ export function activate(context: vscode.ExtensionContext) {
             appModel.compileAllFiles(false);
         });
 
+    let disposableCompileCurrentSass =
+        vscode.commands.registerCommand('liveSass.command.compileCurrentSass', () => {
+            appModel.compileCurrentFile();
+        });
+
     let disposableOpenOutputWindow =
         vscode.commands.registerCommand('liveSass.command.openOutputWindow', () => {
             appModel.openOutputWindow();
         })
-    let disposableOnDivSave =
+
+    let disposableOnDidSave =
         vscode.workspace.onDidSaveTextDocument(() => {
             appModel.compileOnSave();
         });
 
-    context.subscriptions.push(disposablecompileAll,
+    context.subscriptions.push(
+        disposablecompileAll,
         disposableStopWaching,
-        disposableOnDivSave,
+        disposableOnDidSave,
         disposableOneTimeCompileSass,
+        disposableCompileCurrentSass,
         disposableOpenOutputWindow,
         appModel);
 }
