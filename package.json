@@ -47,6 +47,11 @@
                 "category": "Live Sass"
             },
             {
+                "command": "liveSass.command.compileCurrentSass",
+                "title": "Compile Current Sass File",
+                "category": "Live Sass"
+            },
+            {
                 "command": "liveSass.command.oneTimeCompileSass",
                 "title": "Compile Sass - Without Watch Mode",
                 "category": "Live Sass"
