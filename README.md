@@ -6,18 +6,18 @@ _[I'm sorry but I'm now super busy, If you want to be a maintainer of the projec
 
 **_[If you found any bug or if you have any suggestion, feel free to report or suggest me.]_**
 
-[![VSCode Marketplace Badge](https://img.shields.io/vscode-marketplace/v/ritwickdey.live-sass.svg?label=VSCode%20Marketplace&style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![Total Install](https://img.shields.io/vscode-marketplace/d/ritwickdey.live-sass.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![Avarage Rating Badge](https://img.shields.io/vscode-marketplace/r/ritwickdey.live-sass.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/ritwickdey/vscode-live-sass-compiler/)
+[![VSCode Marketplace Badge](https://img.shields.io/vscode-marketplace/v/ritwickdey.live-sass.svg?label=VSCode%20Marketplace&style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![Total Install](https://img.shields.io/vscode-marketplace/d/ritwickdey.live-sass.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![Average Rating Badge](https://img.shields.io/vscode-marketplace/r/ritwickdey.live-sass.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/ritwickdey/vscode-live-sass-compiler/)
 
-A VSCode Extension that help you to compile/transpile your SASS/SCSS files to CSS files at realtime with live browser reload.
+A VSCode Extension that help you to compile/transpile your SASS/SCSS files to CSS files at real-time with live browser reload.
 
 ![App Preview](./images/Screenshot/AnimatedPreview.gif)
 
 ## Usage/Shortcuts
-1. Click to `Watch Sass` from Statusbar to turn on the live compilation and then click to `Stop Watching Sass` from Statusbar to turn off live compilation . 
-![Statusbar control](./images/Screenshot/statusbar.jpg)
+1. Click to `Watch Sass` from the status bar to turn on the live compilation and then click to `Stop Watching Sass` from the status bar to turn off live compilation . 
+![Status bar control](./images/Screenshot/statusbar.jpg)
 
 2. Press `F1` or `ctrl+shift+P` and type `Live Sass: Watch Sass` to start live compilation or, type `Live Sass: Stop Watching Sass` to stop a live compilation.
-3. Press `F1` or `ctrl+shift+P` and type `Live Sass: Compile Sass - Without Watch Mode ` to compile Sass or Scss for one time.
+3. Press `F1` or `ctrl+shift+P` and type `Live Sass: Compile Sass - Without Watch Mode ` to compile SASS or SCSS for one time.
 
 ## Features
 * Live SASS & SCSS Compile.
@@ -43,9 +43,10 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 
 ## What's new ?
 
-// TODO: Add date
-* #### Version 3.1.0 (XX.03.2020)
-    *  Added new setting `liveSassCompile.settings.watchOnLaunch`: When `true` it will automatically start watching your .sass or .scss files on launch. *Default value is `false`*
+<!-- TODO: Add date -->
+* #### Version 3.1.0 (XX.03.2020)  
+No breaking changes so only a minor bump, not major
+    * Added new setting `liveSassCompile.settings.watchOnLaunch`: When `true` it will automatically start watching your `.sass` or `.scss` files on launch. *Default value is `false`*
 
 ## Changelog
 To check full changelog click here [changelog](CHANGELOG.md).

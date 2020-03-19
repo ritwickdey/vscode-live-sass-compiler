@@ -1,11 +1,11 @@
 ## Settings
 
 * **`liveSassCompile.settings.formats`**  
-To setup Format (style), Extension Name & Save location for exported css [Multiple Format Supported].
+To setup Format (style), Extension Name & Save location for exported CSS [Multiple Format Supported].
 
     * *Format can be _`expanded`_, _`compact`_, _`compressed`_ or _`nested`_. Default is  _`expanded`_*
 
-    * *Extension Name can be `.css` or `.min.css`. Default is `.css`*
+    * *Extension Name can be `.css` or `.min.css`. **Default is `.css`***
      
     * *Save location is relative from workspace root or your Sass files (See examples)*
 
@@ -35,12 +35,12 @@ To setup Format (style), Extension Name & Save location for exported css [Multip
             {
                 "format": "compressed",
                 "extensionName": ".min.css",
-                // ~ -> denotes relative to every sass file (1)
+                // ~ -> denotes relative to every sass file (Ref: 1)
                 "savePath": "~/../css/"
             }
         ]
     ```
-    (1) Complex Scenario. *([Checkout the example](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/26#issue-274641546))*
+    (Ref: 1) Complex Scenario. *([Checkout the example](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/26#issue-274641546))*
         
     </div>
     </details>
@@ -48,9 +48,9 @@ To setup Format (style), Extension Name & Save location for exported css [Multip
 ___
 
 * **`liveSassCompile.settings.excludeList`**  
-To Exclude specific folders. All Sass/Scss files inside the folders will be ignored.
+To Exclude specific folders. All SASS/SCSS files inside the folders will be ignored.
 
-    <details><summary>Examples</summary><p>
+    <details><summary>Deafult & examples</summary><p>
 
     **Default**
 
@@ -68,6 +68,8 @@ To Exclude specific folders. All Sass/Scss files inside the folders will be igno
             "path/subpath/*[!(file1|file2)].scss"
         ]
     ```
+
+    **Ignoring partials
 
     </p></details>
 
@@ -102,7 +104,7 @@ Automatically add vendor prefixes to unsupported CSS properties (e. g. `transfor
     * _Specify what browsers to target with an array of strings (uses [Browserslist](https://github.com/ai/browserslist))._ 
 
     <details>
-    <summary>Examples</summary>
+    <summary>Default & examples</summary>
     <p>
 
     **Default**
@@ -123,6 +125,12 @@ Automatically add vendor prefixes to unsupported CSS properties (e. g. `transfor
 ___
 
 * **`liveSassCompile.settings.showOutputWindow`**  
-Set this to `false` if you do not want the output window to show.    
+Set this to `false` if you do not want the output window to show.
     * *NOTE: You can use the command palette to open the Live Sass output window.*
     * *Default value is `true`*
+
+___
+
+* **`liveSassCompile.settings.watchOnLaunch`**  
+Set this to `true` to watch files on launch.
+    * *Default value is `false`*
