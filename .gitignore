@@ -4,3 +4,4 @@ debug.log
 _site
 Gemfile.lock
 Gemfile
+.vscode-test
