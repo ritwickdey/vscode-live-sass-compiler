@@ -119,7 +119,7 @@ export class AppModel {
         const showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
 
         if (!this.isASassFile(currentFile, true)) return;
-        // if (!(await this.isSassFileIncluded(fileUri, '**/*.s[a|c]ss'))) return;
+        if (await this.isSassFileExcluded(vscode.window.activeTextEditor.document.uri.fsPath)) return;
         OutputWindow.Show('Change Detected...', [path.basename(currentFile)], showOutputWindow);
 
         if (!this.isASassFile(currentFile)) { // Partial Or not
@@ -180,9 +180,14 @@ export class AppModel {
 
     }
 
-    async isSassFileIncluded(sassPath: string, queryPatten = '**/[^_]*.s[a|c]ss') {
-        let files = await this.getSassFiles(queryPatten);
+    private async isSassFileIncluded(sassPath: string, queryPatten = '**/[^_]*.s[a|c]ss') {
+        const files = await this.getSassFiles(queryPatten);
         return files.find(e => e === sassPath) ? true : false;
+    }
+
+    private async isSassFileExcluded(sassPath: string, queryPatten = '**/[^_]*.s[a|c]ss') {
+        const files = await this.getSassFiles(queryPatten, true);
+        return files.find(e => e === path.join(AppModel.basePath, sassPath)) ? false : true;
     }
 
     isASassFile(pathUrl: string, partialSass = false): boolean {
@@ -190,17 +195,17 @@ export class AppModel {
         return  (partialSass || !filename.startsWith('_')) && (filename.endsWith('sass') || filename.endsWith('scss'))
     }
 
-    getSassFiles(queryPatten = '**/[^_]*.s[a|c]ss'): Thenable<string[]> {
-        let excludedList = Helper.getConfigSettings<string[]>('excludeList');
-        let includeItems = Helper.getConfigSettings<string[] | null>('includeItems');
+    private getSassFiles(queryPatten = '**/[^_]*.s[a|c]ss', isQueryPatternFixed = false): Thenable<string[]> {
+        const excludedList = Helper.getConfigSettings<string[]>('excludeList');
+        const includeItems = Helper.getConfigSettings<string[] | null>('includeItems');
 
-        let options = {
+        const options = {
             ignore: excludedList,
             mark: true,
             cwd: AppModel.basePath
         }
 
-        if (includeItems && includeItems.length) {
+        if (!isQueryPatternFixed && includeItems && includeItems.length) {
             if (includeItems.length === 1) {
                 queryPatten = includeItems[0];
             }
