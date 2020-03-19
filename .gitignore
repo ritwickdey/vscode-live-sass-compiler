@@ -5,3 +5,4 @@ _site
 Gemfile.lock
 Gemfile
 .vscode-test
+package-lock.json
