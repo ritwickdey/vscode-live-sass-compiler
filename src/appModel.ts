@@ -8,7 +8,7 @@ import * as postcss from 'postcss';
 
 import { FileHelper, IFileResolver } from './FileHelper';
 import { SassHelper } from './SassCompileHelper';
-import { OutputWindow } from './OuputWindow';
+import { OutputWindow } from './VscodeWindow';
 import { Helper, IFormat } from './helper';
 import { StatusBarUi } from './StatubarUi'
 
@@ -46,39 +46,37 @@ export class AppModel {
             }
             this.toggleStatusUI();
         });
-        
+
     }
 
     compileCurrentFile() {
 
         const showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
 
-        if (!vscode.window.activeTextEditor)
-        {
-            StatusBarUi.customMessage("No file open","No file is open, ensure a file is open in the editor window", "warning");
+        if (!vscode.window.activeTextEditor) {
+            StatusBarUi.customMessage("No file open", "No file is open, ensure a file is open in the editor window", "warning");
             OutputWindow.Show('No active file', ["There isn't an active editor window to process"], showOutputWindow)
-        
+
             const t = this;
-            setTimeout(function(){
+            setTimeout(function () {
                 t.revertUIToWatchingStatus();
-            },3000);
+            }, 3000);
 
             return;
         }
 
         const sassPath = vscode.window.activeTextEditor.document.uri.fsPath;
 
-        if (!this.isASassFile(vscode.window.activeTextEditor.document.uri.fsPath))
-        {
+        if (!this.isASassFile(vscode.window.activeTextEditor.document.uri.fsPath)) {
             if (this.isASassFile(vscode.window.activeTextEditor.document.uri.fsPath, true))
-                StatusBarUi.customMessage("Can't process partial Sass","The file currently open in the editor window is a partial sass file, these aren't processed singly", "warning");
+                StatusBarUi.customMessage("Can't process partial Sass", "The file currently open in the editor window is a partial sass file, these aren't processed singly", "warning");
             else
-                StatusBarUi.customMessage("Not a Sass file","The file currently open in the editor window isn't a sass file", "warning");
-        
+                StatusBarUi.customMessage("Not a Sass file", "The file currently open in the editor window isn't a sass file", "warning");
+
             const t = this;
-            setTimeout(function(){
+            setTimeout(function () {
                 t.revertUIToWatchingStatus();
-            },3000);
+            }, 3000);
 
             return;
         }
@@ -90,21 +88,20 @@ export class AppModel {
 
         new Promise((resolve) => {
             let promises = [];
-                formats.forEach(format => { // Each format
-                    let options = this.getCssStyle(format.format);
-                    let cssMapUri = this.generateCssAndMapUri(sassPath, format.savePath, format.extensionName);
-                    promises.push(this.GenerateCssAndMap(sassPath, cssMapUri.css, cssMapUri.map, options));
-                });
+            formats.forEach(format => { // Each format
+                let options = this.getCssStyle(format.format);
+                let cssMapUri = this.generateCssAndMapUri(sassPath, format.savePath, format.extensionName);
+                promises.push(this.GenerateCssAndMap(sassPath, cssMapUri.css, cssMapUri.map, options));
+            });
 
             Promise.all(promises).then((e) => resolve(e));
         })
-        .then(() => {
-            StatusBarUi.compilationSuccess(this.isWatching);
-        })
-        .catch((reason: Error) => OutputWindow.Show('Error in processing', [reason.name, reason.message, reason.stack], showOutputWindow) );
-        
-        this.revertUIToWatchingStatus();
-
+            .then(() => {
+                StatusBarUi.compilationSuccess(this.isWatching);
+            })
+            .catch((reason: Error) => {
+                OutputWindow.Show('Error in processing', [reason.name, reason.message, reason.stack], showOutputWindow)
+            }).then(() => this.revertUIToWatchingStatus());
     }
 
     openOutputWindow() {
@@ -139,11 +136,11 @@ export class AppModel {
 
                     promises.push(this.GenerateCssAndMap(sassPath, cssMapPath.css, cssMapPath.map, options))
                 });
-    
+
                 Promise.all(promises).then((e) => resolve(e));
             })
-            .catch((reason: Error) => OutputWindow.Show('Error in processing', [reason.name, reason.message, reason.stack], showOutputWindow) );
-            
+                .catch((reason: Error) => OutputWindow.Show('Error in processing', [reason.name, reason.message, reason.stack], showOutputWindow));
+
             this.revertUIToWatchingStatus();
         }
 
@@ -192,7 +189,7 @@ export class AppModel {
 
     isASassFile(pathUrl: string, partialSass = false): boolean {
         const filename = path.basename(pathUrl);
-        return  (partialSass || !filename.startsWith('_')) && (filename.endsWith('sass') || filename.endsWith('scss'))
+        return (partialSass || !filename.startsWith('_')) && (filename.endsWith('sass') || filename.endsWith('scss'))
     }
 
     private getSassFiles(queryPatten = '**/[^_]*.s[a|c]ss', isQueryPatternFixed = false): Thenable<string[]> {
@@ -217,7 +214,7 @@ export class AppModel {
         return new Promise(resolve => {
             glob(queryPatten, options, (err, files: string[]) => {
                 if (err) {
-                    OutputWindow.Show('Error To Seach Files', [ err.code + " " + err.errno.toString(), err.message, err.stack ], true);
+                    OutputWindow.Show('Error To Seach Files', [err.code + " " + err.errno.toString(), err.message, err.stack], true);
                     resolve([]);
                     return;
                 }
@@ -254,12 +251,12 @@ export class AppModel {
         return new Promise(resolve => {
             SassHelper.instance.compileOne(SassPath, options)
                 .then(async result => {
-                    if (result.status !== 0) {
-                        OutputWindow.Show('Compilation Error', [result.formatted], showOutputWindow);
+                    if (result.firendlyError !== undefined) {
+                        OutputWindow.Show('Compilation Error', [result.firendlyError], showOutputWindow);
                         StatusBarUi.compilationError(this.isWatching);
 
                         if (!showOutputWindow) {
-                            vscode.window.setStatusBarMessage(result.formatted.split('\n')[0], 4500);
+                            vscode.window.setStatusBarMessage(result.firendlyError.split('\n')[0], 4500);
                         }
 
                         resolve(true);
@@ -269,14 +266,14 @@ export class AppModel {
                         let mapFileTag = `/*# sourceMappingURL=${path.basename(targetCssUri)}.map */`
 
                         if (autoprefixerTarget) {
-                            result.text = await this.autoprefix(result.text, autoprefixerTarget);
+                            result.css = await this.autoprefix(result.css, autoprefixerTarget);
                         }
 
                         if (!generateMap) {
-                            promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.text}`));
+                            promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.css}`));
                         }
                         else {
-                            promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.text}${mapFileTag}`));
+                            promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.css}${mapFileTag}`));
                             let map = this.GenerateMapObject(result.map, targetCssUri);
                             promises.push(FileHelper.Instance.writeToOneFile(mapFileUri, JSON.stringify(map, null, 4)));
                         }
@@ -421,7 +418,7 @@ export class AppModel {
         let showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
         const prefixer = postcss([
             autoprefixer({
-                browsers,
+                overrideBrowserslist: browsers,
                 grid: true
             })
         ]);

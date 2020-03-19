@@ -1,5 +1,22 @@
 import * as vscode from 'vscode';
 
+export class WindowPopout {
+    static Inform(message: string)
+    {
+        vscode.window.showInformationMessage(message);
+    }
+
+    static Warn(message: string)
+    {
+        vscode.window.showWarningMessage(message);
+    }
+
+    static Alert(message: string)
+    {
+        vscode.window.showErrorMessage(message);
+    }
+}
+
 export class OutputWindow {
 
     private static _msgChannel: vscode.OutputChannel;

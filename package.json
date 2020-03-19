@@ -2,7 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime with live browser reload.",
-    "version": "3.0.0",
+    "version": "3.1.0",
     "publisher": "ritwickdey",
     "author": {
         "name": "Ritwick Dey",
@@ -54,6 +54,11 @@
             {
                 "command": "liveSass.command.oneTimeCompileSass",
                 "title": "Compile Sass - Without Watch Mode",
+                "category": "Live Sass"
+            },
+            {
+                "command": "liveSass.command.compileCurrentSass",
+                "title": "Compile Current Sass File",
                 "category": "Live Sass"
             },
             {
@@ -148,7 +153,12 @@
                         "> 1%",
                         "last 2 versions"
                     ],
-                    "description": "Automatically add vendor prefixes to unsupported CSS properties (e. g. transform -> -ms-transform). Specify what browsers to target with an array of strings (uses [Browserslist](https://github.com/ai/browserslist)). Pass `null` to turn off. \nDefault is `null`"
+                    "description": "Automatically add vendor prefixes to unsupported CSS properties (e. g. transform -> -ms-transform). Specify what browsers to target with an array of strings (uses [Browserslist](https://github.com/ai/browserslist)). Pass `null` to turn off."
+                },
+                "liveSassCompile.settings.watchOnLaunch": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Set this to `true` if you want Live Sass Compiler to automatically start watching your .sass or .scss file when you open an applicable workspace\nDefault is `false`"
                 },
                 "liveSassCompile.settings.showOutputWindow": {
                     "type": "boolean",
@@ -179,20 +189,21 @@
         "test": "node ./node_modules/vscode/bin/test"
     },
     "dependencies": {
-        "autoprefixer": "^7.2.6",
+        "autoprefixer": "^9.7.4",
         "glob": "^7.1.2",
-        "postcss": "^6.0.23",
-        "sasslib": "file:lib\\sasslib"
+        "node-sass": "^4.13.1",
+        "postcss": "^7.0.26"
     },
     "devDependencies": {
         "@types/mocha": "^2.2.48",
         "@types/node": "^6.14.9",
+        "electron-rebuild": "^1.10.1",
         "mocha": "^7.1.0",
         "typescript": "^2.9.2",
         "vscode": "^1.1.36"
     },
     "announcement": {
-        "onVersion": "3.0.0",
-        "message": "SassCompiler@3.0.0: Fixes 8 digit Hex, grid names and many more."
+        "onVersion": "3.1.0",
+        "message": "SassCompiler@3.1.0: Various updates, configurable \"Watch On Launch\" and more!"
     }
 }

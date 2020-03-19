@@ -1,3 +1,4 @@
+import { WindowPopout } from './VscodeWindow';
 import * as vscode from 'vscode';
 
 export class StatusBarUi {
