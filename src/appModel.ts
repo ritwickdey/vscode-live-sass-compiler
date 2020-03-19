@@ -212,7 +212,7 @@ export class AppModel {
         return new Promise(resolve => {
             glob(queryPatten, options, (err, files: string[]) => {
                 if (err) {
-                    OutputWindow.Show('Error To Seach Files', err, true);
+                    OutputWindow.Show('Error To Seach Files', [ err.code + " " + err.errno.toString(), err.message, err.stack ], true);
                     resolve([]);
                     return;
                 }
