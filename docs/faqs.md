@@ -26,8 +26,10 @@ Inside of the `settings.json`, type following key-value pairs. By the way you'll
     ],
     "liveSassCompile.settings.generateMap": true,
     "liveSassCompile.settings.autoprefix": [
-        "> 1%",
-        "last 2 versions"
+        "> 0.5%",
+        "last 2 versions",
+        "Firefox ESR",
+        "not dead"
     ]
 }
 ```

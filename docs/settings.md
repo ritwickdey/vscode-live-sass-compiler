@@ -80,6 +80,8 @@ This setting is useful when you deals with only few of sass files. Only mentione
     *  *Default value is `null`* 
 
     <details><summary>Examples</summary><p>
+
+    **Example**
     ```json
         "liveSassCompile.settings.includeItems": [
             "path/subpath/a.scss",
@@ -99,23 +101,19 @@ ___
 * **`liveSassCompile.settings.autoprefix`**  
 Automatically add vendor prefixes to unsupported CSS properties (e. g. `transform` -> `-ms-transform`). 
     
-    * _Specify what browsers to target with an array of strings (uses [Browserslist](https://github.com/ai/browserslist))._ 
+    * _Specify what browsers to target with an array of strings (uses [Browserslist](https://github.com/browserslist/browserslist#query-composition))._ 
 
     <details>
-    <summary>Default & examples</summary>
+    <summary>Default</summary>
     <p>
 
     **Default**
-    ```json
-        // null -> denotes off
-        "liveSassCompile.settings.includeItems": null
-    ``` 
-
-    **Example**
      ```json
        "liveSassCompile.settings.autoprefix": [
-            "> 1%",
-            "last 2 versions"
+           "> 0.5%",
+           "last 2 versions",
+           "Firefox ESR",
+           "not dead"
         ]
      ``` 
     </p></details>

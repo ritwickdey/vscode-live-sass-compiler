@@ -145,8 +145,10 @@
                         "null"
                     ],
                     "default": [
-                        "> 1%",
-                        "last 2 versions"
+                        "> 0.5%",
+                        "last 2 versions",
+                        "Firefox ESR",
+                        "not dead"
                     ],
                     "description": "Automatically add vendor prefixes to unsupported CSS properties (e. g. transform -> -ms-transform). Specify what browsers to target with an array of strings (uses [Browserslist](https://github.com/ai/browserslist)). Pass `null` to turn off."
                 },
