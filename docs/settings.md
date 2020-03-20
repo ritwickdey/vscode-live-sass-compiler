@@ -69,8 +69,6 @@ To Exclude specific folders. All SASS/SCSS files inside the folders will be igno
         ]
     ```
 
-    **Ignoring partials
-
     </p></details>
 
 ___
