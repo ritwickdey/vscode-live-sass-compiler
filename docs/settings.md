@@ -12,7 +12,9 @@ To setup Format (style), Extension Name & Save location for exported CSS [Multip
     <details>
     <summary>Examples</summary>
     <div>
-  
+    
+    **Save to 3 locations each with different settings**
+
     ```js
         "liveSassCompile.settings.formats":[
             // This is Default.
@@ -20,7 +22,8 @@ To setup Format (style), Extension Name & Save location for exported CSS [Multip
                 "format": "expanded",
                 "extensionName": ".css",
 
-                // null -> denotes the same path as the file it's formatting. Note: null not `null`
+                // null -> denotes the same path as the file it's formatting.
+                // Note: null not 'null'
                 "savePath": null
             },
             // You can add more
