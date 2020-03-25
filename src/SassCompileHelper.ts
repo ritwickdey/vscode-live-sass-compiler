@@ -88,7 +88,7 @@ class CompileResult {
     firendlyError: string;
 
     constructor(result) {
-        if (!result) return;
+        if (!result) return null;
 
         this.css = result.css.toString();
         this.stats = result.stats;
