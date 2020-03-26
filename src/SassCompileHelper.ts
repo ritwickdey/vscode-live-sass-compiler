@@ -80,7 +80,6 @@ class CompileResult {
 
         this.css = result.css.toString();
         this.stats = result.stats;
-        // TODO: Transition to node-sass map (save re-doing work that this can do while processing)
         this.map = result.map ? result.map.toString() : undefined;
     }
 }
