@@ -45,9 +45,10 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 * #### Version 3.1.0 (XX.03.2020)  
 No breaking changes so only a minor bump, not major
     * Added new setting `liveSassCompile.settings.watchOnLaunch`: When `true` it will automatically start watching your `.sass` or `.scss` files on launch. *Default value is `false`*
+    * 
 
 ## Changelog
-To check full changelog click here [changelog](CHANGELOG.md).
+To check full changelog click here [changelog](docs/CHANGELOG.md).
 
 ## LICENSE
 This extension is licensed under the [MIT License](LICENSE)

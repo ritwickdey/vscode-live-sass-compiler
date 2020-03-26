@@ -67,20 +67,6 @@ export class SassHelper {
                 list.push((info.getValue()).toString() as string);
         }
     }
-
-    compileMultiple(sassPaths: string[], option) {
-
-        return new Promise<CompileResult[]>((resolve, _) => {
-            const promises: Promise<CompileResult>[] = [];
-
-            sassPaths.forEach(sassPath => {
-                promises.push(this.compileOne(sassPath, option));
-            });
-
-            Promise.all(promises).then(results => resolve(results));
-
-        });
-    }
 }
 
 class CompileResult {

@@ -1,15 +1,33 @@
-# Changelog
+<!-- Example headers: Added, Changed, Removed, Fixed -->
 
+# Changelog
+All notable changes to this project will be documented in this file.
+
+## [Unreleased]
+
+## [3.1.0] - 2020-03-
+### Fixed
+ - Upgrade `sass.js` library that included fixes for 8 digit Hex code & grid name. 
+    * Fixes: [#39](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/39), [#40](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/40), [#78](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/77)]
+
+
+## [3.0.0] - 2018-07-11
+<details>
+<summary>Fixed</summary>
+- Upgrade `sass.js` library that included fixes for 8 digit Hex code & grid name.  
+    * Fixes: [#39](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/39), [#40](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/40), [#78](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/77)]
+</details>
+
+<br><hr><br>
 
 | Version | Date | Changelog|
 | ------- | -------- | ------ |
-|3.0.0 | 11.07.2018 | &mdash; Upgrade `sass.js` library that included fixes for 8 digit Hex code & grid name. [Fixes [#39](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/39), [#40](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/40), [#78](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/77)] |
 |2.2.1 | 29.06.2018 | &mdash; ***[Fixes [#77](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/77)]*** Rebuild the package |
 |2.2.0 | 29.06.2018 | &mdash; ***[Fixes [#76](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/76)]*** (That was library issue. Sass.js is downgraded to `v0.10.8`)|
 |2.1.0| 28.06.2018 | &mdash; ***[Fixes [#73](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/73)]*** Change detection of Partial Sass was missing in `v2.0.0` |
 |2.0.0|27.06.2018|  &mdash; Fixes [#6](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/6) [#62](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/62)  <br>&mdash; Include Path Fixes  <br>&mdash; Grid Autoprefix  <br>&mdash; Autoprefix is now on by default|
-|1.3.0|19.02.2018| &mdash;  ***[NEW [#41](https://github.com/ritwickdey/vscode-live-sass-compiler/pull/41)]*** <br> - added ability to suppress the output window<br> - Statusbar button Color change based on `Success` and `error`.<br><br>_[Thanks a lot to [Brandon Baker](https://github.com/bmwigglestein) for sumitting the PR ]_|
-|1.2.0|21.12.17| &mdash; ***[New Features [#26](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/26)]*** `savePath` setting updated. You can now specify `savePath` location relative to your Sass files. *See Settings section for more details* *[Thanks [Marius](https://github.com/morsanu)]*  <br><br>&mdash; ***[Bug Fixed [#25](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/25)]*** No more extra new line in generated CSS. *[Thanks [Shahril Amri](https://github.com/redemption024)]* <br><br>&mdash;**[Bug Fixed [#33](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/33)]** Now firefox is recognizing source scss file. *[Thanks [Felix](https://github.com/felix007)]*|
+|1.3.0|19.02.2018| &mdash;  ***[NEW [#41](https://github.com/ritwickdey/vscode-live-sass-compiler/pull/41)]*** <br> - added ability to suppress the output window<br> - Status bar button Color change based on `Success` and `error`.<br><br>_[Thanks a lot to [Brandon Baker](https://github.com/bmwigglestein) for submitting the PR ]_|
+|1.2.0|21.12.17| &mdash; ***[New Features [#26](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/26)]*** `savePath` setting updated. You can now specify `savePath` location relative to your Sass files. *See Settings section for more details* *[Thanks [Marius](https://github.com/morsanu)]*  <br><br>&mdash; ***[Bug Fixed [#25](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/25)]*** No more extra new line in generated CSS. *[Thanks [Shahril Amri](https://github.com/redemption024)]* <br><br>&mdash;**[Bug Fixed [#33](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/33)]** Now Firefox is recognizing source SCSS file. *[Thanks [Felix](https://github.com/felix007)]*|
 |1.1.0| 01.11.17 | &mdash; ***[NEW [#19](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/19)]*** Support for autoprefix in generated CSS. (see settings section for more) _[Thanks a lot to [boyum](https://github.com/boyum) for sumitting the PR [#22](https://github.com/ritwickdey/vscode-live-sass-compiler/pull/22)]_ <br><br>&mdash; ***[Bug fixed [#20](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/20)]*** : Fixed `liveSassCompile.settings.includeItems` settings. *[Thanks [Hoàng Nam](https://github.com/hoangnamitc)]* |
 | 1.0.1 | 10.10.17| &mdash; ***[Fixes [#17](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/17)]*** Default value `savePath` from new settings (`.formats`) is revised. If you don't set any value it will generate CSS at the same location of sass/scss as it was before. _(See settings section for more details)_ *[Thanks [2289034325](https://github.com/2289034325) & [Ibsenleo](https://github.com/ibsenleo) for the feedback]* |
 | 1.0.0 |10.10.17 | &mdash; ***[New Features/settings [#10](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/10)]*** Support for multiple extensionName, formats & save locations . *[Thanks to [Trinh Xuan Manh](https://github.com/ShadowFoOrm) for the suggestion and a Special Thanks to [Ibsenleo](https://github.com/ibsenleo) for  the PR [#16](https://github.com/ritwickdey/vscode-live-sass-compiler/pull/16).]* <br><br>&mdash;***NOTE : Due to enable this feature, the `liveSassCompile.settings.format`, `.savePath`, `.extensionName` settings are dropped. [See settings section for the new setting.]*** |
@@ -34,8 +52,7 @@
 | 0.0.1 | 11.07.17 | Initial Preview Release with following key features. <br> &mdash; Live SASS & SCSS Compile. <br> &mdash; Customizable file location of exported CSS. <br> &mdash; Customizable exported CSS Style (`expanded`, `compact`, `compressed`, `nested`.)<br> &mdash; Quick Status bar control.<br> &mdash; Live Reload to browser (`Live Server` extension dependency). |
 
 
-<br>
 
->#### [Released] (11.07.2017)
-
->#### [Unreleased] (09.07.17 - 10.07.2017)
+[Unreleased]: https://github.com/ritwickdey/vscode-live-sass-compiler/compare/v3.0.0...HEAD
+[3.1.0]: https://github.com/ritwickdey/vscode-live-sass-compiler/compare/v3.0.0...v3.1.0
+[3.0.0]: https://github.com/ritwickdey/vscode-live-sass-compiler/compare/v2.2.1...v3.0.0

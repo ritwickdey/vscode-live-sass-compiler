@@ -34,9 +34,14 @@ export class AppModel {
 
         const showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
 
-        this.GenerateAllCssAndMap(showOutputWindow).then(() => {
-            this.revertUIToWatchingStatus()
-        });
+        this.GenerateAllCssAndMap(showOutputWindow)
+            .then(() => {
+                this.revertUIToWatchingStatus()
+            })
+            .catch(() => {
+                // TODO: Research error logging
+                this.revertUIToWatchingStatusNow()
+            });
     }
 
     compileCurrentFile() {
@@ -46,10 +51,7 @@ export class AppModel {
             StatusBarUi.customMessage("No file open", "No file is open, ensure a file is open in the editor window", "warning");
             OutputWindow.Show('No active file', ["There isn't an active editor window to process"], showOutputWindow)
 
-            const t = this;
-            setTimeout(function () {
-                t.revertUIToWatchingStatus();
-            }, 3000);
+            this.revertUIToWatchingStatus();
 
             return;
         }
@@ -62,10 +64,7 @@ export class AppModel {
             else
                 StatusBarUi.customMessage("Not a Sass file", "The file currently open in the editor window isn't a sass file", "warning");
 
-            const t = this;
-            setTimeout(function () {
-                t.revertUIToWatchingStatus();
-            }, 3000);
+            this.revertUIToWatchingStatus();
 
             return;
         }
@@ -90,7 +89,7 @@ export class AppModel {
             })
             .catch((reason: Error) => {
                 OutputWindow.Show('Error in processing', [reason.name, reason.message, reason.stack], showOutputWindow)
-            }).then(() => this.revertUIToWatchingStatus());
+            });
     }
 
     openOutputWindow() {
@@ -164,10 +163,17 @@ export class AppModel {
 
     private toggleStatusUI() {
         this.isWatching = !this.isWatching;
-        this.revertUIToWatchingStatus();
+        this.revertUIToWatchingStatusNow();
     }
 
     private revertUIToWatchingStatus() {
+        const t = this;
+        setTimeout(function () {
+            t.revertUIToWatchingStatusNow();
+        }, 3000);
+    }
+
+    private revertUIToWatchingStatusNow() {
         const showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
 
         if (this.isWatching) {
@@ -180,9 +186,9 @@ export class AppModel {
         }
     }
 
-    private async isSassFileExcluded(sassPath: string, queryPattern = '**/[^_]*.s[a|c]ss') {
-        const files = await this.getSassFiles(queryPattern, true);
-        return files.find(e => e === path.join(AppModel.basePath, sassPath)) ? false : true;
+    private async isSassFileExcluded(sassPath: string) {
+        const files = await this.getSassFiles('**/*.s[a|c]ss', true);
+        return files.find(e => e === sassPath) ? false : true;
     }
 
     isSassFile(pathUrl: string, partialSass = false): boolean {
