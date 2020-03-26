@@ -30,7 +30,7 @@ export class OutputWindow {
         return OutputWindow._msgChannel;
     }
 
-    static Show(msgHeadline: string, MsgBody: string[], popUpToUI: boolean = false, addEndLine = true) {
+    static Show(msgHeadline: string, MsgBody: string[], popUpToUI: Boolean = false, addEndLine = true) {
 
         if (msgHeadline) {
             OutputWindow.MsgChannel.appendLine(msgHeadline);

@@ -16,12 +16,14 @@ export class SassHelper {
 
     compileOne(SassPath: string, options) {
         const showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
-        let data = options || {};
+        let data: any = {};
 
-        options.file = SassPath;
-        options.omitSourceMapUrl = true;
+        Object.assign(data, options);
 
-        options.functions = {
+        data.file = SassPath;
+        data.omitSourceMapUrl = true;
+
+        data.functions = {
             //@ error is handled suitably
             '@warn': function (info) {
                 let lines: string[] = [];
@@ -69,7 +71,7 @@ export class SassHelper {
     compileMultiple(sassPaths: string[], option) {
 
         return new Promise<CompileResult[]>((resolve, _) => {
-            let promises: Promise<CompileResult>[] = [];
+            const promises: Promise<CompileResult>[] = [];
 
             sassPaths.forEach(sassPath => {
                 promises.push(this.compileOne(sassPath, option));
