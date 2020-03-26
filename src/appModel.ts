@@ -22,59 +22,94 @@ export class AppModel {
         StatusBarUi.init(this.isWatching);
     }
 
+    StartWatching() {
+        if (this.isWatching) {
+            WindowPopout.Inform('Already watching...');
+        }
+        else {
+            this.isWatching = !this.isWatching;
+            this.compileAllFiles();
+        }
+    }
+
+    StopWatching() {
+        if (this.isWatching) {
+            this.isWatching = !this.isWatching;
+            this.revertUIToWatchingStatusNow();
+        }
+        else {
+            WindowPopout.Inform('Not watching...');
+        }
+    }
+
+    openOutputWindow() {
+        OutputWindow.Show(null, null, true);
+    }
+
     static get basePath(): string {
         return vscode.workspace.rootPath || path.basename(vscode.window.activeTextEditor.document.fileName);
     }
 
+    private getCssStyle(format?: string) {
+        return SassHelper.targetCssFormat(format || 'expanded');
+    }
+
+    //#region Compilation functions
+
+    //#region Public
+
     /**
      * Compile all files.
      */
-    compileAllFiles() {
-        StatusBarUi.working();
+    async compileAllFiles() {
+        try {
+            StatusBarUi.working();
 
-        const showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
+            const showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
 
-        this.GenerateAllCssAndMap(showOutputWindow)
-            .then(() => {
-                this.revertUIToWatchingStatus()
-            })
-            .catch(() => {
-                // TODO: Research error logging
-                this.revertUIToWatchingStatusNow()
-            });
+            await this.GenerateAllCssAndMap(showOutputWindow);
+        }
+        catch (err) {
+            // TODO: Research error logging
+        }
+
+        this.revertUIToWatchingStatusNow()
     }
 
-    compileCurrentFile() {
+    /**
+     * Compiles the currently active file
+     */
+    async compileCurrentFile() {
         const showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
 
-        if (!vscode.window.activeTextEditor) {
-            StatusBarUi.customMessage("No file open", "No file is open, ensure a file is open in the editor window", "warning");
-            OutputWindow.Show('No active file', ["There isn't an active editor window to process"], showOutputWindow)
+        try {
+            if (!vscode.window.activeTextEditor) {
+                StatusBarUi.customMessage("No file open", "No file is open, ensure a file is open in the editor window", "warning");
+                OutputWindow.Show('No active file', ["There isn't an active editor window to process"], showOutputWindow)
 
-            this.revertUIToWatchingStatus();
+                this.revertUIToWatchingStatus();
 
-            return;
-        }
+                return;
+            }
 
-        const sassPath = vscode.window.activeTextEditor.document.uri.fsPath;
+            const sassPath = vscode.window.activeTextEditor.document.uri.fsPath;
 
-        if (!this.isSassFile(vscode.window.activeTextEditor.document.uri.fsPath)) {
-            if (this.isSassFile(vscode.window.activeTextEditor.document.uri.fsPath, true))
-                StatusBarUi.customMessage("Can't process partial Sass", "The file currently open in the editor window is a partial sass file, these aren't processed singly", "warning");
-            else
-                StatusBarUi.customMessage("Not a Sass file", "The file currently open in the editor window isn't a sass file", "warning");
+            if (!this.isSassFile(vscode.window.activeTextEditor.document.uri.fsPath)) {
+                if (this.isSassFile(vscode.window.activeTextEditor.document.uri.fsPath, true))
+                    StatusBarUi.customMessage("Can't process partial Sass", "The file currently open in the editor window is a partial sass file, these aren't processed singly", "warning");
+                else
+                    StatusBarUi.customMessage("Not a Sass file", "The file currently open in the editor window isn't a sass file", "warning");
 
-            this.revertUIToWatchingStatus();
+                this.revertUIToWatchingStatus();
 
-            return;
-        }
+                return;
+            }
 
-        const formats = Helper.getConfigSettings<IFormat[]>('formats');
+            const formats = Helper.getConfigSettings<IFormat[]>('formats');
 
-        StatusBarUi.working("Processing single file...");
-        OutputWindow.Show('Processing the current file', [`Path: ${sassPath}`], showOutputWindow)
+            StatusBarUi.working("Processing single file...");
+            OutputWindow.Show('Processing the current file', [`Path: ${sassPath}`], showOutputWindow)
 
-        new Promise((resolve) => {
             const promises = [];
             formats.forEach(format => { // Each format
                 const options = this.getCssStyle(format.format);
@@ -82,153 +117,65 @@ export class AppModel {
                 promises.push(this.GenerateCssAndMap(sassPath, cssMapUri.css, cssMapUri.map, options));
             });
 
-            Promise.all(promises).then((e) => resolve(e));
-        })
-            .then(() => {
-                StatusBarUi.compilationSuccess(this.isWatching);
-            })
-            .catch((reason: Error) => {
-                OutputWindow.Show('Error in processing', [reason.name, reason.message, reason.stack], showOutputWindow)
-            });
+            await Promise.all(promises);
+
+            StatusBarUi.compilationSuccess(this.isWatching);
+        }
+        catch (reason) {
+            OutputWindow.Show('Error in processing', [reason.name, reason.message, reason.stack], showOutputWindow)
+        }
     }
 
-    openOutputWindow() {
-        OutputWindow.Show(null, null, true);
-    }
-
+    /**
+     * Compiles the file that has just been saved
+     */
     async compileOnSave() {
         if (!this.isWatching)
             return;
 
-        const
-            currentFile = vscode.window.activeTextEditor.document.fileName,
-            showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
-
-        if (!this.isSassFile(currentFile, true))
-            return;
-
-        if (await this.isSassFileExcluded(vscode.window.activeTextEditor.document.uri.fsPath))
-            return;
-
-        OutputWindow.Show('Change Detected...', [path.basename(currentFile)], showOutputWindow);
-
-        if (this.isSassFile(currentFile)) {
-            const
-                formats = Helper.getConfigSettings<IFormat[]>('formats'),
-                sassPath = currentFile,
-                promises: Promise<Boolean>[] = [];
-
-            formats.forEach(format => { // Each format
-                const
-                    options = this.getCssStyle(format.format),
-                    cssMapPath = this.generateCssAndMapUri(sassPath, format.savePath, format.extensionName);
-
-                promises.push(this.GenerateCssAndMap(sassPath, cssMapPath.css, cssMapPath.map, options))
-            });
-
-            Promise.all(promises)
-                .then((values) => {
-                    if (values.some((value) => value === false )) 
-                        OutputWindow.Show('A file couldn\'t compile, check the above stack', null, showOutputWindow)
-                })
-                .catch((reason: Error) => OutputWindow.Show('Error in processing', [reason.name, reason.message], showOutputWindow))
-                .then(() => this.revertUIToWatchingStatus());
-        }
-        else { // Partial Or not
-            this.GenerateAllCssAndMap(showOutputWindow).then(() => {
-                OutputWindow.Show('Watching...', null);
-            });
-        }
-
-    }
-
-    StartWatching() {
-        if (this.isWatching) {
-            WindowPopout.Inform('Already watching...');
-        }
-        else {
-            this.toggleStatusUI();
-            this.compileAllFiles();
-        }
-    }
-
-    StopWatching() {
-        if (this.isWatching) {
-            this.toggleStatusUI();
-        }
-        else {
-            WindowPopout.Inform('Not watching...');
-        }
-    }
-
-    private toggleStatusUI() {
-        this.isWatching = !this.isWatching;
-        this.revertUIToWatchingStatusNow();
-    }
-
-    private revertUIToWatchingStatus() {
-        const t = this;
-        setTimeout(function () {
-            t.revertUIToWatchingStatusNow();
-        }, 3000);
-    }
-
-    private revertUIToWatchingStatusNow() {
         const showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
+        
+        try {
+            const currentFile = vscode.window.activeTextEditor.document.fileName;
 
-        if (this.isWatching) {
-            StatusBarUi.watching();
-            OutputWindow.Show('Watching...', null, showOutputWindow);
-        }
-        else {
-            StatusBarUi.notWatching();
-            OutputWindow.Show('Not Watching...', null, showOutputWindow);
-        }
-    }
+            if (!this.isSassFile(currentFile, true))
+                return;
 
-    private async isSassFileExcluded(sassPath: string) {
-        const files = await this.getSassFiles('**/*.s[a|c]ss', true);
-        return files.find(e => e === sassPath) ? false : true;
-    }
+            if (await this.isSassFileExcluded(vscode.window.activeTextEditor.document.uri.fsPath))
+                return;
 
-    isSassFile(pathUrl: string, partialSass = false): boolean {
-        const filename = path.basename(pathUrl);
-        return (partialSass || !filename.startsWith('_')) && (filename.endsWith('sass') || filename.endsWith('scss'))
-    }
+            OutputWindow.Show('Change detected...', [path.basename(currentFile)], showOutputWindow);
 
-    private getSassFiles(queryPattern = '**/[^_]*.s[a|c]ss', isQueryPatternFixed = false): Thenable<string[]> {
-        const
-            excludedList = Helper.getConfigSettings<string[]>('excludeList'),
-            includeItems = Helper.getConfigSettings<string[] | null>('includeItems'),
-            options = {
-                ignore: excludedList,
-                mark: true,
-                cwd: AppModel.basePath
-            };
+            if (this.isSassFile(currentFile)) {
+                const
+                    formats = Helper.getConfigSettings<IFormat[]>('formats'),
+                    sassPath = currentFile,
+                    promises: Promise<Boolean>[] = [];
 
-        if (!isQueryPatternFixed && includeItems && includeItems.length) {
-            if (includeItems.length === 1) {
-                queryPattern = includeItems[0];
+                formats.forEach(format => { // Each format
+                    const
+                        options = this.getCssStyle(format.format),
+                        cssMapPath = this.generateCssAndMapUri(sassPath, format.savePath, format.extensionName);
+
+                    promises.push(this.GenerateCssAndMap(sassPath, cssMapPath.css, cssMapPath.map, options))
+                });
+
+                await Promise.all(promises);
             }
-            else {
-                queryPattern = `{${includeItems.join(',')}}`;
+            else { // Partial Or not
+                await this.GenerateAllCssAndMap(showOutputWindow);
             }
         }
+        catch(reason) {
+            OutputWindow.Show('Error in processing', [reason.name, reason.message], showOutputWindow);
+        }
 
-        return new Promise(resolve => {
-            glob(queryPattern, options, (err, files: string[]) => {
-                if (err) {
-                    OutputWindow.Show('Error whilst searching for files', [err.code + " " + err.errno.toString(), err.message, err.stack], true);
-                    resolve([]);
-                    return;
-                }
-                const filePaths =
-                    files.filter(file => this.isSassFile(file))
-                        .map(file => path.join(AppModel.basePath, file));
-                return resolve(filePaths || []);
-            });
-        })
+        this.revertUIToWatchingStatus();
     }
+    
+    //#endregion Public
+
+    //#region Private
 
     /**
      * To Generate one One Css & Map file from Sass/Scss
@@ -237,64 +184,60 @@ export class AppModel {
      * @param mapFileUri Target MAP file URI (string)
      * @param options - Object - It includes target CSS style and some more.
      */
-    private GenerateCssAndMap(SassPath: string, targetCssUri: string, mapFileUri: string, options) {
+    private async GenerateCssAndMap(SassPath: string, targetCssUri: string, mapFileUri: string, options) {
         const
             generateMap = Helper.getConfigSettings<boolean>('generateMap'),
             autoprefixerTarget = Helper.getConfigSettings<Array<string>>('autoprefix'),
-            showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
+            showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow'),
+            result = await SassHelper.instance.compileOne(SassPath, options);
 
-        return new Promise<Boolean>(async resolve => {
-            const result = await SassHelper.instance.compileOne(SassPath, options);
+        if (result.firendlyError !== undefined) {
+            OutputWindow.Show('Compilation Error', [result.firendlyError], showOutputWindow);
+            StatusBarUi.compilationError(this.isWatching);
 
-            if (result.firendlyError !== undefined) {
-                OutputWindow.Show('Compilation Error', [result.firendlyError], showOutputWindow);
-                StatusBarUi.compilationError(this.isWatching);
+            if (!showOutputWindow)
+                vscode.window.setStatusBarMessage(result.firendlyError.split('\n')[0], 4500);
 
-                if (!showOutputWindow)
-                    vscode.window.setStatusBarMessage(result.firendlyError.split('\n')[0], 4500);
+            return false;
+        }
 
-                resolve(false);
-                return;
-            }
-            
-            const
-                promises: Promise<IFileResolver>[] = [],
-                mapFileTag = `/*# sourceMappingURL=${path.basename(targetCssUri)}.map */`;
+        const
+            promises: Promise<IFileResolver>[] = [],
+            mapFileTag = `/*# sourceMappingURL=${path.basename(targetCssUri)}.map */`;
 
-            if (autoprefixerTarget) {
-                result.css = await this.autoprefix(result.css, autoprefixerTarget);
-            }
+        if (autoprefixerTarget) {
+            result.css = await this.autoprefix(result.css, autoprefixerTarget);
+        }
 
-            if (generateMap) {
-                promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.css}${mapFileTag}`));
-                const map = this.GenerateMapObject(result.map, targetCssUri);
-                promises.push(FileHelper.Instance.writeToOneFile(mapFileUri, JSON.stringify(map, null, 4)));
+        if (generateMap) {
+            promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.css}${mapFileTag}`));
+            const map = this.GenerateMapObject(result.map, targetCssUri);
+            promises.push(FileHelper.Instance.writeToOneFile(mapFileUri, JSON.stringify(map, null, 4)));
+        }
+        else {
+            promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.css}`));
+        }
+
+        const fileResolvers = await Promise.all(promises);
+        OutputWindow.Show('Generated :', null, false, false);
+        StatusBarUi.compilationSuccess(this.isWatching);
+        fileResolvers.forEach(fileResolver => {
+            if (fileResolver.Exception) {
+                OutputWindow.Show('Error:', [
+                    fileResolver.Exception.errno.toString(),
+                    fileResolver.Exception.path,
+                    fileResolver.Exception.message
+                ], true);
+                console.error('error :', fileResolver);
             }
             else {
-                promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.css}`));
+                OutputWindow.Show(null, [fileResolver.FileUri], false, false);
             }
-
-            Promise.all(promises)
-                .then(fileResolvers => {
-                    OutputWindow.Show('Generated :', null, false, false);
-                    StatusBarUi.compilationSuccess(this.isWatching);
-                    fileResolvers.forEach(fileResolver => {
-                        if (fileResolver.Exception) {
-                            OutputWindow.Show('Error:', [
-                                fileResolver.Exception.errno.toString(),
-                                fileResolver.Exception.path,
-                                fileResolver.Exception.message
-                            ], true);
-                            console.error('error :', fileResolver);
-                        }
-                        else {
-                            OutputWindow.Show(null, [fileResolver.FileUri], false, false);
-                        }
-                    });
-                    OutputWindow.Show(null, null, false, true);
-                    resolve(true);
-                });
         });
+
+        OutputWindow.Show(null, null, false, true);
+
+        return true;
     }
 
     /**
@@ -302,10 +245,10 @@ export class AppModel {
      * @param popUpOutputWindow To control output window.
      */
     private async GenerateAllCssAndMap(popUpOutputWindow: Boolean) {
-        const 
+        const
             formats = Helper.getConfigSettings<IFormat[]>('formats'),
-            sassPaths: string[] = await this.getSassFiles(),
-            promises: Promise<Boolean>[] = [];
+            promises: Promise<Boolean>[] = [],
+            sassPaths: string[] = await this.getSassFiles();
 
         OutputWindow.Show('Compiling Sass/Scss Files: ', sassPaths, popUpOutputWindow);
 
@@ -357,8 +300,6 @@ export class AppModel {
         });
 
         return map;
-
-        //  this.writeToFileAsync(mapFileUri, JSON.stringify(map, null, 4));
     }
 
     private generateCssAndMapUri(filePath: string, savePath: string, _extensionName?: string) {
@@ -400,10 +341,6 @@ export class AppModel {
         };
     }
 
-    private getCssStyle(format?: string) {
-        return SassHelper.targetCssFormat(format || 'expanded');
-    }
-
     /**
      * Autoprefixes CSS properties
      *
@@ -429,6 +366,82 @@ export class AppModel {
                 return res.css;
             });
     }
+
+    //#endregion Private
+
+    //#endregion Public compilation functions
+
+    //#region UI manipulation functions
+
+    private revertUIToWatchingStatus() {
+        const t = this;
+        setTimeout(function () {
+            t.revertUIToWatchingStatusNow();
+        }, 3000);
+    }
+
+    private revertUIToWatchingStatusNow() {
+        const showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
+
+        if (this.isWatching) {
+            StatusBarUi.watching();
+            OutputWindow.Show('Watching...', null, showOutputWindow);
+        }
+        else {
+            StatusBarUi.notWatching();
+            OutputWindow.Show('Not Watching...', null, showOutputWindow);
+        }
+    }
+
+    //#endregion UI manipulation functions
+
+    //#region Fetch & check SASS functions
+
+    isSassFile(pathUrl: string, partialSass = false): boolean {
+        const filename = path.basename(pathUrl);
+        return (partialSass || !filename.startsWith('_')) && (filename.endsWith('sass') || filename.endsWith('scss'))
+    }
+
+    private async isSassFileExcluded(sassPath: string) {
+        const files = await this.getSassFiles('**/*.s[a|c]ss', true);
+        return files.find(e => e === sassPath) ? false : true;
+    }
+
+    private getSassFiles(queryPattern = '**/[^_]*.s[a|c]ss', isQueryPatternFixed = false): Thenable<string[]> {
+        const
+            excludedList = Helper.getConfigSettings<string[]>('excludeList'),
+            includeItems = Helper.getConfigSettings<string[] | null>('includeItems'),
+            options = {
+                ignore: excludedList,
+                mark: true,
+                cwd: AppModel.basePath
+            };
+
+        if (!isQueryPatternFixed && includeItems && includeItems.length) {
+            if (includeItems.length === 1) {
+                queryPattern = includeItems[0];
+            }
+            else {
+                queryPattern = `{${includeItems.join(',')}}`;
+            }
+        }
+
+        return new Promise(resolve => {
+            glob(queryPattern, options, (err, files: string[]) => {
+                if (err) {
+                    OutputWindow.Show('Error whilst searching for files', [err.code + " " + err.errno.toString(), err.message, err.stack], true);
+                    resolve([]);
+                    return;
+                }
+                const filePaths =
+                    files.filter(file => this.isSassFile(file))
+                        .map(file => path.join(AppModel.basePath, file));
+                return resolve(filePaths || []);
+            });
+        })
+    }
+
+    //#endregion Fetch & check SASS functions
 
     dispose() {
         StatusBarUi.dispose();
