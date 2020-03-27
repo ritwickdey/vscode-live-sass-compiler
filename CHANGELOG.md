@@ -1,15 +1,32 @@
-<!-- Example headers: Added, Changed, Removed, Fixed -->
+<!-- 
+Guiding Principles
+- Changelogs are for humans, not machines.
+- There should be an entry for every single version.
+- The same types of changes should be grouped.
+- Versions and sections should be linkable.
+- The latest version comes first.
+- The release date of each version is displayed.
+- Mention whether you follow Semantic Versioning.
+
+Types of changes
+- Added for new features.
+- Changed for changes in existing functionality.
+- Deprecated for soon-to-be removed features.
+- Removed for now removed features.
+- Fixed for any bug fixes.
+- Security in case of vulnerabilities.
+ -->
 
 # Changelog
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+### Fixed/Changed
+- Changed from `libsass` to `node-sass`
+    * Fixes: 
 
-## [3.1.0] - 2020-03-
-### Fixed
- - Upgrade `sass.js` library that included fixes for 8 digit Hex code & grid name. 
-    * Fixes: [#39](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/39), [#40](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/40), [#78](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/77)]
-
+### Added
+- New setting `liveSassCompile.settings.watchOnLaunch`: When `true` it will automatically start watching your `.sass` or `.scss` files on launch. *Default value is `false`*
 
 ## [3.0.0] - 2018-07-11
 <details>

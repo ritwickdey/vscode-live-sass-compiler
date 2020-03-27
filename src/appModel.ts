@@ -134,7 +134,7 @@ export class AppModel {
             return;
 
         const showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
-        
+
         try {
             const currentFile = vscode.window.activeTextEditor.document.fileName;
 
@@ -166,13 +166,13 @@ export class AppModel {
                 await this.GenerateAllCssAndMap(showOutputWindow);
             }
         }
-        catch(reason) {
+        catch (reason) {
             OutputWindow.Show('Error in processing', [reason.name, reason.message], showOutputWindow);
         }
 
         this.revertUIToWatchingStatus();
     }
-    
+
     //#endregion Public
 
     //#region Private
@@ -353,12 +353,17 @@ export class AppModel {
             prefixer = postcss([
                 autoprefixer({
                     overrideBrowserslist: browsers,
-                    grid: true
+                    grid: true,
+
                 })
             ]);
 
         return await prefixer
-            .process(css)
+            .process(css, {
+                from: 'app.sass.css',
+                to: 'app.css',
+                map: { inline: false }
+            })
             .then(res => {
                 res.warnings().forEach(warn => {
                     OutputWindow.Show('Autoprefix Error', [warn.text], showOutputWindow);

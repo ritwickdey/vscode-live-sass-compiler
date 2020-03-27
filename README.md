@@ -48,7 +48,7 @@ No breaking changes so only a minor bump, not major
     * 
 
 ## Changelog
-To check full changelog click here [changelog](docs/CHANGELOG.md).
+To check full changelog click here [changelog](CHANGELOG.md).
 
 ## LICENSE
 This extension is licensed under the [MIT License](LICENSE)
