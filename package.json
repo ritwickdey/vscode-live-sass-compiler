@@ -62,8 +62,8 @@
                 "category": "Live Sass"
             },
             {
-                "command": "liveSass.command.outputIssue",
-                "title": "Output GitHub issue details",
+                "command": "liveSass.command.createIssue",
+                "title": "Create an 'Unexpected Error' issue",
                 "category": "Live Sass"
             }
         ],
@@ -205,6 +205,6 @@
     },
     "announcement": {
         "onVersion": "3.1.0",
-        "message": "SassCompiler@3.1.0: Various updates, configurable \"Watch On Launch\" and more!"
+        "message": "SassCompiler@3.1.0: Updated LibSass (v3.5.5), configurable \"Watch On Launch\", fixes and more!"
     }
 }

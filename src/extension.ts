@@ -34,8 +34,8 @@ export function activate(context: vscode.ExtensionContext) {
                 appModel.openOutputWindow();
             }),
         disposable =
-            vscode.commands.registerCommand('liveSass.command.outputIssue', () => {
-                appModel.outputIssue();
+            vscode.commands.registerCommand('liveSass.command.createIssue', () => {
+                appModel.createIssue();
             }),
         disposableOnDidSave =
             vscode.workspace.onDidSaveTextDocument(() => {

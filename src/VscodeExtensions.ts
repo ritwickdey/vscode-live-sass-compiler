@@ -40,17 +40,17 @@ export class ErrorLogger {
             );
     }
 
-    async OutputIsssueDetails() {
+    async InitaiteIssueCreator() {
         const result = await new Promise<{ Error: NodeJS.ErrnoException, Files: string[] }>(resolve => fs.readdir(this._workspaceStorageLocation, (err, files) => resolve({ Error: err, Files: files })));
 
-        let 
+        let
             lastDate = new Date(0),
             lastLogName: string = null,
             lastLogData: string = null;
 
         if (!result.Error) {
             for (const file of result.Files) {
-                const dateString = `${file.split('_')[0]}T${file.split('_')[1].replace(/-/gm,':').replace('.txt','')}`;
+                const dateString = `${file.split('_')[0]}T${file.split('_')[1].replace(/-/gm, ':').replace('.txt', '')}`;
                 if (new Date(dateString) > lastDate) {
                     lastDate = new Date(dateString);
                     lastLogName = file;
@@ -58,33 +58,31 @@ export class ErrorLogger {
             }
 
             if (lastLogName !== null)
-                lastLogData = fs.readFileSync(path.join(this._workspaceStorageLocation,lastLogName)).toString();
+                lastLogData = fs.readFileSync(path.join(this._workspaceStorageLocation, lastLogName)).toString();
         }
 
-        OutputWindow.Show(
-            '=======================\nCOPY FROM THE NEXT LINE\n=======================', 
-            [
-                '### UNEXPECTED ERROR\n', 
-                '**Machine & Versions**',
-                `| Item | Value |\n|----------------------:|:-----------------------|\n| Platform | ${process.platform} |\n| Arch | ${process.arch} |\n| Node | ${process.versions.node} (${process.versions.modules}) |`,
-                '',
-                `**LOG**: ${lastDate.toISOString().replace('T', ' ')}`,
-                `\`\`\` JSON`,
-                (lastLogData === null ? '{ "NO LOG": "PLEASE SPECIFY YOUR ISSUE BELOW" }' : lastLogData),
-                `\`\`\``,
-                '======================='
-            ], 
-            true, 
-            false
+        await vscode.env.clipboard.writeText([
+            '### UNEXPECTED ERROR\n',
+            '**Machine & Versions**',
+            `| Item | Value |\n|----------------------:|:-----------------------|\n| VS Code | v${vscode.version} |\n| Platform | ${process.platform} ${process.arch} |\n| Node | ${process.versions.node} (${process.versions.modules}) |\n| Live Sass | ${vscode.extensions.getExtension('ritwickdey.live-sass').packageJSON.version} |`,
+            `<details><summary>Installed Extensions</summary><div>\n${vscode.extensions.all.filter((ext) => ext.isActive).map((ext) => `- ${ext.id} (${ext.packageJSON.version})`).join('<br/>')}\n</div></details>`,
+            '',
+            `**LOG**: ${lastDate.toISOString().replace('T', ' ')}`,
+            `\`\`\``,
+            (lastLogData === null ? '{ "NO LOG": "PLEASE SPECIFY YOUR ISSUE BELOW" }' : lastLogData),
+            `\`\`\``,
+            '=======================',
+            '<!-- You can add any supporting information below here -->\n'].join('\n')
         );
 
+        await vscode.env.openExternal(vscode.Uri.parse('https://github.com/ritwickdey/vscode-live-sass-compiler/issues/new?title=Unexpected+Error%3A+SUMMARY+HERE&body=%3C%21--+Highlight+this+line+and+then+paste+(Ctrl+%2B+V+%7C+Command+%2B+V)+--%3E'));
+
         OutputWindow.Show(
-            'Use the information above to log an "Unexpected error" issue', 
+            'Opened your browser for creating an "Unexpected Error" issue',
             [
-                'You can file it at https://github.com/ritwickdey/vscode-live-sass-compiler/issues/new?title=Unexpected+Error%3A+SUMMARY+HERE&body=Paste+output+window+content+here', 
                 `Not the right error message? You can find all error logs here: ${this._workspaceStorageLocation}`
-            ], 
-            true, 
+            ],
+            true,
             true
         );
     }

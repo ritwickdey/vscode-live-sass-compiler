@@ -49,8 +49,8 @@ export class AppModel {
         OutputWindow.Show(null, null, true);
     }
 
-    outputIssue() {
-        this._logger.OutputIsssueDetails();
+    createIssue() {
+        this._logger.InitaiteIssueCreator();
     }
 
     static get basePath(): string {
