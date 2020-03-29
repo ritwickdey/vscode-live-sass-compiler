@@ -1,4 +1,4 @@
-import { WindowPopout, OutputWindow } from "./VscodeWindow";
+import { WindowPopout, OutputWindow } from "./VscodeExtensions";
 import { Helper } from "./helper";
 const compiler = require('node-sass');
 
@@ -14,14 +14,20 @@ export class SassHelper {
         }
     }
 
-    compileOne(SassPath: string, options) {
-        const showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
-        let data: any = {};
+    compileOne(SassPath: string, mapFileUri: string, options) {
+        const 
+            showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow'),
+            generateMap = Helper.getConfigSettings<boolean>('generateMap'),
+            data: any = {};
 
         Object.assign(data, options);
 
         data.file = SassPath;
-        data.omitSourceMapUrl = true;
+
+        if (generateMap)
+            data.sourceMap = mapFileUri;
+        else
+            data.omitSourceMapUrl = true;
 
         data.functions = {
             //@ error is handled suitably

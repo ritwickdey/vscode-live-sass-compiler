@@ -21,19 +21,24 @@ Types of changes
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
-### Fixed/Changed
+### Fixed
 - Changed from `libsass` to `node-sass`
     * Fixes: 
+- Map line numbers are correct after `autoprefixer` is applied
+    * Fixes: https://github.com/ritwickdey/vscode-live-sass-compiler/issues/279, https://github.com/ritwickdey/vscode-live-sass-compiler/issues/242, https://github.com/ritwickdey/vscode-live-sass-compiler/issues/70
 
 ### Added
-- New setting `liveSassCompile.settings.watchOnLaunch`: When `true` it will automatically start watching your `.sass` or `.scss` files on launch. *Default value is `false`*
+- New setting `liveSassCompile.settings.watchOnLaunch`
+    * When `true` it will automatically start watching your `.sass` or `.scss` files on launch. *Default value is `false`*
+- New logging mechanism
+    * Errors are logged in a workspace folder
+    * New command to help log issues for unhandled errors `liveSass.command.outputIssue`
 
 ## [3.0.0] - 2018-07-11
-<details>
-<summary>Fixed</summary>
+
+### Fixed
 - Upgrade `sass.js` library that included fixes for 8 digit Hex code & grid name.  
     * Fixes: [#39](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/39), [#40](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/40), [#78](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/77)]
-</details>
 
 <br><hr><br>
 

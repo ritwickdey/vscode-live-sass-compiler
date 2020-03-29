@@ -4,13 +4,11 @@ import * as vscode from 'vscode';
 
 import { AppModel } from './appModel';
 import { checkNewAnnouncement } from './announcement/index';
-import { WindowPopout, OutputWindow } from './VscodeWindow';
 
 export function activate(context: vscode.ExtensionContext) {
-
     console.log('"live-sass-compiler" is now activated! Go and debug :P ');
 
-    const appModel = new AppModel();
+    const appModel = new AppModel(context.storagePath);
 
     checkNewAnnouncement(context.globalState);
 
@@ -35,15 +33,13 @@ export function activate(context: vscode.ExtensionContext) {
             vscode.commands.registerCommand('liveSass.command.openOutputWindow', () => {
                 appModel.openOutputWindow();
             }),
+        disposable =
+            vscode.commands.registerCommand('liveSass.command.outputIssue', () => {
+                appModel.outputIssue();
+            }),
         disposableOnDidSave =
             vscode.workspace.onDidSaveTextDocument(() => {
-                try {
-                    appModel.compileOnSave();
-                }
-                catch (e) {
-                    OutputWindow.Show("Compile on save errored", [e.message, "", e.stack], false);
-                    WindowPopout.Alert('Live Sass Compiler:\nCompile on save has errored, see output window for details');
-                }
+                appModel.compileOnSave();
             });
 
     context.subscriptions.push(
