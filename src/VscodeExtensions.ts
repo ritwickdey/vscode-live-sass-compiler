@@ -67,7 +67,7 @@ export class ErrorLogger {
             `| Item | Value |\n|----------------------:|:-----------------------|\n| VS Code | v${vscode.version} |\n| Platform | ${process.platform} ${process.arch} |\n| Node | ${process.versions.node} (${process.versions.modules}) |\n| Live Sass | ${vscode.extensions.getExtension('ritwickdey.live-sass').packageJSON.version} |`,
             `<details><summary>Installed Extensions</summary><div>\n${vscode.extensions.all.filter((ext) => ext.isActive).map((ext) => `- ${ext.id} (${ext.packageJSON.version})`).join('<br/>')}\n</div></details>`,
             '',
-            `**LOG**: ${lastDate.toISOString().replace('T', ' ')}`,
+            `**LOG**: ${lastDate === new Date(0) ? '' : lastDate.toISOString().replace('T', ' ')}`,
             `\`\`\``,
             (lastLogData === null ? '{ "NO LOG": "PLEASE SPECIFY YOUR ISSUE BELOW" }' : lastLogData),
             `\`\`\``,
