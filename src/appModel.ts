@@ -14,8 +14,8 @@ import { StatusBarUi } from './StatubarUi'
 
 export class AppModel {
 
-    isWatching: boolean;
-    _logger: ErrorLogger;
+    private isWatching: boolean;
+    private _logger: ErrorLogger;
 
     constructor(LogPath: string) {
         this.isWatching = Helper.getConfigSettings<boolean>('watchOnLaunch');
