@@ -1,5 +1,5 @@
-import { WindowPopout, OutputWindow } from "./VscodeExtensions";
-import { Helper } from "./helper";
+import { WindowPopout, OutputWindow } from './VscodeExtensions';
+import { Helper } from './helper';
 const compiler = require('node-sass');
 
 export class SassHelper {
@@ -37,7 +37,7 @@ export class SassHelper {
                 infoCompiler(lines, info);
 
                 OutputWindow.Show('Warning:', lines, showOutputWindow, true);
-                WindowPopout.Warn('Live Sass Compiler\n *Warning:* \n' + (lines.join("\n")))
+                WindowPopout.Warn('Live Sass Compiler\n *Warning:* \n' + (lines.join('\n')))
 
                 return compiler.NULL;
             },
@@ -66,7 +66,7 @@ export class SassHelper {
         });
 
         function infoCompiler(list: string[], info: any): void{
-            if (typeof(info.getLength) === "function")
+            if (typeof(info.getLength) === 'function')
                 for (let i = 0; i < info.getLength(); i++)
                     infoCompiler(list, info.getValue(i))
             else

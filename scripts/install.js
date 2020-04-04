@@ -3,8 +3,8 @@ const path = require('path');
 
 function moveBinaries(){
     copyFolderRecursiveSync(
-        "./node-sass/vendor/", 
-        "./node_modules/node-sass/"
+        `./node-sass/vendor/`, 
+        `./node_modules/node-sass/`
     );
 
     function copyFileSync( source, target ) {

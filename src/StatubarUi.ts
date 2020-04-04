@@ -14,7 +14,7 @@ export class StatusBarUi {
     }
 
     static init(watchOnLaunch) {
-        StatusBarUi.customMessage("Starting...", "Initializing... switching state in 1 second");
+        StatusBarUi.customMessage('Starting...', 'Initializing... switching state in 1 second');
         setTimeout(function () {
             watchOnLaunch ? StatusBarUi.watching() : StatusBarUi.notWatching();
         }, 1000);
@@ -34,14 +34,14 @@ export class StatusBarUi {
         StatusBarUi.statusBarItem.tooltip = 'live compilation of SASS or SCSS to CSS';
     }
 
-    static working(workingMsg: string = "Working on it...") {
+    static working(workingMsg: string = 'Working on it...') {
         this.customMessage(workingMsg, 'In case it takes a long time, show output window and report.');
     }
 
-    static customMessage(text: string, tooltip: string, iconName: string = "pulse") {
-        let icon = "";
+    static customMessage(text: string, tooltip: string, iconName: string = 'pulse') {
+        let icon = '';
         if (!!iconName)
-            icon = `"$(${iconName}) `
+            icon = `$(${iconName}) `
 
         StatusBarUi.statusBarItem.text = `${icon}${text}`;
         StatusBarUi.statusBarItem.tooltip = tooltip;

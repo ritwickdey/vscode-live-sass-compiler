@@ -52,13 +52,11 @@ export async function activate(context: vscode.ExtensionContext) {
             disposableCompileCurrentSass,
             disposableOpenOutputWindow,
             disposableCreateIssue,
-            appModel);
-
-            throw new Error('Test error');
+            appModel)
     }
     catch (err) {
         await new ErrorLogger(context.storagePath).LogIssueWithAlert(
-            "Unhandled error with Live Sass Compiler",
+            `Unhandled error with Live Sass Compiler. Error message: ${err.message}`,
             {
                 'error': ErrorLogger.PrepErrorForLogging(err)
             }
