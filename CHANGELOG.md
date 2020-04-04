@@ -22,12 +22,15 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 ### Fixed
-- Changed from `libsass` to `node-sass`
-    * Fixes: 
+- Changed from `libsass` to `node-sass` (upgraded to libsass v 3.5.4)
+    * Fixes: many issues + performance improvement
 - Map line numbers are correct after `autoprefixer` is applied
     * Fixes: https://github.com/ritwickdey/vscode-live-sass-compiler/issues/279, https://github.com/ritwickdey/vscode-live-sass-compiler/issues/242, https://github.com/ritwickdey/vscode-live-sass-compiler/issues/70
 
 ### Added
+- Replace segments in a save path: added two new settings to overwrite `savePath` with segment replacements
+    * `savePathSegmentKeys` - A list of segments to be replaced
+    * `savePathReplaceSegmentsWith` - The replacement value
 - New setting `liveSassCompile.settings.watchOnLaunch`
     * When `true` it will automatically start watching your `.sass` or `.scss` files on launch. *Default value is `false`*
 - New logging mechanism

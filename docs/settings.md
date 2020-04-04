@@ -22,9 +22,11 @@ To setup Format (style), Extension Name & Save location for exported CSS [Multip
                 "format": "expanded",
                 "extensionName": ".css",
 
-                // null -> denotes the same path as the file it's formatting.
+                // null for all three denotes the same path as the file it's formatting.
                 // Note: null not 'null'
-                "savePath": null
+                "savePath": null,
+                "savePathSegmentKeys": null,
+                "savePathReplaceSegmentsWith": null
             },
             // You can add more
             {
@@ -38,8 +40,22 @@ To setup Format (style), Extension Name & Save location for exported CSS [Multip
             {
                 "format": "compressed",
                 "extensionName": ".min.css",
+
                 // ~ -> denotes relative to every sass file (Ref: 1)
                 "savePath": "~/../css/"
+            },
+            // Segment replacement example
+            {
+                "format": "compressed",
+                "extensionName": ".min.css",
+
+                // "/Assets/SCSS/main.css" -> translates to "/Assets/Style/main.css"
+                // "/Assets/_SASS/main.css" -> translates to "/Assets/Style/main.css"
+                "savePathSegmentKeys": [
+                    "SCSS",
+                    "_SASS"
+                ],
+                "savePathReplaceSegmentsWith": "Style"
             }
         ]
     ```

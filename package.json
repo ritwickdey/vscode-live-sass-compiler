@@ -76,7 +76,9 @@
                         {
                             "format": "expanded",
                             "extensionName": ".css",
-                            "savePath": null
+                            "savePath": null,
+                            "savePathSegmentKeys": null,
+                            "savePathReplaceSegmentsWith": null
                         }
                     ],
                     "minItems": 1,
@@ -110,6 +112,23 @@
                                     "null"
                                 ],
                                 "pattern": "^[\\~|/|\\\\]",
+                                "default": null
+                            },
+                            "savePathSegmentKeys": {
+                                "description": "Takes precedence over `savePath`.\nSegment keys that, if found in the file path, will be replaced with `savePathReplaceSegmentsWith`.",
+                                "type": [
+                                    "array",
+                                    "null"
+                                ],
+                                "default": null
+                            },
+                            "savePathReplaceSegmentsWith": {
+                                "description": "Takes precedence over `savePath`.\nThe value that will replace any segement keys found in the save path.",
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "pattern": "[^\\\/\\\\]",
                                 "default": null
                             }
                         },

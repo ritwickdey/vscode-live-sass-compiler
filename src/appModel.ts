@@ -78,7 +78,7 @@ export class AppModel {
         }
         catch (err) {
             await this._logger.LogIssueWithAlert(
-                "Unhandled error while compiling all files",
+                `Unhandled error while compiling all files. Error message: ${err.message}`,
                 {
                     'files': await this.getSassFiles(),
                     'error': ErrorLogger.PrepErrorForLogging(err)
@@ -97,8 +97,8 @@ export class AppModel {
 
         try {
             if (!vscode.window.activeTextEditor) {
-                StatusBarUi.customMessage("No file open", "No file is open, ensure a file is open in the editor window", "warning");
-                OutputWindow.Show('No active file', ["There isn't an active editor window to process"], showOutputWindow)
+                StatusBarUi.customMessage('No file open', 'No file is open, ensure a file is open in the editor window', 'warning');
+                OutputWindow.Show('No active file', ['There isn\'t an active editor window to process'], showOutputWindow)
 
                 this.revertUIToWatchingStatus();
 
@@ -109,9 +109,9 @@ export class AppModel {
 
             if (!this.isSassFile(vscode.window.activeTextEditor.document.uri.fsPath)) {
                 if (this.isSassFile(vscode.window.activeTextEditor.document.uri.fsPath, true))
-                    StatusBarUi.customMessage("Can't process partial Sass", "The file currently open in the editor window is a partial sass file, these aren't processed singly", "warning");
+                    StatusBarUi.customMessage('Can\'t process partial Sass', 'The file currently open in the editor window is a partial sass file, these aren\'t processed singly', 'warning');
                 else
-                    StatusBarUi.customMessage("Not a Sass file", "The file currently open in the editor window isn't a sass file", "warning");
+                    StatusBarUi.customMessage('Not a Sass file', 'The file currently open in the editor window isn\'t a sass file', 'warning');
 
                 this.revertUIToWatchingStatus();
 
@@ -120,13 +120,13 @@ export class AppModel {
 
             const formats = Helper.getConfigSettings<IFormat[]>('formats');
 
-            StatusBarUi.working("Processing single file...");
+            StatusBarUi.working('Processing single file...');
             OutputWindow.Show('Processing the current file', [`Path: ${sassPath}`], showOutputWindow)
 
             const promises: Promise<Boolean>[] = [];
             formats.forEach(format => { // Each format
                 const options = this.getCssStyle(format.format);
-                const cssMapUri = this.generateCssAndMapUri(sassPath, format.savePath, format.extensionName);
+                const cssMapUri = this.generateCssAndMapUri(sassPath, format);
                 promises.push(this.GenerateCssAndMap(sassPath, cssMapUri.css, cssMapUri.map, options));
             });
 
@@ -138,10 +138,10 @@ export class AppModel {
             const sassPath = 
                 vscode.window.activeTextEditor ? 
                     vscode.window.activeTextEditor.document.uri.fsPath :
-                    "/* NO ACTIVE FILE, PROCESSING SHOULD NOT HAVE OCCURRED */";
+                    '/* NO ACTIVE FILE, PROCESSING SHOULD NOT HAVE OCCURRED */';
 
             await this._logger.LogIssueWithAlert(
-                "Unhandled error while compiling the active file",
+                `Unhandled error while compiling the active file. Error message: ${err.message}`,
                 {
                     'file': sassPath,
                     'error': ErrorLogger.PrepErrorForLogging(err)
@@ -179,7 +179,7 @@ export class AppModel {
                 formats.forEach(format => { // Each format
                     const
                         options = this.getCssStyle(format.format),
-                        cssMapPath = this.generateCssAndMapUri(sassPath, format.savePath, format.extensionName);
+                        cssMapPath = this.generateCssAndMapUri(sassPath, format);
 
                     promises.push(this.GenerateCssAndMap(sassPath, cssMapPath.css, cssMapPath.map, options))
                 });
@@ -192,10 +192,10 @@ export class AppModel {
         }
         catch (err) {
             await this._logger.LogIssueWithAlert(
-                "Unhandled error while compiling the saved changes",
+                `Unhandled error while compiling the saved changes. Error message: ${err.message}`,
                 {
                     'triggeringFile': vscode.window.activeTextEditor.document.uri.fsPath,
-                    "allFiles": await this.getSassFiles(),
+                    'allFiles': await this.getSassFiles(),
                     'error': ErrorLogger.PrepErrorForLogging(err)
                 }
             );
@@ -286,7 +286,7 @@ export class AppModel {
             formats.forEach(format => { // Each format
                 const
                     options = this.getCssStyle(format.format),
-                    cssMapUri = this.generateCssAndMapUri(sassPath, format.savePath, format.extensionName);
+                    cssMapUri = this.generateCssAndMapUri(sassPath, format);
 
                 promises.push(this.GenerateCssAndMap(sassPath, cssMapUri.css, cssMapUri.map, options));
             });
@@ -301,35 +301,38 @@ export class AppModel {
      * @param savePath The path we're going to save to
      * @param _extensionName The file extension we're going to use
      */
-    private generateCssAndMapUri(filePath: string, savePath: string, _extensionName?: string) {
-        const extensionName = _extensionName || '.css'; // Helper.getConfigSettings<string>('extensionName');
+    private generateCssAndMapUri(filePath: string, format: IFormat) {
+        const 
+            extensionName = format.extensionName || '.css',
+            workspaceRoot = vscode.workspace.rootPath;
+
+        let generatedUri = null;
 
         // If SavePath is NULL, CSS uri will be same location of SASS.
-        if (savePath) {
-            try {
-                const workspaceRoot = vscode.workspace.rootPath;
-                let generatedUri = null;
+        if (format.savePath) {
+            if (format.savePath.startsWith('~'))
+                generatedUri = path.join(path.dirname(filePath), format.savePath.substring(1));
+            else
+                generatedUri = path.join(workspaceRoot, format.savePath);
 
-                if (savePath.startsWith('~'))
-                    generatedUri = path.join(path.dirname(filePath), savePath.substring(1));
-                else
-                    generatedUri = path.join(workspaceRoot, savePath);
+            FileHelper.Instance.MakeDirIfNotAvailable(generatedUri);
 
-                FileHelper.Instance.MakeDirIfNotAvailable(generatedUri);
+            filePath = path.join(generatedUri, path.basename(filePath));
+        }
+        else if (format.savePathSegmentKeys && format.savePathSegmentKeys.length && format.savePathReplaceSegmentsWith) {
+            generatedUri = 
+                path.join(
+                    workspaceRoot,
+                    path.dirname(filePath).substring(workspaceRoot.length + 1).split(path.sep)
+                        .map((folder) => { 
+                            return format.savePathSegmentKeys.indexOf(folder) >= 0 ? format.savePathReplaceSegmentsWith : folder 
+                        })
+                        .join(path.sep)
+                );
 
-                filePath = path.join(generatedUri, path.basename(filePath));
-            }
-            catch (err) {
-                console.log(err);
+            FileHelper.Instance.MakeDirIfNotAvailable(generatedUri);
 
-                OutputWindow.Show('Error:', [
-                    err.errno.toString(),
-                    err.path,
-                    err.message
-                ], true);
-
-                throw Error('Something Went Wrong.');
-            }
+            filePath = path.join(generatedUri, path.basename(filePath));
         }
 
         const cssUri = filePath.substring(0, filePath.lastIndexOf('.')) + extensionName;
@@ -442,7 +445,7 @@ export class AppModel {
         return new Promise(resolve => {
             glob(queryPattern, options, (err, files: string[]) => {
                 if (err) {
-                    OutputWindow.Show('Error whilst searching for files', [err.code + " " + err.errno.toString(), err.message, err.stack], true);
+                    OutputWindow.Show('Error whilst searching for files', [err.code + ' ' + err.errno.toString(), err.message, err.stack], true);
                     resolve([]);
                     return;
                 }
