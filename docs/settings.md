@@ -13,7 +13,7 @@
 
     * *Extension Name can be `.css` or `.min.css`. Default is `.css`.*
      
-    * ***[New]***   Save location is relative from workspace root or your Sass files. 
+    * ***[New]***   Save location can be relative to the workspace root or your Sass files. 
         * Default value is `null`. (`null` means, it will generate CSS in the location of scss/sass. By The Way, It is `null`, NOT `"null"`).
         
         * "`/`" denotes relative to root.
@@ -63,7 +63,7 @@
         ]
         ```
     <hr>
-* **`liveSassCompile.settings.includeItems`:** This setting is useful when you deals with only few of sass files. Only mentioned Sass files will be included. 
+* **`liveSassCompile.settings.includeItems`:** This setting is useful when you deal with only a few sass files. Only specified Sass files will be included. 
 
     * *NOTE: No need to include partial sass files.*
     * *Default value is `null`*
@@ -75,7 +75,7 @@
         ]
     ``` 
     <hr>
-* **`liveSassCompile.settings.generateMap`:** Set it as `false` if you don't want `.map` file for compiled CSS. 
+* **`liveSassCompile.settings.generateMap`:** Set it as `false` if you don't want a `.map` file for compiled CSS. 
     * _Default is `true`._
     
     <hr>
