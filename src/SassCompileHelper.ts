@@ -57,7 +57,7 @@ export class SassHelper {
                 let newResult = new CompileResult(result);
 
                 if (err) {
-                    newResult.firendlyError = err.formatted;
+                    newResult.friendlyError = err.formatted;
                     if (!newResult.css)
                         newResult.css = `/* Error in processing:\n\n${err.formatted} */`;
                 }
@@ -79,7 +79,7 @@ class CompileResult {
     css: string;
     map: string;
     stats: CompileStats;
-    firendlyError: string;
+    friendlyError: string;
 
     constructor(result) {
         if (!result) return null;

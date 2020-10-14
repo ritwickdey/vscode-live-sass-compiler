@@ -115,7 +115,7 @@
                                 "default": null
                             },
                             "savePathSegmentKeys": {
-                                "description": "Takes precedence over `savePath`.\nSegment keys that, if found in the file path, will be replaced with `savePathReplaceSegmentsWith`.",
+                                "description": "Segment keys that, if found in the file path, will be replaced with `savePathReplaceSegmentsWith`. (Note: Only applied if `savePath` is null).",
                                 "type": [
                                     "array",
                                     "null"
@@ -123,12 +123,12 @@
                                 "default": null
                             },
                             "savePathReplaceSegmentsWith": {
-                                "description": "Takes precedence over `savePath`.\nThe value that will replace any segement keys found in the save path.",
+                                "description": "The value that will replace any segement keys found in the save path. (Note: Only applied if `savePath` is null).",
                                 "type": [
                                     "string",
                                     "null"
                                 ],
-                                "pattern": "[^\\\/\\\\]",
+                                "pattern": "[^\\/\\\\]",
                                 "default": null
                             }
                         },

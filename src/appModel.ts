@@ -10,7 +10,7 @@ import { FileHelper, IFileResolver } from './FileHelper';
 import { Helper, IFormat } from './helper';
 import { ErrorLogger, OutputWindow, WindowPopout } from './VscodeExtensions';
 import { SassHelper } from './SassCompileHelper';
-import { StatusBarUi } from './StatubarUi'
+import { StatusBarUi } from './StatusbarUi'
 
 export class AppModel {
 
@@ -50,7 +50,7 @@ export class AppModel {
     }
 
     createIssue() {
-        this._logger.InitaiteIssueCreator();
+        this._logger.InitiateIssueCreator();
     }
 
     static get basePath(): string {
@@ -223,12 +223,12 @@ export class AppModel {
             result = await SassHelper.instance.compileOne(SassPath, mapFileUri, options),
             promises: Promise<IFileResolver>[] = [];
 
-        if (result.firendlyError !== undefined) {
-            OutputWindow.Show('Compilation Error', [result.firendlyError], showOutputWindow);
+        if (result.friendlyError !== undefined) {
+            OutputWindow.Show('Compilation Error', [result.friendlyError], showOutputWindow);
             StatusBarUi.compilationError(this.isWatching);
 
             if (!showOutputWindow)
-                vscode.window.setStatusBarMessage(result.firendlyError.split('\n')[0], 4500);
+                vscode.window.setStatusBarMessage(result.friendlyError.split('\n')[0], 4500);
 
             return false;
         }

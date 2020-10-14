@@ -41,11 +41,22 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 
 ## What's new ?
 
-<!-- TODO: Add date -->
-* #### Version 3.1.0 (XX.03.2020)  
-No breaking changes so only a minor bump, not major
-    * Added new setting `liveSassCompile.settings.watchOnLaunch`: When `true` it will automatically start watching your `.sass` or `.scss` files on launch. *Default value is `false`*
-    * 
+### 3.1.0 - 2020-10-14
+#### Fixed
+- Changed from `libsass` to `node-sass` (upgraded to libsass v 3.5.4)
+    * Fixes: many issues + performance improvement
+- Map line numbers are correct after `autoprefixer` is applied
+    * Fixes: [#279](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/279), [#242](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/242), [#70](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/70)
+
+#### Added
+- Replace segments in the save path: added two new settings under `liveSassCompile.settings.formats`
+    * `savePathSegmentKeys` - A list of segments to be replaced
+    * `savePathReplaceSegmentsWith` - The replacement value
+- New setting `liveSassCompile.settings.watchOnLaunch`
+    * When `true` it will automatically start watching your `.sass` or `.scss` files on launch. *Default value is `false`*
+- New logging mechanism
+    * Errors are logged in a workspace folder
+    * New command to help log issues for unhandled errors `liveSass.command.createIssue`
 
 ## Changelog
 To check full changelog click here [changelog](CHANGELOG.md).

@@ -1,151 +1,207 @@
 ## Settings
 
-* **`liveSassCompile.settings.formats`**  
-To setup Format (style), Extension Name & Save location for exported CSS [Multiple Format Supported].
+<details>
+    <summary>
+        liveSassCompile.settings.formats<br />
+        An array of formats. Allows you save to multiple locations, with a customisable format and extension for each
+    </summary>
 
-    * *Format can be _`expanded`_, _`compact`_, _`compressed`_ or _`nested`_. Default is  _`expanded`_*
+Each format will have the following items:
+* `format`: the output format of the generated file  
+_`expanded`_, _`compact`_, _`compressed`_ or _`nested`_.  
+_**Default is `expanded`**_
 
-    * *Extension Name can be `.css` or `.min.css`. **Default is `.css`***
-     
-    * *Save location is relative from workspace root or your Sass files (See examples)*
-
-    <details>
-    <summary>Examples</summary>
-    <div>
+* `extensionName`: the extension applied to the generate file  
+_`.css`_ or _`.min.css`_.  
+_**Default is `.css`**_
     
-    **Save to 3 locations each with different settings**
+* `savePath`, `savePathSegmentKeys` and `savePathReplaceSegmentsWith`: these dictate the save path _**(see examples)**_
 
-    ```js
-        "liveSassCompile.settings.formats":[
-            // This is Default.
-            {
-                "format": "expanded",
-                "extensionName": ".css",
+<details>
+<summary>Default & examples</summary>
 
-                // null for all three denotes the same path as the file it's formatting.
-                // Note: null not 'null'
-                "savePath": null,
-                "savePathSegmentKeys": null,
-                "savePathReplaceSegmentsWith": null
-            },
-            // You can add more
-            {
-                "format": "compressed",
-                "extensionName": ".min.css",
+```js
+"liveSassCompile.settings.formats": [
+    // This is the default.
+    {
+        "format": "expanded",
+        "extensionName": ".css",
 
-                // / -> denotes relative to root
-                "savePath": "/dist/css"
-            },
-            // More Complex
-            {
-                "format": "compressed",
-                "extensionName": ".min.css",
+        // null for all three -> denotes the same path as the SASS file
+        "savePath": null,
+        "savePathSegmentKeys": null,
+        "savePathReplaceSegmentsWith": null
+    },
+    // You can add more
+    {
+        "format": "compressed",
+        "extensionName": ".min.css",
 
-                // ~ -> denotes relative to every sass file (Ref: 1)
-                "savePath": "~/../css/"
-            },
-            // Segment replacement example
-            {
-                "format": "compressed",
-                "extensionName": ".min.css",
+        // / -> denotes relative to the workspace root
+        "savePath": "/dist/css"
+    },
+    // More Complex
+    // (See issue 26: https://github.com/ritwickdey/vscode-live-sass-compiler/issues/26)
+    {
+        "format": "nested",
+        "extensionName": ".min.css",
 
-                // "/Assets/SCSS/main.css" -> translates to "/Assets/Style/main.css"
-                // "/Assets/_SASS/main.css" -> translates to "/Assets/Style/main.css"
-                "savePathSegmentKeys": [
-                    "SCSS",
-                    "_SASS"
-                ],
-                "savePathReplaceSegmentsWith": "Style"
-            }
-        ]
-    ```
-    (Ref: 1) Complex Scenario. *([Checkout the example](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/26#issue-274641546))*
-        
-    </div>
-    </details>
+        // ~ -> denotes relative to each sass file
+        "savePath": "~/../css/"
+    },
+    // Segment replacement example
+    {
+        "format": "compact",
+        "extensionName": ".min.css",
 
-___
+        // "/Assets/SCSS/main.scss" -> translates to "/Assets/Style/main.css"
+        // "/Assets/_SASS/main.sass" -> translates to "/Assets/Style/main.css"
+        "savePathSegmentKeys": [
+            "SCSS",
+            "_SASS"
+        ],
+        "savePathReplaceSegmentsWith": "Style",
+    // Segment replacement ONLY applied if "savePath" is null
+    {
+        "format": "compressed",
+        "extensionName": ".min.css",
 
-* **`liveSassCompile.settings.excludeList`**  
-To Exclude specific folders. All SASS/SCSS files inside the folders will be ignored.
+        // "/Assets/SCSS/main.scss" -> translates to "/dist/css/main.css" NOT "/Assets/Style/main.css"
+        "savePath": "/dist/css",
+        "savePathSegmentKeys": [
+            "SCSS"
+        ],
+        "savePathReplaceSegmentsWith": "Style"
+    }
+]
+```
 
-    <details><summary>Deafult & examples</summary><p>
+</details>
+</details>
 
-    **Default**
+---
 
-    ```json
-        "liveSassCompile.settings.excludeList": [ 
-            "**/node_modules/**",
-            ".vscode/**" 
-        ]
-    ```
+<details>
+<summary>
+    liveSassCompile.settings.excludeList<br />
+    Exclude specific files and folders.
+</summary>
 
-    **Negative glob pattern**  
-    Exclude all file except `file1.scss` & `file2.scss` from `path/subpath` directory, you can use the expression
-    ```json
-        "liveSassCompile.settings.excludeList": [
-            "path/subpath/*[!(file1|file2)].scss"
-        ]
-    ```
+Use a [glob pattern] to exclude files or entire folders. All matching SASS/SCSS files or folders will be ignored.
 
-    </p></details>
+<details>
+<summary>Default & examples</summary>
 
-___
+**Default**
 
-* **`liveSassCompile.settings.includeItems`**  
-This setting is useful when you deals with only few of sass files. Only mentioned Sass files will be included. 
+```json
+"liveSassCompile.settings.excludeList": [ 
+    "**/node_modules/**",
+    ".vscode/**" 
+]
+```
 
-    *  *NOTE: No need to include partial sass files.*
-    *  *Default value is `null`* 
+**Negative [glob pattern]**  
+To exclude all files except `file1.scss` & `file2.scss` from the directory `path/subpath`, you can use the expression:
 
-    <details><summary>Examples</summary><p>
+```json
+"liveSassCompile.settings.excludeList": [
+    "path/subpath/*[!(file1|file2)].scss"
+]
+```
 
-    **Example**
-    ```json
-        "liveSassCompile.settings.includeItems": [
-            "path/subpath/a.scss",
-            "path/subpath/b.scss",
-        ]
-    ``` 
-    </p></details>
+</details>
+</details>
 
-___
+---
 
-* **`liveSassCompile.settings.generateMap`**  
-Set it as `false` if you don't want `.map` file for compiled CSS. 
-    * _Default is `true`._
+<details>
+<summary>
+    liveSassCompile.settings.includeItems<br />
+    Process only these specified files
+</summary>
 
-___
+Useful for when you deal with only few of sass files.
 
-* **`liveSassCompile.settings.autoprefix`**  
-Automatically add vendor prefixes to unsupported CSS properties (e. g. `transform` -> `-ms-transform`). 
+*  _**NOTE:** no need to include partial sass files._
+*  _**Default:** `null`_
+
+<details>
+<summary>Examples</summary>
+
+**Example**
+```json
+"liveSassCompile.settings.includeItems": [
+    "path/subpath/a.scss",
+    "path/subpath/b.scss",
+]
+``` 
+</details>
+</details>
+
+---
+
+<details>
+<summary>
+    liveSassCompile.settings.generateMap<br />
+    Create a map file when compiling files
+</summary>
+
+Set it as `false` if you don't want a `.map` file for compiled CSS. 
+* _**Default:** `true`._
+
+</details>
+
+---
+
+<details>
+<summary>
+    liveSassCompile.settings.autoprefix<br />
+    Autoprefix unsupported CSS properties (e.g. transform -> -ms-transform)
+</summary>
     
-    * _Specify what browsers to target with an array of strings (uses [Browserslist](https://github.com/browserslist/browserslist#query-composition))._ 
+_Specify what browsers to target with an array of strings (uses [Browserslist](https://github.com/browserslist/browserslist#query-composition))._ 
 
-    <details>
-    <summary>Default</summary>
-    <p>
+<details>
+<summary>Default</summary>
 
-    **Default**
-     ```json
-       "liveSassCompile.settings.autoprefix": [
-           "> 0.5%",
-           "last 2 versions",
-           "Firefox ESR",
-           "not dead"
-        ]
-     ``` 
-    </p></details>
+```json
+"liveSassCompile.settings.autoprefix": [
+    "> 0.5%",
+    "last 2 versions",
+    "Firefox ESR",
+    "not dead"
+]
+``` 
+</details>
+</details>
 
-___
+---
 
-* **`liveSassCompile.settings.showOutputWindow`**  
+<details>
+<summary>
+    liveSassCompile.settings.showOutputWindow<br />
+    Optionally displays the output window when compiling
+</summary>
+
 Set this to `false` if you do not want the output window to show.
-    * *NOTE: You can use the command palette to open the Live Sass output window.*
-    * *Default value is `true`*
 
-___
+* _**NOTE:** You can use the command palette to open the Live Sass output window._
+* _**Default:** `true`_
 
-* **`liveSassCompile.settings.watchOnLaunch`**  
+</details>
+
+---
+
+<details>
+<summary>
+    liveSassCompile.settings.watchOnLaunch<br />
+    Defines whether Live Sass should watch immediately over waiting to be started 
+</summary>
+
 Set this to `true` to watch files on launch.
-    * *Default value is `false`*
+* _**Default:** `false`_
+
+</details>
+
+[glob pattern]: https://github.com/isaacs/node-glob/blob/master/README.md#glob-primer

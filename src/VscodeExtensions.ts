@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { resolve } from 'url';
 
 export class ErrorLogger {
     private _workspaceStorageLocation: string = null;
@@ -40,7 +39,7 @@ export class ErrorLogger {
             );
     }
 
-    async InitaiteIssueCreator() {
+    async InitiateIssueCreator() {
         const result = await new Promise<{ Error: NodeJS.ErrnoException, Files: string[] }>(resolve => fs.readdir(this._workspaceStorageLocation, (err, files) => resolve({ Error: err, Files: files })));
 
         let
