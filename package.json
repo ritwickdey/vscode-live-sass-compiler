@@ -210,16 +210,16 @@
         "test": "node ./node_modules/vscode-test/out/runTest"
     },
     "dependencies": {
-        "autoprefixer": "^9.7.4",
+        "autoprefixer": "^9.8.6",
         "glob": "^7.1.2",
-        "node-sass": "^4.13.1",
-        "postcss": "^7.0.26"
+        "node-sass": "^4.14.1",
+        "postcss": "^7.0.35"
     },
     "devDependencies": {
         "@types/mocha": "^2.2.48",
-        "@types/node": "^6.14.9",
-        "@types/vscode": "^1.43.0",
-        "mocha": "^7.1.0",
+        "@types/node": "^12.12.6",
+        "@types/vscode": "^1.50.0",
+        "mocha": "^7.2.0",
         "typescript": "^2.9.2",
         "vscode-test": "^1.4.0"
     },
