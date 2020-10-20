@@ -89,7 +89,7 @@ export class ErrorLogger {
     private async CheckFolderExists() {
         const exists = await new Promise<Boolean>(resolve => { fs.exists(this._workspaceStorageLocation, (exists) => resolve(exists)) });
         if (!exists)
-            await new Promise(_ => fs.mkdir(path.join(this._workspaceStorageLocation, 'example-file.txt')));
+            await new Promise((_, reject) => fs.mkdir(path.join(this._workspaceStorageLocation, 'example-file.txt'), (r)=>{r.errno != null && reject(r)}));
     }
 
     private async ClearLogFolder() {
