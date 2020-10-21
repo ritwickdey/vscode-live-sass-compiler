@@ -359,14 +359,14 @@ export class AppModel {
                     grid: true
                 })
             ]),
-            options =
+            options: postcss.ProcessOptions =
                 generateMap ?
                     {
                         from: filePath,
                         to: savePath,
                         map: { inline: false }
                     } :
-                    null;
+                    {};
 
         const result = await prefixer.process(css, options);
 
