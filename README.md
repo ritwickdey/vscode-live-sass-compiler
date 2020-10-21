@@ -59,7 +59,7 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
     * New command to help log issues for unhandled errors `liveSass.command.createIssue`
 
 ## Changelog
-To check full changelog click here [changelog](CHANGELOG.md).
+See the full changelog [here](CHANGELOG.md).
 
 ## LICENSE
 This extension is licensed under the [MIT License](LICENSE)
