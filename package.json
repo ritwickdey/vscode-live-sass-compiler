@@ -220,7 +220,7 @@
         "@types/node": "^12.12.6",
         "@types/vscode": "^1.50.0",
         "mocha": "^7.2.0",
-        "typescript": "^2.9.2",
+        "typescript": "^4.0.3",
         "vscode-test": "^1.4.0"
     },
     "announcement": {
