@@ -38,7 +38,7 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 
 ## What's new ?
 
-### 4.1.0 - 2020-21-20
+### 4.1.0 - 2020-12-20
 
 ### Added
 - New setting `liveSassCompile.settings.compileOnWatch`

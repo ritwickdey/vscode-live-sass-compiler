@@ -22,7 +22,7 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [4.1.0] - 2020-21-20
+## [4.1.0] - 2020-12-20
 
 ### Added
 - New setting `liveSassCompile.settings.compileOnWatch`
