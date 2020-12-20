@@ -79,7 +79,7 @@ export class AppModel {
     async compileAllFiles() {
         try {
             StatusBarUi.working();
-            
+
             const showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
 
             await this.GenerateAllCssAndMap(showOutputWindow);
