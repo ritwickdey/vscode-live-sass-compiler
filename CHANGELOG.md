@@ -20,6 +20,12 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.1.0] - 2020-21-20
+
+### Added
+- New setting `liveSassCompile.settings.compileOnWatch`
+    * When `true` it will automatically compile all Sass files when watching is started. *Default value is `true`*
+
 ## [4.0.0] - 2020-12-20
 ### Breaking changes
 - Output options are now only `expanded` and `compressed`
@@ -83,5 +89,6 @@ All notable changes to this project will be documented in this file.
 
 
 [Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.0.0...HEAD
+[4.1.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.0.0...v4.1.0
 [4.0.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v3.0.0...v4.0.0
 [3.0.0]: https://github.com/ritwickdey/vscode-live-sass-compiler/compare/v2.2.1...v3.0.0

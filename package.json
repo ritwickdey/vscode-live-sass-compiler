@@ -178,6 +178,11 @@
                     "default": false,
                     "description": "Set this to `true` if you want Live Sass Compiler to automatically start watching your .sass or .scss file when you open an applicable workspace\nDefault is `false`"
                 },
+                "liveSassCompile.settings.compileOnWatch": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Set this to `false` if you don't want all Sass files to be compiled when Live Sass Compiler starts watching."
+                },
                 "liveSassCompile.settings.showOutputWindow": {
                     "type": "boolean",
                     "default": true,

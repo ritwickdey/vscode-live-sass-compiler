@@ -26,12 +26,20 @@ export class AppModel {
     }
 
     StartWatching() {
+        const compileOnWatch = Helper.getConfigSettings<boolean>('compileOnWatch');
+
         if (this.isWatching) {
             WindowPopout.Inform('Already watching...');
         }
         else {
             this.isWatching = !this.isWatching;
-            this.compileAllFiles();
+
+            if (compileOnWatch) {
+                this.compileAllFiles();
+            }
+            else {
+                this.revertUIToWatchingStatusNow();
+            }
         }
     }
 
@@ -86,7 +94,7 @@ export class AppModel {
             );
         }
 
-        this.revertUIToWatchingStatusNow()
+        this.revertUIToWatchingStatusNow();
     }
 
     /**
