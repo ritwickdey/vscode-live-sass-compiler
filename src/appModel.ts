@@ -17,10 +17,10 @@ export class AppModel {
     private isWatching: boolean;
     private _logger: ErrorLogger;
 
-    constructor(LogPath: string) {
+    constructor(workplaceState: vscode.Memento) {
         this.isWatching = Helper.getConfigSettings<boolean>('watchOnLaunch');
 
-        this._logger = new ErrorLogger(LogPath);
+        this._logger = new ErrorLogger(workplaceState);
 
         StatusBarUi.init(this.isWatching);
     }
@@ -220,31 +220,35 @@ export class AppModel {
             generateMap = Helper.getConfigSettings<boolean>('generateMap'),
             autoprefixerTarget = Helper.getConfigSettings<Array<string>>('autoprefix'),
             showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow'),
-            result = await SassHelper.instance.compileOne(SassPath, mapFileUri, options),
+            compileResult = SassHelper.instance.compileOne(SassPath, mapFileUri, options),
             promises: Promise<IFileResolver>[] = [];
 
-        if (result.friendlyError !== undefined) {
-            OutputWindow.Show('Compilation Error', [result.friendlyError], showOutputWindow);
+        if (compileResult.errorString !== null) {
+            OutputWindow.Show('Compilation Error', [compileResult.errorString], showOutputWindow);
             StatusBarUi.compilationError(this.isWatching);
 
             if (!showOutputWindow)
-                vscode.window.setStatusBarMessage(result.friendlyError.split('\n')[0], 4500);
+                vscode.window.setStatusBarMessage(compileResult.errorString.split('\n')[0], 4500);
 
             return false;
         }
+        
+        let 
+            css: string = compileResult.result.css.toString(),
+            map: string | null = compileResult.result.map?.toString();
 
         if (autoprefixerTarget) {
-            const autoprefixerResult = await this.autoprefix(result.css, SassPath, targetCssUri, autoprefixerTarget)
-            result.css = autoprefixerResult.css;
-            result.map = autoprefixerResult.map;
+            const autoprefixerResult = await this.autoprefix(css, SassPath, targetCssUri, autoprefixerTarget)
+            css = autoprefixerResult.css;
+            map = autoprefixerResult.map;
         }
         else if (generateMap)
-            result.css += `/*# sourceMappingURL=${path.basename(targetCssUri)}.map */`;
+            css += `/*# sourceMappingURL=${path.basename(targetCssUri)}.map */`;
 
-        promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, `${result.css}`));
+        promises.push(FileHelper.Instance.writeToOneFile(targetCssUri, css));
 
         if (generateMap)
-            promises.push(FileHelper.Instance.writeToOneFile(mapFileUri, result.map));
+            promises.push(FileHelper.Instance.writeToOneFile(mapFileUri, map));
 
         const fileResolvers = await Promise.all(promises);
 

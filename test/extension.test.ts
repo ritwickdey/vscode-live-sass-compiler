@@ -31,13 +31,13 @@
 //   });
 
 //   test('Extension should be present', () => {
-//     assert.ok(vscode.extensions.getExtension('ritwickdey.live-sass'));
+//     assert.ok(vscode.extensions.getExtension('glenn2223.live-sass'));
 //   });
 
 //   test('should activate', function() {
 //     this.timeout(1 * 60 * 1000);
 //     return vscode.extensions
-//       .getExtension('ritwickdey.live-sass')
+//       .getExtension('glenn2223.live-sass')
 //       .activate()
 //       .then(api => {
 //         assert.ok(true);

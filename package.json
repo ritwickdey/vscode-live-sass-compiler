@@ -2,12 +2,11 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime with live browser reload.",
-    "version": "3.1.0",
-    "publisher": "ritwickdey",
+    "version": "4.0.0",
+    "publisher": "glenn2223",
     "author": {
-        "name": "Ritwick Dey",
-        "email": "ritwickdey@outlook.com",
-        "url": "http://twitter.com/Dey_Ritwick"
+        "name": "Glenn Marks",
+        "url": "https://github.com/glenn2223/"
     },
     "engines": {
         "vscode": "^1.50.0"
@@ -90,9 +89,7 @@
                                 "type": "string",
                                 "enum": [
                                     "expanded",
-                                    "compact",
-                                    "compressed",
-                                    "nested"
+                                    "compressed"
                                 ],
                                 "default": "expanded"
                             },
@@ -192,39 +189,38 @@
     "license": "MIT",
     "icon": "images/icon2.png",
     "bugs": {
-        "url": "https://github.com/ritwickdey/vscode-live-sass-compiler/issues",
-        "email": "ritwickdey@outlook.com"
+        "url": "https://github.com/glenn2223/vscode-live-sass-compiler/issues"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/ritwickdey/vscode-live-sass-compiler.git"
+        "url": "https://github.com/glenn2223/vscode-live-sass-compiler.git"
     },
-    "homepage": "https://ritwickdey.github.io/vscode-live-sass-compiler/",
+    "homepage": "https://glenn2223.github.io/vscode-live-sass-compiler/",
     "extensionDependencies": [
         "ritwickdey.LiveServer"
     ],
     "scripts": {
         "vscode:prepublish": "tsc -p ./",
         "compile": "tsc -watch -p ./",
-        "postinstall": "node ./scripts/install",
         "test": "node ./node_modules/vscode-test/out/runTest"
     },
     "dependencies": {
         "autoprefixer": "^9.8.6",
         "glob": "^7.1.2",
-        "node-sass": "^4.14.1",
-        "postcss": "^7.0.35"
+        "postcss": "^7.0.35",
+        "sass": "^1.30.0"
     },
     "devDependencies": {
         "@types/mocha": "^2.2.48",
         "@types/node": "^12.12.6",
+        "@types/sass": "^1.16.0",
         "@types/vscode": "^1.50.0",
         "mocha": "^7.2.0",
         "typescript": "^4.0.3",
         "vscode-test": "^1.4.0"
     },
     "announcement": {
-        "onVersion": "3.1.0",
-        "message": "SassCompiler@3.1.0: Updated LibSass (v3.5.5), configurable \"Watch On Launch\", fixes and more!"
+        "onVersion": "4.0.0",
+        "message": "SassCompiler@4.0.0: Be aware, there are breaking changes. Now running Sass (v6.14.8), configurable \"Watch On Launch\", fixes and more!"
     }
 }

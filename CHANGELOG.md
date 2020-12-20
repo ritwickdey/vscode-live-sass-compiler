@@ -20,9 +20,13 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [3.1.0] - 2020-10-14
+## [4.0.0] - 2020-12-20
+### Breaking changes
+- Output options are now only `expanded` and `compressed`
+- Only works on VS Code v1.50 and over
+
 ### Fixed
-- Changed from `libsass` to `node-sass` (upgraded to libsass v 3.5.4)
+- Changed from `libsass` to `sass` (more up to date release)
     * Fixes: many issues + performance improvement
 - Map line numbers are correct after `autoprefixer` is applied
     * Fixes: [#279](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/279), [#242](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/242), [#70](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/70)
@@ -78,6 +82,6 @@ All notable changes to this project will be documented in this file.
 
 
 
-[Unreleased]: https://github.com/ritwickdey/vscode-live-sass-compiler/compare/v3.1.0...HEAD
-[3.1.0]: https://github.com/ritwickdey/vscode-live-sass-compiler/compare/v3.0.0...v3.1.0
+[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v3.1.0...HEAD
+[4.0.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v3.0.0...v4.0.0
 [3.0.0]: https://github.com/ritwickdey/vscode-live-sass-compiler/compare/v2.2.1...v3.0.0

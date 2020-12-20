@@ -10,7 +10,7 @@ export async function activate(context: vscode.ExtensionContext) {
     try {
         console.log('"live-sass-compiler" is now activated! Go and debug :P ');
 
-        const appModel = new AppModel(context.storagePath);
+        const appModel = new AppModel(context.workspaceState);
 
         checkNewAnnouncement(context.globalState);
 
@@ -55,7 +55,7 @@ export async function activate(context: vscode.ExtensionContext) {
             appModel)
     }
     catch (err) {
-        await new ErrorLogger(context.storagePath).LogIssueWithAlert(
+        await new ErrorLogger(context.workspaceState).LogIssueWithAlert(
             `Unhandled error with Live Sass Compiler. Error message: ${err.message}`,
             {
                 'error': ErrorLogger.PrepErrorForLogging(err)
