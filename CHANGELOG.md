@@ -20,6 +20,12 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.1.0] -
+
+### Added
+- New setting `liveSassCompile.settings.compileOnWatch`
+    * When `true` it will automatically compile all Sass files when watching is started. *Default value is `true`*
+
 ## [4.0.0] - 2020-12-20
 ### Breaking changes
 - Output options are now only `expanded` and `compressed`

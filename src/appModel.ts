@@ -26,12 +26,20 @@ export class AppModel {
     }
 
     StartWatching() {
+        const compileOnWatch = Helper.getConfigSettings<boolean>('compileOnWatch');
+
         if (this.isWatching) {
             WindowPopout.Inform('Already watching...');
         }
         else {
             this.isWatching = !this.isWatching;
-            this.compileAllFiles();
+            StatusBarUi.working();
+
+            if (compileOnWatch) {
+                this.compileAllFiles();
+            }
+
+            this.revertUIToWatchingStatusNow()
         }
     }
 
@@ -70,8 +78,6 @@ export class AppModel {
      */
     async compileAllFiles() {
         try {
-            StatusBarUi.working();
-
             const showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
 
             await this.GenerateAllCssAndMap(showOutputWindow);
@@ -85,8 +91,6 @@ export class AppModel {
                 }
             );
         }
-
-        this.revertUIToWatchingStatusNow()
     }
 
     /**
