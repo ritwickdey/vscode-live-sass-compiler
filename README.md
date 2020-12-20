@@ -1,10 +1,10 @@
 # Live Sass Compiler
 
-**_[If you like the extension, [please leave a review](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass#review-details), it puts a smile on my face.]_**
+**_[If you like the extension, [please leave a review](https://marketplace.visualstudio.com/items?itemName=glenn2223.live-sass#review-details), it puts a smile on my face.]_**
 
 **_[If you found any bug or if you have any suggestion, feel free to report or suggest me.]_**
 
-[![VSCode Marketplace Badge](https://img.shields.io/vscode-marketplace/v/ritwickdey.live-sass.svg?label=VSCode%20Marketplace&style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![Total Install](https://img.shields.io/vscode-marketplace/d/ritwickdey.live-sass.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![Average Rating Badge](https://img.shields.io/vscode-marketplace/r/ritwickdey.live-sass.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/ritwickdey/vscode-live-sass-compiler/)
+[![VSCode Marketplace Badge](https://img.shields.io/vscode-marketplace/v/glenn2223.live-sass.svg?label=VSCode%20Marketplace&style=flat-square)](https://marketplace.visualstudio.com/items?itemName=glenn2223.live-sass) [![Total Install](https://img.shields.io/vscode-marketplace/d/glenn2223.live-sass.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=glenn2223.live-sass) [![Average Rating Badge](https://img.shields.io/vscode-marketplace/r/glenn2223.live-sass.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=glenn2223.live-sass) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/glenn2223/vscode-live-sass-compiler/)
 
 A VSCode Extension that help you to compile/transpile your SASS/SCSS files to CSS files at real-time with live browser reload.
 
@@ -41,9 +41,13 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 
 ## What's new ?
 
-### 3.1.0 - 2020-10-14
+### 4.0.0 - 2020-12-20
+### Breaking changes
+- Output options are now only `expanded` and `compressed`
+- Only works on VS Code v1.50 and over
+
 #### Fixed
-- Changed from `libsass` to `node-sass` (upgraded to libsass v 3.5.4)
+- Changed from `libsass` to `sass` (more up to date release)
     * Fixes: many issues + performance improvement
 - Map line numbers are correct after `autoprefixer` is applied
     * Fixes: [#279](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/279), [#242](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/242), [#70](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/70)
@@ -63,3 +67,6 @@ See the full changelog [here](CHANGELOG.md).
 
 ## LICENSE
 This extension is licensed under the [MIT License](LICENSE)
+
+## Thank you Ritwick Dey
+A big thank you to [@ritwickdey](https://github.com/ritwickdey) for all his work. However, as they are no longer maintaining the [original work](https://github.com/ritwickdey/vscode-live-sass-compiler), I have released my own which has built upon his original work.
