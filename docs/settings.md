@@ -204,4 +204,17 @@ Set this to `true` to watch files on launch.
 
 </details>
 
+---
+
+<details>
+<summary>
+    liveSassCompile.settings.compileOnWatch<br />
+    Defines whether Live Sass should compile all files when it starts watching
+</summary>
+
+Set this to `false` if you don't want all Sass files to be compiled when Live Sass Compiler starts watching. 
+* _**Default:** `true`._
+
+</details>
+
 [glob pattern]: https://github.com/isaacs/node-glob/blob/master/README.md#glob-primer
