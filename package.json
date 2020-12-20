@@ -2,7 +2,8 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime with live browser reload.",
-    "version": "4.0.0",
+    "version": "4.1.0",
+    "preview": true,
     "publisher": "glenn2223",
     "author": {
         "name": "Glenn Marks",
@@ -22,7 +23,6 @@
         "Other",
         "Extension Packs"
     ],
-    "preview": true,
     "galleryBanner": {
         "color": "#41205f",
         "theme": "dark"
@@ -32,7 +32,7 @@
         "onLanguage:scss",
         "onLanguage:sass"
     ],
-    "main": "./out/src/extension",
+    "main": "./out/extension",
     "contributes": {
         "commands": [
             {
@@ -62,7 +62,7 @@
             },
             {
                 "command": "liveSass.command.createIssue",
-                "title": "Create an 'Unexpected Error' issue",
+                "title": "Report an issue",
                 "category": "Live Sass"
             }
         ],
@@ -205,7 +205,9 @@
         "ritwickdey.LiveServer"
     ],
     "scripts": {
-        "vscode:prepublish": "tsc -p ./",
+        "vscode:prepublish": "webpack --mode production",
+        "webpack": "webpack --mode development",
+        "webpack-dev": "webpack --mode development --watch",
         "compile": "tsc -watch -p ./",
         "test": "node ./node_modules/vscode-test/out/runTest"
     },
@@ -221,11 +223,14 @@
         "@types/sass": "^1.16.0",
         "@types/vscode": "^1.50.0",
         "mocha": "^7.2.0",
+        "ts-loader": "^8.0.12",
         "typescript": "^4.0.3",
-        "vscode-test": "^1.4.0"
+        "vscode-test": "^1.4.0",
+        "webpack": "^5.11.0",
+        "webpack-cli": "^4.2.0"
     },
     "announcement": {
-        "onVersion": "4.0.0",
-        "message": "SassCompiler@4.0.0: Be aware, there are breaking changes. Now running Sass (v6.14.8), configurable \"Watch On Launch\", fixes and more!"
+        "onVersion": "4.1.0",
+        "message": "SassCompiler@4.1.0: Now running Sass (v6.14.8), configurable \"Watch On Launch\" and \"Compile On Launch\", fixes and more! Beware: breaking changes from v4.0.0"
     }
 }

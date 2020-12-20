@@ -15,6 +15,8 @@ Types of changes
 - Removed for now removed features.
 - Fixed for any bug fixes.
 - Security in case of vulnerabilities.
+- Breaking changes for break in new revision
+- Other for notable changes that do not 
  -->
 
 # Changelog
@@ -25,6 +27,14 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New setting `liveSassCompile.settings.compileOnWatch`
     * When `true` it will automatically compile all Sass files when watching is started. *Default value is `true`*
+
+## Changed
+- Updated the issue report command text from `Create an 'Unexpected Error' issue` to `Report an issue` to simpilfy and be more inline with the normality.
+- Now using webpack to minify and speed up the extension
+
+### Other
+- Doc changes/general tidy up, updated .vscodeignore, update license, update .gitignore
+
 
 ## [4.0.0] - 2020-12-20
 ### Breaking changes
@@ -47,16 +57,11 @@ All notable changes to this project will be documented in this file.
     * Errors are logged in a workspace folder
     * New command to help log issues for unhandled errors `liveSass.command.createIssue`
 
-## [3.0.0] - 2018-07-11
-
-### Fixed
-- Upgrade `sass.js` library that included fixes for 8 digit Hex code & grid name.  
-    * Fixes: [#39](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/39), [#40](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/40), [#78](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/77)]
-
 <br><hr><br>
 
 | Version | Date | Changelog|
 | ------- | -------- | ------ |
+|3.0.0 | 11.07.2018 | &mdash; ***Fixes: [[#39](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/39), [#40](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/40), [#78](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/77)]*** Upgrade `sass.js` library that included fixes for 8 digit Hex code & grid name.<br />&#9;&#9;  |
 |2.2.1 | 29.06.2018 | &mdash; ***[Fixes [#77](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/77)]*** Rebuild the package |
 |2.2.0 | 29.06.2018 | &mdash; ***[Fixes [#76](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/76)]*** (That was library issue. Sass.js is downgraded to `v0.10.8`)|
 |2.1.0| 28.06.2018 | &mdash; ***[Fixes [#73](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/73)]*** Change detection of Partial Sass was missing in `v2.0.0` |

@@ -1,18 +1,21 @@
 .vscode/**
 .vscode-test/**
-out/test/**
+dist/**
+images/Screenshot/**
+node_modules/**
 test/**
 src/**
 **/*.map
+**/*.ts
 .gitignore
-images/Screenshot/**
 tsconfig.json
-vsc-extension-quickstart.md
+tslint.json
+webpack.config.js
 
 _layouts/**
-Gemfile
-Gemfile.lock
 _site/**
 assets/**
 _config.yml
 _site
+Gemfile
+Gemfile.lock

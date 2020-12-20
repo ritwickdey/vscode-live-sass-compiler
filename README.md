@@ -1,10 +1,7 @@
 # Live Sass Compiler
-
-**_[If you like the extension, [please leave a review](https://marketplace.visualstudio.com/items?itemName=glenn2223.live-sass#review-details), it puts a smile on my face.]_**
-
-**_[If you found any bug or if you have any suggestion, feel free to report or suggest me.]_**
-
 [![VSCode Marketplace Badge](https://img.shields.io/vscode-marketplace/v/glenn2223.live-sass.svg?label=VSCode%20Marketplace&style=flat-square)](https://marketplace.visualstudio.com/items?itemName=glenn2223.live-sass) [![Total Install](https://img.shields.io/vscode-marketplace/d/glenn2223.live-sass.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=glenn2223.live-sass) [![Average Rating Badge](https://img.shields.io/vscode-marketplace/r/glenn2223.live-sass.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=glenn2223.live-sass) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/glenn2223/vscode-live-sass-compiler/)
+
+**_Like it? [Please leave a review](https://marketplace.visualstudio.com/items?itemName=glenn2223.live-sass#review-details). Found something wrong? [Report an issue](https://github.com/glenn2223/vscode-live-sass-compiler/issues/new)._**
 
 A VSCode Extension that help you to compile/transpile your SASS/SCSS files to CSS files at real-time with live browser reload.
 
@@ -25,22 +22,37 @@ A VSCode Extension that help you to compile/transpile your SASS/SCSS files to CS
 * Quick Status bar control.
 * Exclude Specific Folders by settings. 
 * Live Reload to browser (Dependency on `Live Server` extension).
-* Autoprefix Supported (See setting section)
+* Autoprefix Supported (See settings section)
 
 ## Installation
-Open VSCode Editor and Press `ctrl+P`, type `ext install live-sass`.
+Open VSCode Editor and Press `ctrl+P`, type `ext install glenn2223.live-sass`.
 
 ## Settings
-All settings are now listed here  [Settings Docs](./docs/settings.md).
+All settings are now listed in the [Settings Docs](./docs/settings.md).
 
 ## FAQ
-*All FAQs are now listed here [FAQ Docs](./docs/faqs.md)*
+*All FAQs are now listed in the [FAQ Docs](./docs/faqs.md)*
 
 ## Extension Dependency 
 This extension has dependency on _[Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)_ extension for live browser reload.
 
 ## What's new ?
 
+### 4.1.0 - 2020-21-20
+
+### Added
+- New setting `liveSassCompile.settings.compileOnWatch`
+    * When `true` it will automatically compile all Sass files when watching is started. *Default value is `true`*
+
+## Changed
+- Updated the issue report command text from `Create an 'Unexpected Error' issue` to `Report an issue` to simpilfy and be more inline with the normality.
+- Now using webpack to minify and speed up the extension
+
+### Other
+- Doc changes/general tidy up, updated .vscodeignore, update license, update .gitignore
+<br />
+
+(Keeping v4.0.0 because of how close the revision is)
 ### 4.0.0 - 2020-12-20
 ### Breaking changes
 - Output options are now only `expanded` and `compressed`
@@ -69,4 +81,4 @@ See the full changelog [here](CHANGELOG.md).
 This extension is licensed under the [MIT License](LICENSE)
 
 ## Thank you Ritwick Dey
-A big thank you to [@ritwickdey](https://github.com/ritwickdey) for all his work. However, as they are no longer maintaining the [original work](https://github.com/ritwickdey/vscode-live-sass-compiler), I have released my own which has built upon his original work.
+A big thank you to [@ritwickdey](https://github.com/ritwickdey) for all his work. However, as they are no longer maintaining the [original work](https://github.com/ritwickdey/vscode-live-sass-compiler), I have released my own which has built upon it.
