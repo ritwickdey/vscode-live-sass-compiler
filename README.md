@@ -44,7 +44,7 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 - New setting `liveSassCompile.settings.compileOnWatch`
     * When `true` it will automatically compile all Sass files when watching is started. *Default value is `true`*
 
-## Changed
+### Changed
 - Updated the issue report command text from `Create an 'Unexpected Error' issue` to `Report an issue` to simpilfy and be more inline with the normality.
 - Now using webpack to minify and speed up the extension
 
