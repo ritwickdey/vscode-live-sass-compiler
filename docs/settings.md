@@ -8,7 +8,7 @@
 
 Each format will have the following items:
 * `format`: the output format of the generated file  
-_`expanded`_, _`compact`_, _`compressed`_ or _`nested`_.  
+_`expanded`_, or _`compressed`_.  
 _**Default is `expanded`**_
 
 * `extensionName`: the extension applied to the generate file  
