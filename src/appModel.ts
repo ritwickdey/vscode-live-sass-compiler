@@ -33,13 +33,13 @@ export class AppModel {
         }
         else {
             this.isWatching = !this.isWatching;
-            StatusBarUi.working();
 
             if (compileOnWatch) {
                 this.compileAllFiles();
             }
-
-            this.revertUIToWatchingStatusNow()
+            else {
+                this.revertUIToWatchingStatusNow();
+            }
         }
     }
 
@@ -78,6 +78,8 @@ export class AppModel {
      */
     async compileAllFiles() {
         try {
+            StatusBarUi.working();
+            
             const showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow');
 
             await this.GenerateAllCssAndMap(showOutputWindow);
@@ -91,6 +93,8 @@ export class AppModel {
                 }
             );
         }
+
+        this.revertUIToWatchingStatusNow();
     }
 
     /**
