@@ -453,8 +453,14 @@ export class AppModel {
         return files.find((e) => e === sassPath) ? false : true;
     }
 
-    private getSassFiles(queryPattern = "**/[^_]*.s[a|c]ss", isQueryPatternFixed = false): Promise<string[]> {
-        const excludedList = Helper.getConfigSettings<string[]>("excludeList"),
+    private getSassFiles(
+        queryPattern = "**/[^_]*.s[a|c]ss",
+        isQueryPatternFixed = false,
+        isDebugging = false
+    ): Promise<string[]> {
+        const excludedList = isDebugging
+                ? ["**/node_modules/**", ".vscode/**"]
+                : Helper.getConfigSettings<string[]>("excludeList"),
             includeItems = Helper.getConfigSettings<string[] | null>("includeItems"),
             options = {
                 ignore: excludedList,
@@ -555,41 +561,45 @@ export class AppModel {
 
             if (vscode.window.activeTextEditor) {
                 outputInfo.push(
-                    "----------------------",
+                    "--------------------",
                     "Current File",
-                    "----------------------",
+                    "--------------------",
                     vscode.window.activeTextEditor.document.uri.fsPath
                 );
             }
 
             outputInfo.push(
-                "----------------------",
+                "--------------------",
                 "Current Include/Exclude Settings",
-                "----------------------",
-                `[ ${exclusionList.join(", ")} ]`,
-                `[ ${Helper.getConfigSettings<string[] | null>("includeItems")?.join(", ") ?? "NULL"} ]`
+                "--------------------",
+                `Include: [ ${Helper.getConfigSettings<string[] | null>("includeItems")?.join(", ") ?? "NULL"} ]`,
+                `Exclude: [ ${exclusionList.join(", ")} ]`
             );
 
-            outputInfo.push("----------------------", "Workspace Folders", "----------------------");
+            outputInfo.push("--------------------", "Workspace Folders", "--------------------");
             await Promise.all(
                 vscode.workspace.workspaceFolders.map(async (file) => {
                     outputInfo.push(`[${file.index}] ${file.name}\n${file.uri.fsPath}`);
                 })
             );
 
-            outputInfo.push("----------------------", "Included SASS Files", "----------------------");
+            outputInfo.push("--------------------", "Included SASS Files", "--------------------");
             await Promise.all(
                 (await this.getSassFiles()).map(async (file) => {
                     outputInfo.push(file);
                 })
             );
 
-            outputInfo.push("----------------------", "Excluded SASS Files", "----------------------");
-            await Promise.all(
-                (await this.getSassFiles(`{${exclusionList.join(",")}}`)).map(async (file) => {
-                    outputInfo.push(file);
-                })
-            );
+            outputInfo.push("--------------------", "Excluded SASS Files", "--------------------");
+            if (exclusionList.length > 0) {
+                await Promise.all(
+                    (await this.getSassFiles(`{${exclusionList.join(",")}}`, true, true)).map(async (file) => {
+                        outputInfo.push(file);
+                    })
+                );
+            } else {
+                outputInfo.push("NONE");
+            }
 
             OutputWindow.Show("Extension Info", outputInfo, true);
         } catch (err) {
