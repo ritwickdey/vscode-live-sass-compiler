@@ -1,29 +1,24 @@
-import * as fs from 'fs';
-import * as path from 'path';
+import * as fs from "fs";
+import * as path from "path";
 
 export interface IFileResolver {
-    FileUri: string,
-    Exception: NodeJS.ErrnoException
+    FileUri: string;
+    Exception: NodeJS.ErrnoException;
 }
 
 export class FileHelper {
-
-    public static get Instance() {
-        return new FileHelper();
-    }
-
-    writeToOneFile(targetFileUri, data) {
+    static writeToOneFile(targetFileUri: string, data: string): Promise<IFileResolver> {
         return new Promise<IFileResolver>((resolve) => {
-            fs.writeFile(targetFileUri, data, 'utf8', (err) => {
+            fs.writeFile(targetFileUri, data, "utf8", (err) => {
                 resolve({
                     FileUri: targetFileUri,
-                    Exception: err
+                    Exception: err,
                 });
             });
-        })
+        });
     }
 
-    writeToMultipleFile(targetFileUris: string[], data: any[]) {
+    static writeToMultipleFile(targetFileUris: string[], data: string[]): Promise<IFileResolver[]> {
         return new Promise<IFileResolver[]>((resolve) => {
             const promises: Promise<IFileResolver>[] = [];
 
@@ -35,7 +30,7 @@ export class FileHelper {
         });
     }
 
-    MakeDirIfNotAvailable(dir) {
+    static MakeDirIfNotAvailable(dir: string): void {
         if (fs.existsSync(dir)) return;
         if (!fs.existsSync(path.dirname(dir))) {
             this.MakeDirIfNotAvailable(path.dirname(dir));

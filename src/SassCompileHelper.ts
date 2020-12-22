@@ -1,34 +1,33 @@
-import { WindowPopout, OutputWindow } from './VscodeExtensions';
-import { Helper } from './helper';
-import * as compiler from 'sass';
-import { Completer } from 'readline';
+//import { WindowPopout, OutputWindow } from "./VscodeExtensions";
+import { Helper } from "./helper";
+import * as compiler from "sass";
 
 export class SassHelper {
-
-    static get instance() {
+    static get instance(): SassHelper {
         return new SassHelper();
     }
 
-    static targetCssFormat(format) {
+    static targetCssFormat(format: "expanded" | "compressed"): compiler.Options {
         return {
-            outputStyle: format
-        }
+            outputStyle: format,
+        };
     }
 
-    compileOne(SassPath: string, mapFileUri: string, options: compiler.Options): { result: compiler.Result | null, errorString: string | null } {
-        const
-            showOutputWindow = Helper.getConfigSettings<boolean>('showOutputWindow'),
-            generateMap = Helper.getConfigSettings<boolean>('generateMap'),
+    compileOne(
+        SassPath: string,
+        mapFileUri: string,
+        options: compiler.Options
+    ): { result: compiler.Result | null; errorString: string | null } {
+        const generateMap = Helper.getConfigSettings<boolean>("generateMap"),
+            //showOutputWindow = Helper.getConfigSettings<boolean>("showOutputWindow"),
             data: compiler.Options = {};
 
         Object.assign(data, options);
 
         data.file = SassPath;
 
-        if (generateMap)
-            data.sourceMap = mapFileUri;
-        else
-            data.omitSourceMapUrl = true;
+        if (generateMap) data.sourceMap = mapFileUri;
+        else data.omitSourceMapUrl = true;
 
         /*
          * TODO: Chase with dart-sass (now just 'sass')
@@ -58,49 +57,14 @@ export class SassHelper {
 
         try {
             return { result: compiler.renderSync(data), errorString: null };
-        }
-        catch (err) {
+        } catch (err) {
             return { result: null, errorString: err.formatted };
         }
 
-        function infoCompiler(list: string[], info: any): void {
-            if (typeof (info.getLength) === 'function')
-                for (let i = 0; i < info.getLength(); i++)
-                    infoCompiler(list, info.getValue(i))
-            else
-                list.push((info.getValue()).toString() as string);
-        }
+        /*function infoCompiler(list: string[], info): void {
+            if (typeof info.getLength === "function")
+                for (let i = 0; i < info.getLength(); i++) infoCompiler(list, info.getValue(i));
+            else list.push(info.getValue().toString() as string);
+        }*/
     }
-}
-
-class CompileResult {
-    css: string;
-    map: string;
-    stats: CompileStats;
-    friendlyError: string;
-
-    constructor(result) {
-        if (!result) return null;
-
-        this.css = result.css.toString();
-        this.stats = result.stats;
-        this.map = result.map ? result.map.toString() : undefined;
-    }
-}
-
-class CompileStats {
-    entry: string;
-    start: number;
-    end: number;
-    duration: number;
-    includedFiles: string[];
-}
-
-class CompileError {
-    formatted: string;
-    message: string;
-    line: number;
-    column: number;
-    status: number;
-    file: string;
 }
