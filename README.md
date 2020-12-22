@@ -38,41 +38,29 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 
 ## What's new ?
 
-### 4.1.0 - 2020-12-20
-
-### Added
-- New setting `liveSassCompile.settings.compileOnWatch`
-    * When `true` it will automatically compile all Sass files when watching is started. *Default value is `true`*
-
-### Changed
-- Updated the issue report command text from `Create an 'Unexpected Error' issue` to `Report an issue` to simpilfy and be more inline with the normality.
-- Now using webpack to minify and speed up the extension
-
-### Other
-- Doc changes/general tidy up, updated .vscodeignore, update license, update .gitignore
-<br />
-
-(Keeping v4.0.0 because of how close the revision is)
-### 4.0.0 - 2020-12-20
-### Breaking changes
+**Breaking changes in v4:**
 - Output options are now only `expanded` and `compressed`
 - Only works on VS Code v1.50 and over
 
-#### Fixed
-- Changed from `libsass` to `sass` (more up to date release)
-    * Fixes: many issues + performance improvement
-- Map line numbers are correct after `autoprefixer` is applied
-    * Fixes: [#279](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/279), [#242](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/242), [#70](https://github.com/ritwickdey/vscode-live-sass-compiler/issues/70)
+### 4.2.0 - 2020-12-22
 
-#### Added
-- Replace segments in the save path: added two new settings under `liveSassCompile.settings.formats`
-    * `savePathSegmentKeys` - A list of segments to be replaced
-    * `savePathReplaceSegmentsWith` - The replacement value
-- New setting `liveSassCompile.settings.watchOnLaunch`
-    * When `true` it will automatically start watching your `.sass` or `.scss` files on launch. *Default value is `false`*
-- New logging mechanism
-    * Errors are logged in a workspace folder
-    * New command to help log issues for unhandled errors `liveSass.command.createIssue`
+### Added
+- New debugging items
+    * Two settings: 
+        * `liveSass.command.debugInclusion` to check that a current file will be included based on your settings
+        * `liveSass.command.debugFileList` for a more indepth look under the hood of the files included and excluded. Which can assist when logging issues
+    * New item in the [FAQ](https://github.com/glenn2223/vscode-live-sass-compiler/blob/master/docs/faqs.md) for extra help with glob patterns and reporting files not being compiled
+
+### Changed
+- Update the returned message from Autoprefixer warnings. They now better reflect that it's a warning not an error and include file information
+- Updated some dependancies:
+    * autoprefixer: v10.1.0
+    * glob: 7.1.6
+    * postcss: 8.2.1
+- Also updated some dev dependancies (not effecting the extension itself)
+
+### Other
+- Moved to eslinting, prettified the Typescript files
 
 ## Changelog
 See the full changelog [here](CHANGELOG.md).

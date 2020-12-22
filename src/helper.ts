@@ -1,21 +1,19 @@
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
 
 export interface IFormat {
-    format: string,
-    extensionName: string,
-    savePath: string,
-    savePathSegmentKeys: string[] | null,
-    savePathReplaceSegmentsWith: string
+    format: "compressed" | "expanded";
+    extensionName: string;
+    savePath: string;
+    savePathSegmentKeys?: string[];
+    savePathReplaceSegmentsWith: string;
 }
 
 export class Helper {
-
     private static get configSettings() {
-        return vscode.workspace.getConfiguration('liveSassCompile.settings');
+        return vscode.workspace.getConfiguration("liveSassCompile.settings");
     }
 
     static getConfigSettings<T>(val: string): T {
         return this.configSettings.get(val) as T;
     }
-
 }

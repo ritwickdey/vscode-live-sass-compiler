@@ -22,6 +22,26 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.2.0] - 2020-12-22
+
+### Added
+- New debugging items
+    * Two settings: 
+        * `liveSass.command.debugInclusion` to check that a current file will be included based on your settings
+        * `liveSass.command.debugFileList` for a more indepth look under the hood of the files included and excluded. Which can assist when logging issues
+    * New item in the [FAQ](https://github.com/glenn2223/vscode-live-sass-compiler/blob/master/docs/faqs.md) for extra help with glob patterns and reporting files not being compiled
+
+### Changed
+- Update the returned message from Autoprefixer warnings. They now better reflect that it's a warning not an error and include file information
+- Updated some dependancies:
+    * autoprefixer: v10.1.0
+    * glob: 7.1.6
+    * postcss: 8.2.1
+- Also updated some dev dependancies (not effecting the extension itself)
+
+### Other
+- Moved to eslinting, prettified the Typescript files
+
 ## [4.1.0] - 2020-12-20
 
 ### Added
@@ -94,6 +114,7 @@ All notable changes to this project will be documented in this file.
 
 
 [Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.0.0...HEAD
+[4.2.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.1.0...v4.2.0
 [4.1.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.0.0...v4.1.0
 [4.0.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v3.0.0...v4.0.0
 [3.0.0]: https://github.com/ritwickdey/vscode-live-sass-compiler/compare/v2.2.1...v3.0.0
