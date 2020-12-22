@@ -48,16 +48,16 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 - New debugging items
     * Two settings: 
         * `liveSass.command.debugInclusion` to check that a current file will be included based on your settings
-        * `liveSass.command.debugFileList` for a more indepth look under the hood of the files included and excluded. Which can assist when logging issues
+        * `liveSass.command.debugFileList` for a more in-depth look under the hood of the files included and excluded. Which can assist when logging issues
     * New item in the [FAQ](https://github.com/glenn2223/vscode-live-sass-compiler/blob/master/docs/faqs.md) for extra help with glob patterns and reporting files not being compiled
 
 ### Changed
 - Update the returned message from Autoprefixer warnings. They now better reflect that it's a warning not an error and include file information
-- Updated some dependancies:
+- Updated some dependencies:
     * autoprefixer: v10.1.0
     * glob: 7.1.6
     * postcss: 8.2.1
-- Also updated some dev dependancies (not effecting the extension itself)
+- Also updated some dev dependencies (not effecting the extension itself)
 
 ### Other
 - Moved to eslinting, prettified the Typescript files
