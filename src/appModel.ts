@@ -488,7 +488,7 @@ export class AppModel {
                     return;
                 }
                 const filePaths = files
-                    .filter((file) => this.isSassFile(file))
+                    .filter((file) => this.isSassFile(file, isDebugging))
                     .map((file) => path.join(AppModel.basePath, file));
                 return resolve(filePaths || []);
             });
@@ -586,6 +586,13 @@ export class AppModel {
             outputInfo.push("--------------------", "Included SASS Files", "--------------------");
             await Promise.all(
                 (await this.getSassFiles()).map(async (file) => {
+                    outputInfo.push(file);
+                })
+            );
+
+            outputInfo.push("--------------------", "Included Partial SASS Files", "--------------------");
+            await Promise.all(
+                (await this.getSassFiles("**/_*.s[a|c]ss", false, true)).map(async (file) => {
                     outputInfo.push(file);
                 })
             );
