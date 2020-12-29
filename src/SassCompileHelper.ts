@@ -32,27 +32,28 @@ export class SassHelper {
         /*
          * TODO: Chase with dart-sass (now just 'sass')
             See if warn and debug will be accessible properties --> string[] maybe
+            
         data.functions = {
             // @error is handled suitably
-            '\@warn': function (info) {
-                let lines: string[] = [];
+            "@warn": function (info) {
+                const lines: string[] = [];
 
                 infoCompiler(lines, info);
 
-                OutputWindow.Show('Warning:', lines, showOutputWindow, true);
-                WindowPopout.Warn('Live Sass Compiler\n *Warning:* \n' + (lines.join('\n')))
+                OutputWindow.Show("Warning:", lines, showOutputWindow, true);
+                WindowPopout.Warn("Live Sass Compiler\n *Warning:* \n" + lines.join("\n"));
 
                 return compiler.types.Null;
             },
-            '\\@debug': function (info) {
-                let lines: string[] = [];
+            "@debug": function (info) {
+                const lines: string[] = [];
 
                 infoCompiler(lines, info);
 
-                OutputWindow.Show('Debug info:', lines, showOutputWindow, true);
+                OutputWindow.Show("Debug info:", lines, showOutputWindow, true);
 
                 return compiler.types.Null;
-            }
+            },
         };//*/
 
         try {
@@ -65,6 +66,6 @@ export class SassHelper {
             if (typeof info.getLength === "function")
                 for (let i = 0; i < info.getLength(); i++) infoCompiler(list, info.getValue(i));
             else list.push(info.getValue().toString() as string);
-        }*/
+        } //*/
     }
 }
