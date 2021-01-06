@@ -42,7 +42,7 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 - Output options are now only `expanded` and `compressed`
 - Only works on VS Code v1.50 and newer
 
-## 4.3.0 - 2021-01-06
+### 4.3.0 - 2021-01-06
 
 ### Added
 - Support for workspaces with multiple folders
