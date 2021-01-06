@@ -12,7 +12,7 @@ export class ErrorLogger {
         this.ClearLogs();
     }
 
-    async LogIssueWithAlert(Message: string, DetailedLogInfo): Promise<void> {
+    async LogIssueWithAlert(Message: string, DetailedLogInfo: any): Promise<void> {
         WindowPopout.Alert(`Live Sass Compiler: ${Message}`);
 
         this.logs.push(new LogEvent(DetailedLogInfo));

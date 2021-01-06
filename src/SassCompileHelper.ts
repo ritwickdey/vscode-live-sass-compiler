@@ -1,4 +1,4 @@
-import { WindowPopout, OutputWindow } from "./VscodeExtensions";
+//import { WindowPopout, OutputWindow } from "./VscodeExtensions";
 import { Helper } from "./helper";
 import * as compiler from "sass";
 
@@ -19,7 +19,7 @@ export class SassHelper {
         options: compiler.Options
     ): { result: compiler.Result | null; errorString: string | null } {
         const generateMap = Helper.getConfigSettings<boolean>("generateMap"),
-            showOutputWindow = Helper.getConfigSettings<boolean>("showOutputWindow"),
+            //showOutputWindow = Helper.getConfigSettings<boolean>("showOutputWindow"),
             data: compiler.Options = {};
 
         Object.assign(data, options);
