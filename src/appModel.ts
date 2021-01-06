@@ -59,10 +59,6 @@ export class AppModel {
         this._logger.InitiateIssueCreator();
     }
 
-    static get basePath(): string {
-        return vscode.workspace.rootPath || path.basename(vscode.window.activeTextEditor.document.fileName);
-    }
-
     private getCssStyle(format: "compressed" | "expanded" = "expanded") {
         return SassHelper.targetCssFormat(format);
     }
@@ -118,10 +114,10 @@ export class AppModel {
                 return;
             }
 
-            const sassPath = vscode.window.activeTextEditor.document.uri.fsPath;
+            const sassPath = vscode.window.activeTextEditor.document.fileName;
 
-            if (!this.isSassFile(vscode.window.activeTextEditor.document.uri.fsPath)) {
-                if (this.isSassFile(vscode.window.activeTextEditor.document.uri.fsPath, true))
+            if (!this.isSassFile(vscode.window.activeTextEditor.document.fileName)) {
+                if (this.isSassFile(vscode.window.activeTextEditor.document.fileName, true))
                     StatusBarUi.customMessage(
                         "Can't process partial Sass",
                         "The file currently open in the editor window is a partial sass file, these aren't processed singly",
@@ -139,25 +135,23 @@ export class AppModel {
                 return;
             }
 
-            const formats = Helper.getConfigSettings<IFormat[]>("formats");
-
             StatusBarUi.working("Processing single file...");
             OutputWindow.Show("Processing the current file", [`Path: ${sassPath}`], showOutputWindow);
 
-            const promises: Promise<boolean>[] = [];
-            formats.forEach((format) => {
-                // Each format
-                const options = this.getCssStyle(format.format);
-                const cssMapUri = this.generateCssAndMapUri(sassPath, format);
-                promises.push(this.GenerateCssAndMap(sassPath, cssMapUri.css, cssMapUri.map, options));
-            });
-
-            await Promise.all(promises);
+            const formats = Helper.getConfigSettings<IFormat[]>("formats");
+            await Promise.all(
+                formats.map(async (format) => {
+                    // Each format
+                    const options = this.getCssStyle(format.format),
+                        cssMapUri = await this.generateCssAndMapUri(sassPath, format);
+                    await this.GenerateCssAndMap(sassPath, cssMapUri.css, cssMapUri.map, options);
+                })
+            );
 
             StatusBarUi.compilationSuccess(this.isWatching);
         } catch (err) {
             const sassPath = vscode.window.activeTextEditor
-                ? vscode.window.activeTextEditor.document.uri.fsPath
+                ? vscode.window.activeTextEditor.document.fileName
                 : "/* NO ACTIVE FILE, PROCESSING SHOULD NOT HAVE OCCURRED */";
 
             await this._logger.LogIssueWithAlert(
@@ -183,24 +177,23 @@ export class AppModel {
 
             if (!this.isSassFile(currentFile, true)) return;
 
-            if (await this.isSassFileExcluded(vscode.window.activeTextEditor.document.uri.fsPath)) return;
+            if (await this.isSassFileExcluded(vscode.window.activeTextEditor.document.fileName)) return;
 
             OutputWindow.Show("Change detected...", [path.basename(currentFile)], showOutputWindow);
 
             if (this.isSassFile(currentFile)) {
                 const formats = Helper.getConfigSettings<IFormat[]>("formats"),
-                    sassPath = currentFile,
-                    promises: Promise<boolean>[] = [];
+                    sassPath = currentFile;
 
-                formats.forEach((format) => {
-                    // Each format
-                    const options = this.getCssStyle(format.format),
-                        cssMapPath = this.generateCssAndMapUri(sassPath, format);
+                await Promise.all(
+                    formats.map(async (format) => {
+                        // Each format
+                        const options = this.getCssStyle(format.format),
+                            cssMapPath = await this.generateCssAndMapUri(sassPath, format);
 
-                    promises.push(this.GenerateCssAndMap(sassPath, cssMapPath.css, cssMapPath.map, options));
-                });
-
-                await Promise.all(promises);
+                        await this.GenerateCssAndMap(sassPath, cssMapPath.css, cssMapPath.map, options);
+                    })
+                );
             } else {
                 // Partial Or not
                 await this.GenerateAllCssAndMap(showOutputWindow);
@@ -209,7 +202,7 @@ export class AppModel {
             await this._logger.LogIssueWithAlert(
                 `Unhandled error while compiling the saved changes. Error message: ${err.message}`,
                 {
-                    triggeringFile: vscode.window.activeTextEditor.document.uri.fsPath,
+                    triggeringFile: vscode.window.activeTextEditor.document.fileName,
                     allFiles: await this.getSassFiles(),
                     error: ErrorLogger.PrepErrorForLogging(err),
                 }
@@ -292,22 +285,23 @@ export class AppModel {
      */
     private async GenerateAllCssAndMap(popUpOutputWindow: boolean) {
         const formats = Helper.getConfigSettings<IFormat[]>("formats"),
-            promises: Promise<boolean>[] = [],
-            sassPaths: string[] = await this.getSassFiles();
+            sassPaths = await this.getSassFiles();
 
         OutputWindow.Show("Compiling Sass/Scss Files: ", sassPaths, popUpOutputWindow);
 
-        sassPaths.forEach((sassPath) => {
-            formats.forEach((format) => {
-                // Each format
-                const options = this.getCssStyle(format.format),
-                    cssMapUri = this.generateCssAndMapUri(sassPath, format);
+        await Promise.all(
+            sassPaths.map(async (sassPath) => {
+                await Promise.all(
+                    formats.map(async (format) => {
+                        // Each format
+                        const options = this.getCssStyle(format.format),
+                            cssMapUri = await this.generateCssAndMapUri(sassPath, format);
 
-                promises.push(this.GenerateCssAndMap(sassPath, cssMapUri.css, cssMapUri.map, options));
-            });
-        });
-
-        return Promise.all(promises);
+                        await this.GenerateCssAndMap(sassPath, cssMapUri.css, cssMapUri.map, options);
+                    })
+                );
+            })
+        );
     }
 
     /**
@@ -316,11 +310,41 @@ export class AppModel {
      * @param savePath The path we're going to save to
      * @param _extensionName The file extension we're going to use
      */
-    private generateCssAndMapUri(filePath: string, format: IFormat) {
-        const extensionName = format.extensionName || ".css",
-            workspaceRoot = vscode.workspace.rootPath;
+    private async generateCssAndMapUri(filePath: string, format: IFormat) {
+        const extensionName = format.extensionName || ".css";
 
         let generatedUri = null;
+
+        let workspaceRoot: string;
+        if (vscode.workspace.workspaceFolders) {
+            const foundInFolders = (
+                await Promise.all(
+                    vscode.workspace.workspaceFolders.map(async (folder) => {
+                        if (filePath.startsWith(folder.uri.fsPath)) return folder.uri.fsPath;
+
+                        return null;
+                    })
+                )
+            ).filter((x) => x !== null);
+
+            if (foundInFolders.length == 0) {
+                workspaceRoot = vscode.workspace.workspaceFolders[0].uri.fsPath;
+                OutputWindow.Show(
+                    "Warning: File is not in the workspace",
+                    ["The file will be saved relative to the first folder in your workspace", `Path: ${workspaceRoot}`],
+                    true
+                );
+            } else {
+                workspaceRoot = foundInFolders[0];
+            }
+        } else {
+            workspaceRoot = path.basename(vscode.window.activeTextEditor.document.fileName);
+            OutputWindow.Show(
+                "Warning: There is no active workspace",
+                ["The file will be saved relative to file being processed", `Path: ${workspaceRoot}`],
+                true
+            );
+        }
 
         // If SavePath is NULL, CSS uri will be same location of SASS.
         if (format.savePath) {
@@ -448,12 +472,12 @@ export class AppModel {
 
     //#region Private
 
-    private async isSassFileExcluded(sassPath: string) {
+    private async isSassFileExcluded(sassPath: string): Promise<boolean> {
         const files = await this.getSassFiles("**/*.s[a|c]ss", true);
-        return files.find((e) => e === sassPath) ? false : true;
+        return !files.some((e) => e === sassPath);
     }
 
-    private getSassFiles(
+    private async getSassFiles(
         queryPattern = "**/[^_]*.s[a|c]ss",
         isQueryPatternFixed = false,
         isDebugging = false
@@ -461,12 +485,7 @@ export class AppModel {
         const excludedList = isDebugging
                 ? ["**/node_modules/**", ".vscode/**"]
                 : Helper.getConfigSettings<string[]>("excludeList"),
-            includeItems = Helper.getConfigSettings<string[] | null>("includeItems"),
-            options = {
-                ignore: excludedList,
-                mark: true,
-                cwd: AppModel.basePath,
-            };
+            includeItems = Helper.getConfigSettings<string[] | null>("includeItems");
 
         if (!isQueryPatternFixed && includeItems && includeItems.length) {
             if (includeItems.length === 1) {
@@ -476,23 +495,41 @@ export class AppModel {
             }
         }
 
-        return new Promise((resolve) => {
-            glob(queryPattern, options, (err, files: string[]) => {
-                if (err) {
-                    OutputWindow.Show(
-                        "Error whilst searching for files",
-                        [err.code + " " + err.errno.toString(), err.message, err.stack],
-                        true
-                    );
-                    resolve([]);
-                    return;
-                }
-                const filePaths = files
-                    .filter((file) => this.isSassFile(file, isDebugging))
-                    .map((file) => path.join(AppModel.basePath, file));
-                return resolve(filePaths || []);
-            });
-        });
+        const files: string[] = [];
+
+        await Promise.all(
+            vscode.workspace.workspaceFolders.map(async (folder) => {
+                (
+                    await new Promise((resolve: (value: string[]) => void) => {
+                        glob(
+                            queryPattern,
+                            {
+                                ignore: excludedList,
+                                mark: true,
+                                cwd: folder.uri.fsPath,
+                            },
+                            (err, files: string[]) => {
+                                if (err) {
+                                    OutputWindow.Show(
+                                        "Error whilst searching for files",
+                                        [`Workspace folder: ${folder.name}`, err.message, err.stack],
+                                        true
+                                    );
+                                    resolve([]);
+                                    return;
+                                }
+                                const filePaths = files
+                                    .filter((file) => this.isSassFile(file, isDebugging))
+                                    .map((file) => path.join(folder.uri.fsPath, file));
+                                return resolve(filePaths || []);
+                            }
+                        );
+                    })
+                ).forEach((file) => files.push(file));
+            })
+        );
+
+        return files;
     }
 
     //#endregion Private
@@ -516,7 +553,7 @@ export class AppModel {
                 return;
             }
 
-            const sassPath = vscode.window.activeTextEditor.document.uri.fsPath;
+            const sassPath = vscode.window.activeTextEditor.document.fileName;
 
             OutputWindow.Show(sassPath, [], true);
 
@@ -541,7 +578,7 @@ export class AppModel {
             }
         } catch (err) {
             const sassPath = vscode.window.activeTextEditor
-                ? vscode.window.activeTextEditor.document.uri.fsPath
+                ? vscode.window.activeTextEditor.document.fileName
                 : "/* NO ACTIVE FILE, MESSAGE SHOULD HAVE BEEN THROWN */";
 
             await this._logger.LogIssueWithAlert(
@@ -564,7 +601,7 @@ export class AppModel {
                     "--------------------",
                     "Current File",
                     "--------------------",
-                    vscode.window.activeTextEditor.document.uri.fsPath
+                    vscode.window.activeTextEditor.document.fileName
                 );
             }
 
@@ -578,8 +615,8 @@ export class AppModel {
 
             outputInfo.push("--------------------", "Workspace Folders", "--------------------");
             await Promise.all(
-                vscode.workspace.workspaceFolders.map(async (file) => {
-                    outputInfo.push(`[${file.index}] ${file.name}\n${file.uri.fsPath}`);
+                vscode.workspace.workspaceFolders.map(async (folder) => {
+                    outputInfo.push(`[${folder.index}] ${folder.name}\n${folder.uri.fsPath}`);
                 })
             );
 
@@ -611,7 +648,7 @@ export class AppModel {
             OutputWindow.Show("Extension Info", outputInfo, true);
         } catch (err) {
             const sassPath = vscode.window.activeTextEditor
-                ? vscode.window.activeTextEditor.document.uri.fsPath
+                ? vscode.window.activeTextEditor.document.fileName
                 : "/* NO ACTIVE FILE, DETAILS BELOW */";
 
             await this._logger.LogIssueWithAlert(
