@@ -40,27 +40,19 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 
 **Breaking changes in v4:**
 - Output options are now only `expanded` and `compressed`
-- Only works on VS Code v1.50 and over
+- Only works on VS Code v1.50 and newer
 
-### 4.2.0 - 2020-12-22
+## 4.3.0 - 2021-01-06
 
 ### Added
-- New debugging items
-    * Two settings: 
-        * `liveSass.command.debugInclusion` to check that a current file will be included based on your settings
-        * `liveSass.command.debugFileList` for a more in-depth look under the hood of the files included and excluded. Which can assist when logging issues
-    * New item in the [FAQ](https://github.com/glenn2223/vscode-live-sass-compiler/blob/master/docs/faqs.md) for extra help with glob patterns and reporting files not being compiled
+- Support for workspaces with multiple folders
 
 ### Changed
-- Update the returned message from Autoprefixer warnings. They now better reflect that it's a warning not an error and include file information
-- Updated some dependencies:
-    * autoprefixer: v10.1.0
-    * glob: 7.1.6
-    * postcss: 8.2.1
-- Also updated some dev dependencies (not effecting the extension itself)
+- **Out of preview!**
+- Small optimisation to some underlying async operations
 
 ### Other
-- Moved to eslinting, prettified the Typescript files
+- Small bit of general tidying, adjustment to README, new dev dependancy for @.types/glob
 
 ## Changelog
 See the full changelog [here](CHANGELOG.md).

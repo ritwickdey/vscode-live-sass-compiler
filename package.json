@@ -2,8 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime with live browser reload.",
-    "version": "4.2.0",
-    "preview": true,
+    "version": "4.3.0",
     "publisher": "glenn2223",
     "author": {
         "name": "Glenn Marks",

@@ -22,6 +22,18 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.3.0] - 2021-01-06
+
+### Added
+- Support for workspaces with multiple folders
+
+### Changed
+- **Out of preview!**
+- Small optimisation to some underlying async operations
+
+### Other
+- Small bit of general tidying, adjustment to README, new dev dependancy for @.types/glob
+
 ## [4.2.0] - 2020-12-22
 
 ### Added
@@ -113,7 +125,8 @@ All notable changes to this project will be documented in this file.
 
 
 
-[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.0.0...HEAD
+[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.0...HEAD
+[4.3.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.2.0...v4.3.0
 [4.2.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.1.0...v4.2.0
 [4.1.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.0.0...v4.1.0
 [4.0.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v3.0.0...v4.0.0
