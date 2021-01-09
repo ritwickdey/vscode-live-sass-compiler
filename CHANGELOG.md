@@ -22,6 +22,12 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.3.1] - 2021-01-09
+
+### Fixed
+- Fixed [#10](https://github.com/glenn2223/vscode-live-sass-compiler/issues/10): Partial SASS files not triggering compilation of all files
+- Correction of output when running `liveSass.command.debugInclusion` and the file is excluded
+
 ## [4.3.0] - 2021-01-06
 
 ### Added
@@ -125,7 +131,8 @@ All notable changes to this project will be documented in this file.
 
 
 
-[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.0...HEAD
+[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.1...HEAD
+[4.3.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.0...v4.3.1
 [4.3.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.2.0...v4.3.0
 [4.2.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.1.0...v4.2.0
 [4.1.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.0.0...v4.1.0
