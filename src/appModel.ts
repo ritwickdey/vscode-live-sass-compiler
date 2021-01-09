@@ -519,7 +519,7 @@ export class AppModel {
                                     return;
                                 }
                                 const filePaths = files
-                                    .filter((file) => this.isSassFile(file, isDebugging))
+                                    .filter((file) => this.isSassFile(file, isDebugging || isQueryPatternFixed))
                                     .map((file) => path.join(folder.uri.fsPath, file));
                                 return resolve(filePaths || []);
                             }
@@ -565,8 +565,8 @@ export class AppModel {
                 );
             } else if (await this.isSassFileExcluded(sassPath)) {
                 OutputWindow.Show(
-                    "Excluded based on your settings, please check your settings",
-                    ["The file currently open in the editor window isn't a sass file"],
+                    "File excluded",
+                    ["The file is excluded based on your settings, please check your configuration"],
                     true
                 );
             } else {
