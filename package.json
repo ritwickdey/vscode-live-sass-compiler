@@ -2,7 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime with live browser reload.",
-    "version": "4.3.0",
+    "version": "4.3.1",
     "publisher": "glenn2223",
     "author": {
         "name": "Glenn Marks",
@@ -244,7 +244,7 @@
         "webpack-cli": "^4.2.0"
     },
     "announcement": {
-        "onVersion": "4.1.0",
-        "message": "SassCompiler@4.1.0: Now running Sass (v6.14.8), configurable \"Watch On Launch\" and \"Compile On Launch\", fixes and more! Beware: breaking changes from v4.0.0"
+        "onVersion": "4.3.1",
+        "message": "SassCompiler v4.3.1: Bug fix for partial files not processing all files"
     }
 }

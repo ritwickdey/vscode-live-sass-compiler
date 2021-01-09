@@ -15,14 +15,14 @@ A VSCode Extension that help you to compile/transpile your SASS/SCSS files to CS
 3. Press `F1` or `ctrl+shift+P` and type `Live Sass: Compile Sass - Without Watch Mode ` to compile SASS or SCSS for one time.
 
 ## Features
-* Live SASS & SCSS Compile.
+* Live SASS & SCSS compile.
 * Customizable file location of exported CSS.
-* Customizable exported CSS Style (`expanded`, `compressed`).
+* Customizable exported CSS style (`expanded`, `compressed`).
 * Customizable extension name (`.css` or `.min.css`).
-* Quick Status bar control.
-* Exclude Specific Folders by settings. 
-* Live Reload to browser (Dependency on `Live Server` extension).
-* Autoprefix Supported (See settings section)
+* Quick status bar control.
+* Exclude specific folders by settings. 
+* Live reload to browser (Dependency on `Live Server` extension).
+* Autoprefix support (See settings section)
 
 ## Installation
 Open VSCode Editor and Press `ctrl+P`, type `ext install glenn2223.live-sass`.
@@ -42,20 +42,13 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 - Output options are now only `expanded` and `compressed`
 - Only works on VS Code v1.50 and newer
 
-### 4.3.0 - 2021-01-06
+### 4.3.1 - 2021-01-09
 
-### Added
-- Support for workspaces with multiple folders
+### Fixed
+- Fixed [#10](https://github.com/glenn2223/vscode-live-sass-compiler/issues/10): Partial SASS files not triggering compilation of all files
+- Correction of output when running `liveSass.command.debugInclusion` and the file is excluded
 
-### Changed
-- **Out of preview!**
-- Small optimisation to some underlying async operations
-
-### Other
-- Small bit of general tidying, adjustment to README, new dev dependancy for @.types/glob
-
-## Changelog
-See the full changelog [here](CHANGELOG.md).
+*See the full changelog [here](CHANGELOG.md).*
 
 ## LICENSE
 This extension is licensed under the [MIT License](LICENSE)
