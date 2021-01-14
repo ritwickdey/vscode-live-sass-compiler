@@ -40,7 +40,9 @@ export class ErrorLogger {
                 `| VS Code | v${version} |`,
                 `| Platform | ${process.platform} ${process.arch} |`,
                 `| Node | ${process.versions.node} (${process.versions.modules}) |`,
-                `| Live Sass | ${extensions.getExtension("glenn2223.live-sass").packageJSON.version} |`,
+                `| Live Sass | ${
+                    extensions.getExtension("glenn2223.live-sass").packageJSON.version
+                } |`,
                 `<details><summary>Installed Extensions</summary><div>`,
                 extensions.all
                     .filter((ext) => ext.isActive)
@@ -48,9 +50,13 @@ export class ErrorLogger {
                     .join("<br/>"),
                 "</div></details>",
                 "",
-                `**LOG**: ${lastError === null ? "" : lastError.createdAt.toISOString().replace("T", " ")}`,
+                `**LOG**: ${
+                    lastError === null ? "" : lastError.createdAt.toISOString().replace("T", " ")
+                }`,
                 "```JSON",
-                lastError === null ? '{\n"NO LOG": "PLEASE SPECIFY YOUR ISSUE BELOW"\n}' : JSON.stringify(lastError, null, 4),
+                lastError === null
+                    ? '{\n"NO LOG": "PLEASE SPECIFY YOUR ISSUE BELOW"\n}'
+                    : JSON.stringify(lastError, null, 4),
                 "```",
                 "=======================",
                 "<!-- You can add any supporting information below here -->\n",
@@ -104,7 +110,12 @@ export class OutputWindow {
         return OutputWindow._msgChannel;
     }
 
-    static Show(msgHeadline: string, MsgBody: string[], popUpToUI = false, addEndLine = true): void {
+    static Show(
+        msgHeadline: string,
+        MsgBody: string[],
+        popUpToUI = false,
+        addEndLine = true
+    ): void {
         if (msgHeadline) {
             OutputWindow.MsgChannel.appendLine(msgHeadline);
         }

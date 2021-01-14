@@ -14,12 +14,18 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
         checkNewAnnouncement(context.globalState);
 
-        const disposablecompileAll = vscode.commands.registerCommand("liveSass.command.watchMySass", () => {
-                appModel.StartWatching();
-            }),
-            disposableStopWaching = vscode.commands.registerCommand("liveSass.command.donotWatchMySass", () => {
-                appModel.StopWatching();
-            }),
+        const disposablecompileAll = vscode.commands.registerCommand(
+                "liveSass.command.watchMySass",
+                () => {
+                    appModel.StartWatching();
+                }
+            ),
+            disposableStopWaching = vscode.commands.registerCommand(
+                "liveSass.command.donotWatchMySass",
+                () => {
+                    appModel.StopWatching();
+                }
+            ),
             disposableOneTimeCompileSass = vscode.commands.registerCommand(
                 "liveSass.command.oneTimeCompileSass",
                 () => {
@@ -32,18 +38,30 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
                     appModel.compileCurrentFile();
                 }
             ),
-            disposableOpenOutputWindow = vscode.commands.registerCommand("liveSass.command.openOutputWindow", () => {
-                appModel.openOutputWindow();
-            }),
-            disposableCreateIssue = vscode.commands.registerCommand("liveSass.command.createIssue", () => {
-                appModel.createIssue();
-            }),
-            disposableDebugInclusion = vscode.commands.registerCommand("liveSass.command.debugInclusion", async () => {
-                await appModel.debugInclusion();
-            }),
-            disposableDebugFileList = vscode.commands.registerCommand("liveSass.command.debugFileList", async () => {
-                appModel.debugFileList();
-            }),
+            disposableOpenOutputWindow = vscode.commands.registerCommand(
+                "liveSass.command.openOutputWindow",
+                () => {
+                    appModel.openOutputWindow();
+                }
+            ),
+            disposableCreateIssue = vscode.commands.registerCommand(
+                "liveSass.command.createIssue",
+                () => {
+                    appModel.createIssue();
+                }
+            ),
+            disposableDebugInclusion = vscode.commands.registerCommand(
+                "liveSass.command.debugInclusion",
+                async () => {
+                    await appModel.debugInclusion();
+                }
+            ),
+            disposableDebugFileList = vscode.commands.registerCommand(
+                "liveSass.command.debugFileList",
+                async () => {
+                    appModel.debugFileList();
+                }
+            ),
             disposableOnDidSave = vscode.workspace.onDidSaveTextDocument(() => {
                 appModel.compileOnSave();
             });
