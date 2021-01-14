@@ -25,7 +25,7 @@ All notable changes to this project will be documented in this file.
 ## [4.3.2] - 2021-01-15
 
 ### Fixed
-- Now handle errors caused by incorrect autoprfixer browser queries
+- Now handle errors caused by incorrect autoprefixer browser queries
 - Corrected output for unhandled errors that get output when running "Report an issue" from the command `liveSass.command.createIssue`
 
 ### Updates
