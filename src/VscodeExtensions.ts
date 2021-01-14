@@ -50,7 +50,7 @@ export class ErrorLogger {
                 "",
                 `**LOG**: ${lastError === null ? "" : lastError.createdAt.toISOString().replace("T", " ")}`,
                 "```JSON",
-                lastError === null ? '{\n"NO LOG": "PLEASE SPECIFY YOUR ISSUE BELOW"\n}' : lastError,
+                lastError === null ? '{\n"NO LOG": "PLEASE SPECIFY YOUR ISSUE BELOW"\n}' : JSON.stringify(lastError, null, 4),
                 "```",
                 "=======================",
                 "<!-- You can add any supporting information below here -->\n",
