@@ -46,7 +46,7 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 ### 4.3.2 - 2021-01-15
 
 ### Fixed
-- Now handle errors caused by incorrect autoprfixer browser queries
+- Now handle errors caused by incorrect autoprefixer browser queries
 - Corrected output for unhandled errors that get output when running "Report an issue" from the command `liveSass.command.createIssue`
 
 ### Updates
