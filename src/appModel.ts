@@ -14,6 +14,8 @@ import { ProcessOptions } from "postcss";
 
 import postcss from "postcss";
 
+import BrowserslistError = require("browserslist/error");
+
 export class AppModel {
     private isWatching: boolean;
     private _logger: ErrorLogger;
@@ -136,7 +138,11 @@ export class AppModel {
             }
 
             StatusBarUi.working("Processing single file...");
-            OutputWindow.Show("Processing the current file", [`Path: ${sassPath}`], showOutputWindow);
+            OutputWindow.Show(
+                "Processing the current file",
+                [`Path: ${sassPath}`],
+                showOutputWindow
+            );
 
             const formats = Helper.getConfigSettings<IFormat[]>("formats");
             await Promise.all(
@@ -177,7 +183,11 @@ export class AppModel {
 
             if (!this.isSassFile(currentFile, true)) return;
 
-            if (await this.isSassFileExcluded(vscode.window.activeTextEditor.document.fileName)) return;
+            if (
+                !this.isPartialSassFile(currentFile) &&
+                (await this.isSassFileExcluded(currentFile))
+            )
+                return;
 
             OutputWindow.Show("Change detected...", [path.basename(currentFile)], showOutputWindow);
 
@@ -191,7 +201,12 @@ export class AppModel {
                         const options = this.getCssStyle(format.format),
                             cssMapPath = await this.generateCssAndMapUri(sassPath, format);
 
-                        await this.GenerateCssAndMap(sassPath, cssMapPath.css, cssMapPath.map, options);
+                        await this.GenerateCssAndMap(
+                            sassPath,
+                            cssMapPath.css,
+                            cssMapPath.map,
+                            options
+                        );
                     })
                 );
             } else {
@@ -223,7 +238,12 @@ export class AppModel {
      * @param mapFileUri Target MAP file URI (string)
      * @param options - Object - It includes target CSS style and some more.
      */
-    private async GenerateCssAndMap(SassPath: string, targetCssUri: string, mapFileUri: string, options) {
+    private async GenerateCssAndMap(
+        SassPath: string,
+        targetCssUri: string,
+        mapFileUri: string,
+        options
+    ) {
         const generateMap = Helper.getConfigSettings<boolean>("generateMap"),
             autoprefixerTarget = Helper.getConfigSettings<Array<string>>("autoprefix"),
             showOutputWindow = Helper.getConfigSettings<boolean>("showOutputWindow"),
@@ -234,7 +254,8 @@ export class AppModel {
             OutputWindow.Show("Compilation Error", [compileResult.errorString], showOutputWindow);
             StatusBarUi.compilationError(this.isWatching);
 
-            if (!showOutputWindow) vscode.window.setStatusBarMessage(compileResult.errorString.split("\n")[0], 4500);
+            if (!showOutputWindow)
+                vscode.window.setStatusBarMessage(compileResult.errorString.split("\n")[0], 4500);
 
             return false;
         }
@@ -243,9 +264,26 @@ export class AppModel {
             map: string | null = compileResult.result.map?.toString();
 
         if (autoprefixerTarget) {
-            const autoprefixerResult = await this.autoprefix(css, SassPath, targetCssUri, autoprefixerTarget);
-            css = autoprefixerResult.css;
-            map = autoprefixerResult.map;
+            try {
+                const autoprefixerResult = await this.autoprefix(
+                    css,
+                    SassPath,
+                    targetCssUri,
+                    autoprefixerTarget
+                );
+                css = autoprefixerResult.css;
+                map = autoprefixerResult.map;
+            } catch (err) {
+                if (err instanceof BrowserslistError) {
+                    OutputWindow.Show(
+                        "Autoprefix error. Your changes have not been saved",
+                        [`Message: ${err.message}`],
+                        true,
+                        true
+                    );
+                    return false;
+                } else throw err;
+            }
         } else if (generateMap) css += `/*# sourceMappingURL=${path.basename(targetCssUri)}.map */`;
 
         promises.push(FileHelper.writeToOneFile(targetCssUri, css));
@@ -297,7 +335,12 @@ export class AppModel {
                         const options = this.getCssStyle(format.format),
                             cssMapUri = await this.generateCssAndMapUri(sassPath, format);
 
-                        await this.GenerateCssAndMap(sassPath, cssMapUri.css, cssMapUri.map, options);
+                        await this.GenerateCssAndMap(
+                            sassPath,
+                            cssMapUri.css,
+                            cssMapUri.map,
+                            options
+                        );
                     })
                 );
             })
@@ -331,7 +374,10 @@ export class AppModel {
                 workspaceRoot = vscode.workspace.workspaceFolders[0].uri.fsPath;
                 OutputWindow.Show(
                     "Warning: File is not in the workspace",
-                    ["The file will be saved relative to the first folder in your workspace", `Path: ${workspaceRoot}`],
+                    [
+                        "The file will be saved relative to the first folder in your workspace",
+                        `Path: ${workspaceRoot}`,
+                    ],
                     true
                 );
             } else {
@@ -341,7 +387,10 @@ export class AppModel {
             workspaceRoot = path.basename(vscode.window.activeTextEditor.document.fileName);
             OutputWindow.Show(
                 "Warning: There is no active workspace",
-                ["The file will be saved relative to file being processed", `Path: ${workspaceRoot}`],
+                [
+                    "The file will be saved relative to file being processed",
+                    `Path: ${workspaceRoot}`,
+                ],
                 true
             );
         }
@@ -430,7 +479,10 @@ export class AppModel {
             OutputWindow.Show(`Autoprefix ${warn.type || "error"}`, body, showOutputWindow);
         });
 
-        return { css: result.css, map: generateMap ? result.map.toString() : null };
+        return {
+            css: result.css,
+            map: generateMap ? result.map.toString() : null,
+        };
     }
 
     //#endregion Private
@@ -461,16 +513,20 @@ export class AppModel {
 
     //#region Fetch & check SASS functions
 
-    //#region Public
+    //#region Private
 
-    isSassFile(pathUrl: string, partialSass = false): boolean {
+    private isSassFile(pathUrl: string, partialSass = false): boolean {
         const filename = path.basename(pathUrl);
-        return (partialSass || !filename.startsWith("_")) && (filename.endsWith("sass") || filename.endsWith("scss"));
+        return (
+            (partialSass || !filename.startsWith("_")) &&
+            (filename.endsWith("sass") || filename.endsWith("scss"))
+        );
     }
 
-    //#endregion Public
-
-    //#region Private
+    private isPartialSassFile(pathUrl: string): boolean {
+        const filename = path.basename(pathUrl);
+        return filename.startsWith("_") && (filename.endsWith("sass") || filename.endsWith("scss"));
+    }
 
     private async isSassFileExcluded(sassPath: string): Promise<boolean> {
         const files = await this.getSassFiles("**/*.s[a|c]ss", true);
@@ -512,14 +568,20 @@ export class AppModel {
                                 if (err) {
                                     OutputWindow.Show(
                                         "Error whilst searching for files",
-                                        [`Workspace folder: ${folder.name}`, err.message, err.stack],
+                                        [
+                                            `Workspace folder: ${folder.name}`,
+                                            err.message,
+                                            err.stack,
+                                        ],
                                         true
                                     );
                                     resolve([]);
                                     return;
                                 }
                                 const filePaths = files
-                                    .filter((file) => this.isSassFile(file, isDebugging || isQueryPatternFixed))
+                                    .filter((file) =>
+                                        this.isSassFile(file, isDebugging || isQueryPatternFixed)
+                                    )
                                     .map((file) => path.join(folder.uri.fsPath, file));
                                 return resolve(filePaths || []);
                             }
@@ -545,7 +607,10 @@ export class AppModel {
             if (!vscode.window.activeTextEditor) {
                 OutputWindow.Show(
                     "No active file",
-                    ["There isn't an active editor window to process", "Click an open file so it can be checked"],
+                    [
+                        "There isn't an active editor window to process",
+                        "Click an open file so it can be checked",
+                    ],
                     true,
                     true
                 );
@@ -566,7 +631,9 @@ export class AppModel {
             } else if (await this.isSassFileExcluded(sassPath)) {
                 OutputWindow.Show(
                     "File excluded",
-                    ["The file is excluded based on your settings, please check your configuration"],
+                    [
+                        "The file is excluded based on your settings, please check your configuration",
+                    ],
                     true
                 );
             } else {
@@ -609,7 +676,9 @@ export class AppModel {
                 "--------------------",
                 "Current Include/Exclude Settings",
                 "--------------------",
-                `Include: [ ${Helper.getConfigSettings<string[] | null>("includeItems")?.join(", ") ?? "NULL"} ]`,
+                `Include: [ ${
+                    Helper.getConfigSettings<string[] | null>("includeItems")?.join(", ") ?? "NULL"
+                } ]`,
                 `Exclude: [ ${exclusionList.join(", ")} ]`
             );
 
@@ -627,7 +696,11 @@ export class AppModel {
                 })
             );
 
-            outputInfo.push("--------------------", "Included Partial SASS Files", "--------------------");
+            outputInfo.push(
+                "--------------------",
+                "Included Partial SASS Files",
+                "--------------------"
+            );
             await Promise.all(
                 (await this.getSassFiles("**/_*.s[a|c]ss", false, true)).map(async (file) => {
                     outputInfo.push(file);
@@ -637,9 +710,11 @@ export class AppModel {
             outputInfo.push("--------------------", "Excluded SASS Files", "--------------------");
             if (exclusionList.length > 0) {
                 await Promise.all(
-                    (await this.getSassFiles(`{${exclusionList.join(",")}}`, true, true)).map(async (file) => {
-                        outputInfo.push(file);
-                    })
+                    (await this.getSassFiles(`{${exclusionList.join(",")}}`, true, true)).map(
+                        async (file) => {
+                            outputInfo.push(file);
+                        }
+                    )
                 );
             } else {
                 outputInfo.push("NONE");
