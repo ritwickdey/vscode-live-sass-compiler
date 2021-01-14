@@ -2,7 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime with live browser reload.",
-    "version": "4.3.1",
+    "version": "4.3.2",
     "publisher": "glenn2223",
     "author": {
         "name": "Glenn Marks",
@@ -221,30 +221,29 @@
         "lint": "eslint -c .eslintrc.js --ext .ts ./src/"
     },
     "dependencies": {
-        "autoprefixer": "^10.1.0",
+        "autoprefixer": "^10.2.1",
         "glob": "^7.1.6",
-        "postcss": "^8.2.1",
-        "sass": "^1.30.0"
+        "postcss": "^8.2.4",
+        "sass": "^1.32.4"
     },
     "devDependencies": {
-        "@types/autoprefixer": "^9.7.2",
         "@types/glob": "^7.1.3",
         "@types/mocha": "^8.2.0",
-        "@types/node": "^14.14.14",
+        "@types/node": "^14.14.21",
         "@types/sass": "^1.16.0",
         "@types/vscode": "^1.50.0",
-        "@typescript-eslint/eslint-plugin": "^4.11.0",
-        "@typescript-eslint/parser": "^4.11.0",
-        "eslint": "^7.16.0",
+        "@typescript-eslint/eslint-plugin": "^4.13.0",
+        "@typescript-eslint/parser": "^4.13.0",
+        "eslint": "^7.17.0",
         "mocha": "^8.2.0",
-        "ts-loader": "^8.0.12",
+        "ts-loader": "^8.0.14",
         "typescript": "^4.1.3",
-        "vscode-test": "^1.4.0",
-        "webpack": "^5.11.0",
-        "webpack-cli": "^4.2.0"
+        "vscode-test": "^1.4.1",
+        "webpack": "^5.14.0",
+        "webpack-cli": "^4.3.1"
     },
     "announcement": {
-        "onVersion": "4.3.1",
-        "message": "SassCompiler v4.3.1: Bug fix for partial files not processing all files"
+        "onVersion": "4.3.2",
+        "message": "SassCompiler v4.3.2: Updates (including sass@1.32.4). Improved error handling (autoprefix & `Report an issue` command)"
     }
 }

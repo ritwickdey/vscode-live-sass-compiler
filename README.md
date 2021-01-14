@@ -42,11 +42,19 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 - Output options are now only `expanded` and `compressed`
 - Only works on VS Code v1.50 and newer
 
-### 4.3.1 - 2021-01-09
+
+### 4.3.2 - 2021-01-15
 
 ### Fixed
-- Fixed [#10](https://github.com/glenn2223/vscode-live-sass-compiler/issues/10): Partial SASS files not triggering compilation of all files
-- Correction of output when running `liveSass.command.debugInclusion` and the file is excluded
+- Now handle errors caused by incorrect autoprfixer browser queries
+- Corrected output for unhandled errors that get output when running "Report an issue" from the command `liveSass.command.createIssue`
+
+### Updates
+- `sass` from `1.30.0` to `1.32.4`
+  - Various changes, see their [changelog](https://github.com/sass/dart-sass/blob/master/CHANGELOG.md)
+- `autoprefixer` from `10.1.0` to `10.2.1`
+  - Fixed transition-property warnings (by @Sheraff).
+- Other, non-facing changes. See changelog
 
 *See the full changelog [here](CHANGELOG.md).*
 

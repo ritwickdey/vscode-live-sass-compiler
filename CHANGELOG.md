@@ -22,6 +22,25 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.3.2] - 2021-01-15
+
+### Fixed
+- Now handle errors caused by incorrect autoprfixer browser queries
+- Corrected output for unhandled errors that get output when running "Report an issue" from the command `liveSass.command.createIssue`
+
+### Updates
+- `sass` from `1.30.0` to `1.32.4`
+  - Various changes, see their [changelog](https://github.com/sass/dart-sass/blob/master/CHANGELOG.md)
+- `autoprefixer` from `10.1.0` to `10.2.1`
+  - Fixed transition-property warnings (by @Sheraff).
+- Other, non-facing changes
+  - `eslint` from `7.16.0` to `7.17.0`
+  - `ts-loader` from `8.0.12` to `8.0.14`
+  - `postcss` from `8.2.1` to `8.2.4`
+  - `vscode-test` from `1.4.0` to `1.4.1`
+  - `webpack` from `5.11.0` to `5.14.0`
+  - `webpack-cli` from `4.2.0` to `4.3.0`
+
 ## [4.3.1] - 2021-01-09
 
 ### Fixed
@@ -131,7 +150,8 @@ All notable changes to this project will be documented in this file.
 
 
 
-[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.1...HEAD
+[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.2...HEAD
+[4.3.2]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.1...v4.3.2
 [4.3.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.0...v4.3.1
 [4.3.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.2.0...v4.3.0
 [4.2.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.1.0...v4.2.0
