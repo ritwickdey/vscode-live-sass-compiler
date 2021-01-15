@@ -5,7 +5,10 @@ export class StatusBarUi {
 
     private static get statusBarItem() {
         if (!StatusBarUi._statusBarItem) {
-            StatusBarUi._statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 200);
+            StatusBarUi._statusBarItem = vscode.window.createStatusBarItem(
+                vscode.StatusBarAlignment.Right,
+                200
+            );
             this.statusBarItem.show();
         }
 
@@ -34,7 +37,10 @@ export class StatusBarUi {
     }
 
     static working(workingMsg = "Working on it..."): void {
-        this.customMessage(workingMsg, "In case it takes a long time, show output window and report.");
+        this.customMessage(
+            workingMsg,
+            "In case it takes a long time, show output window and report."
+        );
     }
 
     static customMessage(text: string, tooltip: string, iconName = "pulse"): void {
