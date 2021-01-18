@@ -531,8 +531,54 @@ export class AppModel {
     }
 
     private async isSassFileExcluded(sassPath: string): Promise<boolean> {
-        const files = await this.getSassFiles("**/*.s[a|c]ss", true);
-        return !files.some((e) => e === sassPath);
+        const excludeItems = Helper.getConfigSettings<string[]>("excludeList"),
+            includeItems = Helper.getConfigSettings<string[] | null>("includeItems");
+        let fileList: string[];
+
+        if (includeItems && includeItems.length) {
+            fileList = includeItems.concat("**/_*.s[a|c]ss");
+        } else fileList = excludeItems;
+
+        const fileCount = (
+            await Promise.all(
+                vscode.workspace.workspaceFolders.map(async (folder) => {
+                    return await new Promise((resolve: (value: number) => void) => {
+                        glob(
+                            `{${fileList.join(",")}}`,
+                            {
+                                ignore: includeItems && includeItems.length ? excludeItems : null,
+                                mark: true,
+                                cwd: folder.uri.fsPath,
+                            },
+                            (err, files: string[]) => {
+                                if (err) {
+                                    OutputWindow.Show(
+                                        "Error whilst searching for files",
+                                        [
+                                            `Workspace folder: ${folder.name}`,
+                                            err.message,
+                                            err.stack,
+                                        ],
+                                        true
+                                    );
+                                    resolve(0);
+                                    return;
+                                }
+                                resolve(
+                                    files.filter(
+                                        (x) => path.join(folder.uri.fsPath, x) === sassPath
+                                    ).length
+                                );
+                            }
+                        );
+                    });
+                })
+            )
+        ).reduce((a, b) => a + b, 0);
+
+        if (includeItems && includeItems.length) return fileCount === 0;
+
+        return fileCount > 0;
     }
 
     private async getSassFiles(
@@ -704,7 +750,7 @@ export class AppModel {
                 "--------------------"
             );
             await Promise.all(
-                (await this.getSassFiles("**/_*.s[a|c]ss", false, true)).map(async (file) => {
+                (await this.getSassFiles("**/_*.s[a|c]ss", true)).map(async (file) => {
                     outputInfo.push(file);
                 })
             );
