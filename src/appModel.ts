@@ -181,12 +181,7 @@ export class AppModel {
         try {
             const currentFile = vscode.window.activeTextEditor.document.fileName;
 
-            if (!this.isSassFile(currentFile, true)) return;
-
-            if (
-                !this.isPartialSassFile(currentFile) &&
-                (await this.isSassFileExcluded(currentFile))
-            )
+            if (!this.isSassFile(currentFile, true) || (await this.isSassFileExcluded(currentFile)))
                 return;
 
             OutputWindow.Show("Change detected...", [path.basename(currentFile)], showOutputWindow);
@@ -267,6 +262,7 @@ export class AppModel {
             try {
                 const autoprefixerResult = await this.autoprefix(
                     css,
+                    map,
                     SassPath,
                     targetCssUri,
                     autoprefixerTarget
@@ -284,11 +280,18 @@ export class AppModel {
                     return false;
                 } else throw err;
             }
-        } else if (generateMap) css += `/*# sourceMappingURL=${path.basename(targetCssUri)}.map */`;
+        } else if (generateMap) {
+            const pMap: { file: string } = JSON.parse(map);
+            pMap.file = `${path.basename(targetCssUri)}.map`;
+            map = JSON.stringify(pMap);
+        }
+
+        if (generateMap) {
+            css += `/*# sourceMappingURL=${path.basename(targetCssUri)}.map */`;
+            promises.push(FileHelper.writeToOneFile(mapFileUri, map));
+        }
 
         promises.push(FileHelper.writeToOneFile(targetCssUri, css));
-
-        if (generateMap) promises.push(FileHelper.writeToOneFile(mapFileUri, map));
 
         const fileResolvers = await Promise.all(promises);
 
@@ -444,6 +447,7 @@ export class AppModel {
      */
     private async autoprefix(
         css: string,
+        map: string,
         filePath: string,
         savePath: string,
         browsers: Array<string>
@@ -461,7 +465,10 @@ export class AppModel {
                 ? {
                       from: filePath,
                       to: savePath,
-                      map: { inline: false },
+                      map: {
+                          inline: false,
+                          prev: map,
+                      },
                   }
                 : {};
 
@@ -521,11 +528,6 @@ export class AppModel {
             (partialSass || !filename.startsWith("_")) &&
             (filename.endsWith("sass") || filename.endsWith("scss"))
         );
-    }
-
-    private isPartialSassFile(pathUrl: string): boolean {
-        const filename = path.basename(pathUrl);
-        return filename.startsWith("_") && (filename.endsWith("sass") || filename.endsWith("scss"));
     }
 
     private async isSassFileExcluded(sassPath: string): Promise<boolean> {

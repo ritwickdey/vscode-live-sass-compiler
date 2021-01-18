@@ -25,6 +25,7 @@ export class SassHelper {
         Object.assign(data, options);
 
         data.file = SassPath;
+        data.omitSourceMapUrl = true;
         /*data.logger = {
             warning: (warning: compiler.SassFlag) => {
                 OutputWindow.Show("Warning:", warning.formatted.split("\n"), showOutputWindow);
