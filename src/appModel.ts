@@ -181,12 +181,7 @@ export class AppModel {
         try {
             const currentFile = vscode.window.activeTextEditor.document.fileName;
 
-            if (!this.isSassFile(currentFile, true)) return;
-
-            if (
-                !this.isPartialSassFile(currentFile) &&
-                (await this.isSassFileExcluded(currentFile))
-            )
+            if (!this.isSassFile(currentFile, true) || (await this.isSassFileExcluded(currentFile)))
                 return;
 
             OutputWindow.Show("Change detected...", [path.basename(currentFile)], showOutputWindow);
@@ -267,6 +262,7 @@ export class AppModel {
             try {
                 const autoprefixerResult = await this.autoprefix(
                     css,
+                    map,
                     SassPath,
                     targetCssUri,
                     autoprefixerTarget
@@ -284,11 +280,18 @@ export class AppModel {
                     return false;
                 } else throw err;
             }
-        } else if (generateMap) css += `/*# sourceMappingURL=${path.basename(targetCssUri)}.map */`;
+        } else if (generateMap) {
+            const pMap: { file: string } = JSON.parse(map);
+            pMap.file = `${path.basename(targetCssUri)}.map`;
+            map = JSON.stringify(pMap);
+        }
+
+        if (generateMap) {
+            css += `/*# sourceMappingURL=${path.basename(targetCssUri)}.map */`;
+            promises.push(FileHelper.writeToOneFile(mapFileUri, map));
+        }
 
         promises.push(FileHelper.writeToOneFile(targetCssUri, css));
-
-        if (generateMap) promises.push(FileHelper.writeToOneFile(mapFileUri, map));
 
         const fileResolvers = await Promise.all(promises);
 
@@ -444,6 +447,7 @@ export class AppModel {
      */
     private async autoprefix(
         css: string,
+        map: string,
         filePath: string,
         savePath: string,
         browsers: Array<string>
@@ -461,7 +465,10 @@ export class AppModel {
                 ? {
                       from: filePath,
                       to: savePath,
-                      map: { inline: false },
+                      map: {
+                          inline: false,
+                          prev: map,
+                      },
                   }
                 : {};
 
@@ -523,14 +530,55 @@ export class AppModel {
         );
     }
 
-    private isPartialSassFile(pathUrl: string): boolean {
-        const filename = path.basename(pathUrl);
-        return filename.startsWith("_") && (filename.endsWith("sass") || filename.endsWith("scss"));
-    }
-
     private async isSassFileExcluded(sassPath: string): Promise<boolean> {
-        const files = await this.getSassFiles("**/*.s[a|c]ss", true);
-        return !files.some((e) => e === sassPath);
+        const excludeItems = Helper.getConfigSettings<string[]>("excludeList"),
+            includeItems = Helper.getConfigSettings<string[] | null>("includeItems");
+        let fileList: string[];
+
+        if (includeItems && includeItems.length) {
+            fileList = includeItems.concat("**/_*.s[a|c]ss");
+        } else fileList = excludeItems;
+
+        const fileCount = (
+            await Promise.all(
+                vscode.workspace.workspaceFolders.map(async (folder) => {
+                    return await new Promise((resolve: (value: number) => void) => {
+                        glob(
+                            `{${fileList.join(",")}}`,
+                            {
+                                ignore: includeItems && includeItems.length ? excludeItems : null,
+                                mark: true,
+                                cwd: folder.uri.fsPath,
+                            },
+                            (err, files: string[]) => {
+                                if (err) {
+                                    OutputWindow.Show(
+                                        "Error whilst searching for files",
+                                        [
+                                            `Workspace folder: ${folder.name}`,
+                                            err.message,
+                                            err.stack,
+                                        ],
+                                        true
+                                    );
+                                    resolve(0);
+                                    return;
+                                }
+                                resolve(
+                                    files.filter(
+                                        (x) => path.join(folder.uri.fsPath, x) === sassPath
+                                    ).length
+                                );
+                            }
+                        );
+                    });
+                })
+            )
+        ).reduce((a, b) => a + b, 0);
+
+        if (includeItems && includeItems.length) return fileCount === 0;
+
+        return fileCount > 0;
     }
 
     private async getSassFiles(
@@ -702,7 +750,7 @@ export class AppModel {
                 "--------------------"
             );
             await Promise.all(
-                (await this.getSassFiles("**/_*.s[a|c]ss", false, true)).map(async (file) => {
+                (await this.getSassFiles("**/_*.s[a|c]ss", true)).map(async (file) => {
                     outputInfo.push(file);
                 })
             );
