@@ -22,6 +22,15 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.3.3] - 2021-01-18
+
+### Fixed
+- Fixed [#15](https://github.com/glenn2223/vscode-live-sass-compiler/issues/15): No longer outputs absolute path in map file and map link in css output
+- Reinstated feature of partial files being checked for exclusion
+- Autoprefixer map lines now relate to actual SASS files rather than the css file generated
+- When there's an include list, a non partial file that's not "included" would still be processed
+- Now gets the correct list of included partial files
+
 ## [4.3.2] - 2021-01-15
 
 ### Fixed
@@ -150,7 +159,8 @@ All notable changes to this project will be documented in this file.
 
 
 
-[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.2...HEAD
+[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.3...HEAD
+[4.3.3]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.2...v4.3.3
 [4.3.2]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.1...v4.3.2
 [4.3.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.0...v4.3.1
 [4.3.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.2.0...v4.3.0

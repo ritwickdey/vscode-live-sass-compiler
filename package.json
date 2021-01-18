@@ -2,7 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime with live browser reload.",
-    "version": "4.3.2",
+    "version": "4.3.3",
     "publisher": "glenn2223",
     "author": {
         "name": "Glenn Marks",
@@ -243,7 +243,7 @@
         "webpack-cli": "^4.3.1"
     },
     "announcement": {
-        "onVersion": "4.3.2",
-        "message": "SassCompiler v4.3.2: Updates (including sass@1.32.4). Improved error handling (autoprefix & `Report an issue` command)"
+        "onVersion": "4.3.3",
+        "message": "SassCompiler v4.3.3: General bug squashing"
     }
 }
