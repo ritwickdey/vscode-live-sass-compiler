@@ -465,22 +465,17 @@ export class AppModel {
                 // @ts-ignore
                 autoprefixer({
                     overrideBrowserslist: browsers,
-                    grid: "autoplace",
                 })
             );
 
-        const result = 
-            await prefixer.process(
-                css, 
-                {
-                    from: filePath,
-                    to: savePath,
-                    map: {
-                        inline: false,
-                        prev: map,
-                    },
-                }
-            );
+        const result = await prefixer.process(css, {
+            from: filePath,
+            to: savePath,
+            map: {
+                inline: false,
+                prev: map,
+            },
+        });
 
         result.warnings().forEach((warn) => {
             const body: string[] = [];
