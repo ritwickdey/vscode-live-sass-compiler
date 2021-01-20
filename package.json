@@ -224,7 +224,7 @@
         "autoprefixer": "^10.2.1",
         "glob": "^7.1.6",
         "postcss": "^8.2.4",
-        "sass": "^1.32.4"
+        "sass": "^1.32.5"
     },
     "devDependencies": {
         "@types/glob": "^7.1.3",
