@@ -25,6 +25,13 @@ export class AppModel {
 
         this._logger = new ErrorLogger(workplaceState);
 
+        if (this.isWatching)
+            OutputWindow.Show(
+                "Watching...",
+                null,
+                Helper.getConfigSettings<boolean>("showOutputWindow")
+            );
+
         StatusBarUi.init(this.isWatching);
     }
 
