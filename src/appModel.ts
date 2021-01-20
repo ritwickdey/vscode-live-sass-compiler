@@ -467,24 +467,25 @@ export class AppModel {
                     overrideBrowserslist: browsers,
                     grid: "autoplace",
                 })
-            ),
-            options: ProcessOptions = generateMap
-                ? {
-                      from: filePath,
-                      to: savePath,
-                      map: {
-                          inline: false,
-                          prev: map,
-                      },
-                  }
-                : {};
+            );
 
-        const result = await prefixer.process(css, options);
+        const result = 
+            await prefixer.process(
+                css, 
+                {
+                    from: filePath,
+                    to: savePath,
+                    map: {
+                        inline: false,
+                        prev: map,
+                    },
+                }
+            );
 
         result.warnings().forEach((warn) => {
             const body: string[] = [];
 
-            if (warn.node.source?.input.file !== null) {
+            if (warn.node.source?.input.file) {
                 body.push(warn.node.source.input.file + `:${warn.line}:${warn.column}`);
             }
 
