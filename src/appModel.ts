@@ -10,7 +10,6 @@ import { Helper, IFormat } from "./helper";
 import { ErrorLogger, OutputWindow, WindowPopout } from "./VscodeExtensions";
 import { SassHelper } from "./SassCompileHelper";
 import { StatusBarUi } from "./StatusbarUi";
-import { ProcessOptions } from "postcss";
 
 import postcss from "postcss";
 

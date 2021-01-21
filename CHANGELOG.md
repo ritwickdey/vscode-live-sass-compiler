@@ -22,6 +22,19 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.3.4] - 2021-01-21
+
+### Fixed
+- Fixed [#18](https://github.com/glenn2223/vscode-live-sass-compiler/issues/18): On launch there is no output, nor any `Live SASS Compile` ouput selection, when the setting `watchOnLaunch` is `true`
+- Fixed: Autoprefixer warning saying `undefined` for file path when `generateMap` is `false`
+- Fixed: Autoprefixer `grid: "autoplace"` was forced
+  - If [this feature](https://github.com/postcss/autoprefixer#does-autoprefixer-polyfill-grid-layout-for-ie) is wanted then add `/* autoprefixer grid: autoplace */` to the start of your file
+
+### Updates
+- `sass` from `1.32.4` to `1.32.5`
+  - **Potentially breaking bug fix:** When using @for with numbers that have units, the iteration variable now matches the unit of the initial number. This matches the behavior of Ruby Sass and LibSass.
+  - Others: see [sass release notes](https://github.com/sass/dart-sass/releases/tag/1.32.5)
+
 ## [4.3.3] - 2021-01-18
 
 ### Fixed
@@ -159,7 +172,8 @@ All notable changes to this project will be documented in this file.
 
 
 
-[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.3...HEAD
+[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.4...HEAD
+[4.3.4]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.3...v4.3.4
 [4.3.3]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.2...v4.3.3
 [4.3.2]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.1...v4.3.2
 [4.3.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.0...v4.3.1
