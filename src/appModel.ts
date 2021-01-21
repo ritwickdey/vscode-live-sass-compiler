@@ -10,7 +10,6 @@ import { Helper, IFormat } from "./helper";
 import { ErrorLogger, OutputWindow, WindowPopout } from "./VscodeExtensions";
 import { SassHelper } from "./SassCompileHelper";
 import { StatusBarUi } from "./StatusbarUi";
-import { ProcessOptions } from "postcss";
 
 import postcss from "postcss";
 
@@ -24,6 +23,13 @@ export class AppModel {
         this.isWatching = Helper.getConfigSettings<boolean>("watchOnLaunch");
 
         this._logger = new ErrorLogger(workplaceState);
+
+        if (this.isWatching)
+            OutputWindow.Show(
+                "Watching...",
+                null,
+                Helper.getConfigSettings<boolean>("showOutputWindow")
+            );
 
         StatusBarUi.init(this.isWatching);
     }
@@ -458,26 +464,22 @@ export class AppModel {
                 // @ts-ignore
                 autoprefixer({
                     overrideBrowserslist: browsers,
-                    grid: "autoplace",
                 })
-            ),
-            options: ProcessOptions = generateMap
-                ? {
-                      from: filePath,
-                      to: savePath,
-                      map: {
-                          inline: false,
-                          prev: map,
-                      },
-                  }
-                : {};
+            );
 
-        const result = await prefixer.process(css, options);
+        const result = await prefixer.process(css, {
+            from: filePath,
+            to: savePath,
+            map: {
+                inline: false,
+                prev: map,
+            },
+        });
 
         result.warnings().forEach((warn) => {
             const body: string[] = [];
 
-            if (warn.node.source?.input.file !== null) {
+            if (warn.node.source?.input.file) {
                 body.push(warn.node.source.input.file + `:${warn.line}:${warn.column}`);
             }
 

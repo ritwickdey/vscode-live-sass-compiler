@@ -42,14 +42,18 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 - Output options are now only `expanded` and `compressed`
 - Only works on VS Code v1.50 and newer
 
-### 4.3.3 - 2021-01-18
+### 4.3.4 - 2021-01-21
 
 ### Fixed
-- Fixed [#15](https://github.com/glenn2223/vscode-live-sass-compiler/issues/15): No longer outputs absolute path in map file and map link in css output
-- Reinstated feature of partial files being checked for exclusion
-- Autoprefixer map lines now relate to actual SASS files rather than the css file generated
-- When there's an include list, a non partial file that's not "included" would still be processed
-- Now gets the correct list of included partial files
+- Fixed [#18](https://github.com/glenn2223/vscode-live-sass-compiler/issues/18): On launch there is no output, nor any `Live SASS Compile` ouput selection, when the setting `watchOnLaunch` is `true`
+- Fixed: Autoprefixer warning saying `undefined` for file path when `generateMap` is `false`
+- Fixed: Autoprefixer `grid: "autoplace"` was forced
+  - If [this feature](https://github.com/postcss/autoprefixer#does-autoprefixer-polyfill-grid-layout-for-ie) is wanted then add `/* autoprefixer grid: autoplace */` to the start of your file
+
+### Updates
+- `sass` from `1.32.4` to `1.32.5`
+  - **Potentially breaking bug fix:** When using @for with numbers that have units, the iteration variable now matches the unit of the initial number. This matches the behavior of Ruby Sass and LibSass.
+  - Others: see [sass release notes](https://github.com/sass/dart-sass/releases/tag/1.32.5)
 
 *See the full changelog [here](CHANGELOG.md).*
 
