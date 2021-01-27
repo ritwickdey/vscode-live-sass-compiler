@@ -12,7 +12,7 @@ export class ErrorLogger {
         this.ClearLogs();
     }
 
-    async LogIssueWithAlert(Message: string, DetailedLogInfo: any): Promise<void> {
+    async LogIssueWithAlert(Message: string, DetailedLogInfo: unknown): Promise<void> {
         WindowPopout.Alert(`Live Sass Compiler: ${Message}`);
 
         this.logs.push(new LogEvent(DetailedLogInfo));
@@ -84,16 +84,16 @@ export class ErrorLogger {
         return this._workplaceState.update(_errorLogPath, {});
     }
 
-    static PrepErrorForLogging(Err: Error): any {
+    static PrepErrorForLogging(Err: Error): unknown {
         return JSON.parse(JSON.stringify(Err, Object.getOwnPropertyNames(Err)));
     }
 }
 
 class LogEvent {
     public createdAt: Date;
-    public event: any;
+    public event: unknown;
 
-    constructor(event: any) {
+    constructor(event: unknown) {
         this.createdAt = new Date();
         this.event = event;
     }
