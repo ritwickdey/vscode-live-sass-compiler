@@ -28,14 +28,14 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             ),
             disposableOneTimeCompileSass = vscode.commands.registerCommand(
                 "liveSass.command.oneTimeCompileSass",
-                () => {
-                    appModel.compileAllFiles();
+                async () => {
+                    await appModel.compileAllFiles();
                 }
             ),
             disposableCompileCurrentSass = vscode.commands.registerCommand(
                 "liveSass.command.compileCurrentSass",
-                () => {
-                    appModel.compileCurrentFile();
+                async () => {
+                    await appModel.compileCurrentFile();
                 }
             ),
             disposableOpenOutputWindow = vscode.commands.registerCommand(
@@ -59,11 +59,11 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             disposableDebugFileList = vscode.commands.registerCommand(
                 "liveSass.command.debugFileList",
                 async () => {
-                    appModel.debugFileList();
+                    await appModel.debugFileList();
                 }
             ),
-            disposableOnDidSave = vscode.workspace.onDidSaveTextDocument(() => {
-                appModel.compileOnSave();
+            disposableOnDidSave = vscode.workspace.onDidSaveTextDocument(async () => {
+                await appModel.compileOnSave();
             });
 
         context.subscriptions.push(
