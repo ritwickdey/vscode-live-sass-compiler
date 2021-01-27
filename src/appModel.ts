@@ -541,46 +541,33 @@ export class AppModel {
             fileList = includeItems.concat("**/_*.s[a|c]ss");
         } else fileList = excludeItems;
 
-        const fileCount = (
+        const fileFound = (
             await Promise.all(
-                vscode.workspace.workspaceFolders.map(async (folder) => {
-                    return await new Promise((resolve: (value: number) => void) => {
-                        glob(
-                            `{${fileList.join(",")}}`,
-                            {
-                                ignore: includeItems && includeItems.length ? excludeItems : null,
-                                mark: true,
-                                cwd: folder.uri.fsPath,
-                            },
-                            (err, files: string[]) => {
-                                if (err) {
-                                    OutputWindow.Show(
-                                        "Error whilst searching for files",
-                                        [
-                                            `Workspace folder: ${folder.name}`,
-                                            err.message,
-                                            err.stack,
-                                        ],
-                                        true
-                                    );
-                                    resolve(0);
-                                    return;
-                                }
-                                resolve(
-                                    files.filter(
-                                        (x) => path.join(folder.uri.fsPath, x) === sassPath
-                                    ).length
+                vscode.workspace.workspaceFolders.map((folder) => {
+                    return glob(
+                        `{${fileList.join(",")}}`,
+                        {
+                            ignore: includeItems && includeItems.length ? excludeItems : null,
+                            mark: true,
+                            cwd: folder.uri.fsPath,
+                        },
+                        (err) => {
+                            if (err) {
+                                OutputWindow.Show(
+                                    "Error whilst searching for files",
+                                    [`Workspace folder: ${folder.name}`, err.message, err.stack],
+                                    true
                                 );
                             }
-                        );
-                    });
+                        }
+                    ).minimatch.match(sassPath);
                 })
             )
-        ).reduce((a, b) => a + b, 0);
+        ).includes(true);
 
-        if (includeItems && includeItems.length) return fileCount === 0;
+        if (includeItems && includeItems.length) return fileFound === false;
 
-        return fileCount > 0;
+        return fileFound;
     }
 
     private async getSassFiles(
