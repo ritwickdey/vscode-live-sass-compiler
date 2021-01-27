@@ -2,6 +2,7 @@
 
 'use strict';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path');
 
 /**@type {import('webpack').Configuration}*/
@@ -19,7 +20,9 @@ const config = {
   devtool: 'source-map',
   externals: {
     vscode: 'commonjs vscode', // the vscode-module is created on-the-fly and must be excluded. Add other modules that cannot be webpack'ed, 📖 -> https://webpack.js.org/configuration/externals/
-    fsevents: "require('fsevents')"
+    fsevents: "require('fsevents')",
+    autoprefixer: "node_modules/autoprefixer/lib/autoprefixer.js",
+    browserslist: "node_modules/autoprefixer/node_modules/browserslist/index.js"
   },
   resolve: {
     // support reading TypeScript and JavaScript files, 📖 -> https://github.com/TypeStrong/ts-loader

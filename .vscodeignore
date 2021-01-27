@@ -19,7 +19,3 @@ _config.yml
 _site
 Gemfile
 Gemfile.lock
-
-!node_modules/autoprefixer/lib/autoprefixer.js
-!node_modules/autoprefixer/node_modules/browserslist/index.js
-!node_modules/autoprefixer/node_modules/browserslist/node.js
