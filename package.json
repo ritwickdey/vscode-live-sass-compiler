@@ -218,7 +218,7 @@
         "webpack": "webpack --mode development",
         "webpack-dev": "webpack --mode development --watch",
 		"pretest": "tsc -p ./",
-        "test": "node ./out/src/test/index.js",
+        "test": "node ./out/src/test/test/index.js",
         "lint": "eslint -c .eslintrc.js --ext .ts ./src/"
     },
     "dependencies": {

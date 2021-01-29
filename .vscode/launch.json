@@ -20,7 +20,7 @@
             "runtimeExecutable": "${execPath}",
             "args": [
                 "--extensionDevelopmentPath=${workspaceRoot}",
-                "--extensionTestsPath=${workspaceRoot}/out/test/index"
+                "--extensionTestsPath=${workspaceRoot}/out/test/test/index"
             ],
             "stopOnEntry": false,
             "sourceMaps": true,

@@ -31,4 +31,27 @@ suite("Extension Tests", function () {
         });
         assert.strictEqual(foundLiveServerCommands.length, COMMANDS.length);
     });
+    
+    test("Save should ouput default files", async () => {
+        const doc = await vscode.workspace.openTextDocument('./assets/css/style.css');
+
+        if (!await doc.save())
+            assert.ok(false, 'Save failed');
+
+        setTimeout(
+            async () => {
+                const docs = await vscode.workspace.findFiles('./assets/css/**');
+
+                assert.strictEqual(
+                    docs,
+                    [
+                        vscode.Uri.parse('./assets/css/style.scss'),
+                        vscode.Uri.parse('./assets/css/style.css'),
+                        vscode.Uri.parse('./assets/css/style.css.map')
+                    ]
+                );
+            },
+            1000
+        );
+    });
 });
