@@ -27,8 +27,6 @@ install:
   - export CI=true
   - npm i -g vsce
   - npm install
-  - npm run pretest
-  - npm run test
 
 script:
   - vsce package -o LiveSassCompiler-$TRAVIS_TAG-$TRAVIS_OS_NAME.vsix
