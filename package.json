@@ -217,8 +217,8 @@
         "vscode:prepublish": "webpack --mode production",
         "webpack": "webpack --mode development",
         "webpack-dev": "webpack --mode development --watch",
-		"pretest": "tsc -p ./",
-        "test": "node ./out/src/test/test/index.js",
+		"pretest": "npm run webpack & tsc -p ./src/test/",
+        "test": "node ./out/test/runTest.js",
         "lint": "eslint -c .eslintrc.js --ext .ts ./src/"
     },
     "dependencies": {

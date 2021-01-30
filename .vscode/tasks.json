@@ -28,20 +28,6 @@
                 "showReuseMessage": true,
                 "clear": false
             }
-        },
-        {
-            "label": "pack tests",
-            "type": "npm",
-            "script": "pretest",
-            // show the output window only if unrecognized errors occur.
-            "presentation": {
-                "echo": true,
-                "reveal": "silent",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            }
         }
     ]
 }

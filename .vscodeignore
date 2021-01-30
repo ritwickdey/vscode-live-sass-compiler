@@ -2,6 +2,7 @@ _layouts/**
 _site
 _site/**
 .vscode/**
+.vscode-test/**
 assets/**
 dist/**
 images/Screenshot/**

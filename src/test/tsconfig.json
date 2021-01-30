@@ -2,20 +2,19 @@
     "compilerOptions": {
         "module": "commonjs",
         "target": "es6",
-        "outDir": "out",
+        "outDir": "../../out/test",
         "lib": [
             "es6",
             "es5"
         ],
         "sourceMap": true,
-        "rootDir": "./",
-        "esModuleInterop": true,
+        "rootDir": "./"
     },
    
+    "include": ["./*"],
     "exclude": [
         "node_modules",
         "lib",
-        "_site",
-        "./src/test/**/*"
+        "_site"
     ]
 }
