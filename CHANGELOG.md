@@ -16,18 +16,26 @@ Types of changes
 - Fixed for any bug fixes.
 - Security in case of vulnerabilities.
 - Breaking changes for break in new revision
-- Other for notable changes that do not 
+- Other for noteable changes that do not 
  -->
 
 # Changelog
 All notable changes to this project will be documented in this file.
+
+## [4.4.1] - 2021-01-31
+
+### Fixed
+- Fixed: `forceBaseDirectory` has full support in multi-root workspaces
+- Fixed: the path in `forceBaseDirectory` is now checked to see if it exists. If not a user friendly message is displayed in the output
+- Fixed: an error when checking files would still compile what it could. This would hide the error message from the user
+- Incorrect patern matches in settings show user friendly messages rather than "does not match pattern"
 
 ## [4.4.0] - 2021-01-31
 
 ### Added
 - New setting: `liveSassCompile.settings.forceBaseDirectory` #25
   - A new setting that can help performance in large projects with few Sass/Scss files.
-  - **Note:** multi-root workspace with different folder structures can not use this efficiently (See [setting note](https://github.com/glenn2223/vscode-live-sass-compiler/blob/1d043a0541008dfa2b53c492f6a76dce4e3d9909/docs/settings.md) & [VS Code Feature Request](https://github.com/microsoft/vscode/issues/115482) (:+1: it) )
+  - ~~**Note:** multi-root workspace with different folder structures can not use this efficiently (See [setting note](https://github.com/glenn2223/vscode-live-sass-compiler/blob/1d043a0541008dfa2b53c492f6a76dce4e3d9909/docs/settings.md) & [VS Code Feature Request](https://github.com/microsoft/vscode/issues/115482) (:+1: it) )~~ Fixed in v4.4.1
 - New feature: The status bar `Error` and `Success` messages can be clicked which will open the Output Window #25
 
 ### Updates
@@ -194,7 +202,8 @@ All notable changes to this project will be documented in this file.
 
 
 
-[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.4...HEAD
+[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.4.1...HEAD
+[4.4.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.4.0...v4.4.1
 [4.4.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.4...v4.4.0
 [4.3.4]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.3...v4.3.4
 [4.3.3]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.2...v4.3.3
