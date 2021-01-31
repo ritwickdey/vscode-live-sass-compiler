@@ -9,11 +9,11 @@ export interface IFormat {
 }
 
 export class Helper {
-    private static get configSettings() {
-        return vscode.workspace.getConfiguration("liveSassCompile.settings");
+    private static configSettings(folder?: vscode.WorkspaceFolder) {
+        return vscode.workspace.getConfiguration("liveSassCompile.settings", folder);
     }
 
-    static getConfigSettings<T>(val: string): T {
-        return this.configSettings.get(val) as T;
+    static getConfigSettings<T>(val: string, folder?: vscode.WorkspaceFolder): T {
+        return this.configSettings(folder).get(val) as T;
     }
 }

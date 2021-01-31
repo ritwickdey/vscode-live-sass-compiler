@@ -2,7 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime with live browser reload.",
-    "version": "4.4.0",
+    "version": "4.4.1",
     "publisher": "glenn2223",
     "author": {
         "name": "Glenn Marks",
@@ -76,7 +76,7 @@
             }
         ],
         "configuration": {
-            "title": "Live Sass Compile Config",
+            "title": "Live Sass Compiler",
             "properties": {
                 "liveSassCompile.settings.formats": {
                     "type": "array",
@@ -118,6 +118,7 @@
                                     "null"
                                 ],
                                 "pattern": "^[\\~|/|\\\\]",
+                                "patternErrorMessage": "Must start with any of:\n`/` or `\\` (for workspace root)\n`~/` or `~\\` for relative to the file being processed",
                                 "default": null
                             },
                             "savePathSegmentKeys": {
@@ -135,6 +136,7 @@
                                     "null"
                                 ],
                                 "pattern": "[^\\/]",
+                                "patternErrorMessage": "Must not contain any path seperators (`/` or `\\`)",
                                 "default": null
                             }
                         },
@@ -202,9 +204,11 @@
                         "string",
                         "null"
                     ],
+                    "scope": "resource",
                     "default": null,
                     "pattern": "^[^\\/].+[\\/]$",
-                    "description": "Defines a subdirectory to search from (no directory outside of this will be search).\nNote: Must not start with a slash but must end with one"
+                    "patternErrorMessage": "Can't start with a path seperator (`/` or `\\`) and must end with one",
+                    "description": "Defines a subdirectory to search from (no directory outside of this will be search)"
                 }
             }
         }
@@ -253,7 +257,7 @@
         "webpack-cli": "^4.4.0"
     },
     "announcement": {
-        "onVersion": "4.4.0",
-        "message": "SassCompiler v4.4.0: New feature, updates & bug fixes"
+        "onVersion": "4.4.1",
+        "message": "SassCompiler v4.4.1: `forceBaseDirectory` now has better support in multi-root workspaces"
     }
 }

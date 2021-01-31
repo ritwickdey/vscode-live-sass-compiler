@@ -232,7 +232,12 @@ No Sass/Scss files outside of this folder will be watched/compiled when you save
 * _**Default:** `null`_
 * _**Note:** No leading slash but MUST have ending slash_
   * _Example: `src/style/`_
-* _**Note for multi-root workspaces:** This setting can be applied at workspace level however it can not vary from root to root. (opened [feature request](https://github.com/microsoft/vscode/issues/115482) on VS Code source)_
+* _**Note for multi-root workspaces:** This setting can be applied at workspace level. However, it can be overridden in each root using that root's specific setting file_  
+  * _Example: workspace setting is `src/Sass/` and root setting is `Assets/Style/`. In this case `Assets/Style/` would be used_
+
+>**:Warning: It is your responsibility to ensure the path exists and is correct.**  
+If it's not found it will output an error  
+If the path is wrong then nothing will be found and then compiled
 
 </details>
 
