@@ -535,8 +535,7 @@ export class AppModel {
 
     private async isSassFileExcluded(sassPath: string): Promise<boolean> {
         const excludeItems = Helper.getConfigSettings<string[]>("excludeList"),
-            includeItems = Helper.getConfigSettings<string[] | null>("includeItems"),
-            forceBaseDirectory = Helper.getConfigSettings<string | null>("forceBaseDirectory");
+            includeItems = Helper.getConfigSettings<string[] | null>("includeItems");
         let fileList = ["**/*.s[a|c]ss"];
 
         if (includeItems && includeItems.length) {
@@ -546,6 +545,10 @@ export class AppModel {
         const fileFound = (
             await Promise.all(
                 vscode.workspace.workspaceFolders.map(async (folder) => {
+                    const forceBaseDirectory = Helper.getConfigSettings<string | null>(
+                        "forceBaseDirectory",
+                        folder
+                    );
                     let basePath = folder.uri.fsPath;
 
                     if (forceBaseDirectory) basePath = path.resolve(basePath, forceBaseDirectory);
