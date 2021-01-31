@@ -56,7 +56,7 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 - Various dev-dependancy updates
 
 ### Fixed
-- Part fix: Slwo file handling #22. Full fix in v5 as some small breaking changes
+- Part fix: Slow file handling #22. Full fix in v5 as some small breaking changes
   - The glob pattern matcher is causing bottlenecks, reducing load calls with small patch. However moving away from glob is the end-game (which will be happening in v5)
 - Fix: `compileCurrentSass` shows wrong message on fail
   - When you run `compileCurrentSass` and it would fail (for whatever reason) it would cause the output to show `Success` rather than `Error` (just the output was wrong, nothing else)
