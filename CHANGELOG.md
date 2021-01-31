@@ -22,6 +22,28 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.4.0] - 2021-01-31
+
+### Added
+- New setting: `liveSassCompile.settings.forceBaseDirectory` #25
+  - A new setting that can help performance in large projects with few Sass/Scss files.
+  - **Note:** multi-root workspace with different folder structures can not use this efficiently (See [setting note](https://github.com/glenn2223/vscode-live-sass-compiler/blob/1d043a0541008dfa2b53c492f6a76dce4e3d9909/docs/settings.md) & [VS Code Feature Request](https://github.com/microsoft/vscode/issues/115482) (:+1: it) )
+- New feature: The status bar `Error` and `Success` messages can be clicked which will open the Output Window #25
+
+### Updates
+- `autoprefixer` from `10.2.1` to `10.2.4`
+  - Small bug fixes (nothing user facing)
+- Various dev-dependancy updates
+
+### Fixed
+- Part fix: Slwo file handling #22. Full fix in v5 as some small breaking changes
+  - The glob pattern matcher is causing bottlenecks, reducing load calls with small patch. However moving away from glob is the end-game (which will be happening in v5)
+- Fix: `compileCurrentSass` shows wrong message on fail
+  - When you run `compileCurrentSass` and it would fail (for whatever reason) it would cause the output to show `Success` rather than `Error` (just the output was wrong, nothing else)
+- Fix: Status bar inconsistancies during display changes
+  - When command bar is changing between visuals it was possible to cause the status and the shown message to be out of sync (due to clicks while setTimeouts are pending), the setup also meant you couldn't sync them again (unless you did a manual compile command)
+
+
 ## [4.3.4] - 2021-01-21
 
 ### Fixed
@@ -173,6 +195,7 @@ All notable changes to this project will be documented in this file.
 
 
 [Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.4...HEAD
+[4.4.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.4...v4.4.0
 [4.3.4]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.3...v4.3.4
 [4.3.3]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.2...v4.3.3
 [4.3.2]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.1...v4.3.2
