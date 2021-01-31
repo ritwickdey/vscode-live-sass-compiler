@@ -10,10 +10,10 @@ import { SassHelper } from "./SassCompileHelper";
 import { StatusBarUi } from "./StatusbarUi";
 
 import autoprefixer from "autoprefixer";
+import BrowserslistError from "browserslist/error";
+import fs from "fs";
 import glob from "glob";
 import postcss from "postcss";
-
-import BrowserslistError = require("browserslist/error");
 
 export class AppModel {
     private isWatching: boolean;
@@ -542,53 +542,69 @@ export class AppModel {
             fileList = includeItems.concat("**/_*.s[a|c]ss");
         }
 
-        const fileFound = (
-            await Promise.all(
-                vscode.workspace.workspaceFolders.map(async (folder) => {
-                    const forceBaseDirectory = Helper.getConfigSettings<string | null>(
-                        "forceBaseDirectory",
-                        folder
-                    );
-                    let basePath = folder.uri.fsPath;
+        const fileResult = await Promise.all(
+            vscode.workspace.workspaceFolders.map(async (folder) => {
+                const forceBaseDirectory = Helper.getConfigSettings<string | null>(
+                    "forceBaseDirectory",
+                    folder
+                );
+                let basePath = folder.uri.fsPath;
 
-                    if (forceBaseDirectory) basePath = path.resolve(basePath, forceBaseDirectory);
+                if (forceBaseDirectory) {
+                    basePath = path.resolve(basePath, forceBaseDirectory);
 
-                    return await new Promise((resolve) => {
-                        glob(
-                            `{${fileList.join(",")},}`,
-                            {
-                                ignore: excludeItems,
-                                mark: true,
-                                cwd: basePath,
-                            },
-                            (err, files) => {
-                                if (err) {
-                                    OutputWindow.Show(
-                                        "Error whilst searching for files",
-                                        [
-                                            `Workspace folder: ${folder.name}`,
-                                            err.message,
-                                            err.stack,
-                                        ],
-                                        true
-                                    );
-
-                                    return resolve(false);
-                                }
-
-                                resolve(
-                                    files.indexOf(
-                                        path.relative(basePath, sassPath).split(path.sep).join("/")
-                                    ) >= 0
-                                );
-                            }
+                    if (!fs.existsSync(basePath)) {
+                        OutputWindow.Show(
+                            "Error with your `forceBaseDirectory` setting",
+                            [
+                                `Can not find path: ${basePath}`,
+                                `Setting: "${forceBaseDirectory}"`,
+                                `Workspace folder: ${folder.name}`,
+                            ],
+                            true
                         );
-                    });
-                })
-            )
-        ).includes(true);
 
-        return fileFound == false;
+                        return null;
+                    }
+                }
+
+                return await new Promise<boolean | null>((resolve) => {
+                    glob(
+                        `{${fileList.join(",")},}`,
+                        {
+                            ignore: excludeItems,
+                            mark: true,
+                            cwd: basePath,
+                        },
+                        (err, files) => {
+                            if (err) {
+                                OutputWindow.Show(
+                                    "Error whilst searching for files",
+                                    [`Workspace folder: ${folder.name}`, err.message, err.stack],
+                                    true
+                                );
+
+                                return resolve(null);
+                            }
+
+                            resolve(
+                                files.indexOf(
+                                    path.relative(basePath, sassPath).split(path.sep).join("/")
+                                ) >= 0
+                            );
+                        }
+                    );
+                });
+            })
+        );
+
+        // There was an error so stop processing
+        if (fileResult.indexOf(null) >= 0) {
+            return true;
+        }
+
+        // If includes true then file hasn't been excluded (return false result)
+        return fileResult.includes(true) == false;
     }
 
     private async getSassFiles(
@@ -599,8 +615,7 @@ export class AppModel {
         const excludedList = isDebugging
                 ? ["**/node_modules/**", ".vscode/**"]
                 : Helper.getConfigSettings<string[]>("excludeList"),
-            includeItems = Helper.getConfigSettings<string[] | null>("includeItems"),
-            forceBaseDirectory = Helper.getConfigSettings<string | null>("forceBaseDirectory");
+            includeItems = Helper.getConfigSettings<string[] | null>("includeItems");
 
         if (!isQueryPatternFixed && includeItems && includeItems.length) {
             if (includeItems.length === 1) {
@@ -614,9 +629,29 @@ export class AppModel {
 
         await Promise.all(
             vscode.workspace.workspaceFolders.map(async (folder) => {
+                const forceBaseDirectory = Helper.getConfigSettings<string | null>(
+                    "forceBaseDirectory",
+                    folder
+                );
                 let basePath = folder.uri.fsPath;
 
-                if (forceBaseDirectory) basePath = path.resolve(basePath, forceBaseDirectory);
+                if (forceBaseDirectory) {
+                    basePath = path.resolve(basePath, forceBaseDirectory);
+
+                    if (!fs.existsSync(basePath)) {
+                        OutputWindow.Show(
+                            "Error with your `forceBaseDirectory` setting",
+                            [
+                                `Can not find path: ${basePath}`,
+                                `Setting: "${forceBaseDirectory}"`,
+                                `Workspace folder: ${folder.name}`,
+                            ],
+                            true
+                        );
+
+                        return [];
+                    }
+                }
 
                 (
                     await new Promise((resolve: (value: string[]) => void) => {
@@ -638,8 +673,8 @@ export class AppModel {
                                         ],
                                         true
                                     );
-                                    resolve([]);
-                                    return;
+
+                                    return resolve([]);
                                 }
                                 const filePaths = files
                                     .filter((file) =>
