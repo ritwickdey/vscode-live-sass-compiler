@@ -12,6 +12,7 @@ module.exports = {
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended", // Uses the recommended rules from the @typescript-eslint/eslint-plugin
     ],
+    ignorePatterns: ["node_modules", "out"],
     rules: {
         // enable additional rules
         semi: ["error", "always"],

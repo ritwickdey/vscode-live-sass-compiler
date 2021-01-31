@@ -43,20 +43,20 @@ export class StatusBarUi {
         );
     }
 
-    static customMessage(text: string, tooltip: string, iconName = "pulse"): void {
+    static customMessage(text: string, tooltip: string, iconName = "pulse", command: string = null): void {
         let icon = "";
         if (iconName) icon = `$(${iconName}) `;
 
         StatusBarUi.statusBarItem.text = `${icon}${text}`;
         StatusBarUi.statusBarItem.tooltip = tooltip;
-        StatusBarUi.statusBarItem.command = null;
+        StatusBarUi.statusBarItem.command = command;
     }
 
     // Quick status bar messages after compile success or error
     static compilationSuccess(isWatching: boolean): void {
         StatusBarUi.statusBarItem.text = `$(check) Success`;
         StatusBarUi.statusBarItem.color = "#33ff00";
-        StatusBarUi.statusBarItem.command = null;
+        StatusBarUi.statusBarItem.command = "liveSass.command.openOutputWindow";
 
         setTimeout(function () {
             StatusBarUi.statusBarItem.color = "inherit";
@@ -71,7 +71,7 @@ export class StatusBarUi {
     static compilationError(isWatching: boolean): void {
         StatusBarUi.statusBarItem.text = `$(x) Error`;
         StatusBarUi.statusBarItem.color = "#ff0033";
-        StatusBarUi.statusBarItem.command = null;
+        StatusBarUi.statusBarItem.command = "liveSass.command.openOutputWindow";
 
         if (isWatching) {
             setTimeout(function () {

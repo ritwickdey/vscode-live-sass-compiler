@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - "7.9.0"
+  - "12.14.1"
 
 cache:
   directories:
@@ -27,7 +27,7 @@ install:
   - export CI=true
   - npm i -g vsce
   - npm install
-  - npm run vscode:prepublish
+#  - npm run test
 
 script:
   - vsce package -o LiveSassCompiler-$TRAVIS_TAG-$TRAVIS_OS_NAME.vsix

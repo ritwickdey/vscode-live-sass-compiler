@@ -42,18 +42,26 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 - Output options are now only `expanded` and `compressed`
 - Only works on VS Code v1.50 and newer
 
-### 4.3.4 - 2021-01-21
+### 4.4.0 - 2021-01-31
 
-### Fixed
-- Fixed [#18](https://github.com/glenn2223/vscode-live-sass-compiler/issues/18): On launch there is no output, nor any `Live SASS Compile` ouput selection, when the setting `watchOnLaunch` is `true`
-- Fixed: Autoprefixer warning saying `undefined` for file path when `generateMap` is `false`
-- Fixed: Autoprefixer `grid: "autoplace"` was forced
-  - If [this feature](https://github.com/postcss/autoprefixer#does-autoprefixer-polyfill-grid-layout-for-ie) is wanted then add `/* autoprefixer grid: autoplace */` to the start of your file
+### Added
+- New setting: `liveSassCompile.settings.forceBaseDirectory` #25
+  - A new setting that can help performance in large projects with few Sass/Scss files.
+  - **Note:** multi-root workspace with different folder structures can not use this efficiently (See [setting note](https://github.com/glenn2223/vscode-live-sass-compiler/blob/1d043a0541008dfa2b53c492f6a76dce4e3d9909/docs/settings.md) & [VS Code Feature Request](https://github.com/microsoft/vscode/issues/115482) (:+1: it) )
+- New feature: The status bar `Error` and `Success` messages can be clicked which will open the Output Window #25
 
 ### Updates
-- `sass` from `1.32.4` to `1.32.5`
-  - **Potentially breaking bug fix:** When using @for with numbers that have units, the iteration variable now matches the unit of the initial number. This matches the behavior of Ruby Sass and LibSass.
-  - Others: see [sass release notes](https://github.com/sass/dart-sass/releases/tag/1.32.5)
+- `autoprefixer` from `10.2.1` to `10.2.4`
+  - Small bug fixes (nothing user facing)
+- Various dev-dependancy updates
+
+### Fixed
+- Part fix: Slow file handling #22. Full fix in v5 as some small breaking changes
+  - The glob pattern matcher is causing bottlenecks, reducing load calls with small patch. However moving away from glob is the end-game (which will be happening in v5)
+- Fix: `compileCurrentSass` shows wrong message on fail
+  - When you run `compileCurrentSass` and it would fail (for whatever reason) it would cause the output to show `Success` rather than `Error` (just the output was wrong, nothing else)
+- Fix: Status bar inconsistancies during display changes
+  - When command bar is changing between visuals it was possible to cause the status and the shown message to be out of sync (due to clicks while setTimeouts are pending), the setup also meant you couldn't sync them again (unless you did a manual compile command)
 
 *See the full changelog [here](CHANGELOG.md).*
 

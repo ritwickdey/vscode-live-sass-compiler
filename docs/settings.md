@@ -213,7 +213,26 @@ Set this to `true` to watch files on launch.
 </summary>
 
 Set this to `false` if you don't want all Sass files to be compiled when Live Sass Compiler starts watching. 
-* _**Default:** `true`._
+* _**Default:** `true`_
+
+</details>
+
+---
+
+<details>
+<summary>
+    liveSassCompile.settings.forceBaseDirectory<br />
+    Defines a subdirectory to search from (speed gains on larger projects)
+</summary>
+
+Larger projects can have performance problems, using this to target just your sass folder will provide performance gains.
+
+No Sass/Scss files outside of this folder will be watched/compiled when you save.
+
+* _**Default:** `null`_
+* _**Note:** No leading slash but MUST have ending slash_
+  * _Example: `src/style/`_
+* _**Note for multi-root workspaces:** This setting can be applied at workspace level however it can not vary from root to root. (opened [feature request](https://github.com/microsoft/vscode/issues/115482) on VS Code source)_
 
 </details>
 

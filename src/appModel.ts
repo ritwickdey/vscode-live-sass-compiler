@@ -1,16 +1,16 @@
 "use strict";
 
-import * as autoprefixer from "autoprefixer";
-import * as glob from "glob";
 import * as path from "path";
 import * as vscode from "vscode";
 
 import { FileHelper, IFileResolver } from "./FileHelper";
 import { Helper, IFormat } from "./helper";
-import { ErrorLogger, OutputWindow, WindowPopout } from "./VscodeExtensions";
+import { ErrorLogger, OutputWindow } from "./VscodeExtensions";
 import { SassHelper } from "./SassCompileHelper";
 import { StatusBarUi } from "./StatusbarUi";
 
+import autoprefixer from "autoprefixer";
+import glob from "glob";
 import postcss from "postcss";
 
 import BrowserslistError = require("browserslist/error");
@@ -37,26 +37,23 @@ export class AppModel {
     StartWatching(): void {
         const compileOnWatch = Helper.getConfigSettings<boolean>("compileOnWatch");
 
-        if (this.isWatching) {
-            WindowPopout.Inform("Already watching...");
-        } else {
+        if (!this.isWatching) {
             this.isWatching = !this.isWatching;
 
             if (compileOnWatch) {
                 this.compileAllFiles();
-            } else {
-                this.revertUIToWatchingStatusNow();
             }
         }
+
+        this.revertUIToWatchingStatusNow();
     }
 
     StopWatching(): void {
         if (this.isWatching) {
             this.isWatching = !this.isWatching;
-            this.revertUIToWatchingStatusNow();
-        } else {
-            WindowPopout.Inform("Not watching...");
         }
+
+        this.revertUIToWatchingStatusNow();
     }
 
     openOutputWindow(): void {
@@ -151,16 +148,21 @@ export class AppModel {
             );
 
             const formats = Helper.getConfigSettings<IFormat[]>("formats");
-            await Promise.all(
+            const result = await Promise.all(
                 formats.map(async (format) => {
                     // Each format
                     const options = this.getCssStyle(format.format),
                         cssMapUri = await this.generateCssAndMapUri(sassPath, format);
-                    await this.GenerateCssAndMap(sassPath, cssMapUri.css, cssMapUri.map, options);
+                    return await this.GenerateCssAndMap(
+                        sassPath,
+                        cssMapUri.css,
+                        cssMapUri.map,
+                        options
+                    );
                 })
             );
 
-            StatusBarUi.compilationSuccess(this.isWatching);
+            if (result.indexOf(false) < 0) StatusBarUi.compilationSuccess(this.isWatching);
         } catch (err) {
             const sassPath = vscode.window.activeTextEditor
                 ? vscode.window.activeTextEditor.document.fileName
@@ -461,7 +463,6 @@ export class AppModel {
         const showOutputWindow = Helper.getConfigSettings<boolean>("showOutputWindow"),
             generateMap = Helper.getConfigSettings<boolean>("generateMap"),
             prefixer = postcss(
-                // @ts-ignore
                 autoprefixer({
                     overrideBrowserslist: browsers,
                 })
@@ -534,25 +535,30 @@ export class AppModel {
 
     private async isSassFileExcluded(sassPath: string): Promise<boolean> {
         const excludeItems = Helper.getConfigSettings<string[]>("excludeList"),
-            includeItems = Helper.getConfigSettings<string[] | null>("includeItems");
-        let fileList: string[];
+            includeItems = Helper.getConfigSettings<string[] | null>("includeItems"),
+            forceBaseDirectory = Helper.getConfigSettings<string | null>("forceBaseDirectory");
+        let fileList = ["**/*.s[a|c]ss"];
 
         if (includeItems && includeItems.length) {
             fileList = includeItems.concat("**/_*.s[a|c]ss");
-        } else fileList = excludeItems;
+        }
 
-        const fileCount = (
+        const fileFound = (
             await Promise.all(
                 vscode.workspace.workspaceFolders.map(async (folder) => {
-                    return await new Promise((resolve: (value: number) => void) => {
+                    let basePath = folder.uri.fsPath;
+
+                    if (forceBaseDirectory) basePath = path.resolve(basePath, forceBaseDirectory);
+
+                    return await new Promise((resolve) => {
                         glob(
-                            `{${fileList.join(",")}}`,
+                            `{${fileList.join(",")},}`,
                             {
-                                ignore: includeItems && includeItems.length ? excludeItems : null,
+                                ignore: excludeItems,
                                 mark: true,
-                                cwd: folder.uri.fsPath,
+                                cwd: basePath,
                             },
-                            (err, files: string[]) => {
+                            (err, files) => {
                                 if (err) {
                                     OutputWindow.Show(
                                         "Error whilst searching for files",
@@ -563,24 +569,23 @@ export class AppModel {
                                         ],
                                         true
                                     );
-                                    resolve(0);
-                                    return;
+
+                                    return resolve(false);
                                 }
+
                                 resolve(
-                                    files.filter(
-                                        (x) => path.join(folder.uri.fsPath, x) === sassPath
-                                    ).length
+                                    files.indexOf(
+                                        path.relative(basePath, sassPath).split(path.sep).join("/")
+                                    ) >= 0
                                 );
                             }
                         );
                     });
                 })
             )
-        ).reduce((a, b) => a + b, 0);
+        ).includes(true);
 
-        if (includeItems && includeItems.length) return fileCount === 0;
-
-        return fileCount > 0;
+        return fileFound == false;
     }
 
     private async getSassFiles(
@@ -591,7 +596,8 @@ export class AppModel {
         const excludedList = isDebugging
                 ? ["**/node_modules/**", ".vscode/**"]
                 : Helper.getConfigSettings<string[]>("excludeList"),
-            includeItems = Helper.getConfigSettings<string[] | null>("includeItems");
+            includeItems = Helper.getConfigSettings<string[] | null>("includeItems"),
+            forceBaseDirectory = Helper.getConfigSettings<string | null>("forceBaseDirectory");
 
         if (!isQueryPatternFixed && includeItems && includeItems.length) {
             if (includeItems.length === 1) {
@@ -605,6 +611,10 @@ export class AppModel {
 
         await Promise.all(
             vscode.workspace.workspaceFolders.map(async (folder) => {
+                let basePath = folder.uri.fsPath;
+
+                if (forceBaseDirectory) basePath = path.resolve(basePath, forceBaseDirectory);
+
                 (
                     await new Promise((resolve: (value: string[]) => void) => {
                         glob(
@@ -612,7 +622,7 @@ export class AppModel {
                             {
                                 ignore: excludedList,
                                 mark: true,
-                                cwd: folder.uri.fsPath,
+                                cwd: basePath,
                             },
                             (err, files: string[]) => {
                                 if (err) {
@@ -632,7 +642,7 @@ export class AppModel {
                                     .filter((file) =>
                                         this.isSassFile(file, isDebugging || isQueryPatternFixed)
                                     )
-                                    .map((file) => path.join(folder.uri.fsPath, file));
+                                    .map((file) => path.join(basePath, file));
                                 return resolve(filePaths || []);
                             }
                         );

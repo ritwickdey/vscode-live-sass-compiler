@@ -2,7 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime with live browser reload.",
-    "version": "4.3.4",
+    "version": "4.4.0",
     "publisher": "glenn2223",
     "author": {
         "name": "Glenn Marks",
@@ -134,7 +134,7 @@
                                     "string",
                                     "null"
                                 ],
-                                "pattern": "[^\\/\\\\]",
+                                "pattern": "[^\\/]",
                                 "default": null
                             }
                         },
@@ -196,6 +196,15 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Set this to `false` if you do not want the output window to show.\nNote: You can use the command palette to open the Live Sass output window.\nDefault is `true`"
+                },
+                "liveSassCompile.settings.forceBaseDirectory": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null,
+                    "pattern": "^[^\\/].+[\\/]$",
+                    "description": "Defines a subdirectory to search from (no directory outside of this will be search).\nNote: Must not start with a slash but must end with one"
                 }
             }
         }
@@ -217,11 +226,12 @@
         "vscode:prepublish": "webpack --mode production",
         "webpack": "webpack --mode development",
         "webpack-dev": "webpack --mode development --watch",
-        "test": "node ./node_modules/vscode-test/out/runTest",
+        "pretest": "npm run webpack & tsc -p ./src/test/",
+        "test": "node ./out/test/runTest.js",
         "lint": "eslint -c .eslintrc.js --ext .ts ./src/"
     },
     "dependencies": {
-        "autoprefixer": "^10.2.1",
+        "autoprefixer": "^10.2.4",
         "glob": "^7.1.6",
         "postcss": "^8.2.4",
         "sass": "^1.32.5"
@@ -229,21 +239,21 @@
     "devDependencies": {
         "@types/glob": "^7.1.3",
         "@types/mocha": "^8.2.0",
-        "@types/node": "^14.14.21",
+        "@types/node": "^14.14.22",
         "@types/sass": "^1.16.0",
         "@types/vscode": "^1.50.0",
-        "@typescript-eslint/eslint-plugin": "^4.13.0",
-        "@typescript-eslint/parser": "^4.13.0",
-        "eslint": "^7.17.0",
+        "@typescript-eslint/eslint-plugin": "^4.14.1",
+        "@typescript-eslint/parser": "^4.14.1",
+        "eslint": "^7.18.0",
         "mocha": "^8.2.0",
         "ts-loader": "^8.0.14",
         "typescript": "^4.1.3",
-        "vscode-test": "^1.4.1",
-        "webpack": "^5.14.0",
-        "webpack-cli": "^4.3.1"
+        "vscode-test": "^1.5.0",
+        "webpack": "^5.19.0",
+        "webpack-cli": "^4.4.0"
     },
     "announcement": {
-        "onVersion": "4.3.4",
-        "message": "SassCompiler v4.3.4: Updated to sass v1.32.5 & bug fixes"
+        "onVersion": "4.4.0",
+        "message": "SassCompiler v4.4.0: New feature, updates & bug fixes"
     }
 }
