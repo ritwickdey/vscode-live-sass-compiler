@@ -25,7 +25,7 @@
             ],
             "stopOnEntry": false,
             "sourceMaps": true,
-            "outFiles": ["${workspaceRoot}/dist/src/test/**/*.js"],
+            "outFiles": ["${workspaceRoot}/out/test/**/*.js"],
             "preLaunchTask": "npm: pretest"
         }
     ]
