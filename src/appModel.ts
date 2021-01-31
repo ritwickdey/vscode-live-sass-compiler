@@ -5,7 +5,7 @@ import * as vscode from "vscode";
 
 import { FileHelper, IFileResolver } from "./FileHelper";
 import { Helper, IFormat } from "./helper";
-import { ErrorLogger, OutputWindow, WindowPopout } from "./VscodeExtensions";
+import { ErrorLogger, OutputWindow } from "./VscodeExtensions";
 import { SassHelper } from "./SassCompileHelper";
 import { StatusBarUi } from "./StatusbarUi";
 
