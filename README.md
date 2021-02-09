@@ -30,9 +30,6 @@ All settings are now listed in the [Settings Docs](./docs/settings.md).
 ## FAQ
 *All FAQs are now listed in the [FAQ Docs](./docs/faqs.md)*
 
-## Extension Dependency 
-This extension has dependency on _[Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)_ extension for live browser reload.
-
 ## What's new ?
 
 >:warning: v5 alpha releases may have breaking changes. All changes (breaking or otherwise) will be displayed in this changelog. Thesse changes will then be condenced into a single list for the official v5 release
