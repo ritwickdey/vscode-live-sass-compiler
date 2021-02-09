@@ -3,9 +3,7 @@
 
 **_Like it? [Please leave a review](https://marketplace.visualstudio.com/items?itemName=glenn2223.live-sass#review-details). Found something wrong? [Report an issue](https://github.com/glenn2223/vscode-live-sass-compiler/issues/new)._**
 
-A VSCode Extension that help you to compile/transpile your SASS/SCSS files to CSS files at real-time with live browser reload.
-
-![App Preview](./images/Screenshot/AnimatedPreview.gif)
+A VSCode Extension that help you to compile/transpile your SASS/SCSS files to CSS files at real-time.
 
 ## Usage/Shortcuts
 1. Click to `Watch Sass` from the status bar to turn on the live compilation and then click to `Stop Watching Sass` from the status bar to turn off live compilation . 
@@ -38,17 +36,36 @@ This extension has dependency on _[Live Server](https://marketplace.visualstudio
 
 ## What's new ?
 
-**Breaking changes in v4:**
-- Output options are now only `expanded` and `compressed`
-- Only works on VS Code v1.50 and newer
+>:warning: v5 alpha releases may have breaking changes. All changes (breaking or otherwise) will be displayed in this changelog. Thesse changes will then be condenced into a single list for the official v5 release
 
-### 4.4.1 - 2021-01-31
+<!-- **Breaking changes in v5:**
+- Not dependant on `ritwickdey.LiveServer` as there was no actual code dependancies in the extension (#23). If you require the Live Server extension, it can still be installed from [here](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)
+- Only works on VS Code v1.52 and newer (#34)
+- Settings have been updated for continuity and to better aid extension performance (#30). See [changelog](CHANGELOG.md) for details -->
+
+### 5.0.0-alpha.1 - ONGOING
+
+### Breaking changes
+- Not dependant on `ritwickdey.LiveServer` as there was no actual code dependancies in the extension (#23). If you require the Live Server extension, it can still be installed from [here](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)
+- Only works on VS Code v1.52 and newer (#34)
+- Settings have been updated for continuity and to better aid extension performance (#30)
+  - `formats[].savePath` must start with a path separator but not end in one
+  - `includeItems` must start with a path separator and end in either `.sass` or `.scss` (for performance purposes)
+  - `forceBaseDirectory` must start with a path separator but not end in one
 
 ### Fixed
-- Fixed: `forceBaseDirectory` has full support in multi-root workspaces
-- Fixed: the path in `forceBaseDirectory` is now checked to see if it exists. If not a user friendly message is displayed in the output
-- Fixed: an error when checking files would still compile what it could. This would hide the error message from the user
-- Incorrect patern matches in settings show user friendly messages rather than "does not match pattern"
+- Fixed: the `formats[].savePathSegmentKeys` setting would allow non string values in the array
+- Fixed: the `excludeList` setting would allow non string values in the array
+- Fixed: the `includeItems` setting would allow non string values in the array
+- Fixed: the `autoprefix` setting would allow non string values in the array
+- Fixed: some setting descrioptions have been updated for better clarity/readability
+
+### Updated
+- `postcss` from `8.2.4` to `8.2.5`
+  - Small fix *(nothing user facing)*
+- `sass` from `1.32.5` to `1.32.6`
+  - Small fixes *(nothing user facing)*
+- Various dev dependancy updates *(nothing user facing)*
 
 *See the full changelog [here](CHANGELOG.md).*
 
