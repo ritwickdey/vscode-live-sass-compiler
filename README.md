@@ -18,8 +18,7 @@ A VSCode Extension that help you to compile/transpile your SASS/SCSS files to CS
 * Customizable exported CSS style (`expanded`, `compressed`).
 * Customizable extension name (`.css` or `.min.css`).
 * Quick status bar control.
-* Exclude specific folders by settings. 
-* Live reload to browser (Dependency on `Live Server` extension).
+* Exclude specific folders by settings.
 * Autoprefix support (See settings section)
 
 ## Installation
