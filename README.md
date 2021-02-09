@@ -32,7 +32,7 @@ All settings are now listed in the [Settings Docs](./docs/settings.md).
 
 ## What's new ?
 
->:warning: v5 alpha releases may have breaking changes. All changes (breaking or otherwise) will be displayed in this changelog. Thesse changes will then be condenced into a single list for the official v5 release
+>:warning: v5 alpha releases may have breaking changes. All changes (breaking or otherwise) will be displayed in the [changelog](CHANGELOG.md). These changes will be continually updated here and will also be condenced into a single list for the official v5 release
 
 <!-- **Breaking changes in v5:**
 - Not dependant on `ritwickdey.LiveServer` as there was no actual code dependancies in the extension (#23). If you require the Live Server extension, it can still be installed from [here](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)

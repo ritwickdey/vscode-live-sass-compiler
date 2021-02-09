@@ -22,7 +22,7 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
->:warning: v5 alpha releases may have breaking changes. All changes (breaking or otherwise) will be displayed in this changelog. Thesse changes will then be condenced into a single list for the official v5 release
+>:warning: v5 alpha releases may have breaking changes. All changes (breaking or otherwise) will be displayed in this changelog. These changes will then be condenced into a single list for the official v5 release
 
 ## 5.0.0-alpha.1 - ONGOING
 
