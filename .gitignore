@@ -7,4 +7,5 @@ Gemfile.lock
 Gemfile
 .vscode-test
 .vscode/*.dict
-*.vsix
+# Commenting below out so v5 can be installed directly from GitHub
+# *.vsix
