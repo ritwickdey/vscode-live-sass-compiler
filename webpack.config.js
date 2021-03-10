@@ -2,8 +2,10 @@
 
 'use strict';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
+const TerserPlugin = require('terser-webpack-plugin');
+/* eslint-enable */
 
 /**@type {import('webpack').Configuration}*/
 const config = {
@@ -40,6 +42,16 @@ const config = {
         ]
       }
     ]
+  },
+  optimization: {
+    minimizer: [
+        new TerserPlugin({
+            terserOptions: {
+                keep_classnames: true,
+                keep_fnames: true
+            }
+          })
+        ]
   }
 };
 module.exports = config;
