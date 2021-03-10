@@ -5,14 +5,15 @@ import * as vscode from "vscode";
 
 import { FileHelper, IFileResolver } from "./FileHelper";
 import { Helper, IFormat } from "./helper";
-import { ErrorLogger, OutputWindow } from "./VscodeExtensions";
+import { fdir, OnlyCountsOutput, PathsOutput } from "fdir";
 import { SassHelper } from "./SassCompileHelper";
 import { StatusBarUi } from "./StatusbarUi";
+import { ErrorLogger, OutputWindow } from "./VscodeExtensions";
 
 import autoprefixer from "autoprefixer";
 import BrowserslistError from "browserslist/error";
 import fs from "fs";
-import glob from "glob";
+import picomatch from "picomatch";
 import postcss from "postcss";
 
 export class AppModel {
@@ -192,7 +193,11 @@ export class AppModel {
             if (!this.isSassFile(currentFile, true) || (await this.isSassFileExcluded(currentFile)))
                 return;
 
-            OutputWindow.Show("Change detected...", [path.basename(currentFile)], showOutputWindow);
+            OutputWindow.Show(
+                "Change detected - " + new Date().toLocaleString(),
+                [path.basename(currentFile)],
+                showOutputWindow
+            );
 
             if (this.isSassFile(currentFile)) {
                 const formats = Helper.getConfigSettings<IFormat[]>("formats"),
@@ -286,7 +291,9 @@ export class AppModel {
                         true
                     );
                     return false;
-                } else throw err;
+                } else {
+                    throw err;
+                }
             }
         } else if (generateMap) {
             const pMap: { file: string } = JSON.parse(map);
@@ -568,47 +575,37 @@ export class AppModel {
                     }
                 }
 
-                return await new Promise<boolean | null>((resolve) => {
-                    glob(
-                        `{${fileList.join(",")},}`,
-                        {
-                            ignore: excludeItems,
-                            mark: true,
-                            cwd: basePath,
-                        },
-                        (err, files) => {
-                            if (err) {
-                                OutputWindow.Show(
-                                    "Error whilst searching for files",
-                                    [`Workspace folder: ${folder.name}`, err.message, err.stack],
-                                    true
-                                );
+                // @ts-ignore ts2322 => string doesn't match string[] (False negative as string[] is allowed)
+                const isMatch = picomatch(fileList, { ignore: excludeItems, dot: true });
 
-                                return resolve(null);
-                            }
-
-                            resolve(
-                                files.indexOf(
-                                    path.relative(basePath, sassPath).split(path.sep).join("/")
-                                ) >= 0
-                            );
-                        }
-                    );
-                });
+                return (
+                    ((await new fdir()
+                        .crawlWithOptions(basePath, {
+                            includeBasePath: true,
+                            resolvePaths: true,
+                            onlyCounts: true,
+                            filters: [
+                                (path) => path.endsWith(".scss") || path.endsWith(".sass"),
+                                (path) => isMatch(path),
+                                (path) => path === sassPath,
+                            ],
+                        })
+                        .withPromise()) as OnlyCountsOutput).files > 0
+                );
             })
         );
 
         // There was an error so stop processing
-        if (fileResult.indexOf(null) >= 0) {
+        if (fileResult.includes(null)) {
             return true;
         }
 
-        // If includes true then file hasn't been excluded (return false result)
-        return fileResult.includes(true) == false;
+        // If doesn't include true then it's not been found
+        return !fileResult.includes(true);
     }
 
     private async getSassFiles(
-        queryPattern = "**/[^_]*.s[a|c]ss",
+        queryPattern: string | string[] = "**/[^_]*.s[a|c]ss",
         isQueryPatternFixed = false,
         isDebugging = false
     ): Promise<string[]> {
@@ -618,78 +615,60 @@ export class AppModel {
             includeItems = Helper.getConfigSettings<string[] | null>("includeItems");
 
         if (!isQueryPatternFixed && includeItems && includeItems.length) {
-            if (includeItems.length === 1) {
-                queryPattern = includeItems[0];
-            } else {
-                queryPattern = `{${includeItems.join(",")}}`;
-            }
+            queryPattern = includeItems;
         }
 
-        const files: string[] = [];
+        const fileList: string[] = [];
 
-        await Promise.all(
-            vscode.workspace.workspaceFolders.map(async (folder) => {
-                const forceBaseDirectory = Helper.getConfigSettings<string | null>(
-                    "forceBaseDirectory",
-                    folder
-                );
-                let basePath = folder.uri.fsPath;
+        (
+            await Promise.all(
+                vscode.workspace.workspaceFolders.map(async (folder) => {
+                    const forceBaseDirectory = Helper.getConfigSettings<string | null>(
+                        "forceBaseDirectory",
+                        folder
+                    );
+                    let basePath = folder.uri.fsPath;
 
-                if (forceBaseDirectory) {
-                    basePath = path.resolve(basePath, forceBaseDirectory);
+                    if (forceBaseDirectory) {
+                        basePath = path.resolve(basePath, forceBaseDirectory);
 
-                    if (!fs.existsSync(basePath)) {
-                        OutputWindow.Show(
-                            "Error with your `forceBaseDirectory` setting",
-                            [
-                                `Can not find path: ${basePath}`,
-                                `Setting: "${forceBaseDirectory}"`,
-                                `Workspace folder: ${folder.name}`,
-                            ],
-                            true
-                        );
+                        if (!fs.existsSync(basePath)) {
+                            OutputWindow.Show(
+                                "Error with your `forceBaseDirectory` setting",
+                                [
+                                    `Can not find path: ${basePath}`,
+                                    `Setting: "${forceBaseDirectory}"`,
+                                    `Workspace folder: ${folder.name}`,
+                                ],
+                                true
+                            );
 
-                        return [];
+                            return [];
+                        }
                     }
-                }
 
-                (
-                    await new Promise((resolve: (value: string[]) => void) => {
-                        glob(
-                            queryPattern,
-                            {
-                                ignore: excludedList,
-                                mark: true,
-                                cwd: basePath,
-                            },
-                            (err, files: string[]) => {
-                                if (err) {
-                                    OutputWindow.Show(
-                                        "Error whilst searching for files",
-                                        [
-                                            `Workspace folder: ${folder.name}`,
-                                            err.message,
-                                            err.stack,
-                                        ],
-                                        true
-                                    );
+                    // @ts-ignore ts2322 => string doesn't match string[] (False negative as string[] is allowed)
+                    const isMatch = picomatch(queryPattern, { ignore: excludedList });
 
-                                    return resolve([]);
-                                }
-                                const filePaths = files
-                                    .filter((file) =>
-                                        this.isSassFile(file, isDebugging || isQueryPatternFixed)
-                                    )
-                                    .map((file) => path.join(basePath, file));
-                                return resolve(filePaths || []);
-                            }
-                        );
-                    })
-                ).forEach((file) => files.push(file));
-            })
-        );
+                    return (await new fdir()
+                        .crawlWithOptions(basePath, {
+                            includeBasePath: true,
+                            resolvePaths: true,
+                            filters: [
+                                (path) => path.endsWith(".scss") || path.endsWith(".sass"),
+                                (path) => isMatch(path),
+                            ],
+                        })
+                        .withPromise()) as PathsOutput;
+                })
+            )
+        ).forEach((files) => {
+            files.forEach((file) => {
+                fileList.push(file);
+            });
+        });
 
-        return files;
+        return fileList;
     }
 
     //#endregion Private
@@ -781,39 +760,29 @@ export class AppModel {
             );
 
             outputInfo.push("--------------------", "Workspace Folders", "--------------------");
-            await Promise.all(
-                vscode.workspace.workspaceFolders.map(async (folder) => {
-                    outputInfo.push(`[${folder.index}] ${folder.name}\n${folder.uri.fsPath}`);
-                })
-            );
+            vscode.workspace.workspaceFolders.map((folder) => {
+                outputInfo.push(`[${folder.index}] ${folder.name}\n${folder.uri.fsPath}`);
+            });
 
             outputInfo.push("--------------------", "Included SASS Files", "--------------------");
-            await Promise.all(
-                (await this.getSassFiles()).map(async (file) => {
-                    outputInfo.push(file);
-                })
-            );
+            (await this.getSassFiles()).map((file) => {
+                outputInfo.push(file);
+            });
 
             outputInfo.push(
                 "--------------------",
                 "Included Partial SASS Files",
                 "--------------------"
             );
-            await Promise.all(
-                (await this.getSassFiles("**/_*.s[a|c]ss", true)).map(async (file) => {
-                    outputInfo.push(file);
-                })
-            );
+            (await this.getSassFiles("**/_*.s[a|c]ss", true)).map((file) => {
+                outputInfo.push(file);
+            });
 
             outputInfo.push("--------------------", "Excluded SASS Files", "--------------------");
             if (exclusionList.length > 0) {
-                await Promise.all(
-                    (await this.getSassFiles(`{${exclusionList.join(",")}}`, true, true)).map(
-                        async (file) => {
-                            outputInfo.push(file);
-                        }
-                    )
-                );
+                (await this.getSassFiles(exclusionList, true, true)).map((file) => {
+                    outputInfo.push(file);
+                });
             } else {
                 outputInfo.push("NONE");
             }

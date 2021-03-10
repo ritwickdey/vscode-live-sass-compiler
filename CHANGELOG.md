@@ -16,18 +16,51 @@ Types of changes
 - Fixed for any bug fixes.
 - Security in case of vulnerabilities.
 - Breaking changes for break in new revision
-- Other for noteable changes that do not 
+- Other for notable changes that do not 
  -->
 
 # Changelog
 All notable changes to this project will be documented in this file.
 
->:warning: v5 alpha releases may have breaking changes. All changes (breaking or otherwise) will be displayed in this changelog. These changes will then be condenced into a single list for the official v5 release
+>:warning: v5 alphas may have breaking changes from one release to the next. All change, breaking or otherwise, will be displayed in this changelog. These changes will then be condensed into a single list for the official v5 release
+
+## 5.0.0-alpha.2 - ONGOING
+
+### Breaking changes
+- No longer supporting `brace expansion` glob patterns
+  - This is because the underlying glob pattern matching has moved from `minimatch` to `picomatch`. A full feature comparison can be found [here](https://github.com/micromatch/picomatch#library-comparisons)
+
+### Added
+- Increased range of glob pattern support
+  - Full support for `extglobs`
+  - Added support for `posix brackets`
+  - Added support for `regex syntax`
+  - *Full comparison can be found [here](https://github.com/micromatch/picomatch#library-comparisons)*
+- When a change is detected the initial output now includes a date and time stamp
+
+### Changed
+- Now using `fdir` with `picomatch` instead of `glob` and `minimatch`
+  - Speed improvements, the most significant of which will be on larger projects
+  - Greater support for glob patterns
+
+### Fixed
+- Fixed: the `formats[].savePath` setting was warning on valid entries <!-- THIS CAN BE REMOVED ON FULL V5 RELEASE -->
+
+### Updated
+- `autoprefixer` from `10.2.4` to `10.2.5`
+  - Fixed `:` support in `@supports`
+- `postcss` from `8.2.5` to `8.2.8`
+  - Small fixes *(nothing user facing)*
+- `sass` from `1.32.6` to `1.32.8`
+  - Allow `@forward...with` to take arguments that have a `!default` flag without a trailing comma.
+  - Improve the performance of unitless and single-unit numbers.
+  - Other small changes *(nothing user facing)*
+- Various dev dependency updates *(nothing user facing)*
 
 ## 5.0.0-alpha.1 - ONGOING
 
 ### Breaking changes
-- Not dependant on `ritwickdey.LiveServer` as there was no actual code dependancies in the extension (#23). If you require the Live Server extension, it can still be installed from [here](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)
+- Not dependant on `ritwickdey.LiveServer` as there was no actual code dependencies in the extension (#23). If you require the Live Server extension, it can still be installed from [here](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)
 - Only works on VS Code v1.52 and newer (#34)
 - Settings have been updated for continuity and to better aid extension performance (#30)
   - `formats[].savePath` must start with a path separator but not end in one
@@ -39,14 +72,14 @@ All notable changes to this project will be documented in this file.
 - Fixed: the `excludeList` setting would allow non string values in the array
 - Fixed: the `includeItems` setting would allow non string values in the array
 - Fixed: the `autoprefix` setting would allow non string values in the array
-- Fixed: some setting descrioptions have been updated for better clarity/readability
+- Fixed: some setting descriptions have been updated for better clarity/readability
 
 ### Updated
 - `postcss` from `8.2.4` to `8.2.5`
   - Small fix *(nothing user facing)*
 - `sass` from `1.32.5` to `1.32.6`
   - Small fixes *(nothing user facing)*
-- Various dev dependancy updates *(nothing user facing)*
+- Various dev dependency updates *(nothing user facing)*
 
 ## [4.4.1] - 2021-01-31
 
@@ -54,7 +87,7 @@ All notable changes to this project will be documented in this file.
 - Fixed: `forceBaseDirectory` has full support in multi-root workspaces
 - Fixed: the path in `forceBaseDirectory` is now checked to see if it exists. If not a user friendly message is displayed in the output
 - Fixed: an error when checking files would still compile what it could. This would hide the error message from the user
-- Incorrect patern matches in settings show user friendly messages rather than "does not match pattern"
+- Incorrect pattern matches in settings show user friendly messages rather than "does not match pattern"
 
 ## [4.4.0] - 2021-01-31
 
@@ -67,36 +100,36 @@ All notable changes to this project will be documented in this file.
 ### Updates
 - `autoprefixer` from `10.2.1` to `10.2.4`
   - Small bug fixes (nothing user facing)
-- Various dev-dependancy updates
+- Various dev-dependency updates
 
 ### Fixed
 - Part fix: Slow file handling #22. Full fix in v5 as some small breaking changes
   - The glob pattern matcher is causing bottlenecks, reducing load calls with small patch. However moving away from glob is the end-game (which will be happening in v5)
 - Fix: `compileCurrentSass` shows wrong message on fail
   - When you run `compileCurrentSass` and it would fail (for whatever reason) it would cause the output to show `Success` rather than `Error` (just the output was wrong, nothing else)
-- Fix: Status bar inconsistancies during display changes
+- Fix: Status bar inconsistencies during display changes
   - When command bar is changing between visuals it was possible to cause the status and the shown message to be out of sync (due to clicks while setTimeouts are pending), the setup also meant you couldn't sync them again (unless you did a manual compile command)
 
 
 ## [4.3.4] - 2021-01-21
 
 ### Fixed
-- Fixed [#18](https://github.com/glenn2223/vscode-live-sass-compiler/issues/18): On launch there is no output, nor any `Live SASS Compile` ouput selection, when the setting `watchOnLaunch` is `true`
+- Fixed [#18](https://github.com/glenn2223/vscode-live-sass-compiler/issues/18): On launch there is no output, nor any `Live SASS Compile` output selection, when the setting `watchOnLaunch` is `true`
 - Fixed: Autoprefixer warning saying `undefined` for file path when `generateMap` is `false`
 - Fixed: Autoprefixer `grid: "autoplace"` was forced
   - If [this feature](https://github.com/postcss/autoprefixer#does-autoprefixer-polyfill-grid-layout-for-ie) is wanted then add `/* autoprefixer grid: autoplace */` to the start of your file
 
 ### Updates
 - `sass` from `1.32.4` to `1.32.5`
-  - **Potentially breaking bug fix:** When using @for with numbers that have units, the iteration variable now matches the unit of the initial number. This matches the behavior of Ruby Sass and LibSass.
+  - **Potentially breaking bug fix:** When using @for with numbers that have units, the iteration variable now matches the unit of the initial number. This matches the behaviour of Ruby Sass and LibSass.
   - Others: see [sass release notes](https://github.com/sass/dart-sass/releases/tag/1.32.5)
 
 ## [4.3.3] - 2021-01-18
 
 ### Fixed
-- Fixed [#15](https://github.com/glenn2223/vscode-live-sass-compiler/issues/15): No longer outputs absolute path in map file and map link in css output
+- Fixed [#15](https://github.com/glenn2223/vscode-live-sass-compiler/issues/15): No longer outputs absolute path in map file and map link in CSS output
 - Reinstated feature of partial files being checked for exclusion
-- Autoprefixer map lines now relate to actual SASS files rather than the css file generated
+- Autoprefixer map lines now relate to actual SASS files rather than the CSS file generated
 - When there's an include list, a non partial file that's not "included" would still be processed
 - Now gets the correct list of included partial files
 
@@ -110,7 +143,7 @@ All notable changes to this project will be documented in this file.
 - `sass` from `1.30.0` to `1.32.4`
   - Various changes, see their [changelog](https://github.com/sass/dart-sass/blob/master/CHANGELOG.md)
 - `autoprefixer` from `10.1.0` to `10.2.1`
-  - Fixed transition-property warnings (by @Sheraff).
+  - Fixed transition-property warnings
 - Other, non-facing changes
   - `eslint` from `7.16.0` to `7.17.0`
   - `ts-loader` from `8.0.12` to `8.0.14`
@@ -135,7 +168,7 @@ All notable changes to this project will be documented in this file.
 - Small optimisation to some underlying async operations
 
 ### Other
-- Small bit of general tidying, adjustment to README, new dev dependancy for @.types/glob
+- Small bit of general tidying, adjustment to README, new dev dependency for @.types/glob
 
 ## [4.2.0] - 2020-12-22
 
@@ -164,11 +197,11 @@ All notable changes to this project will be documented in this file.
     * When `true` it will automatically compile all Sass files when watching is started. *Default value is `true`*
 
 ### Changed
-- Updated the issue report command text from `Create an 'Unexpected Error' issue` to `Report an issue` to simpilfy and be more inline with the normality.
+- Updated the issue report command text from `Create an 'Unexpected Error' issue` to `Report an issue` to simplify and be more inline with the normality.
 - Now using webpack to minify and speed up the extension
 
 ### Other
-- Doc changes/general tidy up, updated .vscodeignore, update license, update .gitignore
+- Doc changes/general tidy up, updated `.vscodeignore`, update license, update `.gitignore`
 
 
 ## [4.0.0] - 2020-12-20
