@@ -692,10 +692,35 @@ export class AppModel {
                     );
                     let basePath = folder.uri.fsPath;
 
-                    if (forceBaseDirectory) {
-                        basePath = path.resolve(basePath, forceBaseDirectory);
-
-                        if (!fs.existsSync(basePath)) {
+                    if (
+                        forceBaseDirectory &&
+                        forceBaseDirectory.length > 1
+                    ) {
+                        basePath = path.resolve(
+                            basePath,
+                            [ "\\", "/" ].indexOf(forceBaseDirectory.substr(0, 1)) >= 0
+                                ? forceBaseDirectory.substr(1)
+                                : forceBaseDirectory
+                        );
+    
+                        try
+                        {
+                            if (!(await fs.promises.stat(basePath)).isDirectory()) {
+                                OutputWindow.Show(
+                                    "Error with your `forceBaseDirectory` setting",
+                                    [
+                                        `Path is not a folder: ${basePath}`,
+                                        `Setting: "${forceBaseDirectory}"`,
+                                        `Workspace folder: ${folder.name}`,
+                                    ],
+                                    true
+                                );
+    
+                                return null;
+                            }
+                        }
+                        catch
+                        {
                             OutputWindow.Show(
                                 "Error with your `forceBaseDirectory` setting",
                                 [
@@ -705,8 +730,8 @@ export class AppModel {
                                 ],
                                 true
                             );
-
-                            return [];
+    
+                            return null;
                         }
                     }
 
