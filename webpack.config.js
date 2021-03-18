@@ -52,6 +52,9 @@ const config = {
             }
           })
         ]
+  },
+  stats: {
+    errorDetails: true
   }
 };
 module.exports = config;
