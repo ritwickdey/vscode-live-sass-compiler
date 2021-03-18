@@ -26,8 +26,8 @@ A VSCode Extension that help you to compile/transpile your SASS/SCSS files to CS
 ## Installation
 Open VSCode Editor and Press `ctrl+P`, type `ext install glenn2223.live-sass`.
 
-## Settings
-All settings are now listed in the [Settings Docs](./docs/settings.md).
+## Settings & Commands
+All settings are now listed in the [Settings & Commands Docs](./docs/settings.md).
 
 ## FAQ
 *All FAQs are now listed in the [FAQ Docs](./docs/faqs.md)*
