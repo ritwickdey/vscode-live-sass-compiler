@@ -24,7 +24,25 @@ All notable changes to this project will be documented in this file.
 
 >:warning: v5 alphas may have breaking changes from one release to the next. All change, breaking or otherwise, will be displayed in this changelog. These changes will then be condensed into a single list for the official v5 release
 
-## 5.0.0-alpha.2 - ONGOING
+## 5.0.0-alpha.3 - ONGOING
+
+### Breaking changes
+- Changes to `autoprefix` settings
+  - The default is now `defaults` *(as per Autoprefixer recommendations)*
+  - The setting no longer accepts `string[] OR null`, but a `string[] OR boolean`
+    - Rather than `null`, you now use `false`
+  
+### Added
+- When `autoprefix` is true we will search for either:
+  - a `.browserlistsrc` file or,
+  - `"browserslist": [ string[] ]` in a `package.json` file
+
+  *(This allows you to use the same setting across your solution, rather than duplicating content)*
+
+### Fixed
+- Fixed: the `forceBaseDirectory` setting was starting at the drive root, now uses the workspace root <!-- THIS CAN BE REMOVED ON FULL V5 RELEASE -->
+
+## 5.0.0-alpha.2
 
 ### Breaking changes
 - No longer supporting `brace expansion` glob patterns
@@ -57,7 +75,7 @@ All notable changes to this project will be documented in this file.
   - Other small changes *(nothing user facing)*
 - Various dev dependency updates *(nothing user facing)*
 
-## 5.0.0-alpha.1 - ONGOING
+## 5.0.0-alpha.1
 
 ### Breaking changes
 - Not dependant on `ritwickdey.LiveServer` as there was no actual code dependencies in the extension (#23). If you require the Live Server extension, it can still be installed from [here](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)

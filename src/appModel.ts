@@ -35,14 +35,14 @@ export class AppModel {
         StatusBarUi.init(this.isWatching);
     }
 
-    StartWatching(): void {
+    async StartWatching(): Promise<void> {
         const compileOnWatch = Helper.getConfigSettings<boolean>("compileOnWatch");
 
         if (!this.isWatching) {
             this.isWatching = !this.isWatching;
 
             if (compileOnWatch) {
-                this.compileAllFiles();
+                await this.compileAllFiles();
             }
         }
 
@@ -61,13 +61,39 @@ export class AppModel {
         OutputWindow.Show(null, null, true);
     }
 
-    createIssue(): void {
-        this._logger.InitiateIssueCreator();
+    async createIssue(): Promise<void> {
+        await this._logger.InitiateIssueCreator();
     }
 
-    private getCssStyle(format: "compressed" | "expanded" = "expanded") {
-        return SassHelper.targetCssFormat(format);
+    /**
+     * Waiting to see if Autoprefixer will add my changes
+    async browserslistChecks(): Promise<void> {
+        try {
+            const autoprefixerTarget = Helper.getConfigSettings<Array<string> | boolean>(
+                    "autoprefix"
+                ),
+                filePath = vscode.window.activeTextEditor.document.fileName;
+
+            if (
+                autoprefixerTarget === true &&
+                (
+                    filePath.endsWith(`${path.sep}package.json`) ||
+                    filePath.endsWith(`${path.sep}.browserslistrc`)
+                )
+            )
+                autoprefixer.clearBrowserslistCaches();
+
+        } catch (err) {
+            await this._logger.LogIssueWithAlert(
+                `Unhandled error while clearing browserlist cache. Error message: ${err.message}`,
+                {
+                    triggeringFile: vscode.window.activeTextEditor.document.fileName,
+                    error: ErrorLogger.PrepErrorForLogging(err),
+                }
+            );
+        }
     }
+     */
 
     //#region Compilation functions
 
@@ -239,6 +265,10 @@ export class AppModel {
 
     //#region Private
 
+    private getCssStyle(format: "compressed" | "expanded" = "expanded") {
+        return SassHelper.targetCssFormat(format);
+    }
+
     /**
      * To Generate one One Css & Map file from Sass/Scss
      * @param SassPath Sass/Scss file URI (string)
@@ -253,7 +283,7 @@ export class AppModel {
         options
     ) {
         const generateMap = Helper.getConfigSettings<boolean>("generateMap"),
-            autoprefixerTarget = Helper.getConfigSettings<Array<string>>("autoprefix"),
+            autoprefixerTarget = Helper.getConfigSettings<Array<string> | boolean>("autoprefix"),
             showOutputWindow = Helper.getConfigSettings<boolean>("showOutputWindow"),
             compileResult = SassHelper.instance.compileOne(SassPath, mapFileUri, options),
             promises: Promise<IFileResolver>[] = [];
@@ -271,7 +301,7 @@ export class AppModel {
         let css: string = compileResult.result.css.toString(),
             map: string | null = compileResult.result.map?.toString();
 
-        if (autoprefixerTarget) {
+        if (autoprefixerTarget != false) {
             try {
                 const autoprefixerResult = await this.autoprefix(
                     css,
@@ -465,41 +495,49 @@ export class AppModel {
         map: string,
         filePath: string,
         savePath: string,
-        browsers: Array<string>
+        browsers: Array<string> | true
     ): Promise<{ css: string; map: string }> {
         const showOutputWindow = Helper.getConfigSettings<boolean>("showOutputWindow"),
             generateMap = Helper.getConfigSettings<boolean>("generateMap"),
             prefixer = postcss(
                 autoprefixer({
-                    overrideBrowserslist: browsers,
+                    overrideBrowserslist: browsers === true ? null : browsers,
                 })
             );
 
-        const result = await prefixer.process(css, {
-            from: filePath,
-            to: savePath,
-            map: {
-                inline: false,
-                prev: map,
-            },
-        });
+        // TODO: REMOVE - when autoprefixer can stop caching the browsers
+        const oldBrowserlistCache = process.env.BROWSERSLIST_DISABLE_CACHE;
+        process.env.BROWSERSLIST_DISABLE_CACHE = "1";
 
-        result.warnings().forEach((warn) => {
-            const body: string[] = [];
+        try {
+            const result = await prefixer.process(css, {
+                from: filePath,
+                to: savePath,
+                map: {
+                    inline: false,
+                    prev: map,
+                },
+            });
 
-            if (warn.node.source?.input.file) {
-                body.push(warn.node.source.input.file + `:${warn.line}:${warn.column}`);
-            }
+            result.warnings().forEach((warn) => {
+                const body: string[] = [];
 
-            body.push(warn.text);
+                if (warn.node.source?.input.file) {
+                    body.push(warn.node.source.input.file + `:${warn.line}:${warn.column}`);
+                }
 
-            OutputWindow.Show(`Autoprefix ${warn.type || "error"}`, body, showOutputWindow);
-        });
+                body.push(warn.text);
 
-        return {
-            css: result.css,
-            map: generateMap ? result.map.toString() : null,
-        };
+                OutputWindow.Show(`Autoprefix ${warn.type || "error"}`, body, showOutputWindow);
+            });
+
+            return {
+                css: result.css,
+                map: generateMap ? result.map.toString() : null,
+            };
+        } finally {
+            process.env.BROWSERSLIST_DISABLE_CACHE = oldBrowserlistCache;
+        }
     }
 
     //#endregion Private
@@ -557,10 +595,35 @@ export class AppModel {
                 );
                 let basePath = folder.uri.fsPath;
 
-                if (forceBaseDirectory) {
-                    basePath = path.resolve(basePath, forceBaseDirectory);
+                if (
+                    forceBaseDirectory &&
+                    forceBaseDirectory.length > 1
+                ) {
+                    basePath = path.resolve(
+                        basePath,
+                        [ "\\", "/" ].indexOf(forceBaseDirectory.substr(0, 1))
+                            ? forceBaseDirectory.substr(1)
+                            : forceBaseDirectory
+                    );
 
-                    if (!fs.existsSync(basePath)) {
+                    try
+                    {
+                        if (!(await fs.promises.stat(basePath)).isDirectory()) {
+                            OutputWindow.Show(
+                                "Error with your `forceBaseDirectory` setting",
+                                [
+                                    `Path is not a folder: ${basePath}`,
+                                    `Setting: "${forceBaseDirectory}"`,
+                                    `Workspace folder: ${folder.name}`,
+                                ],
+                                true
+                            );
+
+                            return null;
+                        }
+                    }
+                    catch
+                    {
                         OutputWindow.Show(
                             "Error with your `forceBaseDirectory` setting",
                             [

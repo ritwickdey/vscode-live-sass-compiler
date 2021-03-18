@@ -16,8 +16,8 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
         const disposablecompileAll = vscode.commands.registerCommand(
                 "liveSass.command.watchMySass",
-                () => {
-                    appModel.StartWatching();
+                async () => {
+                    await appModel.StartWatching();
                 }
             ),
             disposableStopWaching = vscode.commands.registerCommand(
@@ -46,8 +46,8 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             ),
             disposableCreateIssue = vscode.commands.registerCommand(
                 "liveSass.command.createIssue",
-                () => {
-                    appModel.createIssue();
+                async () => {
+                    await appModel.createIssue();
                 }
             ),
             disposableDebugInclusion = vscode.commands.registerCommand(
@@ -63,6 +63,8 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
                 }
             ),
             disposableOnDidSave = vscode.workspace.onDidSaveTextDocument(async () => {
+                // TODO: ADD - once autopefixer can stop caching browserslist
+                //await appModel.browserslistChecks();
                 await appModel.compileOnSave();
             });
 

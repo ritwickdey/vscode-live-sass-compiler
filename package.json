@@ -2,7 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime with live browser reload.",
-    "version": "5.0.0-alpha.2",
+    "version": "5.0.0-alpha.3",
     "preview": true,
     "publisher": "glenn2223",
     "author": {
@@ -186,14 +186,9 @@
                 "liveSassCompile.settings.autoprefix": {
                     "type": [
                         "array",
-                        "null"
+                        "boolean"
                     ],
-                    "default": [
-                        "> 0.5%",
-                        "last 2 versions",
-                        "Firefox ESR",
-                        "not dead"
-                    ],
+                    "default": "defaults",
                     "description": "Automatically add vendor prefixes to unsupported CSS properties (e. g. transform -> -ms-transform). Specify what browsers to target with an array of strings (uses [Browserslist](https://github.com/ai/browserslist)). Pass `null` to turn off.",
                     "items": {
                         "type": "string"
@@ -272,7 +267,7 @@
         "webpack-cli": "^4.4.0"
     },
     "announcement": {
-        "onVersion": "5.0.0-alpha.2",
-        "message": "SassCompiler v5(alpha 2): New in this release: performance boost (+ support for more glob expressions) & Localised date and time on change detected. --- Thanks for testing the alpha! Please be aware that breaking changes can happen in any alpha release."
+        "onVersion": "5.0.0-alpha.3",
+        "message": "SassCompiler v5(alpha 3): New in this release: Autoprefixer can now use a `.browserlistsrc` file or `\"browserslist\": [ ... ]` in a `package.json` file, just set `autoprefixer` to `true`. --- Thanks for testing the alpha! Please be aware that breaking changes can happen in any alpha release."
     }
 }
