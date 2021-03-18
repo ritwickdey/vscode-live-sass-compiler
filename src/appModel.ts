@@ -735,8 +735,8 @@ export class AppModel {
                         }
                     }
 
-                    // @ts-ignore ts2322 => string doesn't match string[] (False negative as string[] is allowed)
-                    const isMatch = picomatch(queryPattern, { ignore: excludedList });
+                    // @ts-ignore ts2322 => string[] doesn't match string (False negative as string[] is allowed)
+                    const isMatch = picomatch(queryPattern, { ignore: excludedList, dot: true });
 
                     return (await new fdir()
                         .crawlWithOptions(basePath, {
