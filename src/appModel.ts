@@ -601,7 +601,7 @@ export class AppModel {
                 ) {
                     basePath = path.resolve(
                         basePath,
-                        [ "\\", "/" ].indexOf(forceBaseDirectory.substr(0, 1))
+                        [ "\\", "/" ].indexOf(forceBaseDirectory.substr(0, 1)) >= 0
                             ? forceBaseDirectory.substr(1)
                             : forceBaseDirectory
                     );
