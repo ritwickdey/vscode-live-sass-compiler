@@ -24,7 +24,19 @@ All notable changes to this project will be documented in this file.
 
 >:warning: v5 alphas may have breaking changes from one release to the next. All change, breaking or otherwise, will be displayed in this changelog. These changes will then be condensed into a single list for the official v5 release
 
-## 5.0.0-alpha.3 - ONGOING
+## 5.0.0-alpha.4 - ONGOING
+
+### Breaking changes
+- Changes to the `showOutputWindow` setting **now called `showOutputWindowOn`** #26
+  - The system now acts as more of a logger rather than a mass of information
+  - Accepted values are now `Trace`, `Debug`, `Information`, `Warning` or `Error`
+  - The default is now `Warning`
+  
+### Added
+- Loads more logging at lower log levels (`Information` and `Trace`)
+  - *This is just the first draft, I will review the logging before a pre-release* <!-- THIS CAN BE REMOVED ON FULL V5 RELEASE -->
+
+## 5.0.0-alpha.3
 
 ### Breaking changes
 - Changes to `autoprefix` settings

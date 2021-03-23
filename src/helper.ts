@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { OutputLevel } from "./VscodeExtensions";
 
 export interface IFormat {
     format: "compressed" | "expanded";
@@ -15,5 +16,25 @@ export class Helper {
 
     static getConfigSettings<T>(val: string, folder?: vscode.WorkspaceFolder): T {
         return this.configSettings(folder).get(val) as T;
+    }
+
+    static getOutputLogLevel(): OutputLevel {
+        switch (this.configSettings().get("showOutputWindowOn") as string) {
+            case "Trace":
+                return OutputLevel.Trace;
+
+            case "Debug":
+                return OutputLevel.Debug;
+
+            case "Information":
+                return OutputLevel.Information;
+
+            case "Error":
+                return OutputLevel.Error;
+
+            case "Warning":
+            default:
+                return OutputLevel.Warning;
+        }
     }
 }

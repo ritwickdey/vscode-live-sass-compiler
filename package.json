@@ -2,7 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime with live browser reload.",
-    "version": "5.0.0-alpha.3",
+    "version": "5.0.0-alpha.4",
     "preview": true,
     "publisher": "glenn2223",
     "author": {
@@ -204,10 +204,17 @@
                     "default": true,
                     "description": "Set this to `false` if you don't want all Sass files to be compiled when Live Sass Compiler starts watching."
                 },
-                "liveSassCompile.settings.showOutputWindow": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Set this to `false` if you do not want the output window to show.\nNote: You can use the command palette to open the Live Sass output window.\nDefault is `true`"
+                "liveSassCompile.settings.showOutputWindowOn": {
+                    "type": "string",
+                    "enum": [
+                        "Trace",
+                        "Debug",
+                        "Information",
+                        "Warning",
+                        "Error"
+                    ],
+                    "default": "Warning",
+                    "description": "Set the level of logging that is recorded and shown to you.\nDefault is `Warning`"
                 },
                 "liveSassCompile.settings.forceBaseDirectory": {
                     "type": [
@@ -267,7 +274,7 @@
         "webpack-cli": "^4.4.0"
     },
     "announcement": {
-        "onVersion": "5.0.0-alpha.3",
-        "message": "SassCompiler v5(alpha 3): New in this release: Autoprefixer can now use a `.browserlistsrc` file or `\"browserslist\": [ ... ]` in a `package.json` file, just set `autoprefixer` to `true`. --- Thanks for testing the alpha! Please be aware that breaking changes can happen in any alpha release."
+        "onVersion": "5.0.0-alpha.4",
+        "message": "SassCompiler v5(alpha 4): New in this release: `showOutputWindow` is now `showOutputWindowOn` and accepts log values like `Information` or `Error`. --- Thanks for testing the alpha! Please be aware that breaking changes can happen in any alpha release."
     }
 }

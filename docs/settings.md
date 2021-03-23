@@ -181,11 +181,11 @@ Autoprefix unsupported CSS properties (e.g. `transform` will also add `-ms-trans
 
 ---
 
-### liveSassCompile.settings.showOutputWindow
-Optionally display the output window when compiling files
+### liveSassCompile.settings.showOutputWindowOn
+Set the logging level at which errors will be shown in the output window
 
-**Type:** `boolean`  
-**Default:** `true`
+**Type:** `Trace` OR `Debug` OR `Information` OR `Warning` OR `Error`  
+**Default:** `Warning`
 
 *There is also a [command](#livesasscommandopenoutputwindow)*
 
