@@ -10,7 +10,7 @@ export async function checkNewAnnouncement(memento: Memento): Promise<void> {
     const announment = packageJSON.announcement;
 
     if (!announment && Object.keys(announment).length === 0) {
-        OutputWindow.Show(OutputLevel.Trace, "No announcement", ["No announcement has been found"]);
+        OutputWindow.Show(OutputLevel.Trace, "No announcement has been found");
 
         return;
     }
@@ -33,8 +33,6 @@ export async function checkNewAnnouncement(memento: Memento): Promise<void> {
             commands.executeCommand("vscode.open", Uri.parse(url));
         }
     } else {
-        OutputWindow.Show(OutputLevel.Trace, "Announcement already shown", [
-            "There is an announcement, but it's already been shown",
-        ]);
+        OutputWindow.Show(OutputLevel.Trace, "Announcement has already been shown");
     }
 }

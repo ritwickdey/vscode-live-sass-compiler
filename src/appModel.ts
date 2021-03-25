@@ -22,6 +22,8 @@ export class AppModel {
     private _logger: ErrorLogger;
 
     constructor(workplaceState: vscode.Memento) {
+        OutputWindow.Show(OutputLevel.Trace, "Constructing app model");
+
         this.isWatching = Helper.getConfigSettings<boolean>("watchOnLaunch");
 
         this._logger = new ErrorLogger(workplaceState);
@@ -31,6 +33,8 @@ export class AppModel {
         }
 
         StatusBarUi.init(this.isWatching);
+
+        OutputWindow.Show(OutputLevel.Trace, "App model constructed");
     }
 
     async StartWatching(): Promise<void> {
@@ -101,6 +105,8 @@ export class AppModel {
      * Compile all files.
      */
     async compileAllFiles(): Promise<void> {
+        OutputWindow.Show(OutputLevel.Trace, "Starting to compile all files");
+
         try {
             StatusBarUi.working();
 
@@ -122,6 +128,8 @@ export class AppModel {
      * Compiles the currently active file
      */
     async compileCurrentFile(): Promise<void> {
+        OutputWindow.Show(OutputLevel.Trace, "Starting to compile current file");
+
         try {
             if (!vscode.window.activeTextEditor) {
                 StatusBarUi.customMessage(
@@ -130,7 +138,7 @@ export class AppModel {
                     "warning"
                 );
 
-                OutputWindow.Show(OutputLevel.Warning, "No active file", [
+                OutputWindow.Show(OutputLevel.Debug, "No active file", [
                     "There isn't an active editor window to process",
                 ]);
 
@@ -143,7 +151,7 @@ export class AppModel {
 
             if (!this.isSassFile(sassPath)) {
                 if (this.isSassFile(sassPath, true)) {
-                    OutputWindow.Show(OutputLevel.Warning, "Can't process partial Sass", [
+                    OutputWindow.Show(OutputLevel.Debug, "Can't process partial Sass", [
                         "The file currently open in the editor window is a partial sass file, these aren't processed singly",
                     ]);
 
@@ -153,7 +161,7 @@ export class AppModel {
                         "warning"
                     );
                 } else {
-                    OutputWindow.Show(OutputLevel.Warning, "Not a Sass file", [
+                    OutputWindow.Show(OutputLevel.Debug, "Not a Sass file", [
                         "The file currently open in the editor window isn't a sass file",
                     ]);
 
@@ -176,7 +184,13 @@ export class AppModel {
 
             const formats = Helper.getConfigSettings<IFormat[]>("formats");
             const result = await Promise.all(
-                formats.map(async (format) => {
+                formats.map(async (format, index) => {
+                    OutputWindow.Show(
+                        OutputLevel.Trace,
+                        `Starting format ${index + 1} of ${formats.length}`,
+                        [`Settings: ${JSON.stringify(format)}`]
+                    );
+
                     // Each format
                     const options = this.getCssStyle(format.format),
                         cssMapUri = await this.generateCssAndMapUri(sassPath, format);
@@ -189,7 +203,9 @@ export class AppModel {
                 })
             );
 
-            if (result.indexOf(false) < 0) StatusBarUi.compilationSuccess(this.isWatching);
+            if (result.indexOf(false) < 0) {
+                StatusBarUi.compilationSuccess(this.isWatching);
+            }
         } catch (err) {
             const sassPath = vscode.window.activeTextEditor
                 ? vscode.window.activeTextEditor.document.fileName
@@ -256,10 +272,7 @@ export class AppModel {
                         OutputWindow.Show(
                             OutputLevel.Trace,
                             `Starting format ${index + 1} of ${formats.length}`,
-                            [
-                                `Starting compilation of format ${index + 1}`,
-                                `Settings: ${JSON.stringify(format)}`,
-                            ]
+                            [`Settings: ${JSON.stringify(format)}`]
                         );
 
                         // Each format
@@ -335,6 +348,10 @@ export class AppModel {
             map: string | null = compileResult.result.map?.toString();
 
         if (autoprefixerTarget != false) {
+            OutputWindow.Show(OutputLevel.Trace, "Autoprefixer isn't false, applying to file", [
+                `Path: ${sassPath}`,
+            ]);
+
             try {
                 const autoprefixerResult = await this.autoprefix(
                     css,
@@ -408,7 +425,7 @@ export class AppModel {
                 OutputWindow.Show(
                     OutputLevel.Trace,
                     `Starting file ${pathIndex + 1} of ${sassPaths.length}`,
-                    [`Starting processing of file ${pathIndex + 1}`, `Path: ${sassPath}`]
+                    [`Path: ${sassPath}`]
                 );
 
                 await Promise.all(
@@ -416,10 +433,7 @@ export class AppModel {
                         OutputWindow.Show(
                             OutputLevel.Trace,
                             `Starting format ${formatIndex + 1} of ${formats.length}`,
-                            [
-                                `Starting processing of format ${formatIndex + 1}`,
-                                `Settings: ${JSON.stringify(format)}`,
-                            ]
+                            [`Settings: ${JSON.stringify(format)}`]
                         );
 
                         // Each format
@@ -447,13 +461,17 @@ export class AppModel {
     private async generateCssAndMapUri(filePath: string, format: IFormat) {
         OutputWindow.Show(OutputLevel.Trace, "Calculating file paths", [
             "Calculating the save paths for the css and map output files",
-            `Path: ${filePath}`,
+            `Originating path: ${filePath}`,
         ]);
 
         const extensionName = format.extensionName || ".css",
             workspaceFolders = vscode.workspace.workspaceFolders;
 
         let generatedUri = null;
+
+        OutputWindow.Show(OutputLevel.Trace, "Searching for workspace", [
+            "Need to find a workspace folder that holds the file",
+        ]);
 
         let workspaceRoot: string;
         if (workspaceFolders) {
@@ -468,7 +486,7 @@ export class AppModel {
                         OutputWindow.Show(
                             OutputLevel.Trace,
                             `Checking folder ${index + 1} of ${workspaceFolders.length}`,
-                            [`Checking if folder ${index + 1} matches`],
+                            [`Folder: ${folder}`],
                             false
                         );
 
@@ -509,7 +527,7 @@ export class AppModel {
         if (format.savePath) {
             OutputWindow.Show(OutputLevel.Trace, "Using `savePath` setting", [
                 "This format has a `savePath`, using this (takes precedence if others are present)",
-                `Path: ${format.savePath}`,
+                `savePath: ${format.savePath}`,
             ]);
 
             if (format.savePath.startsWith("~")) {
@@ -552,7 +570,6 @@ export class AppModel {
                 OutputLevel.Trace,
                 "Using segment replacement",
                 [
-                    "Segment replacement keys and a replacement item exist in these settings, using them",
                     `Keys: [${format.savePathSegmentKeys.join(", ")}] - Replacement: ${
                         format.savePathReplaceSegmentsWith
                     }`,
@@ -603,14 +620,14 @@ export class AppModel {
         savePath: string,
         browsers: Array<string> | true
     ): Promise<{ css: string; map: string }> {
+        OutputWindow.Show(OutputLevel.Trace, "Preparing autoprefixer");
+
         const generateMap = Helper.getConfigSettings<boolean>("generateMap"),
             prefixer = postcss(
                 autoprefixer({
                     overrideBrowserslist: browsers === true ? null : browsers,
                 })
             );
-
-        OutputWindow.Show(OutputLevel.Trace, "Preparing for autoprefix");
 
         // TODO: REMOVE - when autoprefixer can stop caching the browsers
         const oldBrowserlistCache = process.env.BROWSERSLIST_DISABLE_CACHE;
@@ -622,7 +639,7 @@ export class AppModel {
         ]);
 
         try {
-            OutputWindow.Show(OutputLevel.Trace, "Starting autoprefix");
+            OutputWindow.Show(OutputLevel.Trace, "Starting autoprefixer");
 
             const result = await prefixer.process(css, {
                 from: filePath,
@@ -649,7 +666,7 @@ export class AppModel {
                 );
             });
 
-            OutputWindow.Show(OutputLevel.Trace, "Completed autoprefix");
+            OutputWindow.Show(OutputLevel.Trace, "Completed autoprefixer");
 
             return {
                 css: result.css,
@@ -672,12 +689,19 @@ export class AppModel {
     //#region UI manipulation functions
 
     private revertUIToWatchingStatus() {
+        OutputWindow.Show(
+            OutputLevel.Trace,
+            "Registered timeout to revert UI to correct watching status"
+        );
+
         setTimeout(() => {
             this.revertUIToWatchingStatusNow();
         }, 3000);
     }
 
     private revertUIToWatchingStatusNow() {
+        OutputWindow.Show(OutputLevel.Trace, "Switching UI state");
+
         if (this.isWatching) {
             StatusBarUi.watching();
 
@@ -704,6 +728,10 @@ export class AppModel {
     }
 
     private async isSassFileExcluded(sassPath: string): Promise<boolean> {
+        OutputWindow.Show(OutputLevel.Trace, "Checking SASS path isn't excluded", [
+            `Path: ${sassPath}`,
+        ]);
+
         const excludeItems = Helper.getConfigSettings<string[]>("excludeList"),
             includeItems = Helper.getConfigSettings<string[] | null>("includeItems");
         let fileList = ["**/*.s[a|c]ss"];
@@ -712,15 +740,29 @@ export class AppModel {
             fileList = includeItems.concat("**/_*.s[a|c]ss");
         }
 
+        OutputWindow.Show(OutputLevel.Trace, "Checking all workspace folders in project");
+
         const fileResult = await Promise.all(
-            vscode.workspace.workspaceFolders.map(async (folder) => {
+            vscode.workspace.workspaceFolders.map(async (folder, index) => {
+                OutputWindow.Show(
+                    OutputLevel.Trace,
+                    `Checking folder ${index + 1} of ${vscode.workspace.workspaceFolders.length}`,
+                    [`Folder: ${folder}`]
+                );
+
                 const forceBaseDirectory = Helper.getConfigSettings<string | null>(
                     "forceBaseDirectory",
                     folder
                 );
+
                 let basePath = folder.uri.fsPath;
 
                 if (forceBaseDirectory && forceBaseDirectory.length > 1) {
+                    OutputWindow.Show(
+                        OutputLevel.Trace,
+                        "`forceBaseDirectory` setting found, checking validity"
+                    );
+
                     basePath = path.resolve(
                         basePath,
                         ["\\", "/"].indexOf(forceBaseDirectory.substr(0, 1)) >= 0
@@ -755,10 +797,23 @@ export class AppModel {
 
                         return null;
                     }
+
+                    OutputWindow.Show(
+                        OutputLevel.Trace,
+                        "No problem with path, changing from workspace folder",
+                        [`New folder: ${basePath}`]
+                    );
+                } else {
+                    OutputWindow.Show(
+                        OutputLevel.Trace,
+                        "No base folder override found. Keeping workspace folder"
+                    );
                 }
 
-                // @ts-ignore ts2322 => string doesn't match string[] (False negative as string[] is allowed)
+                // @ts-ignore ts2322 => string[] doesn't match string (False negative as string[] is allowed)
                 const isMatch = picomatch(fileList, { ignore: excludeItems, dot: true });
+
+                OutputWindow.Show(OutputLevel.Trace, "Searching folder");
 
                 return (
                     ((await new fdir()
@@ -783,7 +838,14 @@ export class AppModel {
         }
 
         // If doesn't include true then it's not been found
-        return !fileResult.includes(true);
+        if (fileResult.includes(true)) {
+            OutputWindow.Show(OutputLevel.Trace, "File found, not excluded");
+
+            return false;
+        } else {
+            OutputWindow.Show(OutputLevel.Trace, "File not found, must be excluded");
+            return true;
+        }
     }
 
     private async getSassFiles(
@@ -791,6 +853,11 @@ export class AppModel {
         isQueryPatternFixed = false,
         isDebugging = false
     ): Promise<string[]> {
+        OutputWindow.Show(OutputLevel.Trace, "Getting SASS files", [
+            `Query pattern: ${queryPattern}`,
+            `Can be overwritten: ${!isQueryPatternFixed}`,
+        ]);
+
         const excludedList = isDebugging
                 ? ["**/node_modules/**", ".vscode/**"]
                 : Helper.getConfigSettings<string[]>("excludeList"),
@@ -798,20 +865,37 @@ export class AppModel {
 
         if (!isQueryPatternFixed && includeItems && includeItems.length) {
             queryPattern = includeItems;
+
+            OutputWindow.Show(OutputLevel.Trace, "Query pattern overwritten", [
+                `New pattern(s): "${includeItems.join('" , "')}"`,
+            ]);
         }
 
         const fileList: string[] = [];
-
         (
             await Promise.all(
-                vscode.workspace.workspaceFolders.map(async (folder) => {
+                vscode.workspace.workspaceFolders.map(async (folder, index) => {
+                    OutputWindow.Show(
+                        OutputLevel.Trace,
+                        `Checking folder ${index + 1} of ${
+                            vscode.workspace.workspaceFolders.length
+                        }`,
+                        [`Folder: ${folder}`]
+                    );
+
                     const forceBaseDirectory = Helper.getConfigSettings<string | null>(
                         "forceBaseDirectory",
                         folder
                     );
+
                     let basePath = folder.uri.fsPath;
 
                     if (forceBaseDirectory && forceBaseDirectory.length > 1) {
+                        OutputWindow.Show(
+                            OutputLevel.Trace,
+                            "`forceBaseDirectory` setting found, checking validity"
+                        );
+
                         basePath = path.resolve(
                             basePath,
                             ["\\", "/"].indexOf(forceBaseDirectory.substr(0, 1)) >= 0
@@ -846,6 +930,17 @@ export class AppModel {
 
                             return null;
                         }
+
+                        OutputWindow.Show(
+                            OutputLevel.Trace,
+                            "No problem with path, changing from workspace folder",
+                            [`New folder: ${basePath}`]
+                        );
+                    } else {
+                        OutputWindow.Show(
+                            OutputLevel.Trace,
+                            "No base folder override found. Keeping workspace folder"
+                        );
                     }
 
                     // @ts-ignore ts2322 => string[] doesn't match string (False negative as string[] is allowed)
@@ -868,6 +963,8 @@ export class AppModel {
                 fileList.push(file);
             });
         });
+
+        OutputWindow.Show(OutputLevel.Trace, `Found ${fileList.length} SASS files`);
 
         return fileList;
     }
@@ -994,7 +1091,11 @@ export class AppModel {
     //#endregion Debugging
 
     dispose(): void {
+        OutputWindow.Show(OutputLevel.Trace, "Disposing app model");
+
         StatusBarUi.dispose();
         OutputWindow.dispose();
+
+        OutputWindow.Show(OutputLevel.Trace, "App model disposed");
     }
 }

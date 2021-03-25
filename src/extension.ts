@@ -17,52 +17,94 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         const disposablecompileAll = vscode.commands.registerCommand(
                 "liveSass.command.watchMySass",
                 async () => {
+                    OutputWindow.Show(
+                        OutputLevel.Trace,
+                        'Command called: "liveSass.command.watchMySass"'
+                    );
+
                     await appModel.StartWatching();
                 }
             ),
             disposableStopWaching = vscode.commands.registerCommand(
                 "liveSass.command.donotWatchMySass",
                 () => {
+                    OutputWindow.Show(
+                        OutputLevel.Trace,
+                        'Command called: "liveSass.command.donotWatchMySass"'
+                    );
+
                     appModel.StopWatching();
                 }
             ),
             disposableOneTimeCompileSass = vscode.commands.registerCommand(
                 "liveSass.command.oneTimeCompileSass",
                 async () => {
+                    OutputWindow.Show(
+                        OutputLevel.Trace,
+                        'Command called: "liveSass.command.oneTimeCompileSass"'
+                    );
+
                     await appModel.compileAllFiles();
                 }
             ),
             disposableCompileCurrentSass = vscode.commands.registerCommand(
                 "liveSass.command.compileCurrentSass",
                 async () => {
+                    OutputWindow.Show(
+                        OutputLevel.Trace,
+                        'Command called: "liveSass.command.compileCurrentSass"'
+                    );
+
                     await appModel.compileCurrentFile();
                 }
             ),
             disposableOpenOutputWindow = vscode.commands.registerCommand(
                 "liveSass.command.openOutputWindow",
                 () => {
+                    OutputWindow.Show(
+                        OutputLevel.Trace,
+                        'Command called: "liveSass.command.openOutputWindow"'
+                    );
+
                     appModel.openOutputWindow();
                 }
             ),
             disposableCreateIssue = vscode.commands.registerCommand(
                 "liveSass.command.createIssue",
                 async () => {
+                    OutputWindow.Show(
+                        OutputLevel.Trace,
+                        'Command called: "liveSass.command.createIssue"'
+                    );
+
                     await appModel.createIssue();
                 }
             ),
             disposableDebugInclusion = vscode.commands.registerCommand(
                 "liveSass.command.debugInclusion",
                 async () => {
+                    OutputWindow.Show(
+                        OutputLevel.Trace,
+                        'Command called: "liveSass.command.debugInclusion"'
+                    );
+
                     await appModel.debugInclusion();
                 }
             ),
             disposableDebugFileList = vscode.commands.registerCommand(
                 "liveSass.command.debugFileList",
                 async () => {
+                    OutputWindow.Show(
+                        OutputLevel.Trace,
+                        'Command called: "liveSass.command.debugFileList"'
+                    );
+
                     await appModel.debugFileList();
                 }
             ),
             disposableOnDidSave = vscode.workspace.onDidSaveTextDocument(async () => {
+                OutputWindow.Show(OutputLevel.Trace, 'VS Code event: "onDidSaveTextDocument"');
+
                 // TODO: ADD - once autoprefixer can stop caching browserslist
                 //await appModel.browserslistChecks();
                 await appModel.compileOnSave();

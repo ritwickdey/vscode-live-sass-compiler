@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { OutputLevel, OutputWindow } from "./VscodeExtensions";
 
 export class StatusBarUi {
     private static _statusBarItem: vscode.StatusBarItem;
@@ -17,12 +18,15 @@ export class StatusBarUi {
 
     static init(watchOnLaunch: boolean): void {
         StatusBarUi.customMessage("Starting...", "Initializing... switching state in 1 second");
+        
         setTimeout(function () {
             watchOnLaunch ? StatusBarUi.watching() : StatusBarUi.notWatching();
         }, 1000);
     }
 
     static watching(): void {
+        OutputWindow.Show(OutputLevel.Trace, "Changing status bar to: Watching");
+
         StatusBarUi.statusBarItem.text = `$(telescope) Watching...`;
         StatusBarUi.statusBarItem.color = "inherit";
         StatusBarUi.statusBarItem.command = "liveSass.command.donotWatchMySass";
@@ -30,6 +34,11 @@ export class StatusBarUi {
     }
 
     static notWatching(): void {
+        OutputWindow.Show(
+            OutputLevel.Trace,
+            "Changing status bar to: Not watching (or Watch SASS)"
+        );
+
         StatusBarUi.statusBarItem.text = `$(eye) Watch Sass`;
         StatusBarUi.statusBarItem.color = "inherit";
         StatusBarUi.statusBarItem.command = "liveSass.command.watchMySass";
@@ -43,7 +52,14 @@ export class StatusBarUi {
         );
     }
 
-    static customMessage(text: string, tooltip: string, iconName = "pulse", command: string = null): void {
+    static customMessage(
+        text: string,
+        tooltip: string,
+        iconName = "pulse",
+        command: string = null
+    ): void {
+        OutputWindow.Show(OutputLevel.Trace, `Changing status bar to: "${text}"`);
+
         let icon = "";
         if (iconName) icon = `$(${iconName}) `;
 
@@ -54,11 +70,17 @@ export class StatusBarUi {
 
     // Quick status bar messages after compile success or error
     static compilationSuccess(isWatching: boolean): void {
+        OutputWindow.Show(OutputLevel.Trace, "Changing status bar to: Success", [
+            "Registered timeout to switch state back",
+        ]);
+
         StatusBarUi.statusBarItem.text = `$(check) Success`;
         StatusBarUi.statusBarItem.color = "#33ff00";
         StatusBarUi.statusBarItem.command = "liveSass.command.openOutputWindow";
 
         setTimeout(function () {
+            OutputWindow.Show(OutputLevel.Trace, "Firing timeout function to switch back");
+
             StatusBarUi.statusBarItem.color = "inherit";
             if (isWatching) {
                 StatusBarUi.watching();
@@ -69,21 +91,36 @@ export class StatusBarUi {
     }
 
     static compilationError(isWatching: boolean): void {
+        OutputWindow.Show(OutputLevel.Trace, "Changing status bar to: Error", null, false);
+
         StatusBarUi.statusBarItem.text = `$(x) Error`;
         StatusBarUi.statusBarItem.color = "#ff0033";
         StatusBarUi.statusBarItem.command = "liveSass.command.openOutputWindow";
 
         if (isWatching) {
+            OutputWindow.Show(
+                OutputLevel.Trace,
+                "Registered timeout to switch state back",
+                null,
+                false
+            );
+
             setTimeout(function () {
+                OutputWindow.Show(OutputLevel.Trace, "Firing timeout function to switch back");
+
                 StatusBarUi.statusBarItem.color = "inherit";
                 StatusBarUi.watching();
             }, 4500);
         } else {
             StatusBarUi.notWatching();
         }
+
+        OutputWindow.Show(OutputLevel.Trace, null);
     }
 
     static dispose(): void {
         StatusBarUi.statusBarItem.dispose();
+
+        OutputWindow.Show(OutputLevel.Trace, "Disposing Live SASS status bar item");
     }
 }

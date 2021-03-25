@@ -8,12 +8,18 @@ export class ErrorLogger {
     logs: LogEvent[] = [];
 
     constructor(workplaceState: Memento) {
+        OutputWindow.Show(OutputLevel.Trace, "Constructing error logger");
+
         this._workplaceState = workplaceState;
+
+        OutputWindow.Show(OutputLevel.Trace, "Clearing any old log data");
 
         this.ClearLogs();
     }
 
     async LogIssueWithAlert(Message: string, DetailedLogInfo: unknown): Promise<void> {
+        OutputWindow.Show(OutputLevel.Trace, "Logging issue", [`Message: ${Message}`]);
+
         WindowPopout.Alert(`Live Sass Compiler: ${Message}`);
 
         this.logs.push(new LogEvent(DetailedLogInfo));
@@ -21,7 +27,9 @@ export class ErrorLogger {
         await this.SaveLogs();
     }
 
-    async SaveLogs(): Promise<void> {
+    private async SaveLogs(): Promise<void> {
+        OutputWindow.Show(OutputLevel.Trace, "Saving logs to storage");
+
         await this._workplaceState.update(_errorLogPath, this.logs);
     }
 
@@ -74,7 +82,7 @@ export class ErrorLogger {
 
         OutputWindow.Show(OutputLevel.Trace, "Ready to create issue", [
             "The data has been saved to the clipboard",
-            "Attempting to open new issue URL on GitHub"
+            "Attempting to open new issue URL on GitHub",
         ]);
 
         await env.openExternal(
@@ -87,7 +95,7 @@ export class ErrorLogger {
             OutputLevel.Critical,
             'Opened your browser for creating an "Unexpected Error" issue',
             [
-                // TODO: Output all incidents to Output
+                // TODO: If required - setup command for outputting all logs
                 //'Not the right error message? Run `outputAllLogs` to see all recorded errors'
             ]
         );
@@ -100,6 +108,8 @@ export class ErrorLogger {
     }
 
     static PrepErrorForLogging(Err: Error): unknown {
+        OutputWindow.Show(OutputLevel.Trace, "Converting error to a usable object");
+
         return JSON.parse(JSON.stringify(Err, Object.getOwnPropertyNames(Err)));
     }
 }
