@@ -39,12 +39,12 @@ Open the `settings.json` file and type following key-value pairs. *By the way, y
 
 ---
 
-### Q. Why isn't it starting?/compiling my files?
+### Q. Why isn't it starting?
 
 <details>
 <summary>Answer</summary>
 
-If the extension doesn't activate (that's, show up in the status bar), then it's most likely that you don't have any `.scss` or`.sass` files in your project.
+If the extension doesn't activate (show up in the status bar), then it's most likely that you don't have any `.scss` or`.sass` files in your project.
 
 Just create a SASS file, or open one, and the extension will activate
 
