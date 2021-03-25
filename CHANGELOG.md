@@ -22,12 +22,16 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
->:warning: v5 alphas may have breaking changes from one release to the next. All changes, breaking or otherwise, will be displayed in this changelog. These changes will then be condensed into a single list for the official v5 release
+## 5.0.0-alpha.5 - ONGOING
+>This is the last planed alpha release. See [#45](https://github.com/glenn2223/vscode-live-sass-compiler/issues/45) for the release plan.
 
-## 5.0.0-alpha.4 - ONGOING
+### Changes
+- Increased trace logs, and adjusted some existing log levels/messages <!-- THIS CAN BE REMOVED ON FULL V5 RELEASE -->
+
+## 5.0.0-alpha.4
 
 ### Breaking changes
-- Changes to the `showOutputWindow` setting, **now called `showOutputWindowOn`** #26
+- Changes to the `showOutputWindow` setting, **now called `showOutputWindowOn`** [#26](https://github.com/glenn2223/vscode-live-sass-compiler/issues/26)
   - The system now acts as more of a logger rather than a mass of information
   - Accepted values are now `Trace`, `Debug`, `Information`, `Warning` or `Error`
   - The default is now `Warning`
@@ -90,9 +94,9 @@ All notable changes to this project will be documented in this file.
 ## 5.0.0-alpha.1
 
 ### Breaking changes
-- Not dependant on `ritwickdey.LiveServer` as there was no actual code dependencies in the extension (#23). If you require the Live Server extension, it can still be installed from [here](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)
-- Only works on VS Code v1.52 and newer (#34)
-- Settings have been updated for continuity and to better aid extension performance (#30)
+- Not dependant on `ritwickdey.LiveServer` as there was no actual code dependencies in the extension ([#23](https://github.com/glenn2223/vscode-live-sass-compiler/issues/23)). If you require the Live Server extension, it can still be installed from [here](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)
+- Only works on VS Code v1.52 and newer ([#34](https://github.com/glenn2223/vscode-live-sass-compiler/issues/34))
+- Settings have been updated for continuity and to better aid extension performance ([#30](https://github.com/glenn2223/vscode-live-sass-compiler/issues/30))
   - `formats[].savePath` must start with a path separator but not end in one
   - `includeItems` must start with a path separator and end in either `.sass` or `.scss` (for performance purposes)
   - `forceBaseDirectory` must start with a path separator but not end in one
@@ -122,10 +126,10 @@ All notable changes to this project will be documented in this file.
 ## [4.4.0] - 2021-01-31
 
 ### Added
-- New setting: `liveSassCompile.settings.forceBaseDirectory` #25
+- New setting: `liveSassCompile.settings.forceBaseDirectory` [#25](https://github.com/glenn2223/vscode-live-sass-compiler/issues/25)
   - A new setting that can help performance in large projects with few Sass/Scss files.
   - ~~**Note:** multi-root workspace with different folder structures can not use this efficiently (See [setting note](https://github.com/glenn2223/vscode-live-sass-compiler/blob/1d043a0541008dfa2b53c492f6a76dce4e3d9909/docs/settings.md) & [VS Code Feature Request](https://github.com/microsoft/vscode/issues/115482) (:+1: it) )~~ Fixed in v4.4.1
-- New feature: The status bar `Error` and `Success` messages can be clicked which will open the Output Window #25
+- New feature: The status bar `Error` and `Success` messages can be clicked which will open the Output Window [#25](https://github.com/glenn2223/vscode-live-sass-compiler/issues/25)
 
 ### Updates
 - `autoprefixer` from `10.2.1` to `10.2.4`
@@ -133,7 +137,7 @@ All notable changes to this project will be documented in this file.
 - Various dev-dependency updates
 
 ### Fixed
-- Part fix: Slow file handling #22. Full fix in v5 as some small breaking changes
+- Part fix: Slow file handling [#22](https://github.com/glenn2223/vscode-live-sass-compiler/issues/22). Full fix in v5 as some small breaking changes
   - The glob pattern matcher is causing bottlenecks, reducing load calls with small patch. However moving away from glob is the end-game (which will be happening in v5)
 - Fix: `compileCurrentSass` shows wrong message on fail
   - When you run `compileCurrentSass` and it would fail (for whatever reason) it would cause the output to show `Success` rather than `Error` (just the output was wrong, nothing else)

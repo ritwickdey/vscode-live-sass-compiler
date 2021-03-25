@@ -2,7 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime with live browser reload.",
-    "version": "5.0.0-alpha.4",
+    "version": "5.0.0-alpha.5",
     "preview": true,
     "publisher": "glenn2223",
     "author": {
@@ -274,7 +274,7 @@
         "webpack-cli": "^4.4.0"
     },
     "announcement": {
-        "onVersion": "5.0.0-alpha.4",
-        "message": "SassCompiler v5(alpha 4): New in this release: `showOutputWindow` is now `showOutputWindowOn` and accepts log values like `Information` or `Error`. --- Thanks for testing the alpha! Please be aware that breaking changes can happen in any alpha release."
+        "onVersion": "5.0.0-alpha.5",
+        "message": "SassCompiler v5(alpha 5): New in this release: Some logging tweaks. --- Thanks for testing the alpha! Please be aware that breaking changes can happen in any alpha release."
     }
 }
