@@ -16,11 +16,72 @@ Types of changes
 - Fixed for any bug fixes.
 - Security in case of vulnerabilities.
 - Breaking changes for break in new revision
-- Other for noteable changes that do not 
+- Other for notable changes that do not 
  -->
+
+>:warning: v5 release candidates (tagged `rc`) may have breaking changes from one release to the next. All changes, breaking or otherwise, will be displayed here. These changes will then be condensed into a single list for the official v5 release
 
 # Changelog
 All notable changes to this project will be documented in this file.
+
+## [5.0.0-rc.1] - 2021-04-01
+
+### Breaking changes
+- Not dependant on `ritwickdey.LiveServer` as there was no actual code dependencies in the extension ([#23](https://github.com/glenn2223/vscode-live-sass-compiler/issues/23)). If you require the Live Server extension, it can still be installed from [here](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)
+- Changes to the `showOutputWindow` setting, **now called `showOutputWindowOn`** ([#26](https://github.com/glenn2223/vscode-live-sass-compiler/issues/26))
+  - The system now acts as more of a logger rather than a mass of information
+  - Accepted values are now `Trace`, `Debug`, `Information`, `Warning` or `Error`
+  - The default is now `Warning`
+- Changes to [`autoprefix` settings](https://github.com/glenn2223/vscode-live-sass-compiler/blob/master/docs/settings.md#livesasscompilesettingsautoprefix) ([#41](https://github.com/glenn2223/vscode-live-sass-compiler/issues/41))
+  - The default is now `defaults` *(as per Autoprefixer recommendations)*
+  - The setting no longer accepts `string[] OR null`, but a `string[] OR boolean`
+    - Rather than `null`, you now use `false`
+- No longer supporting `brace expansion` glob patterns ([#27](https://github.com/glenn2223/vscode-live-sass-compiler/issues/27))
+  - This is because the underlying glob pattern matching has moved from `minimatch` to `picomatch`. A full feature comparison can be found [here](https://github.com/micromatch/picomatch#library-comparisons)
+- Only works on VS Code v1.52 and newer ([#34](https://github.com/glenn2223/vscode-live-sass-compiler/issues/34))
+- Settings have been updated for continuity and to better aid extension performance ([#30](https://github.com/glenn2223/vscode-live-sass-compiler/issues/30))
+  - `formats[].savePath` must start with a path separator but not end in one
+  - `includeItems` must start with a path separator and end in either `.sass` or `.scss` (for performance purposes)
+  - `forceBaseDirectory` must start with a path separator but not end in one
+
+### Changed
+- Now using `fdir` with `picomatch` instead of `glob` and `minimatch`
+  - Speed improvements, the most significant of which will be on larger projects
+  - Greater support for glob patterns
+
+### Added
+- When `autoprefix` is true we will search for either:
+  - a `.browserlistsrc` file or,
+  - `"browserslist": [ string[] ]` in a `package.json` file
+
+  *(This allows you to use the same setting across your solution, rather than duplicating content)*
+- Increased range of glob pattern support
+  - Full support for `extglobs`
+  - Added support for `posix brackets`
+  - Added support for `regex syntax`
+  - *Full comparison can be found [here](https://github.com/micromatch/picomatch#library-comparisons)*
+- When a change is detected the initial output now includes a date and time stamp - See [this comment](https://github.com/glenn2223/vscode-live-sass-compiler/issues/26#issuecomment-788133683) on [#26](https://github.com/glenn2223/vscode-live-sass-compiler/issues/26)
+
+### Fixed
+- Fixed: the `formats[].savePathSegmentKeys` setting would allow non string values in the array
+- Fixed: the `excludeList` setting would allow non string values in the array
+- Fixed: the `includeItems` setting would allow non string values in the array
+- Fixed: the `autoprefix` setting would allow non string values in the array
+- Fixed: some setting descriptions have been updated for better clarity/readability
+
+
+### Updated
+- `autoprefixer` from `10.2.4` to `10.2.5`
+  - Fixed `:` support in `@supports`
+- `postcss` from `8.2.4` to `8.2.9`
+  - Small fixes *(nothing user facing)*
+- `sass` from `1.32.5` to `1.32.8`
+  - Allow `@forward...with` to take arguments that have a `!default` flag without a trailing comma.
+  - Improve the performance of unitless and single-unit numbers.
+  - Other small changes *(nothing user facing)*
+- Various dev dependency updates *(nothing user facing)*
+
+---
 
 ## [4.4.1] - 2021-01-31
 
@@ -28,7 +89,7 @@ All notable changes to this project will be documented in this file.
 - Fixed: `forceBaseDirectory` has full support in multi-root workspaces
 - Fixed: the path in `forceBaseDirectory` is now checked to see if it exists. If not a user friendly message is displayed in the output
 - Fixed: an error when checking files would still compile what it could. This would hide the error message from the user
-- Incorrect patern matches in settings show user friendly messages rather than "does not match pattern"
+- Incorrect pattern matches in settings show user friendly messages rather than "does not match pattern"
 
 ## [4.4.0] - 2021-01-31
 
@@ -41,28 +102,28 @@ All notable changes to this project will be documented in this file.
 ### Updates
 - `autoprefixer` from `10.2.1` to `10.2.4`
   - Small bug fixes (nothing user facing)
-- Various dev-dependancy updates
+- Various dev-dependency updates
 
 ### Fixed
 - Part fix: Slow file handling #22. Full fix in v5 as some small breaking changes
   - The glob pattern matcher is causing bottlenecks, reducing load calls with small patch. However moving away from glob is the end-game (which will be happening in v5)
 - Fix: `compileCurrentSass` shows wrong message on fail
   - When you run `compileCurrentSass` and it would fail (for whatever reason) it would cause the output to show `Success` rather than `Error` (just the output was wrong, nothing else)
-- Fix: Status bar inconsistancies during display changes
+- Fix: Status bar inconsistencies during display changes
   - When command bar is changing between visuals it was possible to cause the status and the shown message to be out of sync (due to clicks while setTimeouts are pending), the setup also meant you couldn't sync them again (unless you did a manual compile command)
 
 
 ## [4.3.4] - 2021-01-21
 
 ### Fixed
-- Fixed [#18](https://github.com/glenn2223/vscode-live-sass-compiler/issues/18): On launch there is no output, nor any `Live SASS Compile` ouput selection, when the setting `watchOnLaunch` is `true`
+- Fixed [#18](https://github.com/glenn2223/vscode-live-sass-compiler/issues/18): On launch there is no output, nor any `Live SASS Compile` output selection, when the setting `watchOnLaunch` is `true`
 - Fixed: Autoprefixer warning saying `undefined` for file path when `generateMap` is `false`
 - Fixed: Autoprefixer `grid: "autoplace"` was forced
   - If [this feature](https://github.com/postcss/autoprefixer#does-autoprefixer-polyfill-grid-layout-for-ie) is wanted then add `/* autoprefixer grid: autoplace */` to the start of your file
 
 ### Updates
 - `sass` from `1.32.4` to `1.32.5`
-  - **Potentially breaking bug fix:** When using @for with numbers that have units, the iteration variable now matches the unit of the initial number. This matches the behavior of Ruby Sass and LibSass.
+  - **Potentially breaking bug fix:** When using @for with numbers that have units, the iteration variable now matches the unit of the initial number. This matches the behaviour of Ruby Sass and LibSass.
   - Others: see [sass release notes](https://github.com/sass/dart-sass/releases/tag/1.32.5)
 
 ## [4.3.3] - 2021-01-18
@@ -109,7 +170,7 @@ All notable changes to this project will be documented in this file.
 - Small optimisation to some underlying async operations
 
 ### Other
-- Small bit of general tidying, adjustment to README, new dev dependancy for @.types/glob
+- Small bit of general tidying, adjustment to README, new dev dependency for @.types/glob
 
 ## [4.2.0] - 2020-12-22
 
@@ -138,7 +199,7 @@ All notable changes to this project will be documented in this file.
     * When `true` it will automatically compile all Sass files when watching is started. *Default value is `true`*
 
 ### Changed
-- Updated the issue report command text from `Create an 'Unexpected Error' issue` to `Report an issue` to simpilfy and be more inline with the normality.
+- Updated the issue report command text from `Create an 'Unexpected Error' issue` to `Report an issue` to simplify and be more inline with the normality.
 - Now using webpack to minify and speed up the extension
 
 ### Other
@@ -166,7 +227,7 @@ All notable changes to this project will be documented in this file.
     * Errors are logged in a workspace folder
     * New command to help log issues for unhandled errors `liveSass.command.createIssue`
 
-<br><hr><br>
+---
 
 | Version | Date | Changelog|
 | ------- | -------- | ------ |
@@ -202,7 +263,8 @@ All notable changes to this project will be documented in this file.
 
 
 
-[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.4.1...HEAD
+[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.0-rc.1...HEAD
+[5.0.0-rc.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.4.1...v5.0.0-rc.1
 [4.4.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.4.0...v4.4.1
 [4.4.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.4...v4.4.0
 [4.3.4]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.3...v4.3.4

@@ -19,7 +19,6 @@ export class SassHelper {
         options: compiler.Options
     ): { result: compiler.Result | null; errorString: string | null } {
         const generateMap = Helper.getConfigSettings<boolean>("generateMap"),
-            //showOutputWindow = Helper.getConfigSettings<boolean>("showOutputWindow"),
             data: compiler.Options = {};
 
         Object.assign(data, options);
@@ -28,11 +27,11 @@ export class SassHelper {
         data.omitSourceMapUrl = true;
         /*data.logger = {
             warning: (warning: compiler.SassFlag) => {
-                OutputWindow.Show("Warning:", warning.formatted.split("\n"), showOutputWindow);
+                OutputWindow.Show(OutputLevel.Warning, "Warning:", warning.formatted.split("\n"));
                 WindowPopout.Warn("Live Sass Compiler\n *Warning:* \n" + warning.formatted);
             },
             debug: (debug: compiler.SassFlag) => {
-                OutputWindow.Show("Debug info:", debug.formatted.split("\n"), showOutputWindow);
+                OutputWindow.Show(OutputLevel.Debug, "Debug info:", debug.formatted.split("\n"));
             },
         };*/
 

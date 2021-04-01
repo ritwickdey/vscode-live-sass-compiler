@@ -2,14 +2,15 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime with live browser reload.",
-    "version": "4.4.1",
+    "version": "5.0.0-rc.1",
+    "preview": true,
     "publisher": "glenn2223",
     "author": {
         "name": "Glenn Marks",
         "url": "https://github.com/glenn2223/"
     },
     "engines": {
-        "vscode": "^1.50.0"
+        "vscode": "^1.52.0"
     },
     "keywords": [
         "SASS",
@@ -117,8 +118,8 @@
                                     "string",
                                     "null"
                                 ],
-                                "pattern": "^[\\~|/|\\\\]",
-                                "patternErrorMessage": "Must start with any of:\n`/` or `\\` (for workspace root)\n`~/` or `~\\` for relative to the file being processed",
+                                "pattern": "^(\\|/|~(/|\\)).+[^\\/]$",
+                                "patternErrorMessage": "Must start with any of:\n`/` or `\\` (for workspace root)\n`~/` or `~\\` for relative to the file being processed. Must not end with a path separator (`/` or `\\`)",
                                 "default": null
                             },
                             "savePathSegmentKeys": {
@@ -127,7 +128,10 @@
                                     "array",
                                     "null"
                                 ],
-                                "default": null
+                                "default": null,
+                                "items": {
+                                    "type": "string"
+                                }
                             },
                             "savePathReplaceSegmentsWith": {
                                 "description": "The value that will replace any segement keys found in the save path. (Note: Only applied if `savePath` is null).",
@@ -136,7 +140,7 @@
                                     "null"
                                 ],
                                 "pattern": "[^\\/]",
-                                "patternErrorMessage": "Must not contain any path seperators (`/` or `\\`)",
+                                "patternErrorMessage": "Must not contain any path separators (`/` or `\\`)",
                                 "default": null
                             }
                         },
@@ -154,7 +158,10 @@
                         "**/node_modules/**",
                         ".vscode/**"
                     ],
-                    "description": "All Sass/Scss files inside the folders will be excluded. \n\nExamples: \n'**/node_modules/**',\n'.vscode/**', \n'.history/**' \n\nGlob Patterns are accepted."
+                    "description": "All Sass/Scss files inside the folders will be excluded. \n\nExamples: \n'**/node_modules/**',\n'.vscode/**', \n'.history/**' \n\nGlob Patterns are accepted.",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "liveSassCompile.settings.includeItems": {
                     "type": [
@@ -162,27 +169,30 @@
                         "null"
                     ],
                     "default": null,
-                    "description": "This setting is useful when you deals with only few of sass files. Only mentioned Sass files will be included. \nNOTE: No need to include partial sass files."
+                    "description": "This setting is useful when you only deal with a few sass files. Only these Sass files will be included.\nNOTE: There is no need to include partial sass files.",
+                    "items": {
+                        "type": "string",
+                        "pattern": "^[\\/].+(?<![\\/])[.]s[a|c]ss$",
+                        "patternErrorMessage": "Must start with a path separator (`/` or `\\`) and end with a `.sass` or `.scss`"
+                    }
                 },
                 "liveSassCompile.settings.generateMap": {
                     "type": [
                         "boolean"
                     ],
                     "default": true,
-                    "description": "Set it as `false` if you don't want `.map` file for compiled CSS. \nDefault is `true`"
+                    "description": "Set to `false` if you don't want a `.map` file for each compiled CSS.\nDefault is `true`"
                 },
                 "liveSassCompile.settings.autoprefix": {
                     "type": [
                         "array",
-                        "null"
+                        "boolean"
                     ],
-                    "default": [
-                        "> 0.5%",
-                        "last 2 versions",
-                        "Firefox ESR",
-                        "not dead"
-                    ],
-                    "description": "Automatically add vendor prefixes to unsupported CSS properties (e. g. transform -> -ms-transform). Specify what browsers to target with an array of strings (uses [Browserslist](https://github.com/ai/browserslist)). Pass `null` to turn off."
+                    "default": "defaults",
+                    "description": "Automatically add vendor prefixes to unsupported CSS properties (e. g. transform -> -ms-transform). Specify what browsers to target with an array of strings (uses [Browserslist](https://github.com/ai/browserslist)). Pass `null` to turn off.",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "liveSassCompile.settings.watchOnLaunch": {
                     "type": "boolean",
@@ -194,10 +204,17 @@
                     "default": true,
                     "description": "Set this to `false` if you don't want all Sass files to be compiled when Live Sass Compiler starts watching."
                 },
-                "liveSassCompile.settings.showOutputWindow": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Set this to `false` if you do not want the output window to show.\nNote: You can use the command palette to open the Live Sass output window.\nDefault is `true`"
+                "liveSassCompile.settings.showOutputWindowOn": {
+                    "type": "string",
+                    "enum": [
+                        "Trace",
+                        "Debug",
+                        "Information",
+                        "Warning",
+                        "Error"
+                    ],
+                    "default": "Warning",
+                    "description": "Set the level of logging that is recorded and shown to you.\nDefault is `Warning`"
                 },
                 "liveSassCompile.settings.forceBaseDirectory": {
                     "type": [
@@ -206,8 +223,8 @@
                     ],
                     "scope": "resource",
                     "default": null,
-                    "pattern": "^[^\\/].+[\\/]$",
-                    "patternErrorMessage": "Can't start with a path seperator (`/` or `\\`) and must end with one",
+                    "pattern": "^[\\/].+[^\\/]$",
+                    "patternErrorMessage": "Must start with a path separator (`/` or `\\`) and must not end with one",
                     "description": "Defines a subdirectory to search from (no directory outside of this will be search)"
                 }
             }
@@ -223,9 +240,6 @@
         "url": "https://github.com/glenn2223/vscode-live-sass-compiler.git"
     },
     "homepage": "https://glenn2223.github.io/vscode-live-sass-compiler/",
-    "extensionDependencies": [
-        "ritwickdey.LiveServer"
-    ],
     "scripts": {
         "vscode:prepublish": "webpack --mode production",
         "webpack": "webpack --mode development",
@@ -235,29 +249,32 @@
         "lint": "eslint -c .eslintrc.js --ext .ts ./src/"
     },
     "dependencies": {
-        "autoprefixer": "^10.2.4",
-        "glob": "^7.1.6",
-        "postcss": "^8.2.4",
-        "sass": "^1.32.5"
+        "autoprefixer": "^10.2.5",
+        "fdir": "^5.0.0",
+        "picomatch": "^2.2.2",
+        "postcss": "^8.2.9",
+        "sass": "^1.32.8"
     },
     "devDependencies": {
         "@types/glob": "^7.1.3",
-        "@types/mocha": "^8.2.0",
-        "@types/node": "^14.14.22",
+        "@types/mocha": "^8.2.2",
+        "@types/node": "^14.14.37",
+        "@types/picomatch": "^2.2.1",
         "@types/sass": "^1.16.0",
         "@types/vscode": "^1.50.0",
-        "@typescript-eslint/eslint-plugin": "^4.14.1",
-        "@typescript-eslint/parser": "^4.14.1",
-        "eslint": "^7.18.0",
-        "mocha": "^8.2.0",
-        "ts-loader": "^8.0.14",
-        "typescript": "^4.1.3",
-        "vscode-test": "^1.5.0",
-        "webpack": "^5.19.0",
-        "webpack-cli": "^4.4.0"
+        "@typescript-eslint/eslint-plugin": "^4.20.0",
+        "@typescript-eslint/parser": "^4.20.0",
+        "eslint": "^7.23.0",
+        "mocha": "^8.3.2",
+        "terser-webpack-plugin": "^5.1.1",
+        "ts-loader": "^8.1.0",
+        "typescript": "^4.2.3",
+        "vscode-test": "^1.5.2",
+        "webpack": "^5.30.0",
+        "webpack-cli": "^4.6.0"
     },
     "announcement": {
-        "onVersion": "4.4.1",
-        "message": "SassCompiler v4.4.1: `forceBaseDirectory` now has better support in multi-root workspaces"
+        "onVersion": "5.0.0-rc.1",
+        "message": "SassCompiler v5(rc 5): New in this release: Loads! See the changelog for more info. --- Thanks for testing! Please be aware that breaking changes can happen between each release candidate."
     }
 }
