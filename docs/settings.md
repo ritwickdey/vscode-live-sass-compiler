@@ -1,24 +1,34 @@
+# Settings & Commands
+
+## Contents
+- [Settings](#Settings)
+- [Commands](#Commands)
+
 ## Settings
 
+### liveSassCompile.settings.formats
+An array of formats. Allows you save to multiple locations, with a customisable format and extension for each
+
+Properties | Type | Default | Notes
+-- | -- | -- | --
+format | `expanded` OR `compressed` | `expanded` | The output style of the generated file
+extensionName | `.css` OR `.min.css` | `.css` | The extension appended to the outputted file
+savePath | `string?` | `null` | See [save path notes]
+savePathSegmentKeys | `string[]?` | `null` | See [save path notes]
+savePathReplaceSegmentsWith | `string?` | `null` | See [save path notes]
+
+
+#### Save path notes
+The final save path is dependant on these three settings. However, `savePath` takes precedence over all three.
+
+- Using `savePath`
+  - Starting with `/` or `\` means the path is relative to the workspace root
+  - Starting with `~/` or `~\` means that it's relative to the file being processed
+- Using `savePathSegmentKeys` and `savePathReplaceSegmentsWith`
+  - Any `savePathSegmentKeys` that are found will be replaced with the `savePathReplaceSegmentsWith`. The `savePathSegmentKeys` is an exact folder, this means you can not do `"Folder 1/Folder 2"`
+
 <details>
-    <summary>
-        liveSassCompile.settings.formats<br />
-        An array of formats. Allows you save to multiple locations, with a customisable format and extension for each
-    </summary>
-
-Each format will have the following items:
-* `format`: the output format of the generated file  
-_`expanded`_, or _`compressed`_.  
-_**Default is `expanded`**_
-
-* `extensionName`: the extension applied to the generate file  
-_`.css`_ or _`.min.css`_.  
-_**Default is `.css`**_
-    
-* `savePath`, `savePathSegmentKeys` and `savePathReplaceSegmentsWith`: these dictate the save path _**(see examples)**_
-
-<details>
-<summary>Default & examples</summary>
+<summary>Examples</summary>
 
 ```js
 "liveSassCompile.settings.formats": [
@@ -77,31 +87,22 @@ _**Default is `.css`**_
 ```
 
 </details>
-</details>
 
 ---
 
-<details>
-<summary>
-    liveSassCompile.settings.excludeList<br />
-    Exclude specific files and folders.
-</summary>
+### liveSassCompile.settings.excludeList
+Use an array of various glob patterns to exclude files or entire folders. All matching SASS/SCSS files or matching folders will be ignored.
 
-Use a [glob pattern] to exclude files or entire folders. All matching SASS/SCSS files or folders will be ignored.
-
-<details>
-<summary>Default & examples</summary>
-
+**Type:** `string[]?`  
 **Default**
-
 ```json
-"liveSassCompile.settings.excludeList": [ 
-    "**/node_modules/**",
-    ".vscode/**" 
-]
+[ "**/node_modules/**", ".vscode/**" ]
 ```
 
-**Negative [glob pattern]**  
+<details>
+<summary>Other examples</summary>
+
+**Negative glob pattern**  
 To exclude all files except `file1.scss` & `file2.scss` from the directory `path/subpath`, you can use the expression:
 
 ```json
@@ -110,135 +111,175 @@ To exclude all files except `file1.scss` & `file2.scss` from the directory `path
 ]
 ```
 
-</details>
+**Regex pattern**
+Match regex expressions
+
+```json
+"liveSassCompile.settings.excludeList": [
+    "path\/subpath\/[A-Za-z0-9_]+.scss"
+]
+```
+
+**POSIX brackets - [Full POSIX List]**  
+Match alphas, alpha numerics, words and [more][Full POSIX List]
+
+```json
+"liveSassCompile.settings.excludeList": [
+    "path/subpath/[:word:]+.scss"
+]
+```
+
 </details>
 
 ---
 
-<details>
-<summary>
-    liveSassCompile.settings.includeItems<br />
-    Process only these specified files
-</summary>
+### liveSassCompile.settings.includeItems
+Process only these specified files. Useful for when you deal with only a few sass files.
 
-Useful for when you deal with only few of sass files.
+**Type:** `string[]?`  
+**Default:** `null`
 
-*  _**NOTE:** no need to include partial sass files._
-*  _**Default:** `null`_
+***NOTE:** there is no need to include partial sass files.*
 
 <details>
-<summary>Examples</summary>
+<summary>Example</summary>
 
-**Example**
 ```json
 "liveSassCompile.settings.includeItems": [
     "path/subpath/a.scss",
     "path/subpath/b.scss",
 ]
 ``` 
-</details>
-</details>
-
----
-
-<details>
-<summary>
-    liveSassCompile.settings.generateMap<br />
-    Create a map file when compiling files
-</summary>
-
-Set it as `false` if you don't want a `.map` file for compiled CSS. 
-* _**Default:** `true`._
 
 </details>
 
 ---
 
-<details>
-<summary>
-    liveSassCompile.settings.autoprefix<br />
-    Autoprefix unsupported CSS properties (e.g. transform -> -ms-transform)
-</summary>
-    
-_Specify what browsers to target with an array of strings (uses [Browserslist](https://github.com/browserslist/browserslist#query-composition))._ 
+### liveSassCompile.settings.generateMap
+Create a companion map file for each of the compiled files
 
-<details>
-<summary>Default</summary>
-
-```json
-"liveSassCompile.settings.autoprefix": [
-    "> 0.5%",
-    "last 2 versions",
-    "Firefox ESR",
-    "not dead"
-]
-``` 
-</details>
-</details>
-
----
-
-<details>
-<summary>
-    liveSassCompile.settings.showOutputWindow<br />
-    Optionally displays the output window when compiling
-</summary>
-
-Set this to `false` if you do not want the output window to show.
-
-* _**NOTE:** You can use the command palette to open the Live Sass output window._
-* _**Default:** `true`_
+**Type:** `boolean`  
+**Default:** `true`
 
 </details>
 
 ---
 
-<details>
-<summary>
-    liveSassCompile.settings.watchOnLaunch<br />
-    Defines whether Live Sass should watch immediately over waiting to be started 
-</summary>
+### liveSassCompile.settings.autoprefix
+Autoprefix unsupported CSS properties (e.g. `transform` will also add `-ms-transform`). Uses [Browserslist] for browser selection
 
-Set this to `true` to watch files on launch.
-* _**Default:** `false`_
+**Type:** `boolean` OR `string[]`  
+**Default:** `"defaults"`
 
-</details>
+- A `string[]` will override the default browsers to add prefixes for
+- When `false` Autoprefixer is disabled
+- When `true` we will try and search for either:
+  - a `.browserlistsrc` file or,
+  - `"browserslist": [ string[] ]` in your `package.json` file
 
----
-
-<details>
-<summary>
-    liveSassCompile.settings.compileOnWatch<br />
-    Defines whether Live Sass should compile all files when it starts watching
-</summary>
-
-Set this to `false` if you don't want all Sass files to be compiled when Live Sass Compiler starts watching. 
-* _**Default:** `true`_
-
-</details>
+    If neither of these are found then Autoprefixer will use `"defaults"`
 
 ---
 
-<details>
-<summary>
-    liveSassCompile.settings.forceBaseDirectory<br />
-    Defines a subdirectory to search from (speed gains on larger projects)
-</summary>
+### liveSassCompile.settings.showOutputWindowOn
+Set the logging level at which errors will be shown in the output window
 
-Larger projects can have performance problems, using this to target just your sass folder will provide performance gains.
+**Type:** `Trace` OR `Debug` OR `Information` OR `Warning` OR `Error`  
+**Default:** `Warning`
 
-No Sass/Scss files outside of this folder will be watched/compiled when you save.
+*There is also a [command](#livesasscommandopenoutputwindow)*
 
-* _**Default:** `null`_
-* _**Note:** No leading slash but MUST have ending slash_
-  * _Example: `src/style/`_
-* _**Note for multi-root workspaces:** This setting can be applied at workspace level. However, it can be overridden in each root using that root's specific setting file_  
-  * _Example: workspace setting is `src/Sass/` and root setting is `Assets/Style/`. In this case `Assets/Style/` would be used_
+---
 
->**:Warning: It is your responsibility to ensure the path exists and is correct.**  
-If it's not found it will output an error  
-If the path is wrong then nothing will be found and then compiled
+### liveSassCompile.settings.watchOnLaunch
+Defines whether Live Sass should watch immediately over waiting to be started 
 
-</details>
+**Type:** `boolean`  
+**Default:** `false`
 
-[glob pattern]: https://github.com/isaacs/node-glob/blob/master/README.md#glob-primer
+---
+
+### liveSassCompile.settings.compileOnWatch
+Defines whether Live Sass should compile all files when it starts watching
+
+**Type:** `boolean`  
+**Default:** `true`
+
+---
+
+### liveSassCompile.settings.forceBaseDirectory
+Defines a subdirectory to search from. Add a small performance gain by targeting just your SASS folder.
+
+No SASS/SCSS files outside of this folder will be watched/compiled when you save.
+
+**Type:** `string?`  
+**Default:** `null`
+
+**Note for multi-root workspaces:**  
+This setting can be applied at workspace level. However, it can be overridden in each root using that root's specific setting file
+Example: workspace setting is `src/Sass/` and root setting is `Assets/Style/`. In this case `Assets/Style/` would be used
+
+>**:warning: It is your responsibility to ensure the path exists and is correct.**  
+If the path is not found, or is a file, then it will output an error  
+If the path is wrong then nothing will be found nor compiled
+
+## Commands
+To use any command, start by pressing <kbd>F1</kbd> OR (<kbd>Ctrl</kbd>/<kbd>Cmd</kbd>) + <kbd>Shift</kbd> + <kbd>P</kbd>. You can then enter a `name` for any of the commands below.
+
+### liveSass.command.watchMySass
+Start watching for SASS/SCSS changes
+
+**Names:** `Live SASS: Watch Sass`, `liveSass.command.watchMySass`
+
+---
+
+### liveSass.command.donotWatchMySass
+Stop watching for SASS/SCSS changes
+
+**Names:** `Live SASS: Stop Watching`, `liveSass.command.donotWatchMySass`
+
+---
+
+### liveSass.command.compileCurrentSass
+Compile the currently opened SASS/SCSS file
+
+**Names:** `Live SASS: Compile Current Sass File`, `liveSass.command.compileCurrentSass`
+
+---
+
+### liveSass.command.oneTimeCompileSass
+Perform a one time compilation of all SASS/SCSS files, regardless of whether we're watching or not
+
+**Names:** `Live SASS: Compile Sass - Without Watch Mode`, `liveSass.command.oneTimeCompileSass`
+
+---
+
+### liveSass.command.openOutputWindow
+Open the Live SASS output window
+
+**Names:** `Live SASS: Open Live Sass Output Window`, `liveSass.command.openOutputWindow`
+
+---
+
+### liveSass.command.createIssue
+When an alert pops up in the bottom right corner, you can report that issue directly by running this command. You can use it for general errors, however it will not include details of your specific issue, you will have to include the details yourself
+
+**Names:** `Live SASS: Report an issue`, `liveSass.command.createIssue`
+
+---
+
+### liveSass.command.debugInclusion
+Check if the current file will be included, based on your current settings. A good start to debug any glob pattern issues that might stop the current file from compiling
+
+**Names:** `Live SASS: Check file will be included`, `liveSass.command.debugInclusion`
+
+---
+
+### liveSass.command.debugFileList
+Get a full list of files that are included, any partials that will trigger compilation of all files and also any excluded files. Helpful to debug any glob pattern issue's you're having
+
+**Names:** `Live SASS: Get all included files`, `liveSass.command.debugFileList`
+
+[save path notes]: #save-path-notes
+[Full POSIX List]: https://github.com/micromatch/picomatch#posix-brackets
+[Browserslist]: https://github.com/browserslist/browserslist#query-composition

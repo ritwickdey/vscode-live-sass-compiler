@@ -1,4 +1,5 @@
 import { env, extensions, Memento, OutputChannel, Uri, version, window } from "vscode";
+import { Helper } from "./helper";
 
 const _errorLogPath = "liveSassCompiler.ErrorInfo";
 
@@ -7,12 +8,18 @@ export class ErrorLogger {
     logs: LogEvent[] = [];
 
     constructor(workplaceState: Memento) {
+        OutputWindow.Show(OutputLevel.Trace, "Constructing error logger");
+
         this._workplaceState = workplaceState;
+
+        OutputWindow.Show(OutputLevel.Trace, "Clearing any old log data");
 
         this.ClearLogs();
     }
 
     async LogIssueWithAlert(Message: string, DetailedLogInfo: unknown): Promise<void> {
+        OutputWindow.Show(OutputLevel.Trace, "Logging issue", [`Message: ${Message}`]);
+
         WindowPopout.Alert(`Live Sass Compiler: ${Message}`);
 
         this.logs.push(new LogEvent(DetailedLogInfo));
@@ -20,15 +27,25 @@ export class ErrorLogger {
         await this.SaveLogs();
     }
 
-    async SaveLogs(): Promise<void> {
+    private async SaveLogs(): Promise<void> {
+        OutputWindow.Show(OutputLevel.Trace, "Saving logs to storage");
+
         await this._workplaceState.update(_errorLogPath, this.logs);
     }
 
     async InitiateIssueCreator(): Promise<void> {
+        OutputWindow.Show(OutputLevel.Trace, "Issue creation started", [
+            "Preparing last error for output",
+        ]);
+
         let lastError: LogEvent | null = null;
 
         if (this.logs.length > 0) {
+            OutputWindow.Show(OutputLevel.Trace, "Error log has been found");
+
             lastError = this.logs[this.logs.length - 1];
+        } else {
+            OutputWindow.Show(OutputLevel.Trace, "No error log could be found");
         }
 
         await env.clipboard.writeText(
@@ -63,6 +80,11 @@ export class ErrorLogger {
             ].join("\n")
         );
 
+        OutputWindow.Show(OutputLevel.Trace, "Ready to create issue", [
+            "The data has been saved to the clipboard",
+            "Attempting to open new issue URL on GitHub",
+        ]);
+
         await env.openExternal(
             Uri.parse(
                 "https://github.com/glenn2223/vscode-live-sass-compiler/issues/new?title=Unexpected+Error%3A+SUMMARY+HERE&body=%3C%21--+Highlight+this+line+and+then+paste+(Ctrl+%2B+V+%7C+Command+%2B+V)+--%3E"
@@ -70,21 +92,24 @@ export class ErrorLogger {
         );
 
         OutputWindow.Show(
+            OutputLevel.Critical,
             'Opened your browser for creating an "Unexpected Error" issue',
             [
-                // TODO: Ouput all incidents to Output
+                // TODO: If required - setup command for outputting all logs
                 //'Not the right error message? Run `outputAllLogs` to see all recorded errors'
-            ],
-            true,
-            true
+            ]
         );
     }
 
     private async ClearLogs(): Promise<void> {
+        OutputWindow.Show(OutputLevel.Trace, "Error logs cleared");
+
         return this._workplaceState.update(_errorLogPath, {});
     }
 
     static PrepErrorForLogging(Err: Error): unknown {
+        OutputWindow.Show(OutputLevel.Trace, "Converting error to a usable object");
+
         return JSON.parse(JSON.stringify(Err, Object.getOwnPropertyNames(Err)));
     }
 }
@@ -111,27 +136,29 @@ export class OutputWindow {
     }
 
     static Show(
+        outputLevel: OutputLevel,
         msgHeadline: string,
-        MsgBody: string[],
-        popUpToUI = false,
+        msgBody?: string[],
         addEndLine = true
     ): void {
-        if (msgHeadline) {
-            OutputWindow.MsgChannel.appendLine(msgHeadline);
-        }
+        const userLogLevel = Helper.getOutputLogLevel();
 
-        if (MsgBody) {
-            MsgBody.forEach((msg) => {
-                OutputWindow.MsgChannel.appendLine(msg);
-            });
-        }
-
-        if (popUpToUI) {
+        if (outputLevel >= userLogLevel || outputLevel === OutputLevel.Critical) {
             OutputWindow.MsgChannel.show(true);
-        }
 
-        if (addEndLine) {
-            OutputWindow.MsgChannel.appendLine("--------------------");
+            if (msgHeadline) {
+                OutputWindow.MsgChannel.appendLine(msgHeadline);
+            }
+
+            if (msgBody) {
+                msgBody.forEach((msg) => {
+                    OutputWindow.MsgChannel.appendLine(msg);
+                });
+            }
+
+            if (addEndLine) {
+                OutputWindow.MsgChannel.appendLine("--------------------");
+            }
         }
     }
 
@@ -152,4 +179,13 @@ export class WindowPopout {
     static Alert(message: string): void {
         window.showErrorMessage(message);
     }
+}
+
+export enum OutputLevel {
+    Trace = 1,
+    Debug = 2,
+    Information = 3,
+    Warning = 4,
+    Error = 5,
+    Critical = 6,
 }
