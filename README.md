@@ -21,7 +21,7 @@ A VSCode Extension that help you to compile/transpile your SASS/SCSS files to CS
 * Customizable extension name (`.css` or `.min.css`).
 * Quick status bar control.
 * Exclude specific folders by settings.
-* Autoprefix support (See settings section)
+* Autoprefix support (See [settings section](https://github.com/glenn2223/vscode-live-sass-compiler/blob/master/docs/settings.md#livesasscompilesettingsautoprefix))
 
 ## Installation
 Open VSCode Editor and Press `ctrl+P`, type `ext install glenn2223.live-sass`.
