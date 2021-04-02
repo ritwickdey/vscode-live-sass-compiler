@@ -822,9 +822,9 @@ export class AppModel {
                             resolvePaths: true,
                             onlyCounts: true,
                             filters: [
-                                (path) => path.endsWith(".scss") || path.endsWith(".sass"),
-                                (path) => isMatch(path),
-                                (path) => path === sassPath,
+                                (filePath) => filePath.endsWith(".scss") || filePath.endsWith(".sass"),
+                                (filePath) => isMatch(path.relative(basePath, filePath)),
+                                (filePath) => filePath === sassPath,
                             ],
                         })
                         .withPromise()) as OnlyCountsOutput).files > 0
@@ -951,8 +951,8 @@ export class AppModel {
                             includeBasePath: true,
                             resolvePaths: true,
                             filters: [
-                                (path) => path.endsWith(".scss") || path.endsWith(".sass"),
-                                (path) => isMatch(path),
+                                (filePath) => filePath.endsWith(".scss") || filePath.endsWith(".sass"),
+                                (filePath) => isMatch(path.relative(basePath, filePath))
                             ],
                         })
                         .withPromise()) as PathsOutput;
