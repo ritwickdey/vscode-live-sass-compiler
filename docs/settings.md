@@ -96,7 +96,7 @@ Use an array of various glob patterns to exclude files or entire folders. All ma
 **Type:** `string[]?`  
 **Default**
 ```json
-[ "**/node_modules/**", ".vscode/**" ]
+[ "/**/node_modules/**", "/.vscode/**" ]
 ```
 
 <details>
@@ -107,7 +107,7 @@ To exclude all files except `file1.scss` & `file2.scss` from the directory `path
 
 ```json
 "liveSassCompile.settings.excludeList": [
-    "path/subpath/*[!(file1|file2)].scss"
+    "/path/subpath/*[!(file1|file2)].scss"
 ]
 ```
 
@@ -116,7 +116,7 @@ Match regex expressions
 
 ```json
 "liveSassCompile.settings.excludeList": [
-    "path\/subpath\/[A-Za-z0-9_]+.scss"
+    "/path/subpath/[A-Za-z0-9_]+.scss"
 ]
 ```
 
@@ -125,7 +125,7 @@ Match alphas, alpha numerics, words and [more][Full POSIX List]
 
 ```json
 "liveSassCompile.settings.excludeList": [
-    "path/subpath/[:word:]+.scss"
+    "/path/subpath/[:word:]+.scss"
 ]
 ```
 
@@ -146,8 +146,8 @@ Process only these specified files. Useful for when you deal with only a few sas
 
 ```json
 "liveSassCompile.settings.includeItems": [
-    "path/subpath/a.scss",
-    "path/subpath/b.scss",
+    "/path/subpath/a.scss",
+    "/path/subpath/b.scss",
 ]
 ``` 
 
