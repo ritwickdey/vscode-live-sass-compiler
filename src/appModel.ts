@@ -737,9 +737,7 @@ export class AppModel {
             fileList = ["**/*.s[a|c]ss"];
 
         if (includeItems && includeItems.length) {
-            fileList = await AppModel.stripAllLeadingSlashes(
-                includeItems.concat("**/_*.s[a|c]ss")
-            );
+            fileList = await AppModel.stripAllLeadingSlashes(includeItems.concat("**/_*.s[a|c]ss"));
         }
 
         excludeItems = await AppModel.stripAllLeadingSlashes(excludeItems);
@@ -821,7 +819,8 @@ export class AppModel {
                             resolvePaths: true,
                             onlyCounts: true,
                             filters: [
-                                (filePath) => filePath.endsWith(".scss") || filePath.endsWith(".sass"),
+                                (filePath) =>
+                                    filePath.endsWith(".scss") || filePath.endsWith(".sass"),
                                 (filePath) => isMatch(path.relative(basePath, filePath)),
                                 (filePath) => filePath === sassPath,
                             ],
@@ -858,8 +857,8 @@ export class AppModel {
         ]);
 
         let excludedItems = isDebugging
-                ? ["**/node_modules/**", ".vscode/**"]
-                : Helper.getConfigSettings<string[]>("excludeList");
+            ? ["**/node_modules/**", ".vscode/**"]
+            : Helper.getConfigSettings<string[]>("excludeList");
         const includeItems = Helper.getConfigSettings<string[] | null>("includeItems");
 
         if (!isQueryPatternFixed && includeItems && includeItems.length) {
@@ -952,8 +951,9 @@ export class AppModel {
                             includeBasePath: true,
                             resolvePaths: true,
                             filters: [
-                                (filePath) => filePath.endsWith(".scss") || filePath.endsWith(".sass"),
-                                (filePath) => isMatch(path.relative(basePath, filePath))
+                                (filePath) =>
+                                    filePath.endsWith(".scss") || filePath.endsWith(".sass"),
+                                (filePath) => isMatch(path.relative(basePath, filePath)),
                             ],
                         })
                         .withPromise()) as PathsOutput;
@@ -1093,14 +1093,14 @@ export class AppModel {
 
     private static stripLeadingSlash(partialPath: string): string {
         return ["\\", "/"].indexOf(partialPath.substr(0, 1)) >= 0
-                ? partialPath.substr(1)
-                : partialPath;
+            ? partialPath.substr(1)
+            : partialPath;
     }
 
     private static stripAllLeadingSlashes(stringArray: string[]): Promise<string[]> {
         return Promise.all(
-            stringArray.map(async file => {
-                return AppModel.stripLeadingSlash(file); 
+            stringArray.map(async (file) => {
+                return AppModel.stripLeadingSlash(file);
             })
         );
     }
