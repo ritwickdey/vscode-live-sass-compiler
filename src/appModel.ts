@@ -737,10 +737,10 @@ export class AppModel {
             fileList = ["**/*.s[a|c]ss"];
 
         if (includeItems && includeItems.length) {
-            fileList = await AppModel.stripAllLeadingSlashes(includeItems.concat("**/_*.s[a|c]ss"));
+            fileList = await AppModel.stripAnyLeadingSlashes(includeItems.concat("**/_*.s[a|c]ss"));
         }
 
-        excludeItems = await AppModel.stripAllLeadingSlashes(excludeItems);
+        excludeItems = await AppModel.stripAnyLeadingSlashes(excludeItems);
 
         OutputWindow.Show(OutputLevel.Trace, "Checking all workspace folders in project");
 
@@ -862,14 +862,14 @@ export class AppModel {
         const includeItems = Helper.getConfigSettings<string[] | null>("includeItems");
 
         if (!isQueryPatternFixed && includeItems && includeItems.length) {
-            queryPattern = await AppModel.stripAllLeadingSlashes(includeItems);
+            queryPattern = await AppModel.stripAnyLeadingSlashes(includeItems);
 
             OutputWindow.Show(OutputLevel.Trace, "Query pattern overwritten", [
                 `New pattern(s): "${includeItems.join('" , "')}"`,
             ]);
         }
 
-        excludedItems = await AppModel.stripAllLeadingSlashes(excludedItems);
+        excludedItems = await AppModel.stripAnyLeadingSlashes(excludedItems);
 
         const fileList: string[] = [];
         (
@@ -1097,7 +1097,7 @@ export class AppModel {
             : partialPath;
     }
 
-    private static stripAllLeadingSlashes(stringArray: string[]): Promise<string[]> {
+    private static stripAnyLeadingSlashes(stringArray: string[]): Promise<string[]> {
         return Promise.all(
             stringArray.map(async (file) => {
                 return AppModel.stripLeadingSlash(file);
