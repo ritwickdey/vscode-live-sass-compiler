@@ -29,7 +29,7 @@ All notable changes to this project will be documented in this file.
 ### Fixes
 - Relative paths in the exclude & include settings aren't working ([#49](https://github.com/glenn2223/vscode-live-sass-compiler/issues/49))
 
-## Changed
+### Changed
 - Exclude setting did not have a pattern matching string ([#30](https://github.com/glenn2223/vscode-live-sass-compiler/issues/30))<!-- Remove this on full v5 release -->
 
 ## [5.0.0-rc.1] - 2021-04-01
