@@ -732,13 +732,15 @@ export class AppModel {
             `Path: ${sassPath}`,
         ]);
 
-        const excludeItems = Helper.getConfigSettings<string[]>("excludeList"),
-            includeItems = Helper.getConfigSettings<string[] | null>("includeItems");
-        let fileList = ["**/*.s[a|c]ss"];
+        const includeItems = Helper.getConfigSettings<string[] | null>("includeItems");
+        let excludeItems = Helper.getConfigSettings<string[]>("excludeList"),
+            fileList = ["**/*.s[a|c]ss"];
 
         if (includeItems && includeItems.length) {
-            fileList = includeItems.concat("**/_*.s[a|c]ss");
+            fileList = await AppModel.stripAnyLeadingSlashes(includeItems.concat("**/_*.s[a|c]ss"));
         }
+
+        excludeItems = await AppModel.stripAnyLeadingSlashes(excludeItems);
 
         OutputWindow.Show(OutputLevel.Trace, "Checking all workspace folders in project");
 
@@ -763,12 +765,7 @@ export class AppModel {
                         "`forceBaseDirectory` setting found, checking validity"
                     );
 
-                    basePath = path.resolve(
-                        basePath,
-                        ["\\", "/"].indexOf(forceBaseDirectory.substr(0, 1)) >= 0
-                            ? forceBaseDirectory.substr(1)
-                            : forceBaseDirectory
-                    );
+                    basePath = path.resolve(basePath, AppModel.stripLeadingSlash(basePath));
 
                     try {
                         if (!(await fs.promises.stat(basePath)).isDirectory()) {
@@ -822,9 +819,10 @@ export class AppModel {
                             resolvePaths: true,
                             onlyCounts: true,
                             filters: [
-                                (path) => path.endsWith(".scss") || path.endsWith(".sass"),
-                                (path) => isMatch(path),
-                                (path) => path === sassPath,
+                                (filePath) =>
+                                    filePath.endsWith(".scss") || filePath.endsWith(".sass"),
+                                (filePath) => isMatch(path.relative(basePath, filePath)),
+                                (filePath) => filePath === sassPath,
                             ],
                         })
                         .withPromise()) as OnlyCountsOutput).files > 0
@@ -858,18 +856,20 @@ export class AppModel {
             `Can be overwritten: ${!isQueryPatternFixed}`,
         ]);
 
-        const excludedList = isDebugging
-                ? ["**/node_modules/**", ".vscode/**"]
-                : Helper.getConfigSettings<string[]>("excludeList"),
-            includeItems = Helper.getConfigSettings<string[] | null>("includeItems");
+        let excludedItems = isDebugging
+            ? ["**/node_modules/**", ".vscode/**"]
+            : Helper.getConfigSettings<string[]>("excludeList");
+        const includeItems = Helper.getConfigSettings<string[] | null>("includeItems");
 
         if (!isQueryPatternFixed && includeItems && includeItems.length) {
-            queryPattern = includeItems;
+            queryPattern = await AppModel.stripAnyLeadingSlashes(includeItems);
 
             OutputWindow.Show(OutputLevel.Trace, "Query pattern overwritten", [
                 `New pattern(s): "${includeItems.join('" , "')}"`,
             ]);
         }
+
+        excludedItems = await AppModel.stripAnyLeadingSlashes(excludedItems);
 
         const fileList: string[] = [];
         (
@@ -944,15 +944,16 @@ export class AppModel {
                     }
 
                     // @ts-ignore ts2322 => string[] doesn't match string (False negative as string[] is allowed)
-                    const isMatch = picomatch(queryPattern, { ignore: excludedList, dot: true });
+                    const isMatch = picomatch(queryPattern, { ignore: excludedItems, dot: true });
 
                     return (await new fdir()
                         .crawlWithOptions(basePath, {
                             includeBasePath: true,
                             resolvePaths: true,
                             filters: [
-                                (path) => path.endsWith(".scss") || path.endsWith(".sass"),
-                                (path) => isMatch(path),
+                                (filePath) =>
+                                    filePath.endsWith(".scss") || filePath.endsWith(".sass"),
+                                (filePath) => isMatch(path.relative(basePath, filePath)),
                             ],
                         })
                         .withPromise()) as PathsOutput;
@@ -1089,6 +1090,20 @@ export class AppModel {
     }
 
     //#endregion Debugging
+
+    private static stripLeadingSlash(partialPath: string): string {
+        return ["\\", "/"].indexOf(partialPath.substr(0, 1)) >= 0
+            ? partialPath.substr(1)
+            : partialPath;
+    }
+
+    private static stripAnyLeadingSlashes(stringArray: string[]): Promise<string[]> {
+        return Promise.all(
+            stringArray.map(async (file) => {
+                return AppModel.stripLeadingSlash(file);
+            })
+        );
+    }
 
     dispose(): void {
         OutputWindow.Show(OutputLevel.Trace, "Disposing app model");

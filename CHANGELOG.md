@@ -24,6 +24,14 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [5.0.0-rc.2] - 2021-04-02
+
+### Fixes
+- Relative paths in the exclude & include settings aren't working ([#49](https://github.com/glenn2223/vscode-live-sass-compiler/issues/49))
+
+### Changed
+- Exclude setting did not have a pattern matching string ([#30](https://github.com/glenn2223/vscode-live-sass-compiler/issues/30))<!-- Remove this on full v5 release -->
+
 ## [5.0.0-rc.1] - 2021-04-01
 
 ### Breaking changes
@@ -264,6 +272,7 @@ All notable changes to this project will be documented in this file.
 
 
 [Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.0-rc.1...HEAD
+[5.0.0-rc.2]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.0-rc.1...v5.0.0-rc.2
 [5.0.0-rc.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.4.1...v5.0.0-rc.1
 [4.4.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.4.0...v4.4.1
 [4.4.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.4...v4.4.0
