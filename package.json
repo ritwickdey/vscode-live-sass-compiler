@@ -2,7 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime with live browser reload.",
-    "version": "5.0.0-rc.2",
+    "version": "5.0.0-rc.3",
     "preview": true,
     "publisher": "glenn2223",
     "author": {
@@ -158,7 +158,7 @@
                         "/**/node_modules/**",
                         "/.vscode/**"
                     ],
-                    "description": "All Sass/Scss files inside the folders will be excluded. \n\nExamples: \n'**/node_modules/**',\n'.vscode/**', \n'.history/**' \n\nGlob Patterns are accepted.",
+                    "description": "All Sass/Scss files inside the folders will be excluded. \n\nExamples: \n'/**/node_modules/**',\n'/.vscode/**', \n'/.history/**' \n\nGlob Patterns are accepted.",
                     "items": {
                         "type": "string",
                         "pattern": "^[\\/].+",
@@ -213,7 +213,8 @@
                         "Debug",
                         "Information",
                         "Warning",
-                        "Error"
+                        "Error",
+                        "None"
                     ],
                     "default": "Warning",
                     "description": "Set the level of logging that is recorded and shown to you.\nDefault is `Warning`"
@@ -276,7 +277,7 @@
         "webpack-cli": "^4.6.0"
     },
     "announcement": {
-        "onVersion": "5.0.0-rc.2",
-        "message": "SassCompiler v5(rc 2): New in this release: Fixes. See the changelog for more info. --- Thanks for testing! Please be aware that breaking changes can happen between each release candidate."
+        "onVersion": "5.0.0-rc.3",
+        "message": "SassCompiler v5(rc 3): New in this release: showOutputWindowOn now accepts \"None\". More bug fixes. See the changelog for more info. --- Thanks for testing! Please be aware that breaking changes can happen between each release candidate."
     }
 }

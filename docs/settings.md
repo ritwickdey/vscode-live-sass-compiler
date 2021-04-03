@@ -217,11 +217,14 @@ No SASS/SCSS files outside of this folder will be watched/compiled when you save
 
 **Note for multi-root workspaces:**  
 This setting can be applied at workspace level. However, it can be overridden in each root using that root's specific setting file
-Example: workspace setting is `src/Sass/` and root setting is `Assets/Style/`. In this case `Assets/Style/` would be used
+Example: workspace setting is `/src/Sass` and root setting is `/Assets/Style`. In this case `/Assets/Style` would be used
 
->**:warning: It is your responsibility to ensure the path exists and is correct.**  
+>**⚠ It is your responsibility to ensure the path exists and is correct.**  
 If the path is not found, or is a file, then it will output an error  
 If the path is wrong then nothing will be found nor compiled
+
+>**⚠ This setting effects the root path for `includeItems` and `excludeList`**
+A setting of `/Assets` means that `includeItems` and `excludeList` are both relative to `/Assets` and not `/` (the root of the workspace folder)
 
 ## Commands
 To use any command, start by pressing <kbd>F1</kbd> OR (<kbd>Ctrl</kbd>/<kbd>Cmd</kbd>) + <kbd>Shift</kbd> + <kbd>P</kbd>. You can then enter a `name` for any of the commands below.
