@@ -24,7 +24,7 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [5.0.0-rc.3] - 2021-04-02
+## [5.0.0-rc.3] - 2021-04-03
 
 ### Fixes
 - Checking file exclusion not working when there was a `forceBasePath`<!-- Remove this on full v5 release -->
