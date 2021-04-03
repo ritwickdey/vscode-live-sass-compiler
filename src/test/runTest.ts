@@ -5,13 +5,13 @@ import { runTests } from "vscode-test";
 async function main() {
     try {
         const extensionDevelopmentPath = path.resolve(__dirname, "..");
-        const extensionTestsPath = path.resolve(__dirname, "./out/test/extension.test.js");
-        const testWorkspace = path.resolve(__dirname, "./assets/");
+        const extensionTestsPath = __dirname;
+        const testWorkspace = path.resolve(__dirname, "../../src/test/sample");
 
         await runTests({
             extensionDevelopmentPath,
             extensionTestsPath,
-            version: "1.50.0",
+            version: "1.52.0",
             launchArgs: [testWorkspace],
         });
     } catch (err) {
