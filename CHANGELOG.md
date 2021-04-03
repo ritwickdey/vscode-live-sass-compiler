@@ -19,10 +19,27 @@ Types of changes
 - Other for notable changes that do not 
  -->
 
->:warning: v5 release candidates (tagged `rc`) may have breaking changes from one release to the next. All changes, breaking or otherwise, will be displayed here. These changes will then be condensed into a single list for the official v5 release
+>⚠ v5 release candidates (tagged `rc`) may have breaking changes from one release to the next. All changes, breaking or otherwise, will be displayed here. These changes will then be condensed into a single list for the official v5 release
 
 # Changelog
 All notable changes to this project will be documented in this file.
+
+## [5.0.0-rc.3] - 2021-04-02
+
+### Fixes
+- Checking file exclusion not working when there was a `forceBasePath`<!-- Remove this on full v5 release -->
+- Trace logging wrote `Folder: [object Object]` it now writes the folder name<!-- Remove this on full v5 release -->
+- Re-added ability to turn off output window on errors [#53](https://github.com/glenn2223/vscode-live-sass-compiler/issues/53). 
+
+  This adds the new `showOutputWindowOn` option `"None"`
+
+  The only time the output window is shown is:
+  - Running the `liveSass.command.debugInclusion` (`Check file will be included`) command
+  - Running the `liveSass.command.debugFileList` (`Get all included files`) command
+  - When the `forceBaseDirectory` is not found or invalid (i.e. a file instead of a folder)
+
+### Changed
+- Some documentation tweaks
 
 ## [5.0.0-rc.2] - 2021-04-02
 

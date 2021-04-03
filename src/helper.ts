@@ -32,6 +32,9 @@ export class Helper {
             case "Error":
                 return OutputLevel.Error;
 
+            case "None":
+                return OutputLevel.Critical;
+
             case "Warning":
             default:
                 return OutputLevel.Warning;

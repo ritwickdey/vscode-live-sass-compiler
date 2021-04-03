@@ -486,7 +486,7 @@ export class AppModel {
                         OutputWindow.Show(
                             OutputLevel.Trace,
                             `Checking folder ${index + 1} of ${workspaceFolders.length}`,
-                            [`Folder: ${folder}`],
+                            [`Folder: ${folder.name}`],
                             false
                         );
 
@@ -749,7 +749,7 @@ export class AppModel {
                 OutputWindow.Show(
                     OutputLevel.Trace,
                     `Checking folder ${index + 1} of ${vscode.workspace.workspaceFolders.length}`,
-                    [`Folder: ${folder}`]
+                    [`Folder: ${folder.name}`]
                 );
 
                 const forceBaseDirectory = Helper.getConfigSettings<string | null>(
@@ -765,7 +765,10 @@ export class AppModel {
                         "`forceBaseDirectory` setting found, checking validity"
                     );
 
-                    basePath = path.resolve(basePath, AppModel.stripLeadingSlash(basePath));
+                    basePath = path.resolve(
+                        basePath,
+                        AppModel.stripLeadingSlash(forceBaseDirectory)
+                    );
 
                     try {
                         if (!(await fs.promises.stat(basePath)).isDirectory()) {
@@ -880,7 +883,7 @@ export class AppModel {
                         `Checking folder ${index + 1} of ${
                             vscode.workspace.workspaceFolders.length
                         }`,
-                        [`Folder: ${folder}`]
+                        [`Folder: ${folder.name}`]
                     );
 
                     const forceBaseDirectory = Helper.getConfigSettings<string | null>(
@@ -898,9 +901,7 @@ export class AppModel {
 
                         basePath = path.resolve(
                             basePath,
-                            ["\\", "/"].indexOf(forceBaseDirectory.substr(0, 1)) >= 0
-                                ? forceBaseDirectory.substr(1)
-                                : forceBaseDirectory
+                            AppModel.stripLeadingSlash(forceBaseDirectory)
                         );
 
                         try {
