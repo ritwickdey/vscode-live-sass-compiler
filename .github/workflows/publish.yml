@@ -34,9 +34,9 @@ jobs:
     - name: Install vsce
       run: npm i vsce -g
     
-    - run: xvfb-run -a npm test
-      if: runner.os == 'Linux'
-      name: Test extension
+#    - run: xvfb-run -a npm test
+#      if: runner.os == 'Linux'
+#      name: Test extension
       
     - run: npm test
       if: runner.os != 'Linux'
