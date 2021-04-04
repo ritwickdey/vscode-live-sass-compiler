@@ -955,6 +955,7 @@ export class AppModel {
                                 (filePath) =>
                                     filePath.endsWith(".scss") || filePath.endsWith(".sass"),
                                 (filePath) => isMatch(path.relative(basePath, filePath)),
+                                (filePath) => isQueryPatternFixed || this.isSassFile(filePath, false),
                             ],
                         })
                         .withPromise()) as PathsOutput;

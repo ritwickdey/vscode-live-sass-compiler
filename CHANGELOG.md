@@ -24,6 +24,11 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [5.0.0-rc.4] - 2021-04-04
+
+### Fixes
+- Saving a partial (or all files by a command) no longer compiles the partials themselves ([#50](https://github.com/glenn2223/vscode-live-sass-compiler/issues/50))<!-- Remove this on full v5 release -->
+
 ## [5.0.0-rc.3] - 2021-04-03
 
 ### Fixes
@@ -288,7 +293,9 @@ All notable changes to this project will be documented in this file.
 
 
 
-[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.0-rc.1...HEAD
+[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.0-rc.4...HEAD
+[5.0.0-rc.4]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.0-rc.3...v5.0.0-rc.4
+[5.0.0-rc.3]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.0-rc.2...v5.0.0-rc.3
 [5.0.0-rc.2]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.0-rc.1...v5.0.0-rc.2
 [5.0.0-rc.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.4.1...v5.0.0-rc.1
 [4.4.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.4.0...v4.4.1

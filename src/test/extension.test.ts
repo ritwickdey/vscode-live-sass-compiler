@@ -6,10 +6,8 @@ suite("Extension Tests", function () {
         assert.ok(vscode.extensions.getExtension("glenn2223.live-sass"));
     });
 
-    test("Extension should activate", async () => {
-        await vscode.extensions.getExtension("glenn2223.live-sass").activate();
-
-        assert.ok(true);
+    test("Extension should activate", () => {
+        assert.ok(vscode.extensions.getExtension("glenn2223.live-sass").isActive);
     });
 
     test("should register all live server commands", async () => {
@@ -30,20 +28,29 @@ suite("Extension Tests", function () {
         assert.strictEqual(foundLiveServerCommands.length, COMMANDS.length);
     });
 
-    /* HIDING KNOW FAILED TEST - RESEARCHING
     test("Save should ouput default files", async () => {
-        const doc = await vscode.workspace.openTextDocument("./assets/css/style.css");
+        const doc = await vscode.workspace.openTextDocument(
+            (await vscode.workspace.findFiles("css/**"))[0]
+        );
 
-        if (!(await doc.save())) assert.ok(false, "Save failed");
+        if (!(await doc.save())) {
+            assert.ok(false, "Save failed");
+        }
 
         setTimeout(async () => {
-            const docs = await vscode.workspace.findFiles("./assets/css/**");
+            const docs = await vscode.workspace.findFiles("css/**");
 
             assert.strictEqual(docs, [
-                vscode.Uri.parse("./assets/css/style.scss"),
-                vscode.Uri.parse("./assets/css/style.css"),
-                vscode.Uri.parse("./assets/css/style.css.map"),
+                vscode.Uri.parse("css/sample.scss"),
+                vscode.Uri.parse("css/sample.css"),
+                vscode.Uri.parse("css/sample.css.map"),
             ]);
         }, 1000);
-    });*/
+    });
+
+    // TODO: increase tests for the following
+    //      testing forceBaseDirectory
+    //      testing autoprefixer
+    //      more known features 
+    //          (so future changes don't break something they shouldn't)
 });
