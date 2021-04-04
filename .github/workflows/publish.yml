@@ -36,9 +36,9 @@ jobs:
 #      if: runner.os == 'Linux'
 #      name: Test extension
       
-    - run: npm test
-      if: runner.os != 'Linux'
-      name: Test extension
+#    - run: npm test
+#      if: runner.os != 'Linux'
+#      name: Test extension
       
     - name: Publish
       if: success() && startsWith( github.ref, 'refs/tags/releases/') && matrix.os == 'ubuntu-latest'
