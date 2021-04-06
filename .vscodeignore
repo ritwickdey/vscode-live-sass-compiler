@@ -1,6 +1,7 @@
 _layouts/**
 _site
 _site/**
+.github/**
 .vscode/**
 .vscode-test/**
 assets/**

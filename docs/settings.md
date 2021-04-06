@@ -182,12 +182,40 @@ Autoprefix unsupported CSS properties (e.g. `transform` will also add `-ms-trans
 ---
 
 ### liveSassCompile.settings.showOutputWindowOn
-Set the logging level at which errors will be shown in the output window
+Set the logging level at which errors will be shown in the output window. *There is also a [command](#livesasscommandopenoutputwindow)*.
 
-**Type:** `Trace` OR `Debug` OR `Information` OR `Warning` OR `Error`  
+**Type:** `Trace`, `Debug`, `Information`, `Warning`, `Error` or `None`  
 **Default:** `Warning`
 
-*There is also a [command](#livesasscommandopenoutputwindow)*
+<details>
+<summary> Choosing the right output level </summary>
+
+- `None`: almost no output
+  - Running the `liveSass.command.debugInclusion` (`Check file will be included`) command
+  - Running the `liveSass.command.debugFileList` (`Get all included files`) command
+  - When the `forceBaseDirectory` is not found or invalid (i.e. a file instead of a folder)
+- `Error`: this will output when compilation errors  
+    All of the above, plus
+  - When there is an error or `@error` in your SASS
+  - When autoprefixer errors, or is passed an invalid browserslist setting
+  - If saving a file to the disk fails
+- `Warning`: this will output non-critical issues  
+    All of the above, plus
+  - Primarily, workspace folder issues
+- `Information`: this will output file information  
+    All of the above, plus
+  - When compilation is starting
+  - When files have been generated (it outputs all files)
+  - When the watch state is changed
+- `Debug`: this will output some info to help with debugging  
+    All of the above, plus
+  - Details as to why files aren't compiling (not SASS, no active file, etc.)
+  - Details of which files are being processed
+- `Trace`: this is primarily to aid in resolving problems  
+    All of the above, plus
+  - A lot of sub-process by sub-process details of progress
+
+</details>
 
 ---
 
@@ -223,8 +251,7 @@ Example: workspace setting is `/src/Sass` and root setting is `/Assets/Style`. I
 If the path is not found, or is a file, then it will output an error  
 If the path is wrong then nothing will be found nor compiled
 
->**⚠ This setting effects the root path for `includeItems` and `excludeList`**
-A setting of `/Assets` means that `includeItems` and `excludeList` are both relative to `/Assets` and not `/` (the root of the workspace folder)
+>**⚠ This setting effects the root path for `includeItems` and `excludeList`**. So, a setting of `/Assets` means that `includeItems` and `excludeList` are both relative to `/Assets` and not `/` (the root of the workspace folder)
 
 ## Commands
 To use any command, start by pressing <kbd>F1</kbd> OR (<kbd>Ctrl</kbd>/<kbd>Cmd</kbd>) + <kbd>Shift</kbd> + <kbd>P</kbd>. You can then enter a `name` for any of the commands below.

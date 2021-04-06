@@ -29,28 +29,34 @@ suite("Extension Tests", function () {
     });
 
     test("Save should ouput default files", async () => {
-        const doc = await vscode.workspace.openTextDocument(
-            (await vscode.workspace.findFiles("css/**"))[0]
-        );
+        const actual = [
+                vscode.Uri.parse("css/sample.scss"),
+                vscode.Uri.parse("css/sample.css"),
+                vscode.Uri.parse("css/sample.css.map"),
+            ].map(
+                (file) =>
+                    vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, file.path).path
+            ),
+            doc = await vscode.workspace.openTextDocument(
+                (await vscode.workspace.findFiles("css/**"))[0]
+            );
 
         if (!(await doc.save())) {
             assert.ok(false, "Save failed");
         }
 
-        setTimeout(async () => {
-            const docs = await vscode.workspace.findFiles("css/**");
+        await new Promise((resolve) => setTimeout(resolve, 1000));
 
-            assert.strictEqual(docs, [
-                vscode.Uri.parse("css/sample.scss"),
-                vscode.Uri.parse("css/sample.css"),
-                vscode.Uri.parse("css/sample.css.map"),
-            ]);
-        }, 1000);
+        const docs = (await vscode.workspace.findFiles("css/**")).map((file) => file.path);
+
+        console.log("Docs:", docs);
+
+        assert.strictEqual(docs, actual);
     });
 
     // TODO: increase tests for the following
     //      testing forceBaseDirectory
     //      testing autoprefixer
-    //      more known features 
+    //      more known features
     //          (so future changes don't break something they shouldn't)
 });

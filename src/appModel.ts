@@ -112,10 +112,18 @@ export class AppModel {
 
             await this.GenerateAllCssAndMap();
         } catch (err) {
+            let files: string[] | string;
+
+            try {
+                files = await this.getSassFiles();
+            } catch (_) {
+                files = "Error lies in getSassFiles()";
+            }
+
             await this._logger.LogIssueWithAlert(
                 `Unhandled error while compiling all files. Error message: ${err.message}`,
                 {
-                    files: await this.getSassFiles(),
+                    files: files,
                     error: ErrorLogger.PrepErrorForLogging(err),
                 }
             );
@@ -292,11 +300,19 @@ export class AppModel {
                 await this.GenerateAllCssAndMap();
             }
         } catch (err) {
+            let files: string[] | string;
+
+            try {
+                files = await this.getSassFiles();
+            } catch (_) {
+                files = "Error lies in getSassFiles()";
+            }
+
             await this._logger.LogIssueWithAlert(
                 `Unhandled error while compiling the saved changes. Error message: ${err.message}`,
                 {
                     triggeringFile: vscode.window.activeTextEditor.document.fileName,
-                    allFiles: await this.getSassFiles(),
+                    allFiles: files,
                     error: ErrorLogger.PrepErrorForLogging(err),
                 }
             );
@@ -389,7 +405,7 @@ export class AppModel {
 
         const fileResolvers = await Promise.all(promises);
 
-        OutputWindow.Show(OutputLevel.Information, "Generated :", null, false);
+        OutputWindow.Show(OutputLevel.Information, "Generated:", null, false);
 
         StatusBarUi.compilationSuccess(this.isWatching);
 
@@ -818,15 +834,16 @@ export class AppModel {
                 return (
                     ((await new fdir()
                         .crawlWithOptions(basePath, {
-                            includeBasePath: true,
-                            resolvePaths: true,
-                            onlyCounts: true,
                             filters: [
                                 (filePath) =>
                                     filePath.endsWith(".scss") || filePath.endsWith(".sass"),
                                 (filePath) => isMatch(path.relative(basePath, filePath)),
                                 (filePath) => filePath === sassPath,
                             ],
+                            includeBasePath: true,
+                            onlyCounts: true,
+                            resolvePaths: true,
+                            suppressErrors: true,
                         })
                         .withPromise()) as OnlyCountsOutput).files > 0
                 );
@@ -875,42 +892,57 @@ export class AppModel {
         excludedItems = await AppModel.stripAnyLeadingSlashes(excludedItems);
 
         const fileList: string[] = [];
+
         (
             await Promise.all(
-                vscode.workspace.workspaceFolders.map(async (folder, index) => {
-                    OutputWindow.Show(
-                        OutputLevel.Trace,
-                        `Checking folder ${index + 1} of ${
-                            vscode.workspace.workspaceFolders.length
-                        }`,
-                        [`Folder: ${folder.name}`]
-                    );
-
-                    const forceBaseDirectory = Helper.getConfigSettings<string | null>(
-                        "forceBaseDirectory",
-                        folder
-                    );
-
-                    let basePath = folder.uri.fsPath;
-
-                    if (forceBaseDirectory && forceBaseDirectory.length > 1) {
+                vscode.workspace.workspaceFolders.map(
+                    async (folder, index): Promise<PathsOutput | null> => {
                         OutputWindow.Show(
                             OutputLevel.Trace,
-                            "`forceBaseDirectory` setting found, checking validity"
+                            `Checking folder ${index + 1} of ${
+                                vscode.workspace.workspaceFolders.length
+                            }`,
+                            [`Folder: ${folder.name}`]
                         );
 
-                        basePath = path.resolve(
-                            basePath,
-                            AppModel.stripLeadingSlash(forceBaseDirectory)
+                        const forceBaseDirectory = Helper.getConfigSettings<string | null>(
+                            "forceBaseDirectory",
+                            folder
                         );
 
-                        try {
-                            if (!(await fs.promises.stat(basePath)).isDirectory()) {
+                        let basePath = folder.uri.fsPath;
+
+                        if (forceBaseDirectory && forceBaseDirectory.length > 1) {
+                            OutputWindow.Show(
+                                OutputLevel.Trace,
+                                "`forceBaseDirectory` setting found, checking validity"
+                            );
+
+                            basePath = path.resolve(
+                                basePath,
+                                AppModel.stripLeadingSlash(forceBaseDirectory)
+                            );
+
+                            try {
+                                if (!(await fs.promises.stat(basePath)).isDirectory()) {
+                                    OutputWindow.Show(
+                                        OutputLevel.Critical,
+                                        "Error with your `forceBaseDirectory` setting",
+                                        [
+                                            `Path is not a folder: ${basePath}`,
+                                            `Setting: "${forceBaseDirectory}"`,
+                                            `Workspace folder: ${folder.name}`,
+                                        ]
+                                    );
+
+                                    return null;
+                                }
+                            } catch {
                                 OutputWindow.Show(
                                     OutputLevel.Critical,
                                     "Error with your `forceBaseDirectory` setting",
                                     [
-                                        `Path is not a folder: ${basePath}`,
+                                        `Can not find path: ${basePath}`,
                                         `Setting: "${forceBaseDirectory}"`,
                                         `Workspace folder: ${folder.name}`,
                                     ]
@@ -918,51 +950,44 @@ export class AppModel {
 
                                 return null;
                             }
-                        } catch {
-                            OutputWindow.Show(
-                                OutputLevel.Critical,
-                                "Error with your `forceBaseDirectory` setting",
-                                [
-                                    `Can not find path: ${basePath}`,
-                                    `Setting: "${forceBaseDirectory}"`,
-                                    `Workspace folder: ${folder.name}`,
-                                ]
-                            );
 
-                            return null;
+                            OutputWindow.Show(
+                                OutputLevel.Trace,
+                                "No problem with path, changing from workspace folder",
+                                [`New folder: ${basePath}`]
+                            );
+                        } else {
+                            OutputWindow.Show(
+                                OutputLevel.Trace,
+                                "No base folder override found. Keeping workspace folder"
+                            );
                         }
 
-                        OutputWindow.Show(
-                            OutputLevel.Trace,
-                            "No problem with path, changing from workspace folder",
-                            [`New folder: ${basePath}`]
-                        );
-                    } else {
-                        OutputWindow.Show(
-                            OutputLevel.Trace,
-                            "No base folder override found. Keeping workspace folder"
-                        );
+                        const isMatch = picomatch(queryPattern, {
+                            // @ts-ignore ts2322 => string[] doesn't match string (False negative as string[] is allowed)
+                            ignore: excludedItems,
+                            dot: true,
+                        });
+
+                        return (await new fdir()
+                            .crawlWithOptions(basePath, {
+                                filters: [
+                                    (filePath) =>
+                                        filePath.endsWith(".scss") || filePath.endsWith(".sass"),
+                                    (filePath) => isMatch(path.relative(basePath, filePath)),
+                                    (filePath) =>
+                                        isQueryPatternFixed || this.isSassFile(filePath, false),
+                                ],
+                                includeBasePath: true,
+                                resolvePaths: true,
+                                suppressErrors: true,
+                            })
+                            .withPromise()) as PathsOutput;
                     }
-
-                    // @ts-ignore ts2322 => string[] doesn't match string (False negative as string[] is allowed)
-                    const isMatch = picomatch(queryPattern, { ignore: excludedItems, dot: true });
-
-                    return (await new fdir()
-                        .crawlWithOptions(basePath, {
-                            includeBasePath: true,
-                            resolvePaths: true,
-                            filters: [
-                                (filePath) =>
-                                    filePath.endsWith(".scss") || filePath.endsWith(".sass"),
-                                (filePath) => isMatch(path.relative(basePath, filePath)),
-                                (filePath) => isQueryPatternFixed || this.isSassFile(filePath, false),
-                            ],
-                        })
-                        .withPromise()) as PathsOutput;
-                })
+                )
             )
         ).forEach((files) => {
-            files.forEach((file) => {
+            files?.forEach((file) => {
                 fileList.push(file);
             });
         });
