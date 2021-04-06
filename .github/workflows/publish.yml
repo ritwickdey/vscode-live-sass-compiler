@@ -17,7 +17,7 @@ jobs:
       matrix:
 #       AGAIN ONLY THE RELEASE
 #        os: [macos-latest, ubuntu-latest, windows-latest]
-        os: ubuntu-latest
+        os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout
