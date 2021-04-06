@@ -405,7 +405,7 @@ export class AppModel {
 
         const fileResolvers = await Promise.all(promises);
 
-        OutputWindow.Show(OutputLevel.Information, "Generated :", null, false);
+        OutputWindow.Show(OutputLevel.Information, "Generated:", null, false);
 
         StatusBarUi.compilationSuccess(this.isWatching);
 
