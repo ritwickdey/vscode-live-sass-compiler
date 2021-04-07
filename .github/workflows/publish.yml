@@ -43,9 +43,20 @@ jobs:
 #      if: runner.os != 'Linux'
 #      name: Test extension
 
+    - id: get-name
+      if: success() && startsWith( github.ref, 'refs/tags/') && matrix.os == 'ubuntu-latest'
+      uses: actions/github-script@0.9.0
+      with:
+        script: |
+          const ver = github.event.release.tag_name.substr(1)
+          core.setOutput('name', `live-sass-${ver}.vsix`)
+
+    - name: Package
+      run: vsce package --yarn
+
     - name: Publish - vsce
-      if: success() && startsWith( github.ref, 'refs/tags/releases/') && matrix.os == 'ubuntu-latest'
-      run: vsce publish --yarn
+      if: success() && startsWith(github.ref, 'refs/tags/') && matrix.os == 'ubuntu-latest'
+      run: vsce publish ${{ steps.get-name.outputs.name }} --yarn
       env:
         VSCE_PAT: ${{ secrets.VSCE_PAT }}
         
@@ -53,7 +64,15 @@ jobs:
       run: npm i ovsx -g
       
     - name: Publish - ovsx
-      if: success() && startsWith( github.ref, 'refs/tags/releases/') && matrix.os == 'ubuntu-latest'
-      run: ovsx publish
+      if: success() && startsWith(github.ref, 'refs/tags/') && matrix.os == 'ubuntu-latest'
+      run: ovsx publish ${{ steps.get-name.outputs.name }}
       env:
         OVSX_PAT: ${{ secrets.OVSX_PAT }}
+        
+    - name: Upload asset
+      if: startsWith(github.ref, 'refs/tags/') && matrix.os == 'ubuntu-latest'
+      uses: softprops/action-gh-release@v0.1.5
+      with:
+        files: ${{ steps.get-name.outputs.name }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
