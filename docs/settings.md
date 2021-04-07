@@ -53,7 +53,7 @@ The final save path is dependant on these three settings. However, `savePath` ta
     // More Complex
     // (See issue 26: https://github.com/ritwickdey/vscode-live-sass-compiler/issues/26)
     {
-        "format": "nested",
+        "format": "compressed",
         "extensionName": ".min.css",
 
         // ~ -> denotes relative to each sass file
@@ -61,7 +61,7 @@ The final save path is dependant on these three settings. However, `savePath` ta
     },
     // Segment replacement example
     {
-        "format": "compact",
+        "format": "compressed",
         "extensionName": ".min.css",
 
         // "/Assets/SCSS/main.scss" -> translates to "/Assets/Style/main.css"
