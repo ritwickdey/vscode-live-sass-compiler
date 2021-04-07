@@ -45,7 +45,6 @@ jobs:
 
     - name: Debug
       run: |
-        echo "${{ success() }}"
         echo "${{ github.ref }}"
         echo "${{ matrix.os }}"
 
