@@ -44,7 +44,7 @@ jobs:
 #      name: Test extension
 
     - name: Publish - vsce
-      if: success() && startsWith( github.ref, 'refs/tags/releases/') && matrix.os == 'ubuntu-latest'
+#      if: success() && startsWith( github.ref, 'refs/tags/releases/') && matrix.os == 'ubuntu-latest'
       run: vsce publish --yarn
       env:
         VSCE_PAT: ${{ secrets.VSCE_PAT }}
@@ -53,7 +53,7 @@ jobs:
       run: npm i ovsx -g
       
     - name: Publish - ovsx
-      if: success() && startsWith( github.ref, 'refs/tags/releases/') && matrix.os == 'ubuntu-latest'
+#      if: success() && startsWith( github.ref, 'refs/tags/releases/') && matrix.os == 'ubuntu-latest'
       run: ovsx publish
       env:
         OVSX_PAT: ${{ secrets.OVSX_PAT }}
