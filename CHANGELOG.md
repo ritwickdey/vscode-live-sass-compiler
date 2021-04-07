@@ -22,6 +22,14 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [5.0.1] - 2021-04-07
+
+### Fixed
+- Bump to stop installation issues caused by original RC uploads ([#54](https://github.com/glenn2223/vscode-live-sass-compiler/issues/54))
+
+### Changes
+- No extension changes
+
 ## [5.0.0] - 2021-04-06
 
 ### Breaking changes
@@ -261,7 +269,8 @@ All notable changes to this project will be documented in this file.
 | 0.0.1 | 11.07.17 | Initial Preview Release with following key features. <br> – Live SASS & SCSS Compile. <br> – Customizable file location of exported CSS. <br> – Customizable exported CSS Style (`expanded`, `compact`, `compressed`, `nested`.)<br> – Quick Status bar control.<br> – Live Reload to browser (`Live Server` extension dependency). |
 
 
-[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.0...HEAD
+[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.1...HEAD
+[5.0.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.0...v5.0.1
 [5.0.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.4.1...v5.0.0
 [4.4.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.4.0...v4.4.1
 [4.4.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.4...v4.4.0
