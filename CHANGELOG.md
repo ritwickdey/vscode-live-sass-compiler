@@ -283,8 +283,8 @@ All notable changes to this project will be documented in this file.
 
 
 [Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.2...HEAD
-[5.0.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.1...v5.0.2
-[5.0.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.0...v5.0.1
+[5.0.2]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.1...v5.0.2
+[5.0.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.0...v5.0.1
 [5.0.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.4.1...v5.0.0
 [4.4.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.4.0...v4.4.1
 [4.4.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.4...v4.4.0
