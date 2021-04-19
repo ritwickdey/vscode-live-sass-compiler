@@ -22,6 +22,19 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [5.0.2] - 2021-04-19
+
+### Updated
+- `picomatch` from `10.2.4` to `10.2.5`
+  - Do not skip pattern separator for square brackets
+  - Other small changes *(nothing user facing)*
+- `postcss` from `8.2.9` to `8.2.10`
+  - Fixed ReDoS vulnerabilities in source map parsing
+  - Other small changes *(nothing user facing)*
+- `sass` from `1.32.8` to `1.32.11`
+  - Small changes *(nothing user facing)*
+- Various dev dependency updates *(nothing user facing)*
+
 ## [5.0.1] - 2021-04-07
 
 ### Fixed
@@ -269,8 +282,9 @@ All notable changes to this project will be documented in this file.
 | 0.0.1 | 11.07.17 | Initial Preview Release with following key features. <br> – Live SASS & SCSS Compile. <br> – Customizable file location of exported CSS. <br> – Customizable exported CSS Style (`expanded`, `compact`, `compressed`, `nested`.)<br> – Quick Status bar control.<br> – Live Reload to browser (`Live Server` extension dependency). |
 
 
-[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.1...HEAD
-[5.0.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.0...v5.0.1
+[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.2...HEAD
+[5.0.2]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.1...v5.0.2
+[5.0.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.0...v5.0.1
 [5.0.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.4.1...v5.0.0
 [4.4.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.4.0...v4.4.1
 [4.4.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.3.4...v4.4.0
