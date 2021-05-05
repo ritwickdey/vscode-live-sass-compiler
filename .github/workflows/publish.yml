@@ -23,23 +23,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - id: test
+    - id: Info
       uses: actions/github-script@0.9.0
       with:
         script: |
-          console.log('test', github)
-
-    - id: test2
-      uses: actions/github-script@0.9.0
-      with:
-        script: |
-          console.log('test 2', ${{ github }})
-
-    - id: break
-      uses: actions/github-script@0.9.0
-      with:
-        script: |
-          consssssssole.log(conssssss)
+          console.log('Github Info', { ref: github.ref, event: github.event, release: github.event.release })
       
     - name: Install Node.js
       uses: actions/setup-node@v1
