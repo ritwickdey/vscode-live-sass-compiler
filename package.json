@@ -1,8 +1,8 @@
 {
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
-    "description": "Compile Sass or Scss to CSS at realtime with live browser reload.",
-    "version": "5.0.2",
+    "description": "Compile Sass or Scss to CSS at realtime.",
+    "version": "5.0.3",
     "publisher": "glenn2223",
     "author": {
         "name": "Glenn Marks",
@@ -215,7 +215,7 @@
                         "Error",
                         "None"
                     ],
-                    "default": "Warning",
+                    "default": "Information",
                     "description": "Set the level of logging that is recorded and shown to you.\nDefault is `Warning`"
                 },
                 "liveSassCompile.settings.forceBaseDirectory": {
@@ -255,28 +255,28 @@
         "fdir": "^5.0.0",
         "picomatch": "^2.2.3",
         "postcss": "^8.2.10",
-        "sass": "^1.32.11"
+        "sass": "^1.32.12"
     },
     "devDependencies": {
         "@types/glob": "^7.1.3",
         "@types/mocha": "^8.2.2",
-        "@types/node": "^14.14.41",
+        "@types/node": "^15.0.2",
         "@types/picomatch": "^2.2.2",
         "@types/sass": "^1.16.0",
         "@types/vscode": "^1.50.0",
-        "@typescript-eslint/eslint-plugin": "^4.22.0",
-        "@typescript-eslint/parser": "^4.22.0",
-        "eslint": "^7.24.0",
+        "@typescript-eslint/eslint-plugin": "^4.22.1",
+        "@typescript-eslint/parser": "^4.22.1",
+        "eslint": "^7.25.0",
         "mocha": "^8.3.2",
         "terser-webpack-plugin": "^5.1.1",
-        "ts-loader": "^9.0.0",
+        "ts-loader": "^9.1.2",
         "typescript": "^4.2.4",
         "vscode-test": "^1.5.2",
-        "webpack": "^5.34.0",
+        "webpack": "^5.36.2",
         "webpack-cli": "^4.6.0"
     },
     "announcement": {
-        "onVersion": "5.0.2",
-        "message": "SassCompiler v5.0.2: Just some dependancy bumps. Please note: there have been lots of changes in v5! Please see the changelog for all the details, including those about the breaking changes."
+        "onVersion": "5.0.3",
+        "message": "SassCompiler v5.0.2: Changed the default value of a setting and some dependancy bumps. Please note: there have been lots of changes in v5! Please see the changelog for all the details, including those about the breaking changes."
     }
 }

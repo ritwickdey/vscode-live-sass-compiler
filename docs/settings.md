@@ -185,7 +185,7 @@ Autoprefix unsupported CSS properties (e.g. `transform` will also add `-ms-trans
 Set the logging level at which errors will be shown in the output window. *There is also a [command](#livesasscommandopenoutputwindow)*.
 
 **Type:** `Trace`, `Debug`, `Information`, `Warning`, `Error` or `None`  
-**Default:** `Warning`
+**Default:** `Information`
 
 <details>
 <summary> Choosing the right output level </summary>

@@ -26,8 +26,8 @@ export class Helper {
             case "Debug":
                 return OutputLevel.Debug;
 
-            case "Information":
-                return OutputLevel.Information;
+            case "Warning":
+                return OutputLevel.Warning;
 
             case "Error":
                 return OutputLevel.Error;
@@ -35,9 +35,9 @@ export class Helper {
             case "None":
                 return OutputLevel.Critical;
 
-            case "Warning":
+            case "Information":
             default:
-                return OutputLevel.Warning;
+                return OutputLevel.Information;
         }
     }
 }

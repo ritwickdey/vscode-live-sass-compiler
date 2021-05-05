@@ -22,6 +22,22 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [5.0.3] - 2021-05-05
+
+### Changed
+- The default for `liveSassCompile.settings.showOutputWindowOn` is now `Information`
+  - To prevent future issues like [#70](https://github.com/glenn2223/vscode-live-sass-compiler/issues/70) & [#76](https://github.com/glenn2223/vscode-live-sass-compiler/issues/76). *Where issues are created because, by default, compiling didn't output the same details that the original extension did*
+- Updated the documentation to match the above change - and also sorted a couple of typos
+- Removed reference to live reload in `package.json`
+
+### Updated
+- `postcss` from `8.2.10` to `8.2.14`
+  - Fixed ReDoS vulnerabilities in source map parsing
+  - Other small changes *(nothing user facing)*
+- `sass` from `1.32.11` to `1.32.12`
+  - Fix a bug that disallowed more than one module from extending the same selector from a module if that selector itself extended a selector from another upstream module.
+- Various dev dependency updates *(nothing user facing)*
+
 ## [5.0.2] - 2021-04-19
 
 ### Updated
@@ -282,7 +298,8 @@ All notable changes to this project will be documented in this file.
 | 0.0.1 | 11.07.17 | Initial Preview Release with following key features. <br> – Live SASS & SCSS Compile. <br> – Customizable file location of exported CSS. <br> – Customizable exported CSS Style (`expanded`, `compact`, `compressed`, `nested`.)<br> – Quick Status bar control.<br> – Live Reload to browser (`Live Server` extension dependency). |
 
 
-[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.2...HEAD
+[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.3...HEAD
+[5.0.2]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.2...v5.0.3
 [5.0.2]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.1...v5.0.2
 [5.0.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.0...v5.0.1
 [5.0.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.4.1...v5.0.0

@@ -93,9 +93,9 @@ Here's some of the most important changes:
     - The default is `defaults`
     - `null` is no longer accepted, use `false` instead
     - When `true` we will find a `.browserslistrc` file or `browserslist` in your `package.json`. No more duplicating settings!
-  - `showOutputWindow` is now `showOutputWindowOn` and uses log values (`Debug`, `Error`, etc.). It's default log level is `Warning`
+  - `showOutputWindow` is now `showOutputWindowOn` and uses log values (`Debug`, `Error`, etc.). It's default log level is `Information` - at this level it will output the same information that the original extension does
 - Some settings are new!
-  - `savePathSegmentKeys` and `savePathReplaceSegmentsWith`: when used in combination you can choose a to replace folder segments in the save path
+  - `savePathSegmentKeys` and `savePathReplaceSegmentsWith`: when used in combination you can choose to replace folder segments in the save path
   - `watchOnLaunch`: state whether you want to watch files upon launch
   - `compileOnWatch`: state if files should be compiled upon watching
   - `forceBaseDirectory`: state the base directory of all you SASS files. Aids in reducing wasted resources while searching for files
@@ -105,7 +105,7 @@ Here are some things you probably won't care about as much
 - We abandoned `glob` (the package, not the patterns) and we now use `fdir` which is blazingly fast
 - New commands!
   - `liveSass.command.compileCurrentSass`: perform a one-time compilation of the current SASS file
-  - `liveSass.command.createIssue`: create an issue in GutHub. If an unexpected error occurred then this information is readily available to paste into the new issue
+  - `liveSass.command.createIssue`: opens a link to create a new issue in GutHub. If an unexpected error occurred then error information is readily available to paste into the new issue
   - `liveSass.command.debugInclusion`: check if the current SASS file will be included, based on your settings
   - `liveSass.command.debugFileList`: get a full list of files that are included and excluded
 - We support multi-root/multi-folder workspaces
