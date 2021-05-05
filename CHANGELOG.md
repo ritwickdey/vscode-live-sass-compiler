@@ -24,13 +24,11 @@ All notable changes to this project will be documented in this file.
 
 ## [5.0.3] - 2021-05-05
 
-## Fixed
-- Removed reference to live reload in `package.json`
-
 ### Changed
 - The default for `liveSassCompile.settings.showOutputWindowOn` is now `Information`
   - To prevent future issues like [#70](https://github.com/glenn2223/vscode-live-sass-compiler/issues/70) & [#76](https://github.com/glenn2223/vscode-live-sass-compiler/issues/76). *An issue because saving didn't output the same details as the original extension*
 - Updated the documentation to match this - and also sorted a couple of typos
+- Removed reference to live reload in `package.json`
 
 ### Updated
 - `postcss` from `8.2.10` to `8.2.14`
