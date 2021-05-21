@@ -1,5 +1,45 @@
-
 # FAQs
+
+### Q. I'm migrating from Ritwick Dey's extension, what do I need to know?
+
+<details>
+<summary>Answer</summary>
+
+Well, **lots of things**.
+
+Firstly, welcome! I'm glad you're here!
+
+Here's some of the most important changes:
+- We now require VS Code version 1.52
+- We are no longer dependant on `ritwickdey.LiveServer`. You can manually add this package to VS Code, if you need it
+- Some settings have been changed
+  - `formats[].format` only accepts `compressed` or `expanded`
+  - `autoprefix`:
+    - The default is `defaults`
+    - `null` is no longer accepted, use `false` instead
+    - When `true` we will find a `.browserslistrc` file or `browserslist` in your `package.json`. No more duplicating settings!
+  - `showOutputWindow` is now `showOutputWindowOn` and uses log values (`Debug`, `Error`, etc.). It's default log level is `Information` - at this level it will output the same information that the original extension does
+- Some settings are new!
+  - `savePathSegmentKeys` and `savePathReplaceSegmentsWith`: when used in combination you can choose to replace folder segments in the save path
+  - `watchOnLaunch`: state whether you want to watch files upon launch
+  - `compileOnWatch`: state if files should be compiled upon watching
+  - `forceBaseDirectory`: state the base directory of all you SASS files. Aids in reducing wasted resources while searching for files
+
+Here are some things you probably won't care about as much
+- The extension has had a massive overhaul. Performance optimisation, and new features!
+- We abandoned `glob` (the package, not the patterns) and we now use `fdir` which is blazingly fast
+- New commands!
+  - `liveSass.command.compileCurrentSass`: perform a one-time compilation of the current SASS file
+  - `liveSass.command.createIssue`: opens a link to create a new issue in GutHub. If an unexpected error occurred then error information is readily available to paste into the new issue
+  - `liveSass.command.debugInclusion`: check if the current SASS file will be included, based on your settings
+  - `liveSass.command.debugFileList`: get a full list of files that are included and excluded
+- We support multi-root/multi-folder workspaces
+- Map files now link back to the correct line after `autoprefixer` has been applied 
+- Clicking the status bar icon while in the `Success` or `Error` state will show the output window
+
+</details>
+
+---
 
 ### Q. How do I change the settings?
 
@@ -75,41 +115,34 @@ Still no luck?
 
 ---
 
-### Q. I'm migrating from Ritwick Dey's extension, what do I need to know?
+
+### Q. So... about multi-root workspaces?
 
 <details>
-<summary>Answer</summary>
+<summary>Answers</summary>
 
-Well, **lots of things**.
+**What is it?**
 
-Firstly, welcome! I'm glad you're here!
+A multi-root workspaces is a project that gives you access to a folder at `C:/a/b/c` and `C:/x/y/z` - all from one VS Code window!
 
-Here's some of the most important changes:
-- We now require VS Code version 1.52
-- We are no longer dependant on `ritwickdey.LiveServer`. You can manually add this package to VS Code, if you need it
-- Some settings have been changed
-  - `formats[].format` only accepts `compressed` or `expanded`
-  - `autoprefix`:
-    - The default is `defaults`
-    - `null` is no longer accepted, use `false` instead
-    - When `true` we will find a `.browserslistrc` file or `browserslist` in your `package.json`. No more duplicating settings!
-  - `showOutputWindow` is now `showOutputWindowOn` and uses log values (`Debug`, `Error`, etc.). It's default log level is `Information` - at this level it will output the same information that the original extension does
-- Some settings are new!
-  - `savePathSegmentKeys` and `savePathReplaceSegmentsWith`: when used in combination you can choose to replace folder segments in the save path
-  - `watchOnLaunch`: state whether you want to watch files upon launch
-  - `compileOnWatch`: state if files should be compiled upon watching
-  - `forceBaseDirectory`: state the base directory of all you SASS files. Aids in reducing wasted resources while searching for files
+By doing this, and when an extension is configured for it, you can have an independent settings for each project. But don't worry, you don't need to duplicate settings! Default settings can be placed in the `.code-workspace` - these are then ignored if the same settings exists in the workspace's `settings.json`.
 
-Here are some things you probably won't care about as much
-- The extension has had a massive overhaul. Performance optimisation, and new features!
-- We abandoned `glob` (the package, not the patterns) and we now use `fdir` which is blazingly fast
-- New commands!
-  - `liveSass.command.compileCurrentSass`: perform a one-time compilation of the current SASS file
-  - `liveSass.command.createIssue`: opens a link to create a new issue in GutHub. If an unexpected error occurred then error information is readily available to paste into the new issue
-  - `liveSass.command.debugInclusion`: check if the current SASS file will be included, based on your settings
-  - `liveSass.command.debugFileList`: get a full list of files that are included and excluded
-- We support multi-root/multi-folder workspaces
-- Map files now link back to the correct line after `autoprefixer` has been applied 
-- Clicking the status bar icon while in the `Success` or `Error` state will show the output window
+*Note: Each workspace must have a `.vscode` folder with a `settings.json` file for the settings to overwrite the workspace defaults.*
+
+**I like it! how do I set one up?**
+
+When you open any folder in VS Code it is essentially a "single-root" workspace.
+
+First, right click (left click on mac) in some open space on the `Explorer` tab. You will see an option to `Add folder to workspace`. When you click this you can choose a folder in a completely different location to add to your project. By doing this VS Code will create a `.code-workspace` file. This creates an actual workspace - well, in this case, a "multi-root" workspace.
+
+**Okay, so what settings can I use**
+
+The following settings can all be made available to each workspaces `settings.json` file.
+- `liveSassCompile.settings.formats`
+- `liveSassCompile.settings.excludeList`
+- `liveSassCompile.settings.includeItems`
+- `liveSassCompile.settings.generateMap`
+- `liveSassCompile.settings.autoprefix`
+- `liveSassCompile.settings.forceBaseDirectory`
 
 </details>

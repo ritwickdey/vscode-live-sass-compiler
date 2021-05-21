@@ -1,19 +1,18 @@
 //import { WindowPopout, OutputWindow } from "./VscodeExtensions";
-import { Helper } from "./helper";
+import { Helper, IFormat } from "./helper";
 import * as compiler from "sass";
 
 export class SassHelper {
-    static get instance(): SassHelper {
-        return new SassHelper();
-    }
-
-    static targetCssFormat(format: "expanded" | "compressed"): compiler.Options {
+    static toSassOptions(format: IFormat): compiler.Options {
         return {
-            outputStyle: format,
+            outputStyle: format.format,
+            linefeed: format.linefeed,
+            indentType: format.indentType,
+            indentWidth: format.indentWidth,
         };
     }
 
-    compileOne(
+    static compileOne(
         SassPath: string,
         mapFileUri: string,
         options: compiler.Options

@@ -5,6 +5,7 @@ import * as vscode from "vscode";
 import { AppModel } from "./appModel";
 import { checkNewAnnouncement } from "./announcement/index";
 import { ErrorLogger, OutputLevel, OutputWindow } from "./VscodeExtensions";
+import { Helper } from "./helper";
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
     try {
@@ -14,7 +15,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
         checkNewAnnouncement(context.globalState);
 
-        const disposablecompileAll = vscode.commands.registerCommand(
+        const disposableStartWatching = vscode.commands.registerCommand(
                 "liveSass.command.watchMySass",
                 async () => {
                     OutputWindow.Show(
@@ -102,6 +103,72 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
                     await appModel.debugFileList();
                 }
             ),
+            disposableShowOutputOnTrace = vscode.commands.registerCommand(
+                "liveSass.command.showOuputOn.trace",
+                async () => {
+                    OutputWindow.Show(
+                        OutputLevel.Trace,
+                        'Command called: "liveSass.command.showOuputOn.trace"'
+                    );
+
+                    await Helper.updateOutputLogLevel(OutputLevel.Trace);
+                }
+            ),
+            disposableShowOutputOnDebug = vscode.commands.registerCommand(
+                "liveSass.command.showOuputOn.debug",
+                async () => {
+                    OutputWindow.Show(
+                        OutputLevel.Trace,
+                        'Command called: "liveSass.command.showOuputOn.debug"'
+                    );
+
+                    await Helper.updateOutputLogLevel(OutputLevel.Debug);
+                }
+            ),
+            disposableShowOutputOnInformation = vscode.commands.registerCommand(
+                "liveSass.command.showOuputOn.information",
+                async () => {
+                    OutputWindow.Show(
+                        OutputLevel.Trace,
+                        'Command called: "liveSass.command.showOuputOn.information"'
+                    );
+
+                    await Helper.updateOutputLogLevel(OutputLevel.Information);
+                }
+            ),
+            disposableShowOutputOnWarning = vscode.commands.registerCommand(
+                "liveSass.command.showOuputOn.warning",
+                async () => {
+                    OutputWindow.Show(
+                        OutputLevel.Trace,
+                        'Command called: "liveSass.command.showOuputOn.warning"'
+                    );
+
+                    await Helper.updateOutputLogLevel(OutputLevel.Warning);
+                }
+            ),
+            disposableShowOutputOnError = vscode.commands.registerCommand(
+                "liveSass.command.showOuputOn.error",
+                async () => {
+                    OutputWindow.Show(
+                        OutputLevel.Trace,
+                        'Command called: "liveSass.command.showOuputOn.error"'
+                    );
+
+                    await Helper.updateOutputLogLevel(OutputLevel.Error);
+                }
+            ),
+            disposableShowOutputOnNone = vscode.commands.registerCommand(
+                "liveSass.command.showOuputOn.none",
+                async () => {
+                    OutputWindow.Show(
+                        OutputLevel.Trace,
+                        'Command called: "liveSass.command.showOuputOn.none"'
+                    );
+
+                    await Helper.updateOutputLogLevel(OutputLevel.Critical);
+                }
+            ),
             disposableOnDidSave = vscode.workspace.onDidSaveTextDocument(async () => {
                 OutputWindow.Show(OutputLevel.Trace, 'VS Code event: "onDidSaveTextDocument"');
 
@@ -111,7 +178,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             });
 
         context.subscriptions.push(
-            disposablecompileAll,
+            disposableStartWatching,
             disposableStopWaching,
             disposableOnDidSave,
             disposableOneTimeCompileSass,
@@ -120,6 +187,12 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             disposableCreateIssue,
             disposableDebugInclusion,
             disposableDebugFileList,
+            disposableShowOutputOnTrace,
+            disposableShowOutputOnDebug,
+            disposableShowOutputOnInformation,
+            disposableShowOutputOnWarning,
+            disposableShowOutputOnError,
+            disposableShowOutputOnNone,
             appModel
         );
 

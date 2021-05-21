@@ -21,6 +21,12 @@ suite("Extension Tests", function () {
             "liveSass.command.createIssue",
             "liveSass.command.debugInclusion",
             "liveSass.command.debugFileList",
+            "liveSass.command.showOuputOn.trace",
+            "liveSass.command.showOuputOn.debug",
+            "liveSass.command.showOuputOn.information",
+            "liveSass.command.showOuputOn.warning",
+            "liveSass.command.showOuputOn.error",
+            "liveSass.command.showOuputOn.none",
         ];
         const foundLiveServerCommands = commands.filter((value) => {
             return COMMANDS.indexOf(value) >= 0 || value.startsWith("liveSass.command.");
@@ -30,9 +36,9 @@ suite("Extension Tests", function () {
 
     test("Save should ouput default files", async () => {
         const actual = [
-                vscode.Uri.parse("css/sample.scss"),
-                vscode.Uri.parse("css/sample.css"),
-                vscode.Uri.parse("css/sample.css.map"),
+                vscode.Uri.file("css/sample.scss"),
+                vscode.Uri.file("css/sample.css"),
+                vscode.Uri.file("css/sample.css.map"),
             ].map(
                 (file) =>
                     vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, file.path).path

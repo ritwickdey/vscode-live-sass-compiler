@@ -22,6 +22,42 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
+>These alpha notes will be consolidated for the first release candidate (`-rc.1` suffix). Please note breaking changes can happen right up until the official release
+
+## 5.1.0-alpha.1 - 2021-05-19
+
+### Added
+- New settings to support all other SASS output formatting options - Closes [#82](https://github.com/glenn2223/vscode-live-sass-compiler/issues/82)  
+The new settings are:
+  - `liveSassCompile.settings.formats.linefeed` - control the line terminator used
+  - `liveSassCompile.settings.formats.indentType` - control whether indents are spaces or tabs
+  - `liveSassCompile.settings.formats.indentWidth` - control the width of the indentation
+- New commands to change the `showOutputOn` from the command pallete - Closes [#63](https://github.com/glenn2223/vscode-live-sass-compiler/issues/63)  
+Having these commands in the pallete also means that key combos can be set for each  
+The new commands are:
+  - `liveSass.command.showOuputOn.trace`
+  - `liveSass.command.showOuputOn.debug`
+  - `liveSass.command.showOuputOn.information`
+  - `liveSass.command.showOuputOn.warning`
+  - `liveSass.command.showOuputOn.error`
+  - `liveSass.command.showOuputOn.none`
+
+### Fixed
+- `Change detected - {DateTime}` is now output when `showOutputOn` is set to `"Information"`. This better reflects the functionality of the original extension
+
+## Changes
+- Added more and adjusted some logging messages *(primarily to `Trace` levels)*
+
+### Updated
+- `postcss` from `8.2.14` to `8.2.15`
+  - Small change *(nothing user facing)*
+- `sass` from `1.32.12` to `1.32.13`
+  - **Potentially breaking bug fix:** Null values in `@use` and `@forward`
+  configurations no longer override the `!default` variable, matching the
+  behaviour of the equivalent code using `@import`.
+  - Use the proper parameter names in error messages about `string.slice`
+- Various dev dependency updates *(nothing user facing)*
+
 ## [5.0.3] - 2021-05-05
 
 ### Changed
@@ -298,8 +334,9 @@ All notable changes to this project will be documented in this file.
 | 0.0.1 | 11.07.17 | Initial Preview Release with following key features. <br> – Live SASS & SCSS Compile. <br> – Customizable file location of exported CSS. <br> – Customizable exported CSS Style (`expanded`, `compact`, `compressed`, `nested`.)<br> – Quick Status bar control.<br> – Live Reload to browser (`Live Server` extension dependency). |
 
 
-[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.3...HEAD
-[5.0.2]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.2...v5.0.3
+[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.0...HEAD
+[5.1.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.3...v5.1.0
+[5.0.3]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.2...v5.0.3
 [5.0.2]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.1...v5.0.2
 [5.0.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.0...v5.0.1
 [5.0.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.4.1...v5.0.0
