@@ -27,7 +27,7 @@ jobs:
       uses: actions/github-script@0.9.0
       with:
         script: |
-          console.log('Github Info', { ref: github.ref, event: github.event, release: github.event.release })
+          console.log('Github Info', { ref: github.ref, event: github.event })
       
     - name: Install Node.js
       uses: actions/setup-node@v1
