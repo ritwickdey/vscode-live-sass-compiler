@@ -3,6 +3,7 @@
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime.",
     "version": "5.1.0-alpha.1",
+    "preview": true,
     "publisher": "glenn2223",
     "author": {
         "name": "Glenn Marks",
