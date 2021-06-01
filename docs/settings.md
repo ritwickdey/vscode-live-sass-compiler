@@ -19,6 +19,9 @@ extensionName | `.css` OR `.min.css` | `.css` | The extension appended to the ou
 savePath | `string?` | `null` | See [save path notes]
 savePathSegmentKeys | `string[]?` | `null` | See [save path notes]
 savePathReplaceSegmentsWith | `string?` | `null` | See [save path notes]
+linefeed | `cr` OR `crlf` OR `lf` OR `lfcr` | `lf` | The linefeed terminator to use
+indentType | `space` OR `tab` | `space` | The indentation to use for the `expanded` format
+indentWidth | `number` | `2` | The indentation width used for the `expanded` format
 
 <details>
 <summary>Examples</summary>
