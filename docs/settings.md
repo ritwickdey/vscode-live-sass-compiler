@@ -310,6 +310,26 @@ Get a full list of files that are included, any partials that will trigger compi
 
 **Names:** `Live SASS: Get all included files`, `liveSass.command.debugFileList`
 
+---
+
+### liveSass.command.showOutputOn...
+This heading actually applies to 6 different commands. However, they all share the same prefix. I have highlighted each command in the list below.
+
+Applying this command will change the output logging level that is used by this extension.
+
+- **Trace:**
+  - **Names:** `Live SASS: Show Output On: Trace`, `liveSass.command.showOutputOn.trace`
+- **Debug:**
+  - **Names:** `Live SASS: Show Output On: Debug`, `liveSass.command.showOutputOn.debug`
+- **Information:**
+  - **Names:** `Live SASS: Show Output On: Information`, `liveSass.command.showOutputOn.information`
+- **Warning:**
+  - **Names:** `Live SASS: Show Output On: Warning`, `liveSass.command.showOutputOn.warning`
+- **Error:**
+  - **Names:** `Live SASS: Show Output On: Error`, `liveSass.command.showOutputOn.error`
+- **None:**
+  - **Names:** `Live SASS: Show Output On: None`, `liveSass.command.showOutputOn.none`
+
 [save path notes]: #save-path-notes
 [Full POSIX List]: https://github.com/micromatch/picomatch#posix-brackets
 [Browserslist]: https://github.com/browserslist/browserslist#query-composition
