@@ -35,12 +35,12 @@ The new settings are:
 - New commands to change the `showOutputOn` from the command pallete - Closes [#63](https://github.com/glenn2223/vscode-live-sass-compiler/issues/63)  
 Having these commands in the pallete also means that key combos can be set for each  
 The new commands are:
-  - `liveSass.command.showOuputOn.trace`
-  - `liveSass.command.showOuputOn.debug`
-  - `liveSass.command.showOuputOn.information`
-  - `liveSass.command.showOuputOn.warning`
-  - `liveSass.command.showOuputOn.error`
-  - `liveSass.command.showOuputOn.none`
+  - `liveSass.command.showOutputOn.trace`
+  - `liveSass.command.showOutputOn.debug`
+  - `liveSass.command.showOutputOn.information`
+  - `liveSass.command.showOutputOn.warning`
+  - `liveSass.command.showOutputOn.error`
+  - `liveSass.command.showOutputOn.none`
 
 ### Fixed
 - `Change detected - {DateTime}` is now output when `showOutputOn` is set to `"Information"`. This better reflects the functionality of the original extension

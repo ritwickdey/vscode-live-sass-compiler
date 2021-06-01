@@ -21,12 +21,12 @@ suite("Extension Tests", function () {
             "liveSass.command.createIssue",
             "liveSass.command.debugInclusion",
             "liveSass.command.debugFileList",
-            "liveSass.command.showOuputOn.trace",
-            "liveSass.command.showOuputOn.debug",
-            "liveSass.command.showOuputOn.information",
-            "liveSass.command.showOuputOn.warning",
-            "liveSass.command.showOuputOn.error",
-            "liveSass.command.showOuputOn.none",
+            "liveSass.command.showOutputOn.trace",
+            "liveSass.command.showOutputOn.debug",
+            "liveSass.command.showOutputOn.information",
+            "liveSass.command.showOutputOn.warning",
+            "liveSass.command.showOutputOn.error",
+            "liveSass.command.showOutputOn.none",
         ];
         const foundLiveServerCommands = commands.filter((value) => {
             return COMMANDS.indexOf(value) >= 0 || value.startsWith("liveSass.command.");

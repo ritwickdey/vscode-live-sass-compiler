@@ -76,32 +76,32 @@
                 "category": "Live Sass"
             },
             {
-                "command": "liveSass.command.showOuputOn.trace",
+                "command": "liveSass.command.showOutputOn.trace",
                 "title": "Show Output On: Trace",
                 "category": "Live Sass"
             },
             {
-                "command": "liveSass.command.showOuputOn.debug",
+                "command": "liveSass.command.showOutputOn.debug",
                 "title": "Show Output On: Debug",
                 "category": "Live Sass"
             },
             {
-                "command": "liveSass.command.showOuputOn.information",
+                "command": "liveSass.command.showOutputOn.information",
                 "title": "Show Output On: Information",
                 "category": "Live Sass"
             },
             {
-                "command": "liveSass.command.showOuputOn.warning",
+                "command": "liveSass.command.showOutputOn.warning",
                 "title": "Show Output On: Warning",
                 "category": "Live Sass"
             },
             {
-                "command": "liveSass.command.showOuputOn.error",
+                "command": "liveSass.command.showOutputOn.error",
                 "title": "Show Output On: Error",
                 "category": "Live Sass"
             },
             {
-                "command": "liveSass.command.showOuputOn.none",
+                "command": "liveSass.command.showOutputOn.none",
                 "title": "Show Output On: None",
                 "category": "Live Sass"
             }

@@ -104,66 +104,66 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
                 }
             ),
             disposableShowOutputOnTrace = vscode.commands.registerCommand(
-                "liveSass.command.showOuputOn.trace",
+                "liveSass.command.showOutputOn.trace",
                 async () => {
                     OutputWindow.Show(
                         OutputLevel.Trace,
-                        'Command called: "liveSass.command.showOuputOn.trace"'
+                        'Command called: "liveSass.command.showOutputOn.trace"'
                     );
 
                     await Helper.updateOutputLogLevel(OutputLevel.Trace);
                 }
             ),
             disposableShowOutputOnDebug = vscode.commands.registerCommand(
-                "liveSass.command.showOuputOn.debug",
+                "liveSass.command.showOutputOn.debug",
                 async () => {
                     OutputWindow.Show(
                         OutputLevel.Trace,
-                        'Command called: "liveSass.command.showOuputOn.debug"'
+                        'Command called: "liveSass.command.showOutputOn.debug"'
                     );
 
                     await Helper.updateOutputLogLevel(OutputLevel.Debug);
                 }
             ),
             disposableShowOutputOnInformation = vscode.commands.registerCommand(
-                "liveSass.command.showOuputOn.information",
+                "liveSass.command.showOutputOn.information",
                 async () => {
                     OutputWindow.Show(
                         OutputLevel.Trace,
-                        'Command called: "liveSass.command.showOuputOn.information"'
+                        'Command called: "liveSass.command.showOutputOn.information"'
                     );
 
                     await Helper.updateOutputLogLevel(OutputLevel.Information);
                 }
             ),
             disposableShowOutputOnWarning = vscode.commands.registerCommand(
-                "liveSass.command.showOuputOn.warning",
+                "liveSass.command.showOutputOn.warning",
                 async () => {
                     OutputWindow.Show(
                         OutputLevel.Trace,
-                        'Command called: "liveSass.command.showOuputOn.warning"'
+                        'Command called: "liveSass.command.showOutputOn.warning"'
                     );
 
                     await Helper.updateOutputLogLevel(OutputLevel.Warning);
                 }
             ),
             disposableShowOutputOnError = vscode.commands.registerCommand(
-                "liveSass.command.showOuputOn.error",
+                "liveSass.command.showOutputOn.error",
                 async () => {
                     OutputWindow.Show(
                         OutputLevel.Trace,
-                        'Command called: "liveSass.command.showOuputOn.error"'
+                        'Command called: "liveSass.command.showOutputOn.error"'
                     );
 
                     await Helper.updateOutputLogLevel(OutputLevel.Error);
                 }
             ),
             disposableShowOutputOnNone = vscode.commands.registerCommand(
-                "liveSass.command.showOuputOn.none",
+                "liveSass.command.showOutputOn.none",
                 async () => {
                     OutputWindow.Show(
                         OutputLevel.Trace,
-                        'Command called: "liveSass.command.showOuputOn.none"'
+                        'Command called: "liveSass.command.showOutputOn.none"'
                     );
 
                     await Helper.updateOutputLogLevel(OutputLevel.Critical);
