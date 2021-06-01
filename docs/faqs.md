@@ -1,6 +1,6 @@
 # FAQs
 
-### Q. I'm migrating from Ritwick Dey's extension, what do I need to know?
+## Q. I'm migrating from Ritwick Dey's extension, what do I need to know?
 
 <details>
 <summary>Answer</summary>
@@ -41,7 +41,7 @@ Here are some things you probably won't care about as much
 
 ---
 
-### Q. How do I change the settings?
+## Q. How do I change the settings?
 
 <details>
 <summary>Answer</summary>
@@ -79,7 +79,7 @@ Open the `settings.json` file and type following key-value pairs. *By the way, y
 
 ---
 
-### Q. Why isn't it starting?
+## Q. Why isn't it starting?
 
 <details>
 <summary>Answer</summary>
@@ -92,7 +92,7 @@ Just create a SASS file, or open one, and the extension will activate
 
 ---
 
-### Q. Why isn't it compiling my files?
+## Q. Why isn't it compiling my files?
 
 <details>
 <summary>Answers</summary>
@@ -116,26 +116,26 @@ Still no luck?
 ---
 
 
-### Q. So... about multi-root workspaces?
+## Q. So... about multi-root workspaces?
 
 <details>
 <summary>Answers</summary>
 
-**What is it?**
+### What is it?
 
 A multi-root workspaces is a project that gives you access to a folder at `C:/a/b/c` and `C:/x/y/z` - all from one VS Code window!
 
-By doing this, and when an extension is configured for it, you can have an independent settings for each project. But don't worry, you don't need to duplicate settings! Default settings can be placed in the `.code-workspace` - these are then ignored if the same settings exists in the workspace's `settings.json`.
+By doing this, and when an extension is configured for it, you can have independent settings for each project. But don't worry, you don't need to duplicate settings! Default settings can be placed in the `.code-workspace` - these are then ignored if the same settings exists in a workspace folder's `settings.json`.
 
-*Note: Each workspace must have a `.vscode` folder with a `settings.json` file for the settings to overwrite the workspace defaults.*
+*Note: Each workspace folder must have a `.vscode` folder with a `settings.json` file for the settings to overwrite the workspace defaults.*
 
-**I like it! how do I set one up?**
+### I like it! how do I set one up?
 
 When you open any folder in VS Code it is essentially a "single-root" workspace.
 
-First, right click (left click on mac) in some open space on the `Explorer` tab. You will see an option to `Add folder to workspace`. When you click this you can choose a folder in a completely different location to add to your project. By doing this VS Code will create a `.code-workspace` file. This creates an actual workspace - well, in this case, a "multi-root" workspace.
+First, right click (left click on mac) in some open space on the `Explorer` tab. You will see an option to `Add folder to workspace`. After you click this, you can choose to add a folder to your project that's in any location on your machine. By doing this VS Code will create a `.code-workspace` file. This creates an actual workspace - well, in this case, a "multi-root" workspace.
 
-**Okay, so what settings can I use**
+### Okay, so what settings can I use?
 
 The following settings can all be made available to each workspaces `settings.json` file.
 - `liveSassCompile.settings.formats`
