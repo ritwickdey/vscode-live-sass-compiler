@@ -3,10 +3,13 @@
 ## Contents
 - [Settings](#Settings)
 - [Commands](#Commands)
+- [Notes](#Notes)
 
 ## Settings
 
 ### liveSassCompile.settings.formats
+>ℹ This setting can vary between workspace folders - [read more][Multi-rootFAQ]
+
 An array of formats. Allows you save to multiple locations, with a customisable format and extension for each
 
 Properties | Type | Default | Notes
@@ -16,16 +19,6 @@ extensionName | `.css` OR `.min.css` | `.css` | The extension appended to the ou
 savePath | `string?` | `null` | See [save path notes]
 savePathSegmentKeys | `string[]?` | `null` | See [save path notes]
 savePathReplaceSegmentsWith | `string?` | `null` | See [save path notes]
-
-
-#### Save path notes
-The final save path is dependant on these three settings. However, `savePath` takes precedence over all three.
-
-- Using `savePath`
-  - Starting with `/` or `\` means the path is relative to the workspace root
-  - Starting with `~/` or `~\` means that it's relative to the file being processed
-- Using `savePathSegmentKeys` and `savePathReplaceSegmentsWith`
-  - Any `savePathSegmentKeys` that are found will be replaced with the `savePathReplaceSegmentsWith`. The `savePathSegmentKeys` is an exact folder, this means you can not do `"Folder 1/Folder 2"`
 
 <details>
 <summary>Examples</summary>
@@ -91,6 +84,8 @@ The final save path is dependant on these three settings. However, `savePath` ta
 ---
 
 ### liveSassCompile.settings.excludeList
+>ℹ This setting can vary between workspace folders - [read more][Multi-rootFAQ]
+
 Use an array of various glob patterns to exclude files or entire folders. All matching SASS/SCSS files or matching folders will be ignored.
 
 **Type:** `string[]?`  
@@ -134,6 +129,8 @@ Match alphas, alpha numerics, words and [more][Full POSIX List]
 ---
 
 ### liveSassCompile.settings.includeItems
+>ℹ This setting can vary between workspace folders - [read more][Multi-rootFAQ]
+
 Process only these specified files. Useful for when you deal with only a few sass files.
 
 **Type:** `string[]?`  
@@ -156,6 +153,8 @@ Process only these specified files. Useful for when you deal with only a few sas
 ---
 
 ### liveSassCompile.settings.generateMap
+>ℹ This setting can vary between workspace folders - [read more][Multi-rootFAQ]
+
 Create a companion map file for each of the compiled files
 
 **Type:** `boolean`  
@@ -166,6 +165,8 @@ Create a companion map file for each of the compiled files
 ---
 
 ### liveSassCompile.settings.autoprefix
+>ℹ This setting can vary between workspace folders - [read more][Multi-rootFAQ]
+
 Autoprefix unsupported CSS properties (e.g. `transform` will also add `-ms-transform`). Uses [Browserslist] for browser selection
 
 **Type:** `boolean` OR `string[]`  
@@ -236,16 +237,14 @@ Defines whether Live Sass should compile all files when it starts watching
 ---
 
 ### liveSassCompile.settings.forceBaseDirectory
+>ℹ This setting can vary between workspace folders - [read more][Multi-rootFAQ]
+
 Defines a subdirectory to search from. Add a small performance gain by targeting just your SASS folder.
 
 No SASS/SCSS files outside of this folder will be watched/compiled when you save.
 
 **Type:** `string?`  
 **Default:** `null`
-
-**Note for multi-root workspaces:**  
-This setting can be applied at workspace level. However, it can be overridden in each root using that root's specific setting file
-Example: workspace setting is `/src/Sass` and root setting is `/Assets/Style`. In this case `/Assets/Style` would be used
 
 >**⚠ It is your responsibility to ensure the path exists and is correct.**  
 If the path is not found, or is a file, then it will output an error  
@@ -330,6 +329,28 @@ Applying this command will change the output logging level that is used by this 
 - **None:**
   - **Names:** `Live SASS: Show Output On: None`, `liveSass.command.showOutputOn.none`
 
+## Notes
+
+### Multi-root workspaces
+Settings that can be applied at a workspace level and at root level will have a heading like the one below  
+>ℹ This setting can vary between workspace folders - [read more][Multi-rootFAQ]
+
+Not sure what a multi-root workspace is, then [why not read more][multi-root workspaces]?
+
+To summarise; these settings can be applied at the `.code-workspace` level .However, they can be overridden by settings in a `\.vscode\settings.json` file in any workspace root folder.  
+For example, if a `.code-workspace` setting is `/src/Sass` but a `settings.json` is `/Assets/Style` then `/Assets/Style` would be used
+
+### Save path settings
+The final save path is dependant on three settings: `savePath`, `savePathSegmentKeys` and `savePathReplaceSegmentsWith`. However, `savePath` takes precedence over all three.
+
+- Using `savePath`
+  - Starting with `/` or `\` means the path is relative to the workspace root
+  - Starting with `~/` or `~\` means that it's relative to the file being processed
+- Using `savePathSegmentKeys` and `savePathReplaceSegmentsWith`
+  - Any `savePathSegmentKeys` that are found will be replaced with the `savePathReplaceSegmentsWith`. The `savePathSegmentKeys` is an exact folder, this means you can not do `"Folder 1/Folder 2"`
+
 [save path notes]: #save-path-notes
 [Full POSIX List]: https://github.com/micromatch/picomatch#posix-brackets
 [Browserslist]: https://github.com/browserslist/browserslist#query-composition
+[multi-root workspaces] https://github.com/glenn2223/vscode-live-sass-compiler/blob/master/docs/faqs.md#q-so-about-multi-root-workspaces
+[Multi-rootFAQ]:  #multi-root-workspaces
