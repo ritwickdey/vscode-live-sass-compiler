@@ -54,7 +54,7 @@ Only to those who have used version `5.1.0-alpha.1`
 ### Changed
 - A lot of documentation tweaks
 
-## 5.1.0-alpha.1 - 2021-05-19
+## 5.1.0-alpha.1 - 2021-06-02
 
 ### Added
 - New settings to support all other SASS output formatting options - Closes [#82](https://github.com/glenn2223/vscode-live-sass-compiler/issues/82)  
