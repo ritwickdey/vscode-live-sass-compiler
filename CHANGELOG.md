@@ -24,6 +24,36 @@ All notable changes to this project will be documented in this file.
 
 >These alpha notes will be consolidated for the first release candidate (`-rc.1` suffix). Please note breaking changes can happen right up until the official release
 
+## 5.1.0-alpha.2 - 2021-05-19
+
+### Breaking changes
+Only to those who have used version `5.1.0-alpha.1`
+- Fixed: all `liveSass.command.showOutputOn...` commands had a typo
+
+### Updated
+- `sass` from `1.32.13` to `1.34.0`
+  - Deprecate the use of `/` for division. The new `math.div()` function should be used instead. See [this page](https://sass-lang.com/documentation/breaking-changes/slash-div) for details.
+  - Add a `list.slash()` function that returns a slash-separated list.
+  - **Potentially breaking bug fix:** The heuristics around when potentially slash-separated numbers are converted to slash-free numbers—for example, when `1/2` will be printed as `0.5` rather than `1/2`—have been slightly expanded. Previously, a number would be made slash-free if it was passed as an argument to a user-defined function, but not to a built-in function. Now it will be made slash-free in both cases. This is a behavioral change, but it's unlikely to affect any real-world stylesheets.
+  - `:is()` now behaves identically to `:matches()`.
+  - Fix a bug where non-integer numbers that were very close to integer values would be incorrectly formatted in CSS.
+  - Fix a bug where very small number and very large negative numbers would be incorrectly formatted in CSS.
+  - Other changes  *(nothing user facing)*
+- `postcss` from `8.2.15` to `8.2.`
+  - Source map performance improvements
+  - Other changes  *(nothing user facing)*
+- `autoprefixer` from `10.2.5` to `10.2.6`
+  - Fixed “no prefixes needed” warning 
+- `fdir` from `5.0.0` to `5.1.0`
+  - Performance & memory usage has also been greatly improved due to the many internal refactorings
+  - Other changes  *(nothing user facing)*
+- `picomatch` from `2.2.3` to `2.3.0`
+  - Fixes bug where file names with two dots were not being matched consistently with negation extglobs containing a star
+- Various dev dependency updates *(nothing user facing)*
+
+### Changed
+- A lot of documentation tweaks
+
 ## 5.1.0-alpha.1 - 2021-05-19
 
 ### Added
