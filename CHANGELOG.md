@@ -24,6 +24,17 @@ All notable changes to this project will be documented in this file.
 
 >These alpha notes will be consolidated for the first release candidate (`-rc.1` suffix). Please note breaking changes can happen right up until the official release
 
+## 5.1.0-alpha.3 - 2021-06-10
+
+### Updated
+- `sass` from `1.34.0` to `1.34.1`
+  - Fix the URL for the `@-moz-document` deprecation message.
+  - Fix a bug with `@for` loops nested inside property declarations.`
+  - Other changes  *(nothing user facing)*
+- `postcss` from `8.3.0` to `8.3.1`
+  - Various changes  *(nothing user facing)*
+- Various dev dependency updates *(nothing user facing)*
+
 ## 5.1.0-alpha.2 - 2021-05-19
 
 ### Breaking changes
