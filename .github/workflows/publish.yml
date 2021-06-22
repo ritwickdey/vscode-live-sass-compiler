@@ -40,23 +40,22 @@ jobs:
 #      if: runner.os != 'Linux'
 #      name: Test extension
 
+# Removed && startsWith( github.ref, 'refs/tags/')
     - id: get-name
-      if: success() && matrix.os == 'ubuntu-latest' # && startsWith( github.ref, 'refs/tags/')
-        run: echo ::set-output name=tag::${GITHUB_REF#refs/tags/v}
+      if: success() && matrix.os == 'ubuntu-latest' 
+      run: echo ::set-output name=tag::${GITHUB_REF#refs/tags/v}
 
     - name: Install vsce
       run: npm i vsce -g
 
     - name: Package
       run: vsce package --yarn
-        
-    - if: "!github.event.release.prerelease"
 
-      - name: Publish - vsce
-        if: success() && matrix.os == 'ubuntu-latest'
-        run: vsce publish ${{ steps.get-name.outputs.tag }} --yarn
-        env:
-          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+    - name: Publish - vsce
+      if: success() && matrix.os == 'ubuntu-latest' && "!github.event.release.prerelease"
+      run: vsce publish ${{ steps.get-name.outputs.tag }} --yarn
+      env:
+        VSCE_PAT: ${{ secrets.VSCE_PAT }}
 
     - name: Install ovsx
       run: npm i ovsx -g
