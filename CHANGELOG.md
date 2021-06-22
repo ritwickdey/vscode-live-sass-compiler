@@ -22,7 +22,7 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
->These release candidate notes will be consolidated for the official release. Please note breaking changes can happen right up until the official release
+>⚠ These release candidate notes will be consolidated for the official release. Please note breaking changes can happen right up until the official release
 
 ## [5.1.0-rc.1] - 2021-06-22
 
@@ -85,7 +85,6 @@ The new commands are:
 ### Security
 - Bumped `glob-parent` to `5.1.2`
   - eliminate ReDoS
-
 
 ## [5.0.3] - 2021-05-05
 
