@@ -52,8 +52,8 @@ jobs:
       run: vsce package --yarn
 
     - name: Publish - vsce
-      if: success() && matrix.os == 'ubuntu-latest' && "!github.event.release.prerelease"
-      run: vsce publish ${{ steps.get-name.outputs.tag }} --yarn
+      if: success() && matrix.os == 'ubuntu-latest' && !github.event.release.prerelease
+      run: vsce publish live-sass-${{ steps.get-name.outputs.tag }}.vsix --yarn
       env:
         VSCE_PAT: ${{ secrets.VSCE_PAT }}
 
@@ -62,7 +62,7 @@ jobs:
       
     - name: Publish - ovsx
       if: success() && matrix.os == 'ubuntu-latest'
-      run: ovsx publish ${{ steps.get-name.outputs.tag }}
+      run: ovsx publish live-sass-${{ steps.get-name.outputs.tag }}.vsix
       env:
         OVSX_PAT: ${{ secrets.OVSX_PAT }}
         
@@ -70,6 +70,6 @@ jobs:
       if: matrix.os == 'ubuntu-latest'
       uses: softprops/action-gh-release@v0.1.5
       with:
-        files: ${{ steps.get-name.outputs.tag }}
+        files: live-sass-${{ steps.get-name.outputs.tag }}.vsix
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
