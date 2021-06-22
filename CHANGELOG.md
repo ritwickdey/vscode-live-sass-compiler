@@ -22,6 +22,12 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [5.0.4] - 2021-06-22
+
+### Security
+- Bumped `glob-parent` to `5.1.2`
+  - eliminate ReDoS
+
 ## [5.0.3] - 2021-05-05
 
 ### Changed
@@ -299,7 +305,8 @@ All notable changes to this project will be documented in this file.
 
 
 [Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.3...HEAD
-[5.0.2]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.2...v5.0.3
+[5.0.4]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.3...v5.0.4
+[5.0.3]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.2...v5.0.3
 [5.0.2]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.1...v5.0.2
 [5.0.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.0...v5.0.1
 [5.0.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v4.4.1...v5.0.0
