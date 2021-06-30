@@ -24,6 +24,12 @@ All notable changes to this project will be documented in this file.
 
 >⚠ These release candidate notes will be consolidated for the official release. Please note breaking changes can happen right up until the official release
 
+## [5.1.0-rc.2] - 2021-06-30
+
+### Fixed
+- The UI description for `showOutputWindowOn` was stating the default is `Warning` when, in fact, it is `Information`
+- File searching is no longer case sensitive - it is still accent sensitive
+
 ## [5.1.0-rc.1] - 2021-06-22
 
 ### Added
@@ -362,7 +368,8 @@ The new commands are:
 | 0.0.1 | 11.07.17 | Initial Preview Release with following key features. <br> – Live SASS & SCSS Compile. <br> – Customizable file location of exported CSS. <br> – Customizable exported CSS Style (`expanded`, `compact`, `compressed`, `nested`.)<br> – Quick Status bar control.<br> – Live Reload to browser (`Live Server` extension dependency). |
 
 
-[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.0-rc.1...HEAD
+[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.0-rc.2...HEAD
+[5.1.0-rc.2]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.0-rc.1...v5.1.0-rc.2
 [5.1.0-rc.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.4...v5.1.0-rc.1
 [5.0.4]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.3...v5.0.4
 [5.0.3]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.2...v5.0.3
