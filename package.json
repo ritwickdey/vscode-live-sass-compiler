@@ -279,7 +279,7 @@
                         "None"
                     ],
                     "default": "Information",
-                    "description": "Set the level of logging that is recorded and shown to you.\nDefault is `Warning`"
+                    "description": "Set the level of logging that is recorded and shown to you.\nDefault is `Information`"
                 },
                 "liveSassCompile.settings.forceBaseDirectory": {
                     "type": [
