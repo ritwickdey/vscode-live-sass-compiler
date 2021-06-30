@@ -802,7 +802,7 @@ export class AppModel {
                     filters: [
                         (filePath) => filePath.endsWith(".scss") || filePath.endsWith(".sass"),
                         (filePath) => isMatch(path.relative(basePath, filePath)),
-                        (filePath) => filePath === sassPath,
+                        (filePath) => filePath.localeCompare(sassPath, undefined, { sensitivity: 'accent' }) === 0,
                     ],
                     includeBasePath: true,
                     onlyCounts: true,
