@@ -36,7 +36,9 @@ export class SassHelper {
 
         data.sourceMap = mapFileUri;
 
-        if (!generateMap) data.omitSourceMapUrl = true;
+        if (!generateMap) {
+            data.omitSourceMapUrl = true;
+        }
 
         try {
             return { result: compiler.renderSync(data), errorString: null };
