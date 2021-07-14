@@ -42,7 +42,7 @@ All notable changes to this project will be documented in this file.
   - Added `::file-selector-button` support
   - Fixed adding wrong prefixes to `content`
 
-## Changes
+### Changes
 - Added more and adjusted some logging messages *(primarily to `Trace` levels)*
 - Some linting tweaks *(nothing user facing)*
 
@@ -73,7 +73,7 @@ The new commands are:
 ### Fixed
 - `Change detected - {DateTime}` is now output when `showOutputOn` is set to `"Information"`. This better reflects the functionality of the original extension
 
-## Changes
+### Changes
 - Added more and adjusted some logging messages *(primarily to `Trace` levels)*
 - A lot of documentation tweaks
 
@@ -116,7 +116,7 @@ The new commands are:
 
 ## [5.0.3] - 2021-05-05
 
-### Changed
+### Changes
 - The default for `liveSassCompile.settings.showOutputWindowOn` is now `Information`
   - To prevent future issues like [#70](https://github.com/glenn2223/vscode-live-sass-compiler/issues/70) & [#76](https://github.com/glenn2223/vscode-live-sass-compiler/issues/76). *Where issues are created because, by default, compiling didn't output the same details that the original extension did*
 - Updated the documentation to match the above change - and also sorted a couple of typos
