@@ -24,6 +24,28 @@ All notable changes to this project will be documented in this file.
 
 >⚠ These release candidate notes will be consolidated for the official release. Please note breaking changes can happen right up until the official release
 
+## [5.1.0-rc.3] - 2021-07-14
+
+### Fixed
+- Stopped outputting `Watching...` twice when compilation happens on watching
+- A single file - that is a window without a workspace - would error and not compile
+
+### Updated
+- `sass` from `1.34.1` to `1.35.2`
+  - **Potentially breaking bug fix:** Properly throw an error for Unicode ranges that have too many `?`s after hexadecimal digits, such as `U+12345??`
+  - **Potentially breaking bug fix:** Fixed a bug where certain local variable declarations nested within multiple `@if` statements would incorrectly override a global variable. It's unlikely that any real stylesheets were relying on this bug, but if so they can simply add `!global` to the variable declaration to preserve the old behaviour
+  - Fix an edge case where `@extend` wouldn't affect a selector within a pseudo-selector such as `:is()` that itself extended other selectors
+  - Fix a couple bugs that could prevent some members from being found in certain files that use a mix of imports and the module system.
+  - Fix incorrect recommendation for migrating division expressions that reference namespace variables.
+  - Other changes *(nothing user facing)*
+- `autoprefixer` from `10.2.6` to `10.3.1`
+  - Added `::file-selector-button` support
+  - Fixed adding wrong prefixes to `content`
+
+## Changes
+- Added more and adjusted some logging messages *(primarily to `Trace` levels)*
+- Some linting tweaks *(nothing user facing)*
+
 ## [5.1.0-rc.2] - 2021-06-30
 
 ### Fixed
@@ -369,8 +391,9 @@ The new commands are:
 
 
 [Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.0-rc.2...HEAD
-[5.1.0-rc.2]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.0-rc.1...v5.1.0-rc.2
-[5.1.0-rc.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.4...v5.1.0-rc.1
+[5.1.0-rc.3]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.0-rc.2...v5.1.0-rc.3
+[5.1.0-rc.2]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.0-rc.1.0...v5.1.0-rc.2
+[5.1.0-rc.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.4...v5.1.0-rc.1.0
 [5.0.4]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.3...v5.0.4
 [5.0.3]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.2...v5.0.3
 [5.0.2]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.1...v5.0.2
