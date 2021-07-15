@@ -355,5 +355,5 @@ The final save path is dependant on three settings: `savePath`, `savePathSegment
 [save path notes]: #save-path-notes
 [Full POSIX List]: https://github.com/micromatch/picomatch#posix-brackets
 [Browserslist]: https://github.com/browserslist/browserslist#query-composition
-[multi-root workspaces] https://github.com/glenn2223/vscode-live-sass-compiler/blob/master/docs/faqs.md#q-so-about-multi-root-workspaces
+[multi-root workspaces]: https://github.com/glenn2223/vscode-live-sass-compiler/blob/master/docs/faqs.md#q-so-about-multi-root-workspaces
 [Multi-rootFAQ]:  #multi-root-workspaces
