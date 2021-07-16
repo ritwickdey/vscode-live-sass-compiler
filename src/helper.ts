@@ -1,19 +1,43 @@
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
+import { OutputLevel } from "./VscodeExtensions";
 
 export interface IFormat {
-    format: string,
-    extensionName: string,
-    savePath: string
+    format: "compressed" | "expanded";
+    extensionName: string;
+    savePath: string;
+    savePathSegmentKeys?: string[];
+    savePathReplaceSegmentsWith: string;
 }
 
 export class Helper {
-
-    private static get configSettings() {
-        return vscode.workspace.getConfiguration('liveSassCompile.settings');
+    private static configSettings(folder?: vscode.WorkspaceFolder) {
+        return vscode.workspace.getConfiguration("liveSassCompile.settings", folder);
     }
 
-    static getConfigSettings<T>(val: string): T {
-        return this.configSettings.get(val) as T;
+    static getConfigSettings<T>(val: string, folder?: vscode.WorkspaceFolder): T {
+        return this.configSettings(folder).get(val) as T;
     }
 
+    static getOutputLogLevel(): OutputLevel {
+        switch (this.configSettings().get("showOutputWindowOn") as string) {
+            case "Trace":
+                return OutputLevel.Trace;
+
+            case "Debug":
+                return OutputLevel.Debug;
+
+            case "Warning":
+                return OutputLevel.Warning;
+
+            case "Error":
+                return OutputLevel.Error;
+
+            case "None":
+                return OutputLevel.Critical;
+
+            case "Information":
+            default:
+                return OutputLevel.Information;
+        }
+    }
 }

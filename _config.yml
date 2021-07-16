@@ -1,18 +1,17 @@
 theme: jekyll-theme-cayman
-repository: ritwickdey/vscode-live-sass-compiler
+repository: glenn2223/vscode-live-sass-compiler
 
 gems:
   - jekyll-seo-tag
 
 title: Live Sass Compiler | VSCode Extension
-description : Compile Sass or Scss to CSS at realtime with live browser reload.
-author : Ritwick Dey
-twitter:username: Dey_Ritwick
+description : Compile Sass or Scss to CSS at realtime!
+author : Glenn Marks
 social:
-  name: Ritwick Dey
+  name: Glenn Marks
   links:
-    - https://github.com/ritwickdey/vscode-live-sass-compiler
-    - https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass
+    - https://github.com/glenn2223/vscode-live-sass-compiler
+    - https://marketplace.visualstudio.com/items?itemName=glenn2223.live-sass
 lang: en_IN
 
 ## Uncomment below for local test
