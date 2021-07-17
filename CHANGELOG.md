@@ -24,7 +24,7 @@ All notable changes to this project will be documented in this file.
 
 >⚠ These release candidate notes will be consolidated for the official release. Please note breaking changes can happen right up until the official release
 
-## [5.1.0-rc.4] - 2021-07-14
+## [5.1.0-rc.4] - 2021-07-17
 
 ### Fixed
 - `liveSassCompile.settings.formats` was not allowing different settings between workspace folders ([#108](https://github.com/glenn2223/vscode-live-sass-compiler/issues/108))
