@@ -24,6 +24,11 @@ All notable changes to this project will be documented in this file.
 
 >⚠ These release candidate notes will be consolidated for the official release. Please note breaking changes can happen right up until the official release
 
+## [5.1.0-rc.4] - 2021-07-14
+
+### Fixed
+- `liveSassCompile.settings.formats` was not allowing different settings between workspace folders ([#108](https://github.com/glenn2223/vscode-live-sass-compiler/issues/108))
+
 ## [5.1.0-rc.3] - 2021-07-14
 
 ### Fixed
@@ -391,6 +396,7 @@ The new commands are:
 
 
 [Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.0-rc.2...HEAD
+[5.1.0-rc.4]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.0-rc.3...v5.1.0-rc.4
 [5.1.0-rc.3]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.0-rc.2...v5.1.0-rc.3
 [5.1.0-rc.2]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.0-rc.1.0...v5.1.0-rc.2
 [5.1.0-rc.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.4...v5.1.0-rc.1.0

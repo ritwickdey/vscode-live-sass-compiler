@@ -2,7 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime.",
-    "version": "5.1.0-rc.3",
+    "version": "5.1.0-rc.4",
     "preview": true,
     "publisher": "glenn2223",
     "author": {
@@ -205,10 +205,10 @@
                         "required": [
                             "format",
                             "extensionName"
-                        ],
-                        "scope": "resource"
+                        ]
                     },
-                    "description": "Set your exported CSS Styles, Formats & save location."
+                    "description": "Set your exported CSS Styles, Formats & save location.",
+                    "scope": "resource"
                 },
                 "liveSassCompile.settings.excludeList": {
                     "type": "array",
@@ -339,7 +339,7 @@
         "webpack-cli": "^4.7.2"
     },
     "announcement": {
-        "onVersion": "5.1.0-rc.3",
-        "message": "SassCompiler v5.1.0-rc.3: Bug squashing & dependancy updates"
+        "onVersion": "5.1.0-rc.4",
+        "message": "SassCompiler v5.1.0-rc.4: Bug squashing"
     }
 }
