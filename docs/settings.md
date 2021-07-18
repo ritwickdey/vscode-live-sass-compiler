@@ -28,7 +28,7 @@
                 {
                     "format": "expanded",
                     "extensionName": ".css",
-                    "savePath": null
+                    "savePath": "/.css/"
                 },
                 // You can add more
                 {
