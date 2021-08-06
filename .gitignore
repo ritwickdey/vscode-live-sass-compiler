@@ -7,5 +7,4 @@ Gemfile.lock
 Gemfile
 .vscode-test
 .vscode/*.dict
-# Don't ignore .vsix files for now
-#*.vsix
+*.vsix
