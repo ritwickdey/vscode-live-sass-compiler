@@ -22,6 +22,73 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [5.1.0] - 2021-08-06
+
+### Fixed
+- The UI description for `showOutputWindowOn` was stating the default is `Warning` when, in fact, it is `Information`
+- File searching is no longer case sensitive - it is still accent sensitive
+- Stopped outputting `Watching...` twice when compilation happens on watching
+- A single file - that is a window without a workspace - would error and not compile
+- `Change detected - {DateTime}` is now output when `showOutputOn` is set to `"Information"`. This better reflects the functionality of the original extension
+
+### Added
+- New settings to support all other SASS output formatting options - Closes [#82](https://github.com/glenn2223/vscode-live-sass-compiler/issues/82)  
+The new settings are:
+  - `liveSassCompile.settings.formats.linefeed` - control the line terminator used
+  - `liveSassCompile.settings.formats.indentType` - control whether indents are spaces or tabs
+  - `liveSassCompile.settings.formats.indentWidth` - control the width of the indentation
+- New commands to change the `showOutputOn` from the command pallete - Closes [#63](https://github.com/glenn2223/vscode-live-sass-compiler/issues/63)  
+Having these commands in the pallete also means that key combos can be set for each  
+The new commands are:
+  - `liveSass.command.showOutputOn.trace`
+  - `liveSass.command.showOutputOn.debug`
+  - `liveSass.command.showOutputOn.information`
+  - `liveSass.command.showOutputOn.warning`
+  - `liveSass.command.showOutputOn.error`
+  - `liveSass.command.showOutputOn.none`
+
+### Changes
+- Added more and adjusted some logging messages *(primarily to `Trace` levels)*
+- A lot of documentation tweaks
+- Some linting tweaks *(nothing user facing)*
+
+### Updated
+- `sass` from `1.32.12` to `1.37.5`
+  - **Potentially breaking bug fix:** Properly throw an error for Unicode ranges that have too many `?`s after hexadecimal digits, such as `U+12345??`
+  - **Potentially breaking bug fix:** Fixed a bug where certain local variable declarations nested within multiple `@if` statements would incorrectly override a global variable. It's unlikely that any real stylesheets were relying on this bug, but if so they can simply add `!global` to the variable declaration to preserve the old behaviour
+  - Fix an edge case where `@extend` wouldn't affect a selector within a pseudo-selector such as `:is()` that itself extended other selectors
+  - Fix a couple bugs that could prevent some members from being found in certain files that use a mix of imports and the module system.
+  - Fix incorrect recommendation for migrating division expressions that reference namespace variables.
+  - **Potentially breaking bug fix:** Null values in `@use` and `@forward` configurations no longer override the `!default` variable, matching the behaviour of the equivalent code using `@import`.
+  - Use the proper parameter names in error messages about `string.slice`
+  - Deprecate the use of `/` for division. The new `math.div()` function should be used instead. See [this page](https://sass-lang.com/documentation/breaking-changes/slash-div) for details.
+  - Add a `list.slash()` function that returns a slash-separated list.
+  - **Potentially breaking bug fix:** The heuristics around when potentially slash-separated numbers are converted to slash-free numbers—for example, when `1/2` will be printed as `0.5` rather than `1/2`—have been slightly expanded. Previously, a number would be made slash-free if it was passed as an argument to a user-defined function, but not to a built-in function. Now it will be made slash-free in both cases. This is a behavioural change, but it's unlikely to affect any real-world stylesheets.
+  - `:is()` now behaves identically to `:matches()`.
+  - Fix a bug where non-integer numbers that were very close to integer values would be incorrectly formatted in CSS.
+  - Fix a bug where very small number and very large negative numbers would be incorrectly formatted in CSS.
+  - Fix the URL for the `@-moz-document` deprecation message.
+  - Fix a bug with `@for` loops nested inside property declarations.`
+  - Fix a couple bugs that could prevent some members from being found in certain files that use a mix of imports and the module system.
+  - Fix incorrect recommendation for migrating division expressions that reference namespace variables
+  - Fix a bug where the quiet dependency flag didn't silence warnings in some stylesheets loaded using `@import`
+  - Other changes  *(nothing user facing)*
+- `autoprefixer` from `10.2.5` to `10.3.1`
+  - Added `::file-selector-button` support
+  - Fixed adding wrong prefixes to `content`
+  - Fixed “no prefixes needed” warning 
+- `postcss` from `8.2.14` to `8.3.6`
+  - Fixed column in `missed semicolon` error 
+  - Source map performance improvements
+  - Fixed broken AST detection
+  - Other changes  *(nothing user facing)*
+- `fdir` from `5.0.0` to `5.1.0`
+  - Performance & memory usage has also been greatly improved due to the many internal refactoring
+  - Other changes  *(nothing user facing)*
+- `picomatch` from `2.2.3` to `2.3.0`
+  - Fixes bug where file names with two dots were not being matched consistently with negation `extglobs` containing a star
+- Various dev dependency updates *(nothing user facing)*
+
 ## [5.0.4] - 2021-06-22
 
 ### Security
@@ -30,7 +97,7 @@ All notable changes to this project will be documented in this file.
 
 ## [5.0.3] - 2021-05-05
 
-### Changed
+### Changes
 - The default for `liveSassCompile.settings.showOutputWindowOn` is now `Information`
   - To prevent future issues like [#70](https://github.com/glenn2223/vscode-live-sass-compiler/issues/70) & [#76](https://github.com/glenn2223/vscode-live-sass-compiler/issues/76). *Where issues are created because, by default, compiling didn't output the same details that the original extension did*
 - Updated the documentation to match the above change - and also sorted a couple of typos
@@ -171,9 +238,9 @@ All notable changes to this project will be documented in this file.
 ## [4.3.3] - 2021-01-18
 
 ### Fixed
-- Fixed [#15](https://github.com/glenn2223/vscode-live-sass-compiler/issues/15): No longer outputs absolute path in map file and map link in css output
+- Fixed [#15](https://github.com/glenn2223/vscode-live-sass-compiler/issues/15): No longer outputs absolute path in map file and map link in CSS output
 - Reinstated feature of partial files being checked for exclusion
-- Autoprefixer map lines now relate to actual SASS files rather than the css file generated
+- Autoprefixer map lines now relate to actual SASS files rather than the CSS file generated
 - When there's an include list, a non partial file that's not "included" would still be processed
 - Now gets the correct list of included partial files
 
@@ -245,7 +312,7 @@ All notable changes to this project will be documented in this file.
 - Now using webpack to minify and speed up the extension
 
 ### Other
-- Doc changes/general tidy up, updated .vscodeignore, update license, update .gitignore
+- Doc changes/general tidy up, updated `.vscodeignore`, update license, update `.gitignore`
 
 
 ## [4.0.0] - 2020-12-20
@@ -304,7 +371,8 @@ All notable changes to this project will be documented in this file.
 | 0.0.1 | 11.07.17 | Initial Preview Release with following key features. <br> – Live SASS & SCSS Compile. <br> – Customizable file location of exported CSS. <br> – Customizable exported CSS Style (`expanded`, `compact`, `compressed`, `nested`.)<br> – Quick Status bar control.<br> – Live Reload to browser (`Live Server` extension dependency). |
 
 
-[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.3...HEAD
+[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.0...HEAD
+[5.1.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.4...v5.1.0
 [5.0.4]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.3...v5.0.4
 [5.0.3]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.2...v5.0.3
 [5.0.2]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.1...v5.0.2

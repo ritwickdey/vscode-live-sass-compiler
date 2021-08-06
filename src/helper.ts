@@ -4,9 +4,12 @@ import { OutputLevel } from "./VscodeExtensions";
 export interface IFormat {
     format: "compressed" | "expanded";
     extensionName: string;
-    savePath: string;
+    savePath?: string;
     savePathSegmentKeys?: string[];
-    savePathReplaceSegmentsWith: string;
+    savePathReplaceSegmentsWith?: string;
+    linefeed: "cr" | "crlf" | "lf" | "lfcr";
+    indentType: "space" | "tab";
+    indentWidth: number;
 }
 
 export class Helper {
@@ -39,5 +42,40 @@ export class Helper {
             default:
                 return OutputLevel.Information;
         }
+    }
+
+    static async updateOutputLogLevel(level: OutputLevel): Promise<void> {
+        let value: string | undefined;
+
+        switch (level) {
+            case OutputLevel.Trace:
+                value = "Trace";
+                break;
+
+            case OutputLevel.Debug:
+                value = "Debug";
+                break;
+
+            case OutputLevel.Warning:
+                value = "Warning";
+                break;
+
+            case OutputLevel.Error:
+                value = "Error";
+                break;
+
+            case OutputLevel.Critical:
+                value = "None";
+                break;
+
+            case OutputLevel.Information:
+            default:
+                // `undefined` clears the setting from file
+                // Clearing will then result in the default value
+                value = undefined;
+                break;
+        }
+
+        await this.configSettings().update("showOutputWindowOn", value);
     }
 }

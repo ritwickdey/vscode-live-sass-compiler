@@ -2,7 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime.",
-    "version": "5.0.4",
+    "version": "5.1.0",
     "publisher": "glenn2223",
     "author": {
         "name": "Glenn Marks",
@@ -73,6 +73,36 @@
                 "command": "liveSass.command.debugFileList",
                 "title": "Get all included files",
                 "category": "Live Sass"
+            },
+            {
+                "command": "liveSass.command.showOutputOn.trace",
+                "title": "Show Output On: Trace",
+                "category": "Live Sass"
+            },
+            {
+                "command": "liveSass.command.showOutputOn.debug",
+                "title": "Show Output On: Debug",
+                "category": "Live Sass"
+            },
+            {
+                "command": "liveSass.command.showOutputOn.information",
+                "title": "Show Output On: Information",
+                "category": "Live Sass"
+            },
+            {
+                "command": "liveSass.command.showOutputOn.warning",
+                "title": "Show Output On: Warning",
+                "category": "Live Sass"
+            },
+            {
+                "command": "liveSass.command.showOutputOn.error",
+                "title": "Show Output On: Error",
+                "category": "Live Sass"
+            },
+            {
+                "command": "liveSass.command.showOutputOn.none",
+                "title": "Show Output On: None",
+                "category": "Live Sass"
             }
         ],
         "configuration": {
@@ -141,6 +171,33 @@
                                 "pattern": "[^\\/]",
                                 "patternErrorMessage": "Must not contain any path separators (`/` or `\\`)",
                                 "default": null
+                            },
+                            "linefeed": {
+                                "description": "Choose the linefeed terminator to use in the CSS output",
+                                "type": "string",
+                                "enum": [
+                                    "cr",
+                                    "crlf",
+                                    "lf",
+                                    "lfcr"
+                                ],
+                                "default": "lf"
+                            },
+                            "indentType": {
+                                "description": "Choose the indent type to use in the CSS ouput (for `expanded` formats only)",
+                                "type": "string",
+                                "enum": [
+                                    "space",
+                                    "tab"
+                                ],
+                                "default": "space"
+                            },
+                            "indentWidth": {
+                                "description": "Choose the indent width to use in the CSS ouput (for `expanded` formats only)",
+                                "type": "number",
+                                "default": 2,
+                                "minimum": 0,
+                                "maximum": 10
                             }
                         },
                         "additionalProperties": false,
@@ -149,7 +206,8 @@
                             "extensionName"
                         ]
                     },
-                    "description": "Set your exported CSS Styles, Formats & save location."
+                    "description": "Set your exported CSS Styles, Formats & save location.",
+                    "scope": "resource"
                 },
                 "liveSassCompile.settings.excludeList": {
                     "type": "array",
@@ -162,7 +220,8 @@
                         "type": "string",
                         "pattern": "^[\\/].+",
                         "patternErrorMessage": "Must start with a path separator (`/` or `\\`)"
-                    }
+                    },
+                    "scope": "resource"
                 },
                 "liveSassCompile.settings.includeItems": {
                     "type": [
@@ -175,14 +234,16 @@
                         "type": "string",
                         "pattern": "^[\\/].+(?<![\\/])[.]s[a|c]ss$",
                         "patternErrorMessage": "Must start with a path separator (`/` or `\\`) and end with a `.sass` or `.scss`"
-                    }
+                    },
+                    "scope": "resource"
                 },
                 "liveSassCompile.settings.generateMap": {
                     "type": [
                         "boolean"
                     ],
                     "default": true,
-                    "description": "Set to `false` if you don't want a `.map` file for each compiled CSS.\nDefault is `true`"
+                    "description": "Set to `false` if you don't want a `.map` file for each compiled CSS.\nDefault is `true`",
+                    "scope": "resource"
                 },
                 "liveSassCompile.settings.autoprefix": {
                     "type": [
@@ -193,7 +254,8 @@
                     "description": "Automatically add vendor prefixes to unsupported CSS properties (e. g. transform -> -ms-transform). Specify what browsers to target with an array of strings (uses [Browserslist](https://github.com/ai/browserslist)). Pass `null` to turn off.",
                     "items": {
                         "type": "string"
-                    }
+                    },
+                    "scope": "resource"
                 },
                 "liveSassCompile.settings.watchOnLaunch": {
                     "type": "boolean",
@@ -216,18 +278,18 @@
                         "None"
                     ],
                     "default": "Information",
-                    "description": "Set the level of logging that is recorded and shown to you.\nDefault is `Warning`"
+                    "description": "Set the level of logging that is recorded and shown to you.\nDefault is `Information`"
                 },
                 "liveSassCompile.settings.forceBaseDirectory": {
                     "type": [
                         "string",
                         "null"
                     ],
-                    "scope": "resource",
                     "default": null,
                     "pattern": "^[\\/].+[^\\/]$",
                     "patternErrorMessage": "Must start with a path separator (`/` or `\\`) and must not end with one",
-                    "description": "Defines a subdirectory to search from (no directory outside of this will be search)"
+                    "description": "Defines a subdirectory to search from (no directory outside of this will be search)",
+                    "scope": "resource"
                 }
             }
         }
@@ -251,32 +313,32 @@
         "lint": "eslint -c .eslintrc.js --ext .ts ./src/"
     },
     "dependencies": {
-        "autoprefixer": "^10.2.5",
-        "fdir": "^5.0.0",
-        "picomatch": "^2.2.3",
-        "postcss": "^8.2.10",
-        "sass": "^1.32.12"
+        "autoprefixer": "^10.3.1",
+        "fdir": "^5.1.0",
+        "picomatch": "^2.3.0",
+        "postcss": "^8.3.6",
+        "sass": "^1.37.5"
     },
     "devDependencies": {
-        "@types/glob": "^7.1.3",
-        "@types/mocha": "^8.2.2",
-        "@types/node": "^15.0.2",
-        "@types/picomatch": "^2.2.2",
-        "@types/sass": "^1.16.0",
-        "@types/vscode": "^1.50.0",
-        "@typescript-eslint/eslint-plugin": "^4.22.1",
-        "@typescript-eslint/parser": "^4.22.1",
-        "eslint": "^7.25.0",
-        "mocha": "^8.3.2",
-        "terser-webpack-plugin": "^5.1.1",
-        "ts-loader": "^9.1.2",
-        "typescript": "^4.2.4",
+        "@types/glob": "^7.1.4",
+        "@types/mocha": "^8.2.3",
+        "@types/node": "^15.14.2",
+        "@types/picomatch": "^2.2.5",
+        "@types/sass": "^1.16.1",
+        "@types/vscode": "^1.52.0",
+        "@typescript-eslint/eslint-plugin": "^4.28.3",
+        "@typescript-eslint/parser": "^4.28.3",
+        "eslint": "^7.30.0",
+        "mocha": "^9.0.2",
+        "terser-webpack-plugin": "^5.1.4",
+        "ts-loader": "^9.2.3",
+        "typescript": "^4.3.5",
         "vscode-test": "^1.5.2",
-        "webpack": "^5.36.2",
-        "webpack-cli": "^4.6.0"
+        "webpack": "^5.44.0",
+        "webpack-cli": "^4.7.2"
     },
     "announcement": {
-        "onVersion": "5.0.4",
-        "message": "SassCompiler v5.0.2: Security fix."
+        "onVersion": "5.1.0",
+        "message": "SassCompiler v5.1.0: New commands, new settings, bug squashing, dependancy bumps and more"
     }
 }

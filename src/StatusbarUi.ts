@@ -61,7 +61,9 @@ export class StatusBarUi {
         OutputWindow.Show(OutputLevel.Trace, `Changing status bar to: "${text}"`);
 
         let icon = "";
-        if (iconName) icon = `$(${iconName}) `;
+        if (iconName) {
+            icon = `$(${iconName}) `;
+        }
 
         StatusBarUi.statusBarItem.text = `${icon}${text}`;
         StatusBarUi.statusBarItem.tooltip = tooltip;

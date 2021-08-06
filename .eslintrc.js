@@ -16,6 +16,7 @@ module.exports = {
     rules: {
         // enable additional rules
         semi: ["error", "always"],
+        curly: "error",
 
         // override default options for rules from base configurations
         "no-cond-assign": ["error", "always"],
