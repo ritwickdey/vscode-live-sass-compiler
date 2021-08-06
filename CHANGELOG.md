@@ -22,42 +22,14 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
->⚠ These release candidate notes will be consolidated for the official release. Please note breaking changes can happen right up until the official release
-
-## [5.1.0-rc.4] - 2021-07-17
-
-### Fixed
-- `liveSassCompile.settings.formats` was not allowing different settings between workspace folders ([#108](https://github.com/glenn2223/vscode-live-sass-compiler/issues/108))
-
-## [5.1.0-rc.3] - 2021-07-14
-
-### Fixed
-- Stopped outputting `Watching...` twice when compilation happens on watching
-- A single file - that is a window without a workspace - would error and not compile
-
-### Updated
-- `sass` from `1.34.1` to `1.35.2`
-  - **Potentially breaking bug fix:** Properly throw an error for Unicode ranges that have too many `?`s after hexadecimal digits, such as `U+12345??`
-  - **Potentially breaking bug fix:** Fixed a bug where certain local variable declarations nested within multiple `@if` statements would incorrectly override a global variable. It's unlikely that any real stylesheets were relying on this bug, but if so they can simply add `!global` to the variable declaration to preserve the old behaviour
-  - Fix an edge case where `@extend` wouldn't affect a selector within a pseudo-selector such as `:is()` that itself extended other selectors
-  - Fix a couple bugs that could prevent some members from being found in certain files that use a mix of imports and the module system.
-  - Fix incorrect recommendation for migrating division expressions that reference namespace variables.
-  - Other changes *(nothing user facing)*
-- `autoprefixer` from `10.2.6` to `10.3.1`
-  - Added `::file-selector-button` support
-  - Fixed adding wrong prefixes to `content`
-
-### Changes
-- Added more and adjusted some logging messages *(primarily to `Trace` levels)*
-- Some linting tweaks *(nothing user facing)*
-
-## [5.1.0-rc.2] - 2021-06-30
+## [5.1.0] - 2021-08-06
 
 ### Fixed
 - The UI description for `showOutputWindowOn` was stating the default is `Warning` when, in fact, it is `Information`
 - File searching is no longer case sensitive - it is still accent sensitive
-
-## [5.1.0-rc.1] - 2021-06-22
+- Stopped outputting `Watching...` twice when compilation happens on watching
+- A single file - that is a window without a workspace - would error and not compile
+- `Change detected - {DateTime}` is now output when `showOutputOn` is set to `"Information"`. This better reflects the functionality of the original extension
 
 ### Added
 - New settings to support all other SASS output formatting options - Closes [#82](https://github.com/glenn2223/vscode-live-sass-compiler/issues/82)  
@@ -75,18 +47,19 @@ The new commands are:
   - `liveSass.command.showOutputOn.error`
   - `liveSass.command.showOutputOn.none`
 
-### Fixed
-- `Change detected - {DateTime}` is now output when `showOutputOn` is set to `"Information"`. This better reflects the functionality of the original extension
-
 ### Changes
 - Added more and adjusted some logging messages *(primarily to `Trace` levels)*
 - A lot of documentation tweaks
+- Some linting tweaks *(nothing user facing)*
 
 ### Updated
-- `sass` from `1.32.12` to `1.34.1`
-  - **Potentially breaking bug fix:** Null values in `@use` and `@forward`
-  configurations no longer override the `!default` variable, matching the
-  behaviour of the equivalent code using `@import`.
+- `sass` from `1.32.12` to `1.37.5`
+  - **Potentially breaking bug fix:** Properly throw an error for Unicode ranges that have too many `?`s after hexadecimal digits, such as `U+12345??`
+  - **Potentially breaking bug fix:** Fixed a bug where certain local variable declarations nested within multiple `@if` statements would incorrectly override a global variable. It's unlikely that any real stylesheets were relying on this bug, but if so they can simply add `!global` to the variable declaration to preserve the old behaviour
+  - Fix an edge case where `@extend` wouldn't affect a selector within a pseudo-selector such as `:is()` that itself extended other selectors
+  - Fix a couple bugs that could prevent some members from being found in certain files that use a mix of imports and the module system.
+  - Fix incorrect recommendation for migrating division expressions that reference namespace variables.
+  - **Potentially breaking bug fix:** Null values in `@use` and `@forward` configurations no longer override the `!default` variable, matching the behaviour of the equivalent code using `@import`.
   - Use the proper parameter names in error messages about `string.slice`
   - Deprecate the use of `/` for division. The new `math.div()` function should be used instead. See [this page](https://sass-lang.com/documentation/breaking-changes/slash-div) for details.
   - Add a `list.slash()` function that returns a slash-separated list.
@@ -100,12 +73,15 @@ The new commands are:
   - Fix incorrect recommendation for migrating division expressions that reference namespace variables
   - Fix a bug where the quiet dependency flag didn't silence warnings in some stylesheets loaded using `@import`
   - Other changes  *(nothing user facing)*
-- `postcss` from `8.2.14` to `8.3.5`
+- `autoprefixer` from `10.2.5` to `10.3.1`
+  - Added `::file-selector-button` support
+  - Fixed adding wrong prefixes to `content`
+  - Fixed “no prefixes needed” warning 
+- `postcss` from `8.2.14` to `8.3.6`
+  - Fixed column in `missed semicolon` error 
   - Source map performance improvements
   - Fixed broken AST detection
   - Other changes  *(nothing user facing)*
-- `autoprefixer` from `10.2.5` to `10.2.6`
-  - Fixed “no prefixes needed” warning 
 - `fdir` from `5.0.0` to `5.1.0`
   - Performance & memory usage has also been greatly improved due to the many internal refactoring
   - Other changes  *(nothing user facing)*
@@ -395,11 +371,8 @@ The new commands are:
 | 0.0.1 | 11.07.17 | Initial Preview Release with following key features. <br> – Live SASS & SCSS Compile. <br> – Customizable file location of exported CSS. <br> – Customizable exported CSS Style (`expanded`, `compact`, `compressed`, `nested`.)<br> – Quick Status bar control.<br> – Live Reload to browser (`Live Server` extension dependency). |
 
 
-[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.0-rc.2...HEAD
-[5.1.0-rc.4]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.0-rc.3...v5.1.0-rc.4
-[5.1.0-rc.3]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.0-rc.2...v5.1.0-rc.3
-[5.1.0-rc.2]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.0-rc.1.0...v5.1.0-rc.2
-[5.1.0-rc.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.4...v5.1.0-rc.1.0
+[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.0...HEAD
+[5.1.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.4...v5.1.0
 [5.0.4]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.3...v5.0.4
 [5.0.3]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.2...v5.0.3
 [5.0.2]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.1...v5.0.2

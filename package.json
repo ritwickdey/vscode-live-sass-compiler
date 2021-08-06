@@ -2,8 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime.",
-    "version": "5.1.0-rc.4",
-    "preview": true,
+    "version": "5.1.0",
     "publisher": "glenn2223",
     "author": {
         "name": "Glenn Marks",
@@ -317,8 +316,8 @@
         "autoprefixer": "^10.3.1",
         "fdir": "^5.1.0",
         "picomatch": "^2.3.0",
-        "postcss": "^8.3.5",
-        "sass": "^1.35.2"
+        "postcss": "^8.3.6",
+        "sass": "^1.37.5"
     },
     "devDependencies": {
         "@types/glob": "^7.1.4",
@@ -339,7 +338,7 @@
         "webpack-cli": "^4.7.2"
     },
     "announcement": {
-        "onVersion": "5.1.0-rc.4",
-        "message": "SassCompiler v5.1.0-rc.4: Bug squashing"
+        "onVersion": "5.1.0",
+        "message": "SassCompiler v5.1.0: New commands, new settings, bug squashing, dependancy bumps and more"
     }
 }
