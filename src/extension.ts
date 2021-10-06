@@ -200,12 +200,21 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             "Commands have been saved and are ready to be used",
         ]);
     } catch (err) {
-        await new ErrorLogger(context.workspaceState).LogIssueWithAlert(
-            `Unhandled error with Live Sass Compiler. Error message: ${err.message}`,
-            {
-                error: ErrorLogger.PrepErrorForLogging(err),
-            }
-        );
+        if (err instanceof Error) {
+            await new ErrorLogger(context.workspaceState).LogIssueWithAlert(
+                `Unhandled error with Live Sass Compiler. Error message: ${err.message}`,
+                {
+                    error: ErrorLogger.PrepErrorForLogging(err),
+                }
+            );
+        } else {
+            await new ErrorLogger(context.workspaceState).LogIssueWithAlert(
+                "Unhandled error with Live Sass Compiler. Error message: UNKNOWN (not Error type)",
+                {
+                    error: JSON.stringify(err),
+                }
+            );
+        }
     }
 }
 

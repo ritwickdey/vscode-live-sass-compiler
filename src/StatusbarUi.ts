@@ -18,7 +18,7 @@ export class StatusBarUi {
 
     static init(watchOnLaunch: boolean): void {
         StatusBarUi.customMessage("Starting...", "Initializing... switching state in 1 second");
-        
+
         setTimeout(function () {
             watchOnLaunch ? StatusBarUi.watching() : StatusBarUi.notWatching();
         }, 1000);
@@ -56,7 +56,7 @@ export class StatusBarUi {
         text: string,
         tooltip: string,
         iconName = "pulse",
-        command: string = null
+        command: string | undefined = undefined
     ): void {
         OutputWindow.Show(OutputLevel.Trace, `Changing status bar to: "${text}"`);
 
