@@ -325,7 +325,7 @@
         "@types/node": "^15.14.9",
         "@types/picomatch": "^2.3.0",
         "@types/sass": "^1.16.1",
-        "@types/vscode": "^1.61.0",
+        "@types/vscode": "^1.52.0",
         "@typescript-eslint/eslint-plugin": "^5.0.0",
         "@typescript-eslint/parser": "^5.0.0",
         "eslint": "^8.0.0",
