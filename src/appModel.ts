@@ -122,13 +122,23 @@ export class AppModel {
                 files = "Error lies in getSassFiles()";
             }
 
-            await this._logger.LogIssueWithAlert(
-                `Unhandled error while compiling all files. Error message: ${err.message}`,
-                {
-                    files: files,
-                    error: ErrorLogger.PrepErrorForLogging(err),
-                }
-            );
+            if (err instanceof Error) {
+                await this._logger.LogIssueWithAlert(
+                    `Unhandled error while compiling all files. Error message: ${err.message}`,
+                    {
+                        files: files,
+                        error: ErrorLogger.PrepErrorForLogging(err),
+                    }
+                );
+            } else {
+                await this._logger.LogIssueWithAlert(
+                    "Unhandled error while compiling all files. Error message: UNKNOWN (not Error type)",
+                    {
+                        files: files,
+                        error: JSON.stringify(err),
+                    }
+                );
+            }
         }
 
         this.revertUIToWatchingStatusNow();
@@ -229,13 +239,23 @@ export class AppModel {
                 ? vscode.window.activeTextEditor.document.fileName
                 : "/* NO ACTIVE FILE, PROCESSING SHOULD NOT HAVE OCCURRED */";
 
-            await this._logger.LogIssueWithAlert(
-                `Unhandled error while compiling the active file. Error message: ${err.message}`,
-                {
-                    file: sassPath,
-                    error: ErrorLogger.PrepErrorForLogging(err),
-                }
-            );
+            if (err instanceof Error) {
+                await this._logger.LogIssueWithAlert(
+                    `Unhandled error while compiling the active file. Error message: ${err.message}`,
+                    {
+                        files: sassPath,
+                        error: ErrorLogger.PrepErrorForLogging(err),
+                    }
+                );
+            } else {
+                await this._logger.LogIssueWithAlert(
+                    "Unhandled error while compiling the active file. Error message: UNKNOWN (not Error type)",
+                    {
+                        files: sassPath,
+                        error: JSON.stringify(err),
+                    }
+                );
+            }
         }
     }
 
@@ -244,9 +264,9 @@ export class AppModel {
      */
     async compileOnSave(): Promise<void> {
         try {
-            const currentFile = vscode.window.activeTextEditor.document.fileName;
+            const currentFile = vscode.window.activeTextEditor?.document.fileName;
 
-            if (!this.isSassFile(currentFile, true)) {
+            if (!currentFile || !this.isSassFile(currentFile, true)) {
                 return;
             }
 
@@ -325,14 +345,29 @@ export class AppModel {
                 files = "Error lies in getSassFiles()";
             }
 
-            await this._logger.LogIssueWithAlert(
-                `Unhandled error while compiling the saved changes. Error message: ${err.message}`,
-                {
-                    triggeringFile: vscode.window.activeTextEditor.document.fileName,
-                    allFiles: files,
-                    error: ErrorLogger.PrepErrorForLogging(err),
-                }
-            );
+            if (err instanceof Error) {
+                await this._logger.LogIssueWithAlert(
+                    `Unhandled error while compiling the saved changes. Error message: ${err.message}`,
+                    {
+                        triggeringFile:
+                            vscode.window.activeTextEditor?.document.fileName ??
+                            "NO SASS FILE - Should not have been called",
+                        allFiles: files,
+                        error: ErrorLogger.PrepErrorForLogging(err),
+                    }
+                );
+            } else {
+                await this._logger.LogIssueWithAlert(
+                    "Unhandled error while compiling the saved changes. Error message: UNKNOWN (not Error type)",
+                    {
+                        triggeringFile:
+                            vscode.window.activeTextEditor?.document.fileName ??
+                            "NO SASS FILE - Should not have been called",
+                        allFiles: files,
+                        error: JSON.stringify(err),
+                    }
+                );
+            }
         }
 
         this.revertUIToWatchingStatus();
@@ -354,7 +389,7 @@ export class AppModel {
      * @param options - Object - It includes target CSS style and some more.
      */
     private async GenerateCssAndMap(
-        folder: vscode.WorkspaceFolder,
+        folder: vscode.WorkspaceFolder | undefined,
         sassPath: string,
         targetCssUri: string,
         mapFileUri: string,
@@ -381,8 +416,18 @@ export class AppModel {
             return false;
         }
 
-        let css: string = compileResult.result.css.toString(),
-            map: string | null = compileResult.result.map?.toString();
+        let css: string | undefined = compileResult.result?.css.toString(),
+            map: string | undefined | null = compileResult.result?.map?.toString();
+
+        if (!css) {
+            OutputWindow.Show(OutputLevel.Error, "Compilation Error", [
+                "There was no CSS output from sass/sass",
+            ]);
+
+            StatusBarUi.compilationError(this.isWatching);
+
+            return false;
+        }
 
         if (autoprefixerTarget != false) {
             OutputWindow.Show(OutputLevel.Trace, "Autoprefixer isn't false, applying to file", [
@@ -412,13 +457,13 @@ export class AppModel {
                     throw err;
                 }
             }
-        } else if (generateMap) {
+        } else if (map && generateMap) {
             const pMap: { file: string } = JSON.parse(map);
             pMap.file = `${path.basename(targetCssUri)}.map`;
             map = JSON.stringify(pMap);
         }
 
-        if (generateMap) {
+        if (map && generateMap) {
             css += `/*# sourceMappingURL=${path.basename(targetCssUri)}.map */`;
             promises.push(FileHelper.writeToOneFile(mapFileUri, map));
         }
@@ -434,8 +479,8 @@ export class AppModel {
         fileResolvers.forEach((fileResolver) => {
             if (fileResolver.Exception) {
                 OutputWindow.Show(OutputLevel.Error, "Error:", [
-                    fileResolver.Exception.errno.toString(),
-                    fileResolver.Exception.path,
+                    fileResolver.Exception.errno?.toString() ?? "UNKNOWN ERR NUMBER",
+                    fileResolver.Exception.path ?? "UNKNOWN PATH",
                     fileResolver.Exception.message,
                 ]);
                 console.error("error :", fileResolver);
@@ -583,7 +628,7 @@ export class AppModel {
                         .substring(workspacePath.length + 1)
                         .split(path.sep)
                         .map((folder) => {
-                            return format.savePathSegmentKeys.indexOf(folder) >= 0
+                            return format.savePathSegmentKeys!.indexOf(folder) >= 0
                                 ? format.savePathReplaceSegmentsWith
                                 : folder;
                         })
@@ -610,19 +655,19 @@ export class AppModel {
      * Autoprefix CSS properties
      */
     private async autoprefix(
-        folder: vscode.WorkspaceFolder,
+        folder: vscode.WorkspaceFolder | undefined,
         css: string,
-        map: string,
+        map: string | undefined,
         filePath: string,
         savePath: string,
         browsers: Array<string> | true
-    ): Promise<{ css: string; map: string }> {
+    ): Promise<{ css: string; map: string | null }> {
         OutputWindow.Show(OutputLevel.Trace, "Preparing autoprefixer");
 
         const generateMap = Helper.getConfigSettings<boolean>("generateMap", folder),
             prefixer = postcss(
                 autoprefixer({
-                    overrideBrowserslist: browsers === true ? null : browsers,
+                    overrideBrowserslist: browsers === true ? undefined : browsers,
                 })
             );
 
@@ -737,7 +782,7 @@ export class AppModel {
                     "includeItems",
                     workspaceFolder
                 ),
-                excludeItems = await AppModel.stripAnyLeadingSlashes(
+                excludeItems = AppModel.stripAnyLeadingSlashes(
                     Helper.getConfigSettings<string[]>("excludeList", workspaceFolder)
                 ),
                 forceBaseDirectory = Helper.getConfigSettings<string | null>(
@@ -748,9 +793,7 @@ export class AppModel {
             let fileList = ["**/*.s[a|c]ss"];
 
             if (includeItems && includeItems.length) {
-                fileList = await AppModel.stripAnyLeadingSlashes(
-                    includeItems.concat("**/_*.s[a|c]ss")
-                );
+                fileList = AppModel.stripAnyLeadingSlashes(includeItems.concat("**/_*.s[a|c]ss"));
             }
 
             let basePath = workspaceFolder.uri.fsPath;
@@ -775,7 +818,7 @@ export class AppModel {
                             ]
                         );
 
-                        return null;
+                        return false;
                     }
                 } catch {
                     OutputWindow.Show(
@@ -788,7 +831,7 @@ export class AppModel {
                         ]
                     );
 
-                    return null;
+                    return false;
                 }
 
                 OutputWindow.Show(
@@ -866,7 +909,7 @@ export class AppModel {
                             OutputWindow.Show(
                                 OutputLevel.Trace,
                                 `Checking folder ${index + 1} of ${
-                                    vscode.workspace.workspaceFolders.length
+                                    vscode.workspace.workspaceFolders!.length
                                 }`,
                                 [`Folder: ${folder.name}`]
                             );
@@ -886,14 +929,14 @@ export class AppModel {
                                     : Helper.getConfigSettings<string[]>("excludeList", folder);
 
                             if (!isQueryPatternFixed && includeItems && includeItems.length) {
-                                queryPattern = await AppModel.stripAnyLeadingSlashes(includeItems);
+                                queryPattern = AppModel.stripAnyLeadingSlashes(includeItems);
 
                                 OutputWindow.Show(OutputLevel.Trace, "Query pattern overwritten", [
                                     `New pattern(s): "${includeItems.join('" , "')}"`,
                                 ]);
                             }
 
-                            excludedItems = await AppModel.stripAnyLeadingSlashes(excludedItems);
+                            excludedItems = AppModel.stripAnyLeadingSlashes(excludedItems);
 
                             if (forceBaseDirectory && forceBaseDirectory.length > 1) {
                                 OutputWindow.Show(
@@ -978,7 +1021,11 @@ export class AppModel {
         } else {
             OutputWindow.Show(OutputLevel.Trace, "No workspace, must be a single file solution");
 
-            fileList.push(vscode.window.activeTextEditor.document.fileName);
+            if (vscode.window.activeTextEditor) {
+                fileList.push(vscode.window.activeTextEditor.document.fileName);
+            } else {
+                fileList.push("No files found - not even an active file");
+            }
         }
 
         OutputWindow.Show(OutputLevel.Trace, `Found ${fileList.length} SASS files`);
@@ -1029,13 +1076,23 @@ export class AppModel {
                 ? vscode.window.activeTextEditor.document.fileName
                 : "/* NO ACTIVE FILE, MESSAGE SHOULD HAVE BEEN THROWN */";
 
-            await this._logger.LogIssueWithAlert(
-                `Unhandled error while checking the active file. Error message: ${err.message}`,
-                {
-                    file: sassPath,
-                    error: ErrorLogger.PrepErrorForLogging(err),
-                }
-            );
+            if (err instanceof Error) {
+                await this._logger.LogIssueWithAlert(
+                    `Unhandled error while checking the active file. Error message: ${err.message}`,
+                    {
+                        file: sassPath,
+                        error: ErrorLogger.PrepErrorForLogging(err),
+                    }
+                );
+            } else {
+                await this._logger.LogIssueWithAlert(
+                    "Unhandled error while compiling the active file. Error message: UNKNOWN (not Error type)",
+                    {
+                        files: sassPath,
+                        error: JSON.stringify(err),
+                    }
+                );
+            }
         }
     }
 
@@ -1059,12 +1116,12 @@ export class AppModel {
             if (workspaceCount === null) {
                 outputInfo.push("No workspaces, must be a single file");
             } else {
-                vscode.workspace.workspaceFolders.map((folder) => {
+                vscode.workspace.workspaceFolders!.map((folder) => {
                     outputInfo.push(`[${folder.index}] ${folder.name}\n${folder.uri.fsPath}`);
                 });
 
                 await Promise.all(
-                    vscode.workspace.workspaceFolders.map(async (folder, index) => {
+                    vscode.workspace.workspaceFolders!.map(async (folder, index) => {
                         outputInfo.push(
                             "--------------------",
                             `Checking workspace folder ${index} of ${workspaceCount}`,
@@ -1130,13 +1187,23 @@ export class AppModel {
                 ? vscode.window.activeTextEditor.document.fileName
                 : "/* NO ACTIVE FILE, DETAILS BELOW */";
 
-            await this._logger.LogIssueWithAlert(
-                `Unhandled error while checking the active file. Error message: ${err.message}`,
-                {
-                    file: sassPath,
-                    error: ErrorLogger.PrepErrorForLogging(err),
-                }
-            );
+            if (err instanceof Error) {
+                await this._logger.LogIssueWithAlert(
+                    `Unhandled error while checking the active file. Error message: ${err.message}`,
+                    {
+                        file: sassPath,
+                        error: ErrorLogger.PrepErrorForLogging(err),
+                    }
+                );
+            } else {
+                await this._logger.LogIssueWithAlert(
+                    "Unhandled error while compiling the active file. Error message: UNKNOWN (not Error type)",
+                    {
+                        files: sassPath,
+                        error: JSON.stringify(err),
+                    }
+                );
+            }
         }
     }
 
@@ -1148,12 +1215,14 @@ export class AppModel {
             : partialPath;
     }
 
-    private static stripAnyLeadingSlashes(stringArray: string[]): Promise<string[]> {
-        return Promise.all(
-            stringArray.map(async (file) => {
-                return AppModel.stripLeadingSlash(file);
-            })
-        );
+    private static stripAnyLeadingSlashes(stringArray: string[] | null): string[] {
+        if (!stringArray) {
+            return [];
+        }
+
+        return stringArray.map((file) => {
+            return AppModel.stripLeadingSlash(file);
+        });
     }
 
     private static getWorkspaceFolder(filePath: string) {

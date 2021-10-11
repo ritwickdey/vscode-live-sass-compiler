@@ -6,7 +6,7 @@ const SETUP_STRING = "liveSassCompiler.setup.version";
 export async function checkNewAnnouncement(memento: Memento): Promise<void> {
     OutputWindow.Show(OutputLevel.Trace, "Checking for an unread announcement");
 
-    const packageJSON = extensions.getExtension("glenn2223.live-sass").packageJSON;
+    const packageJSON = extensions.getExtension("glenn2223.live-sass")!.packageJSON;
     const announment = packageJSON.announcement;
 
     if (!announment && Object.keys(announment).length === 0) {

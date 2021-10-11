@@ -4,7 +4,7 @@ import { OutputLevel, OutputWindow } from "./VscodeExtensions";
 
 export interface IFileResolver {
     FileUri: string;
-    Exception: NodeJS.ErrnoException;
+    Exception: NodeJS.ErrnoException | null;
 }
 
 export class FileHelper {

@@ -22,6 +22,23 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [5.1.1] - 2021-10-11
+
+### Fixed
+- Implemented strict checks to reduce chances of unhandled errors - Closes [#128](https://github.com/glenn2223/vscode-live-sass-compiler/issues/128)
+
+### Updated
+- `postcss` from `8.3.6` to `8.3.9`
+  - Replaced `colorette` with `picocolors`
+  - Other changes  *(nothing user facing)*
+- `autoprefixer` from `10.3.1` to `10.3.7`
+  - Fixed `::file-selector-button` support
+  - Fixed `stretch` value in latest Firefox
+  - Reduced package size
+  - Replaced `colorette` with `picocolors`
+  - Other changes  *(nothing user facing)*
+- Various dev dependency updates *(nothing user facing)*
+
 ## [5.1.0] - 2021-08-06
 
 ### Fixed
@@ -371,7 +388,8 @@ The new commands are:
 | 0.0.1 | 11.07.17 | Initial Preview Release with following key features. <br> – Live SASS & SCSS Compile. <br> – Customizable file location of exported CSS. <br> – Customizable exported CSS Style (`expanded`, `compact`, `compressed`, `nested`.)<br> – Quick Status bar control.<br> – Live Reload to browser (`Live Server` extension dependency). |
 
 
-[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.0...HEAD
+[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.1...HEAD
+[5.1.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.0...v5.1.1
 [5.1.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.4...v5.1.0
 [5.0.4]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.3...v5.0.4
 [5.0.3]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.2...v5.0.3

@@ -1,5 +1,6 @@
 //import { WindowPopout, OutputWindow } from "./VscodeExtensions";
 import { Helper, IFormat } from "./helper";
+import { SassException } from "sass";
 import * as compiler from "sass";
 
 export class SassHelper {
@@ -43,7 +44,18 @@ export class SassHelper {
         try {
             return { result: compiler.renderSync(data), errorString: null };
         } catch (err) {
-            return { result: null, errorString: err.formatted };
+            if (SassHelper.instanceOfSassExcpetion(err)) {
+                return { result: null, errorString: err.formatted };
+            } else if (err instanceof Error) {
+                return { result: null, errorString: err.message };
+            }
+
+            return { result: null, errorString: "Unexpected error" };
         }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    private static instanceOfSassExcpetion(object: any): object is SassException {
+        return "formatted" in object;
     }
 }

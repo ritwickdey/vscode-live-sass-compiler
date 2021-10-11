@@ -4,7 +4,7 @@ import { Helper } from "./helper";
 const _errorLogPath = "liveSassCompiler.ErrorInfo";
 
 export class ErrorLogger {
-    private _workplaceState: Memento = null;
+    private _workplaceState: Memento;
     logs: LogEvent[] = [];
 
     constructor(workplaceState: Memento) {
@@ -58,7 +58,7 @@ export class ErrorLogger {
                 `| Platform | ${process.platform} ${process.arch} |`,
                 `| Node | ${process.versions.node} (${process.versions.modules}) |`,
                 `| Live Sass | ${
-                    extensions.getExtension("glenn2223.live-sass").packageJSON.version
+                    extensions.getExtension("glenn2223.live-sass")!.packageJSON.version
                 } |`,
                 `<details><summary>Installed Extensions</summary><div>`,
                 extensions.all
@@ -137,8 +137,8 @@ export class OutputWindow {
 
     static Show(
         outputLevel: OutputLevel,
-        msgHeadline: string,
-        msgBody?: string[],
+        msgHeadline: string | null,
+        msgBody?: string[] | null,
         addEndLine = true
     ): void {
         const userLogLevel = Helper.getOutputLogLevel();
