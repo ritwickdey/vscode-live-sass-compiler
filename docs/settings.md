@@ -343,7 +343,7 @@ Not sure what a multi-root workspace is, then [why not read more][multi-root wor
 To summarise; these settings can be applied at the `.code-workspace` level .However, they can be overridden by settings in a `\.vscode\settings.json` file in any workspace root folder.  
 For example, if a `.code-workspace` setting is `/src/Sass` but a `settings.json` is `/Assets/Style` then `/Assets/Style` would be used
 
-### Save path settings
+### Save path notes
 The final save path is dependant on three settings: `savePath`, `savePathSegmentKeys` and `savePathReplaceSegmentsWith`. However, `savePath` takes precedence over all three.
 
 - Using `savePath`
