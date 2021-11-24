@@ -405,7 +405,7 @@ export class AppModel {
                 "autoprefix",
                 folder
             ),
-            compileResult = SassHelper.compileOne(sassPath, mapFileUri, options),
+            compileResult = SassHelper.compileOne(sassPath, targetCssUri, mapFileUri, options),
             promises: Promise<IFileResolver>[] = [];
 
         if (compileResult.errorString !== null) {
@@ -439,7 +439,6 @@ export class AppModel {
                     folder,
                     css,
                     map,
-                    sassPath,
                     targetCssUri,
                     autoprefixerTarget
                 );
@@ -457,14 +456,11 @@ export class AppModel {
                     throw err;
                 }
             }
-        } else if (map && generateMap) {
-            const pMap: { file: string } = JSON.parse(map);
-            pMap.file = `${path.basename(targetCssUri)}.map`;
-            map = JSON.stringify(pMap);
         }
 
         if (map && generateMap) {
             css += `/*# sourceMappingURL=${path.basename(targetCssUri)}.map */`;
+
             promises.push(FileHelper.writeToOneFile(mapFileUri, map));
         }
 
@@ -658,7 +654,6 @@ export class AppModel {
         folder: vscode.WorkspaceFolder | undefined,
         css: string,
         map: string | undefined,
-        filePath: string,
         savePath: string,
         browsers: Array<string> | true
     ): Promise<{ css: string; map: string | null }> {
@@ -684,7 +679,7 @@ export class AppModel {
             OutputWindow.Show(OutputLevel.Trace, "Starting autoprefixer");
 
             const result = await prefixer.process(css, {
-                from: filePath,
+                from: savePath,
                 to: savePath,
                 map: {
                     inline: false,
@@ -762,7 +757,7 @@ export class AppModel {
     //#region Private
 
     private isSassFile(pathUrl: string, partialSass = false): boolean {
-        const filename = path.basename(pathUrl);
+        const filename = path.basename(pathUrl).toLowerCase();
         return (
             (partialSass || !filename.startsWith("_")) &&
             (filename.endsWith("sass") || filename.endsWith("scss"))
@@ -846,8 +841,7 @@ export class AppModel {
                 );
             }
 
-            // @ts-ignore ts2322 => string[] doesn't match string (False negative as string[] is allowed)
-            const isMatch = picomatch(fileList, { ignore: excludeItems, dot: true });
+            const isMatch = picomatch(fileList, { ignore: excludeItems, dot: true, nocase: true });
 
             OutputWindow.Show(OutputLevel.Trace, "Searching folder", null, false);
 
@@ -855,7 +849,9 @@ export class AppModel {
                 (await new fdir()
                     .crawlWithOptions(basePath, {
                         filters: [
-                            (filePath) => filePath.endsWith(".scss") || filePath.endsWith(".sass"),
+                            (filePath) =>
+                                filePath.toLowerCase().endsWith(".scss") ||
+                                filePath.toLowerCase().endsWith(".sass"),
                             (filePath) => isMatch(path.relative(basePath, filePath)),
                             (filePath) =>
                                 filePath.localeCompare(sassPath, undefined, {
@@ -990,17 +986,17 @@ export class AppModel {
                             }
 
                             const isMatch = picomatch(queryPattern, {
-                                // @ts-ignore ts2322 => string[] doesn't match string (False negative as string[] is allowed)
                                 ignore: excludedItems,
                                 dot: true,
+                                nocase: true,
                             });
 
                             return (await new fdir()
                                 .crawlWithOptions(basePath, {
                                     filters: [
                                         (filePath) =>
-                                            filePath.endsWith(".scss") ||
-                                            filePath.endsWith(".sass"),
+                                            filePath.toLowerCase().endsWith(".scss") ||
+                                            filePath.toLowerCase().endsWith(".sass"),
                                         (filePath) => isMatch(path.relative(basePath, filePath)),
                                         (filePath) =>
                                             isQueryPatternFixed || this.isSassFile(filePath, false),

@@ -15,6 +15,7 @@ export class SassHelper {
 
     static compileOne(
         SassPath: string,
+        targetCssUri: string,
         mapFileUri: string,
         options: compiler.Options
     ): { result: compiler.Result | null; errorString: string | null } {
@@ -35,6 +36,7 @@ export class SassHelper {
             },
         };*/
 
+        data.outFile = targetCssUri;
         data.sourceMap = mapFileUri;
 
         if (!generateMap) {
