@@ -147,7 +147,7 @@
                                     "string",
                                     "null"
                                 ],
-                                "pattern": "^(\\|/|~(/|\\)).+[^\\/]$",
+                                "pattern": "^(?:\\\\|/|~/|~\\\\).+[^\\\\/]$",
                                 "patternErrorMessage": "Must start with any of:\n`/` or `\\` (for workspace root)\n`~/` or `~\\` for relative to the file being processed. Must not end with a path separator (`/` or `\\`)",
                                 "default": null
                             },
