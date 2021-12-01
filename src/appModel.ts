@@ -419,9 +419,10 @@ export class AppModel {
         let css: string | undefined = compileResult.result?.css.toString(),
             map: string | undefined | null = compileResult.result?.map?.toString();
 
-        if (!css) {
+        if (css === undefined) {
             OutputWindow.Show(OutputLevel.Error, "Compilation Error", [
                 "There was no CSS output from sass/sass",
+                `Sass error: ${compileResult.errorString ?? "NONE"}`
             ]);
 
             StatusBarUi.compilationError(this.isWatching);
@@ -684,6 +685,7 @@ export class AppModel {
                 map: {
                     inline: false,
                     prev: map,
+                    annotation: false
                 },
             });
 
