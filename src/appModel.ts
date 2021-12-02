@@ -422,7 +422,7 @@ export class AppModel {
         if (css === undefined) {
             OutputWindow.Show(OutputLevel.Error, "Compilation Error", [
                 "There was no CSS output from sass/sass",
-                `Sass error: ${compileResult.errorString ?? "NONE"}`
+                `Sass error: ${compileResult.errorString ?? "NONE"}`,
             ]);
 
             StatusBarUi.compilationError(this.isWatching);
@@ -669,12 +669,15 @@ export class AppModel {
 
         // TODO: REMOVE - when autoprefixer can stop caching the browsers
         const oldBrowserlistCache = process.env.BROWSERSLIST_DISABLE_CACHE;
-        process.env.BROWSERSLIST_DISABLE_CACHE = "1";
 
-        OutputWindow.Show(OutputLevel.Trace, "Changing BROWSERSLIST_DISABLE_CACHE setting", [
-            `Was: ${oldBrowserlistCache ?? "UNDEFINED"}`,
-            "Now: 1",
-        ]);
+        if (browsers === true) {
+            process.env.BROWSERSLIST_DISABLE_CACHE = "1";
+
+            OutputWindow.Show(OutputLevel.Trace, "Changing BROWSERSLIST_DISABLE_CACHE setting", [
+                `Was: ${oldBrowserlistCache ?? "UNDEFINED"}`,
+                "Now: 1",
+            ]);
+        }
 
         try {
             OutputWindow.Show(OutputLevel.Trace, "Starting autoprefixer");
@@ -685,7 +688,7 @@ export class AppModel {
                 map: {
                     inline: false,
                     prev: map,
-                    annotation: false
+                    annotation: false,
                 },
             });
 
@@ -712,12 +715,14 @@ export class AppModel {
                 map: generateMap ? result.map.toString() : null,
             };
         } finally {
-            process.env.BROWSERSLIST_DISABLE_CACHE = oldBrowserlistCache;
+            if (browsers === true) {
+                process.env.BROWSERSLIST_DISABLE_CACHE = oldBrowserlistCache;
 
-            OutputWindow.Show(
-                OutputLevel.Trace,
-                `Restored BROWSERSLIST_DISABLE_CACHE to: ${oldBrowserlistCache ?? "UNDEFINED"}`
-            );
+                OutputWindow.Show(
+                    OutputLevel.Trace,
+                    `Restored BROWSERSLIST_DISABLE_CACHE to: ${oldBrowserlistCache ?? "UNDEFINED"}`
+                );
+            }
         }
     }
 
