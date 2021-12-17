@@ -792,10 +792,10 @@ export class AppModel {
                     workspaceFolder
                 );
 
-            let fileList = ["**/*.s[a|c]ss"];
+            let fileList = ["**/*.s[ac]ss"];
 
             if (includeItems && includeItems.length) {
-                fileList = AppModel.stripAnyLeadingSlashes(includeItems.concat("**/_*.s[a|c]ss"));
+                fileList = AppModel.stripAnyLeadingSlashes(includeItems.concat("**/_*.s[ac]ss"));
             }
 
             let basePath = workspaceFolder.uri.fsPath;
@@ -893,7 +893,7 @@ export class AppModel {
     }
 
     private async getSassFiles(
-        queryPattern: string | string[] = "**/[^_]*.s[a|c]ss",
+        queryPattern: string | string[] = "**/[^_]*.s[ac]ss",
         isQueryPatternFixed = false,
         isDebugging = false
     ): Promise<string[]> {
@@ -1164,7 +1164,7 @@ export class AppModel {
                             "Included Partial SASS Files",
                             "--------------------"
                         );
-                        (await this.getSassFiles("**/_*.s[a|c]ss", true)).map((file) => {
+                        (await this.getSassFiles("**/_*.s[ac]ss", true)).map((file) => {
                             outputInfo.push(file);
                         });
 
