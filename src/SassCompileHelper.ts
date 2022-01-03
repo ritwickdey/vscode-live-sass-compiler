@@ -35,14 +35,14 @@ export class SassHelper {
                 OutputWindow.Show(
                     OutputLevel.Warning,
                     "Warning:",
-                    [message].concat(this.format(options.span, options.stack))
+                    [message].concat(this.format(options.span, options.stack, options.deprecation))
                 );
             },
             debug: (message: string, options: { span?: compiler.SourceSpan }) => {
                 OutputWindow.Show(
                     OutputLevel.Debug,
                     "Debug info:",
-                    [message].concat(this.format(options.span, undefined))
+                    [message].concat(this.format(options.span))
                 );
             },
         };
@@ -73,7 +73,8 @@ export class SassHelper {
 
     private static format(
         span: compiler.SourceSpan | undefined | null,
-        stack: string | undefined
+        stack?: string,
+        deprecated?: boolean
     ): string[] {
         const stringArray: string[] = [];
 
@@ -81,34 +82,36 @@ export class SassHelper {
             if (stack !== undefined) {
                 stringArray.push(stack);
             }
+        } else {
+            stringArray.push(this.charOfLength(span.start.line.toString().length, "╷"));
 
-            return stringArray;
-        }
+            let lineNumber = span.start.line;
 
-        stringArray.push(this.charOfLength(span.start.line.toString().length, "╷"));
+            do {
+                stringArray.push(
+                    `${lineNumber} |${
+                        span.context?.split("\n")[lineNumber - span.start.line] ??
+                        span.text.split("\n")[lineNumber - span.start.line]
+                    }`
+                );
 
-        let lineNumber = span.start.line;
+                lineNumber++;
+            } while (lineNumber < span.end.line);
 
-        do {
             stringArray.push(
-                `${lineNumber} |${
-                    span.context?.split("\n")[lineNumber - span.start.line] ??
-                    span.text.split("\n")[lineNumber - span.start.line]
-                }`
+                this.charOfLength(span.start.line.toString().length, this.addUnderLine(span))
             );
 
-            lineNumber++;
-        } while (lineNumber < span.end.line);
+            stringArray.push(this.charOfLength(span.start.line.toString().length, "╵"));
 
-        stringArray.push(
-            this.charOfLength(span.start.line.toString().length, this.addUnderLine(span))
-        );
+            if (span.url) {
+                // possibly include `,${span.end.line}:${span.end.column}`, if VS Code ever supports it
+                stringArray.push(`${span.url.toString()}:${span.start.line}:${span.start.column}`);
+            }
+        }
 
-        stringArray.push(this.charOfLength(span.start.line.toString().length, "╵"));
-
-        if (span.url) {
-            // possibly include `,${span.end.line}:${span.end.column}`, if VS Code ever supports it
-            stringArray.push(`${span.url.toString()}:${span.start.line}:${span.start.column}`);
+        if (deprecated === true) {
+            stringArray.push("THIS IS DEPRECATED AND WILL BE REMOVED IN SASS 2.0");
         }
 
         return stringArray;
