@@ -22,6 +22,52 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
+>These alpha notes will be consolidated for the first release candidate (`-rc.1` suffix). Please note breaking changes can happen right up until the official release
+
+## [5.2.0-alpha.1] - 2021-12-02
+
+### Added
+- `@warn` and `@debug` lines, as well as other SASS warnings, are now shown in the output window - Closes [#89](https://github.com/glenn2223/vscode-live-sass-compiler/issues/89)
+- You can now specify the files/folders to treat as partials using the new `liveSassCompile.settings.partialsList` setting - Closes [#143](https://github.com/glenn2223/vscode-live-sass-compiler/issues/143)
+
+### Fixed
+- Update broken reference link in settings documentation - thanks @dawidmachon
+- Source maps would add duplicates, mostly with incorrect paths - Fixes [#135](https://github.com/glenn2223/vscode-live-sass-compiler/issues/135)
+- Extension checks are no longer case sensitive (i.e. `.Sass` will now match) - Fixes [#137](https://github.com/glenn2223/vscode-live-sass-compiler/issues/137)
+- Valid save paths in the `liveSassCompile.settings.formats` setting no longer throws a warning - Fixes [#139](https://github.com/glenn2223/vscode-live-sass-compiler/issues/139)
+- No longer outputs error if the css generated is an empty string - Fixes [#140](https://github.com/glenn2223/vscode-live-sass-compiler/issues/140)
+
+### Updated
+- `autoprefixer` from `10.3.7` to `10.4.1`
+  - Added `:autofill` support
+  - Fixed `::file-selector-button` data
+- `picomatch` from `2.3.0` to `2.3.1`
+  - Fixes bug when a pattern containing an expression after the closing parenthesis (`/!(*.d).{ts,tsx}`) was incorrectly converted to regexp
+  - Other changes *(nothing user facing)*
+- `postcss` from `8.3.9` to `8.4.5`
+  - Various changes *(nothing user facing)*
+- `sass` from `1.37.5` to `1.45.2`
+  - *Potentially breaking bug fix:* Change the default value of the `separator` parameter for `new SassArgumentList()` to `','` rather than `null`. This matches the API specification.
+  - *Potentially breaking bug fix:* Properly parse custom properties in `@supports` conditions. Note that this means that SassScript expressions on the right-hand side of custom property `@supports` queries now need to be interpolated, as per https://sass-lang.com/d/css-vars.
+  - *Potentially breaking bug fix:* Fix a bug where `inspect()` was not properly printing nested, empty, bracketed lists.
+  - In expanded mode, emit characters in Unicode private-use areas as escape sequences rather than literal characters.
+  - Fix a bug where quotes would be omitted for an attribute selector whose value was a single backslash.
+  - Properly consider numbers that begin with `.` as "plain CSS" for the purposes of parsing plain-CSS `min()` and `max()` functions.
+  - Allow `if` to be used as an unquoted string.
+  - Properly parse backslash escapes within `url()` expressions.
+  - Fix a couple bugs where `@extend`s could be marked as unsatisfied when multiple identical `@extend`s extended selectors across `@use` rules.
+  - Add a `charset` option that controls whether or not Sass emits a `@charset`/BOM for non-ASCII stylesheets.
+  - `min()` and `max()` expressions are once again parsed as calculations as long as they contain only syntax that's allowed in calculation expressions. To avoid the backwards-compatibility issues that were present in 1.40.0, they now allow unitless numbers to be mixed with numbers with units just like the global `min()` and `max()` functions. Similarly, `+` and `-` operations within `min()` and `max()` functions allow unitless numbers to be mixed with numbers with units.
+  - Fix a bug where Sass variables and function calls in calculations weren't being resolved correctly if there was a parenthesized interpolation elsewhere in the file.
+  - Add support for the `logger` option. This takes an object that can define `warn` or `debug` methods to add custom handling for messages emitted by the Sass compiler. See the JS API docs for details.
+      **Please note:** this will now print warnings for any divisions using `/`, please use the new `math.div(100, 20)` function or `calc(100 / 20)`
+  - Improve the error message when the default namespace of a `@use` rule is not a valid identifier.
+  - Improve performance
+  - Fix a bug where calculations with different operators were incorrectly considered equal.
+  - Properly parse attribute selectors with empty namespaces.
+  - Other changes *(nothing user facing)*
+- Various dev dependency updates *(nothing user facing)*
+
 ## [5.1.1] - 2021-10-11
 
 ### Fixed
@@ -388,7 +434,8 @@ The new commands are:
 | 0.0.1 | 11.07.17 | Initial Preview Release with following key features. <br> – Live SASS & SCSS Compile. <br> – Customizable file location of exported CSS. <br> – Customizable exported CSS Style (`expanded`, `compact`, `compressed`, `nested`.)<br> – Quick Status bar control.<br> – Live Reload to browser (`Live Server` extension dependency). |
 
 
-[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.1...HEAD
+[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.2...HEAD
+[5.1.2]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.1...v5.1.2
 [5.1.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.0...v5.1.1
 [5.1.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.4...v5.1.0
 [5.0.4]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.3...v5.0.4

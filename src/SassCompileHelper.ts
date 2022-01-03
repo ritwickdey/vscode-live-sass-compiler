@@ -1,11 +1,12 @@
 import { Helper, IFormat } from "./helper";
 import { OutputWindow, OutputLevel } from "./VscodeExtensions";
-import { SassException } from "sass";
+import { LegacyException } from "sass";
 import * as compiler from "sass";
 
 export class SassHelper {
-    static toSassOptions(format: IFormat): compiler.Options {
+    static toSassOptions(format: IFormat): compiler.LegacyFileOptions<"sync"> {
         return {
+            file: "",
             outputStyle: format.format,
             linefeed: format.linefeed,
             indentType: format.indentType,
@@ -17,10 +18,10 @@ export class SassHelper {
         SassPath: string,
         targetCssUri: string,
         mapFileUri: string,
-        options: compiler.Options
-    ): { result: compiler.Result | null; errorString: string | null } {
+        options: compiler.LegacyFileOptions<"sync">
+    ): { result: compiler.LegacyResult | null; errorString: string | null } {
         const generateMap = Helper.getConfigSettings<boolean>("generateMap"),
-            data: compiler.Options = {};
+            data: compiler.LegacyFileOptions<"sync"> = { file: "" };
 
         Object.assign(data, options);
 
@@ -34,14 +35,14 @@ export class SassHelper {
                 OutputWindow.Show(
                     OutputLevel.Warning,
                     "Warning:",
-                    [message].concat(this.format(options.span))
+                    [message].concat(this.format(options.span, options.stack))
                 );
             },
             debug: (message: string, options: { span?: compiler.SourceSpan }) => {
                 OutputWindow.Show(
                     OutputLevel.Debug,
                     "Debug info:",
-                    [message].concat(this.format(options.span))
+                    [message].concat(this.format(options.span, undefined))
                 );
             },
         };
@@ -66,14 +67,21 @@ export class SassHelper {
         }
     }
 
-    private static instanceOfSassExcpetion(object: unknown): object is SassException {
-        return "formatted" in (object as SassException);
+    private static instanceOfSassExcpetion(object: unknown): object is LegacyException {
+        return "formatted" in (object as LegacyException);
     }
 
-    private static format(span: compiler.SourceSpan | undefined | null): string[] {
+    private static format(
+        span: compiler.SourceSpan | undefined | null,
+        stack: string | undefined
+    ): string[] {
         const stringArray: string[] = [];
 
         if (span === undefined || span === null) {
+            if (stack !== undefined) {
+                stringArray.push(stack);
+            }
+
             return stringArray;
         }
 
