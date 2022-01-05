@@ -1180,7 +1180,7 @@ export class AppModel {
 
                         folderOutput.push(
                             "--------------------",
-                            `Checking workspace folder ${index} of ${workspaceCount}`,
+                            `Checking workspace folder ${index + 1} of ${workspaceCount}`,
                             `Path: ${folder.uri.fsPath}`,
                             "--------------------"
                         );
