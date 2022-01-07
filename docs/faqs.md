@@ -20,10 +20,14 @@ Here's some of the most important changes:
     - When `true` we will find a `.browserslistrc` file or `browserslist` in your `package.json`. No more duplicating settings!
   - `showOutputWindow` is now `showOutputWindowOn` and uses log values (`Debug`, `Error`, etc.). It's default log level is `Information` - at this level it will output the same information that the original extension does
 - Some settings are new!
-  - `savePathSegmentKeys` and `savePathReplaceSegmentsWith`: when used in combination you can choose to replace folder segments in the save path
+  - `formats[].savePathSegmentKeys` and `formats[].savePathReplaceSegmentsWith`: when used in combination you can choose to replace folder segments in the save path
+  - `formats[].linefeed`: control the line terminator used
+  - `formats[].indentType`: control whether indents are spaces or tabs
+  - `formats[].indentWidth`: control the width of the indentation
   - `watchOnLaunch`: state whether you want to watch files upon launch
   - `compileOnWatch`: state if files should be compiled upon watching
   - `forceBaseDirectory`: state the base directory of all you SASS files. Aids in reducing wasted resources while searching for files
+  - `partialsList`: specify what files are actually partials (or which folders contain them)
 
 Here are some things you probably won't care about as much
 - The extension has had a massive overhaul. Performance optimisation, and new features!
@@ -33,6 +37,7 @@ Here are some things you probably won't care about as much
   - `liveSass.command.createIssue`: opens a link to create a new issue in GutHub. If an unexpected error occurred then error information is readily available to paste into the new issue
   - `liveSass.command.debugInclusion`: check if the current SASS file will be included, based on your settings
   - `liveSass.command.debugFileList`: get a full list of files that are included and excluded
+  - Various commands to change the log level (meaning you can key bind them)
 - We support multi-root/multi-folder workspaces
 - Map files now link back to the correct line after `autoprefixer` has been applied 
 - Clicking the status bar icon while in the `Success` or `Error` state will show the output window
@@ -144,5 +149,6 @@ The following settings can all be made available to each workspaces `settings.js
 - `liveSassCompile.settings.generateMap`
 - `liveSassCompile.settings.autoprefix`
 - `liveSassCompile.settings.forceBaseDirectory`
+- `liveSassCompile.settings.partialsList`
 
 </details>
