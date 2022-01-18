@@ -24,6 +24,27 @@ All notable changes to this project will be documented in this file.
 
 >These alpha notes will be consolidated for the first release candidate (`-rc.1` suffix). Please note breaking changes can happen right up until the official release
 
+## [5.2.0-alpha.2] - 2022-01-18
+
+### Changes
+- Updated docs to reflect new setting and also included previous changes in the FAQ
+- Further logging in a function at `Trace` level
+
+### Fixed
+- Stopped returning false negatives when checking if a file should trigger compilation thanks to a bump to `fdir` - Closes [#145](https://github.com/glenn2223/vscode-live-sass-compiler/issues/145)
+  - **_Awaiting confirmation of fix_**
+- Workspace loop numbering outputs the correct figure
+
+### Updated
+- `autoprefixer` from `10.4.1` to `10.4.2`
+  - Fixed missed `-webkit-` prefix for `width: stretch`
+- `fdir` from `5.1.0` to `5.2.0`
+  - Fixed a critical issue with async crawling that caused the crawler to return early
+  - Other changes *(nothing user facing)*
+- `sass` from `1.45.2` to `1.48.0`
+  - Various changes *(nothing user facing)*
+- Various dev dependency updates *(nothing user facing)*
+
 ## [5.2.0-alpha.1] - 2021-12-02
 
 ### Added
