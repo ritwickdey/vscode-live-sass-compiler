@@ -897,6 +897,8 @@ export class AppModel {
 
             OutputWindow.Show(OutputLevel.Trace, "Searching folder", null, false);
 
+            const searchLogs: Map<string, string[]> = new Map<string, string[]>();
+
             const searchFileCount = (
                 (await new fdir()
                     .crawlWithOptions(basePath, {
@@ -904,11 +906,35 @@ export class AppModel {
                             (filePath) =>
                                 filePath.toLowerCase().endsWith(".scss") ||
                                 filePath.toLowerCase().endsWith(".sass"),
-                            (filePath) => isMatch(path.relative(basePath, filePath)),
-                            (filePath) =>
-                                filePath.localeCompare(sassPath, undefined, {
-                                    sensitivity: "accent",
-                                }) === 0,
+                            (filePath) => {
+                                const result = isMatch(path.relative(basePath, filePath));
+
+                                searchLogs.set(`Path: ${filePath}`, [
+                                    `  isMatch: ${result}`,
+                                    `   - Base path: ${basePath}`,
+                                    `   - Rela path: ${path.relative(basePath, filePath)}`,
+                                ]);
+
+                                return result;
+                            },
+                            (filePath) => {
+                                const result =
+                                    path
+                                        .toNamespacedPath(filePath)
+                                        .localeCompare(path.toNamespacedPath(sassPath), undefined, {
+                                            sensitivity: "accent",
+                                        }) === 0;
+
+                                searchLogs
+                                    .get(`Path: ${filePath}`)
+                                    ?.push(
+                                        `  compare: ${result}`,
+                                        `   - Orig file path: ${filePath}`,
+                                        `   - Orig sass path: ${sassPath}`
+                                    );
+
+                                return result;
+                            },
                         ],
                         includeBasePath: true,
                         onlyCounts: true,
@@ -917,6 +943,14 @@ export class AppModel {
                     })
                     .withPromise()) as OnlyCountsOutput
             ).files;
+
+            OutputWindow.Show(OutputLevel.Trace, "Search results", undefined, false);
+
+            searchLogs.forEach((logs, key) => {
+                OutputWindow.Show(OutputLevel.Trace, key, logs, false);
+            });
+
+            OutputWindow.Show(OutputLevel.Trace, null);
 
             // If doesn't include true then it's not been found
             if (searchFileCount > 0) {
