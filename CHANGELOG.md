@@ -22,9 +22,13 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
->These alpha notes will be consolidated for the first release candidate (`-rc.1` suffix). Please note breaking changes can happen right up until the official release
+>These release candidate notes will be consolidated for the official release. Please note that breaking changes can also happen right up until that point too
 
-## [5.2.0-alpha.2] - 2022-01-18
+## [5.2.0-rc.1] - 2022-01-25
+
+### Added
+- `@warn` and `@debug` lines, as well as other SASS warnings, are now shown in the output window - Closes [#89](https://github.com/glenn2223/vscode-live-sass-compiler/issues/89)
+- You can now specify the files/folders to treat as partials using the new `liveSassCompile.settings.partialsList` setting - Closes [#143](https://github.com/glenn2223/vscode-live-sass-compiler/issues/143)
 
 ### Changes
 - Updated docs to reflect new setting and also included previous changes in the FAQ
@@ -34,24 +38,6 @@ All notable changes to this project will be documented in this file.
 - Stopped returning false negatives when checking if a file should trigger compilation thanks to a bump to `fdir` - Closes [#145](https://github.com/glenn2223/vscode-live-sass-compiler/issues/145)
   - **_Awaiting confirmation of fix_**
 - Workspace loop numbering outputs the correct figure
-
-### Updated
-- `autoprefixer` from `10.4.1` to `10.4.2`
-  - Fixed missed `-webkit-` prefix for `width: stretch`
-- `fdir` from `5.1.0` to `5.2.0`
-  - Fixed a critical issue with async crawling that caused the crawler to return early
-  - Other changes *(nothing user facing)*
-- `sass` from `1.45.2` to `1.48.0`
-  - Various changes *(nothing user facing)*
-- Various dev dependency updates *(nothing user facing)*
-
-## [5.2.0-alpha.1] - 2021-12-02
-
-### Added
-- `@warn` and `@debug` lines, as well as other SASS warnings, are now shown in the output window - Closes [#89](https://github.com/glenn2223/vscode-live-sass-compiler/issues/89)
-- You can now specify the files/folders to treat as partials using the new `liveSassCompile.settings.partialsList` setting - Closes [#143](https://github.com/glenn2223/vscode-live-sass-compiler/issues/143)
-
-### Fixed
 - Update broken reference link in settings documentation - thanks @dawidmachon
 - Source maps would add duplicates, mostly with incorrect paths - Fixes [#135](https://github.com/glenn2223/vscode-live-sass-compiler/issues/135)
 - Extension checks are no longer case sensitive (i.e. `.Sass` will now match) - Fixes [#137](https://github.com/glenn2223/vscode-live-sass-compiler/issues/137)
@@ -59,15 +45,19 @@ All notable changes to this project will be documented in this file.
 - No longer outputs error if the css generated is an empty string - Fixes [#140](https://github.com/glenn2223/vscode-live-sass-compiler/issues/140)
 
 ### Updated
-- `autoprefixer` from `10.3.7` to `10.4.1`
+- `autoprefixer` from `10.3.7` to `10.4.2`
   - Added `:autofill` support
   - Fixed `::file-selector-button` data
+  - Fixed missed `-webkit-` prefix for `width: stretch`
+- `fdir` from `5.1.0` to `5.2.0`
+  - Fixed a critical issue with async crawling that caused the crawler to return early
+  - Other changes *(nothing user facing)*
 - `picomatch` from `2.3.0` to `2.3.1`
   - Fixes bug when a pattern containing an expression after the closing parenthesis (`/!(*.d).{ts,tsx}`) was incorrectly converted to regexp
   - Other changes *(nothing user facing)*
 - `postcss` from `8.3.9` to `8.4.5`
   - Various changes *(nothing user facing)*
-- `sass` from `1.37.5` to `1.45.2`
+- `sass` from `1.37.5` to `1.49.0`
   - *Potentially breaking bug fix:* Change the default value of the `separator` parameter for `new SassArgumentList()` to `','` rather than `null`. This matches the API specification.
   - *Potentially breaking bug fix:* Properly parse custom properties in `@supports` conditions. Note that this means that SassScript expressions on the right-hand side of custom property `@supports` queries now need to be interpolated, as per https://sass-lang.com/d/css-vars.
   - *Potentially breaking bug fix:* Fix a bug where `inspect()` was not properly printing nested, empty, bracketed lists.
@@ -86,7 +76,7 @@ All notable changes to this project will be documented in this file.
   - Improve performance
   - Fix a bug where calculations with different operators were incorrectly considered equal.
   - Properly parse attribute selectors with empty namespaces.
-  - Other changes *(nothing user facing)*
+  - Various changes *(nothing user facing)*
 - Various dev dependency updates *(nothing user facing)*
 
 ## [5.1.1] - 2021-10-11
@@ -456,7 +446,7 @@ The new commands are:
 
 
 [Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.2...HEAD
-[5.1.2]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.1...v5.1.2
+[5.2.0-rc.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.1...v5.2.0-rc.1
 [5.1.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.0...v5.1.1
 [5.1.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.4...v5.1.0
 [5.0.4]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.3...v5.0.4
