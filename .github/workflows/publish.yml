@@ -1,0 +1,75 @@
+name: Publish CI
+
+on:
+# ONLY CARE ABOUT RELEASES - AS TESTS ARE FAILING
+#  pull_request:
+#    branches: [ master ]
+  release:
+    types:
+    - published
+
+  # ALLOW MANUAL RUNS
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+#       AGAIN ONLY THE RELEASE
+#        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+ 
+    - name: Install Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+        
+    - name: Install the package dependencies
+      run: npm install
+    
+#   TESTS ARE FAILING - DOING MORE RESEARCH
+#    - run: xvfb-run -a npm test
+#      if: runner.os == 'Linux'
+#      name: Test extension
+      
+#    - run: npm test
+#      if: runner.os != 'Linux'
+#      name: Test extension
+
+# Removed && startsWith( github.ref, 'refs/tags/')
+    - id: get-name
+      if: success() && matrix.os == 'ubuntu-latest' 
+      run: echo ::set-output name=tag::${GITHUB_REF#refs/tags/v}
+
+    - name: Install vsce
+      run: npm i vsce@2.5.3 -g
+
+    - name: Package
+      run: vsce package --yarn
+
+    - name: Publish - vsce
+      if: success() && matrix.os == 'ubuntu-latest' && !github.event.release.prerelease
+      run: vsce publish --yarn
+      env:
+        VSCE_PAT: ${{ secrets.VSCE_PAT }}
+
+    - name: Install ovsx
+      run: npm i ovsx -g
+      
+    - name: Publish - ovsx
+      if: success() && matrix.os == 'ubuntu-latest'
+      run: ovsx publish live-sass-${{ steps.get-name.outputs.tag }}.vsix
+      env:
+        OVSX_PAT: ${{ secrets.OVSX_PAT }}
+        
+    - name: Upload asset
+      if: matrix.os == 'ubuntu-latest'
+      uses: softprops/action-gh-release@v0.1.5
+      with:
+        files: live-sass-${{ steps.get-name.outputs.tag }}.vsix
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

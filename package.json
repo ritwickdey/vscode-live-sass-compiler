@@ -1,16 +1,15 @@
 {
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
-    "description": "Compile Sass or Scss to CSS at realtime with live browser reload.",
-    "version": "3.0.0",
-    "publisher": "ritwickdey",
+    "description": "Compile Sass or Scss to CSS at realtime.",
+    "version": "5.2.0",
+    "publisher": "glenn2223",
     "author": {
-        "name": "Ritwick Dey",
-        "email": "ritwickdey@outlook.com",
-        "url": "http://twitter.com/Dey_Ritwick"
+        "name": "Glenn Marks",
+        "url": "https://github.com/glenn2223/"
     },
     "engines": {
-        "vscode": "^1.0.0"
+        "vscode": "^1.52.0"
     },
     "keywords": [
         "SASS",
@@ -23,7 +22,6 @@
         "Other",
         "Extension Packs"
     ],
-    "preview": true,
     "galleryBanner": {
         "color": "#41205f",
         "theme": "dark"
@@ -33,7 +31,7 @@
         "onLanguage:scss",
         "onLanguage:sass"
     ],
-    "main": "./out/src/extension",
+    "main": "./out/extension",
     "contributes": {
         "commands": [
             {
@@ -47,6 +45,11 @@
                 "category": "Live Sass"
             },
             {
+                "command": "liveSass.command.compileCurrentSass",
+                "title": "Compile Current Sass File",
+                "category": "Live Sass"
+            },
+            {
                 "command": "liveSass.command.oneTimeCompileSass",
                 "title": "Compile Sass - Without Watch Mode",
                 "category": "Live Sass"
@@ -55,10 +58,55 @@
                 "command": "liveSass.command.openOutputWindow",
                 "title": "Open Live Sass Output Window",
                 "category": "Live Sass"
+            },
+            {
+                "command": "liveSass.command.createIssue",
+                "title": "Report an issue",
+                "category": "Live Sass"
+            },
+            {
+                "command": "liveSass.command.debugInclusion",
+                "title": "Check file will be included",
+                "category": "Live Sass"
+            },
+            {
+                "command": "liveSass.command.debugFileList",
+                "title": "Get all included files",
+                "category": "Live Sass"
+            },
+            {
+                "command": "liveSass.command.showOutputOn.trace",
+                "title": "Show Output On: Trace",
+                "category": "Live Sass"
+            },
+            {
+                "command": "liveSass.command.showOutputOn.debug",
+                "title": "Show Output On: Debug",
+                "category": "Live Sass"
+            },
+            {
+                "command": "liveSass.command.showOutputOn.information",
+                "title": "Show Output On: Information",
+                "category": "Live Sass"
+            },
+            {
+                "command": "liveSass.command.showOutputOn.warning",
+                "title": "Show Output On: Warning",
+                "category": "Live Sass"
+            },
+            {
+                "command": "liveSass.command.showOutputOn.error",
+                "title": "Show Output On: Error",
+                "category": "Live Sass"
+            },
+            {
+                "command": "liveSass.command.showOutputOn.none",
+                "title": "Show Output On: None",
+                "category": "Live Sass"
             }
         ],
         "configuration": {
-            "title": "Live Sass Compile Config",
+            "title": "Live Sass Compiler",
             "properties": {
                 "liveSassCompile.settings.formats": {
                     "type": "array",
@@ -66,7 +114,9 @@
                         {
                             "format": "expanded",
                             "extensionName": ".css",
-                            "savePath": null
+                            "savePath": null,
+                            "savePathSegmentKeys": null,
+                            "savePathReplaceSegmentsWith": null
                         }
                     ],
                     "minItems": 1,
@@ -78,9 +128,7 @@
                                 "type": "string",
                                 "enum": [
                                     "expanded",
-                                    "compact",
-                                    "compressed",
-                                    "nested"
+                                    "compressed"
                                 ],
                                 "default": "expanded"
                             },
@@ -99,8 +147,57 @@
                                     "string",
                                     "null"
                                 ],
-                                "pattern": "^[\\~|/|\\\\]",
+                                "pattern": "^(?:\\\\|/|~/|~\\\\).+[^\\\\/]$",
+                                "patternErrorMessage": "Must start with any of:\n`/` or `\\` (for workspace root)\n`~/` or `~\\` for relative to the file being processed. Must not end with a path separator (`/` or `\\`)",
                                 "default": null
+                            },
+                            "savePathSegmentKeys": {
+                                "description": "Segment keys that, if found in the file path, will be replaced with `savePathReplaceSegmentsWith`. (Note: Only applied if `savePath` is null).",
+                                "type": [
+                                    "array",
+                                    "null"
+                                ],
+                                "default": null,
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "savePathReplaceSegmentsWith": {
+                                "description": "The value that will replace any segement keys found in the save path. (Note: Only applied if `savePath` is null).",
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "pattern": "[^\\/]",
+                                "patternErrorMessage": "Must not contain any path separators (`/` or `\\`)",
+                                "default": null
+                            },
+                            "linefeed": {
+                                "description": "Choose the linefeed terminator to use in the CSS output",
+                                "type": "string",
+                                "enum": [
+                                    "cr",
+                                    "crlf",
+                                    "lf",
+                                    "lfcr"
+                                ],
+                                "default": "lf"
+                            },
+                            "indentType": {
+                                "description": "Choose the indent type to use in the CSS ouput (for `expanded` formats only)",
+                                "type": "string",
+                                "enum": [
+                                    "space",
+                                    "tab"
+                                ],
+                                "default": "space"
+                            },
+                            "indentWidth": {
+                                "description": "Choose the indent width to use in the CSS ouput (for `expanded` formats only)",
+                                "type": "number",
+                                "default": 2,
+                                "minimum": 0,
+                                "maximum": 10
                             }
                         },
                         "additionalProperties": false,
@@ -109,15 +206,22 @@
                             "extensionName"
                         ]
                     },
-                    "description": "Set your exported CSS Styles, Formats & save location."
+                    "description": "Set your exported CSS Styles, Formats & save location.",
+                    "scope": "resource"
                 },
                 "liveSassCompile.settings.excludeList": {
                     "type": "array",
                     "default": [
-                        "**/node_modules/**",
-                        ".vscode/**"
+                        "/**/node_modules/**",
+                        "/.vscode/**"
                     ],
-                    "description": "All Sass/Scss files inside the folders will be excluded. \n\nExamples: \n'**/node_modules/**',\n'.vscode/**', \n'.history/**' \n\nGlob Patterns are accepted."
+                    "description": "All Sass/Scss files inside the folders will be excluded. \n\nExamples: \n'/**/node_modules/**',\n'/.vscode/**', \n'/.history/**' \n\nGlob Patterns are accepted.",
+                    "items": {
+                        "type": "string",
+                        "pattern": "^[\\/].+",
+                        "patternErrorMessage": "Must start with a path separator (`/` or `\\`)"
+                    },
+                    "scope": "resource"
                 },
                 "liveSassCompile.settings.includeItems": {
                     "type": [
@@ -125,30 +229,80 @@
                         "null"
                     ],
                     "default": null,
-                    "description": "This setting is useful when you deals with only few of sass files. Only mentioned Sass files will be included. \nNOTE: No need to include partial sass files."
+                    "description": "This setting is useful when you only deal with a few sass files. Only these Sass files will be included.\nNOTE: There is no need to include partial sass files.",
+                    "items": {
+                        "type": "string",
+                        "pattern": "^[\\/].+(?<![\\/])[.]s[a|c]ss$",
+                        "patternErrorMessage": "Must start with a path separator (`/` or `\\`) and end with a `.sass` or `.scss`"
+                    },
+                    "scope": "resource"
+                },
+                "liveSassCompile.settings.partialsList": {
+                    "type": "array",
+                    "default": [
+                        "/**/_*.s[ac]ss"
+                    ],
+                    "description": "Specific glob patterns to identify partial files/folders",
+                    "items": {
+                        "type": "string",
+                        "pattern": "^[\\/].+",
+                        "patternErrorMessage": "Must start with a path separator (`/` or `\\`)"
+                    },
+                    "scope": "resource"
                 },
                 "liveSassCompile.settings.generateMap": {
                     "type": [
                         "boolean"
                     ],
                     "default": true,
-                    "description": "Set it as `false` if you don't want `.map` file for compiled CSS. \nDefault is `true`"
+                    "description": "Set to `false` if you don't want a `.map` file for each compiled CSS.\nDefault is `true`",
+                    "scope": "resource"
                 },
                 "liveSassCompile.settings.autoprefix": {
                     "type": [
                         "array",
-                        "null"
+                        "boolean"
                     ],
-                    "default": [
-                        "> 1%",
-                        "last 2 versions"
-                    ],
-                    "description": "Automatically add vendor prefixes to unsupported CSS properties (e. g. transform -> -ms-transform). Specify what browsers to target with an array of strings (uses [Browserslist](https://github.com/ai/browserslist)). Pass `null` to turn off. \nDefault is `null`"
+                    "default": "defaults",
+                    "description": "Automatically add vendor prefixes to unsupported CSS properties (e. g. transform -> -ms-transform). Specify what browsers to target with an array of strings (uses [Browserslist](https://github.com/ai/browserslist)). Pass `null` to turn off.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "scope": "resource"
                 },
-                "liveSassCompile.settings.showOutputWindow": {
+                "liveSassCompile.settings.watchOnLaunch": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Set this to `true` if you want Live Sass Compiler to automatically start watching your .sass or .scss file when you open an applicable workspace\nDefault is `false`"
+                },
+                "liveSassCompile.settings.compileOnWatch": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Set this to `false` if you do not want the output window to show.\nNote: You can use the command palette to open the Live Sass output window.\nDefault is `true`"
+                    "description": "Set this to `false` if you don't want all Sass files to be compiled when Live Sass Compiler starts watching."
+                },
+                "liveSassCompile.settings.showOutputWindowOn": {
+                    "type": "string",
+                    "enum": [
+                        "Trace",
+                        "Debug",
+                        "Information",
+                        "Warning",
+                        "Error",
+                        "None"
+                    ],
+                    "default": "Information",
+                    "description": "Set the level of logging that is recorded and shown to you.\nDefault is `Information`"
+                },
+                "liveSassCompile.settings.forceBaseDirectory": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null,
+                    "pattern": "^[\\/].+[^\\/]$",
+                    "patternErrorMessage": "Must start with a path separator (`/` or `\\`) and must not end with one",
+                    "description": "Defines a subdirectory to search from (no directory outside of this will be search)",
+                    "scope": "resource"
                 }
             }
         }
@@ -156,38 +310,47 @@
     "license": "MIT",
     "icon": "images/icon2.png",
     "bugs": {
-        "url": "https://github.com/ritwickdey/vscode-live-sass-compiler/issues",
-        "email": "ritwickdey@outlook.com"
+        "url": "https://github.com/glenn2223/vscode-live-sass-compiler/issues"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/ritwickdey/vscode-live-sass-compiler.git"
+        "url": "https://github.com/glenn2223/vscode-live-sass-compiler.git"
     },
-    "homepage": "https://ritwickdey.github.io/vscode-live-sass-compiler/",
-    "extensionDependencies": [
-        "ritwickdey.LiveServer"
-    ],
+    "homepage": "https://glenn2223.github.io/vscode-live-sass-compiler/",
     "scripts": {
-        "vscode:prepublish": "tsc -p ./",
-        "compile": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "node ./node_modules/vscode/bin/test"
+        "vscode:prepublish": "webpack --mode production",
+        "webpack": "webpack --mode development",
+        "webpack-dev": "webpack --mode development --watch",
+        "pretest": "npm run webpack && tsc -p ./src/test/",
+        "test": "node ./out/test/runTest.js",
+        "lint": "eslint -c .eslintrc.js --ext .ts ./src/"
     },
     "dependencies": {
-        "autoprefixer": "^7.2.6",
-        "glob": "^7.1.2",
-        "postcss": "^6.0.23",
-        "sasslib": "file:lib\\sasslib"
+        "autoprefixer": "^10.4.2",
+        "fdir": "^5.2.0",
+        "picomatch": "^2.3.1",
+        "postcss": "^8.4.6",
+        "sass": "^1.49.8"
     },
     "devDependencies": {
-        "typescript": "^2.4.1",
-        "vscode": "^1.0.0",
-        "mocha": "^2.3.3",
-        "@types/node": "^6.0.40",
-        "@types/mocha": "^2.2.32"
+        "@types/glob": "^7.2.0",
+        "@types/mocha": "^9.1.0",
+        "@types/node": "^15.14.9",
+        "@types/picomatch": "^2.3.0",
+        "@types/vscode": "^1.52.0",
+        "@typescript-eslint/eslint-plugin": "^5.12.1",
+        "@typescript-eslint/parser": "^5.12.1",
+        "eslint": "^8.9.0",
+        "mocha": "^9.2.1",
+        "terser-webpack-plugin": "^5.3.1",
+        "ts-loader": "^9.2.6",
+        "typescript": "^4.5.5",
+        "vscode-test": "^1.6.1",
+        "webpack": "^5.69.1",
+        "webpack-cli": "^4.9.2"
     },
     "announcement": {
-        "onVersion": "3.0.0",
-        "message": "SassCompiler@3.0.0: Fixes 8 digit Hex, grid names and many more."
+        "onVersion": "5.2.0",
+        "message": "SassCompiler v5.2.0: @warn and @debug support, new setting, bug squashing and dependency bumps"
     }
 }

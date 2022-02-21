@@ -1,6 +1,10 @@
+dist
 out
 node_modules
 debug.log
 _site
 Gemfile.lock
 Gemfile
+.vscode-test
+.vscode/*.dict
+*.vsix
