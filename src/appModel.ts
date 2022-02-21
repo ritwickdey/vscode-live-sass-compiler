@@ -15,7 +15,7 @@ import BrowserslistError from "browserslist/error";
 import fs from "fs";
 import picomatch from "picomatch";
 import postcss from "postcss";
-import { Options } from "sass";
+import { LegacyFileOptions } from "sass";
 
 export class AppModel {
     private isWatching: boolean;
@@ -167,10 +167,12 @@ export class AppModel {
                 return;
             }
 
-            const sassPath = vscode.window.activeTextEditor.document.fileName;
+            const sassPath = vscode.window.activeTextEditor.document.fileName,
+                workspaceFolder = AppModel.getWorkspaceFolder(sassPath),
+                sassFileType = this.confirmSassType(sassPath, workspaceFolder);
 
-            if (!this.isSassFile(sassPath)) {
-                if (this.isSassFile(sassPath, true)) {
+            switch (sassFileType) {
+                case SassConfirmationType.PartialFile:
                     OutputWindow.Show(OutputLevel.Debug, "Can't process partial Sass", [
                         "The file currently open in the editor window is a partial sass file, these aren't processed singly",
                     ]);
@@ -180,7 +182,12 @@ export class AppModel {
                         "The file currently open in the editor window is a partial sass file, these aren't processed singly",
                         "warning"
                     );
-                } else {
+
+                    this.revertUIToWatchingStatus();
+
+                    return;
+
+                case SassConfirmationType.NotSass:
                     OutputWindow.Show(OutputLevel.Debug, "Not a Sass file", [
                         "The file currently open in the editor window isn't a sass file",
                     ]);
@@ -190,19 +197,16 @@ export class AppModel {
                         "The file currently open in the editor window isn't a sass file",
                         "warning"
                     );
-                }
 
-                this.revertUIToWatchingStatus();
+                    this.revertUIToWatchingStatus();
 
-                return;
+                    return;
             }
 
             StatusBarUi.working("Processing single file...");
             OutputWindow.Show(OutputLevel.Debug, "Processing the current file", [
                 `Path: ${sassPath}`,
             ]);
-
-            const workspaceFolder = AppModel.getWorkspaceFolder(sassPath);
 
             const formats = Helper.getConfigSettings<IFormat[]>("formats", workspaceFolder);
             const result = await Promise.all(
@@ -262,11 +266,14 @@ export class AppModel {
     /**
      * Compiles the file that has just been saved
      */
-    async compileOnSave(): Promise<void> {
+    async compileOnSave(textDocument: vscode.TextDocument): Promise<void> {
         try {
-            const currentFile = vscode.window.activeTextEditor?.document.fileName;
+            const currentFile = textDocument.fileName;
 
-            if (!currentFile || !this.isSassFile(currentFile, true)) {
+            const workspaceFolder = AppModel.getWorkspaceFolder(currentFile),
+                sassFileType = this.confirmSassType(currentFile, workspaceFolder);
+
+            if (sassFileType == SassConfirmationType.NotSass) {
                 return;
             }
 
@@ -281,8 +288,6 @@ export class AppModel {
 
                 return;
             }
-
-            const workspaceFolder = AppModel.getWorkspaceFolder(currentFile);
 
             if (await this.isSassFileExcluded(currentFile, workspaceFolder)) {
                 OutputWindow.Show(OutputLevel.Trace, "File excluded", [
@@ -299,7 +304,7 @@ export class AppModel {
                 [path.basename(currentFile)]
             );
 
-            if (this.isSassFile(currentFile)) {
+            if (sassFileType == SassConfirmationType.SassFile) {
                 OutputWindow.Show(OutputLevel.Trace, "File is not a partial", [
                     "The file is not a partial so we will compile only this one",
                     `Path: ${currentFile}`,
@@ -393,7 +398,7 @@ export class AppModel {
         sassPath: string,
         targetCssUri: string,
         mapFileUri: string,
-        options: Options
+        options: LegacyFileOptions<"sync">
     ) {
         OutputWindow.Show(OutputLevel.Trace, "Starting compilation", [
             "Starting compilation of file",
@@ -405,7 +410,7 @@ export class AppModel {
                 "autoprefix",
                 folder
             ),
-            compileResult = SassHelper.compileOne(sassPath, mapFileUri, options),
+            compileResult = SassHelper.compileOne(sassPath, targetCssUri, mapFileUri, options),
             promises: Promise<IFileResolver>[] = [];
 
         if (compileResult.errorString !== null) {
@@ -419,9 +424,10 @@ export class AppModel {
         let css: string | undefined = compileResult.result?.css.toString(),
             map: string | undefined | null = compileResult.result?.map?.toString();
 
-        if (!css) {
+        if (css === undefined) {
             OutputWindow.Show(OutputLevel.Error, "Compilation Error", [
                 "There was no CSS output from sass/sass",
+                `Sass error: ${compileResult.errorString ?? "NONE"}`,
             ]);
 
             StatusBarUi.compilationError(this.isWatching);
@@ -439,7 +445,6 @@ export class AppModel {
                     folder,
                     css,
                     map,
-                    sassPath,
                     targetCssUri,
                     autoprefixerTarget
                 );
@@ -457,14 +462,11 @@ export class AppModel {
                     throw err;
                 }
             }
-        } else if (map && generateMap) {
-            const pMap: { file: string } = JSON.parse(map);
-            pMap.file = `${path.basename(targetCssUri)}.map`;
-            map = JSON.stringify(pMap);
         }
 
         if (map && generateMap) {
             css += `/*# sourceMappingURL=${path.basename(targetCssUri)}.map */`;
+
             promises.push(FileHelper.writeToOneFile(mapFileUri, map));
         }
 
@@ -658,7 +660,6 @@ export class AppModel {
         folder: vscode.WorkspaceFolder | undefined,
         css: string,
         map: string | undefined,
-        filePath: string,
         savePath: string,
         browsers: Array<string> | true
     ): Promise<{ css: string; map: string | null }> {
@@ -673,22 +674,26 @@ export class AppModel {
 
         // TODO: REMOVE - when autoprefixer can stop caching the browsers
         const oldBrowserlistCache = process.env.BROWSERSLIST_DISABLE_CACHE;
-        process.env.BROWSERSLIST_DISABLE_CACHE = "1";
 
-        OutputWindow.Show(OutputLevel.Trace, "Changing BROWSERSLIST_DISABLE_CACHE setting", [
-            `Was: ${oldBrowserlistCache ?? "UNDEFINED"}`,
-            "Now: 1",
-        ]);
+        if (browsers === true) {
+            process.env.BROWSERSLIST_DISABLE_CACHE = "1";
+
+            OutputWindow.Show(OutputLevel.Trace, "Changing BROWSERSLIST_DISABLE_CACHE setting", [
+                `Was: ${oldBrowserlistCache ?? "UNDEFINED"}`,
+                "Now: 1",
+            ]);
+        }
 
         try {
             OutputWindow.Show(OutputLevel.Trace, "Starting autoprefixer");
 
             const result = await prefixer.process(css, {
-                from: filePath,
+                from: savePath,
                 to: savePath,
                 map: {
                     inline: false,
                     prev: map,
+                    annotation: false,
                 },
             });
 
@@ -715,12 +720,14 @@ export class AppModel {
                 map: generateMap ? result.map.toString() : null,
             };
         } finally {
-            process.env.BROWSERSLIST_DISABLE_CACHE = oldBrowserlistCache;
+            if (browsers === true) {
+                process.env.BROWSERSLIST_DISABLE_CACHE = oldBrowserlistCache;
 
-            OutputWindow.Show(
-                OutputLevel.Trace,
-                `Restored BROWSERSLIST_DISABLE_CACHE to: ${oldBrowserlistCache ?? "UNDEFINED"}`
-            );
+                OutputWindow.Show(
+                    OutputLevel.Trace,
+                    `Restored BROWSERSLIST_DISABLE_CACHE to: ${oldBrowserlistCache ?? "UNDEFINED"}`
+                );
+            }
         }
     }
 
@@ -761,12 +768,44 @@ export class AppModel {
 
     //#region Private
 
-    private isSassFile(pathUrl: string, partialSass = false): boolean {
-        const filename = path.basename(pathUrl);
-        return (
-            (partialSass || !filename.startsWith("_")) &&
-            (filename.endsWith("sass") || filename.endsWith("scss"))
-        );
+    private confirmSassType(
+        pathUrl: string,
+        workspaceFolder?: vscode.WorkspaceFolder
+    ): SassConfirmationType {
+        const filename = path.basename(pathUrl).toLowerCase();
+
+        if (filename.endsWith("sass") || filename.endsWith("scss")) {
+            if (workspaceFolder === undefined) {
+                if (filename.startsWith("_")) {
+                    return SassConfirmationType.PartialFile;
+                }
+
+                return SassConfirmationType.SassFile;
+            } else {
+                const basePath = workspaceFolder.uri.fsPath;
+
+                const isPartial = picomatch(
+                    AppModel.stripAnyLeadingSlashes(
+                        Helper.getConfigSettings<string[]>("partialsList", workspaceFolder)
+                    ),
+                    {
+                        ignore: AppModel.stripAnyLeadingSlashes(
+                            Helper.getConfigSettings<string[]>("excludeList", workspaceFolder)
+                        ),
+                        dot: true,
+                        nocase: true,
+                    }
+                );
+
+                if (isPartial(path.relative(basePath, pathUrl))) {
+                    return SassConfirmationType.PartialFile;
+                }
+
+                return SassConfirmationType.SassFile;
+            }
+        }
+
+        return SassConfirmationType.NotSass;
     }
 
     private async isSassFileExcluded(
@@ -790,10 +829,14 @@ export class AppModel {
                     workspaceFolder
                 );
 
-            let fileList = ["**/*.s[a|c]ss"];
+            let fileList = ["**/*.s[ac]ss"];
 
             if (includeItems && includeItems.length) {
-                fileList = AppModel.stripAnyLeadingSlashes(includeItems.concat("**/_*.s[a|c]ss"));
+                fileList = AppModel.stripAnyLeadingSlashes(
+                    includeItems.concat(
+                        Helper.getConfigSettings<string[]>("partialsList", workspaceFolder)
+                    )
+                );
             }
 
             let basePath = workspaceFolder.uri.fsPath;
@@ -846,21 +889,48 @@ export class AppModel {
                 );
             }
 
-            // @ts-ignore ts2322 => string[] doesn't match string (False negative as string[] is allowed)
-            const isMatch = picomatch(fileList, { ignore: excludeItems, dot: true });
+            const isMatch = picomatch(fileList, { ignore: excludeItems, dot: true, nocase: true });
 
             OutputWindow.Show(OutputLevel.Trace, "Searching folder", null, false);
+
+            const searchLogs: Map<string, string[]> = new Map<string, string[]>();
 
             const searchFileCount = (
                 (await new fdir()
                     .crawlWithOptions(basePath, {
                         filters: [
-                            (filePath) => filePath.endsWith(".scss") || filePath.endsWith(".sass"),
-                            (filePath) => isMatch(path.relative(basePath, filePath)),
                             (filePath) =>
-                                filePath.localeCompare(sassPath, undefined, {
-                                    sensitivity: "accent",
-                                }) === 0,
+                                filePath.toLowerCase().endsWith(".scss") ||
+                                filePath.toLowerCase().endsWith(".sass"),
+                            (filePath) => {
+                                const result = isMatch(path.relative(basePath, filePath));
+
+                                searchLogs.set(`Path: ${filePath}`, [
+                                    `  isMatch: ${result}`,
+                                    `   - Base path: ${basePath}`,
+                                    `   - Rela path: ${path.relative(basePath, filePath)}`,
+                                ]);
+
+                                return result;
+                            },
+                            (filePath) => {
+                                const result =
+                                    path
+                                        .toNamespacedPath(filePath)
+                                        .localeCompare(path.toNamespacedPath(sassPath), undefined, {
+                                            sensitivity: "accent",
+                                        }) === 0;
+
+                                searchLogs
+                                    .get(`Path: ${filePath}`)
+                                    ?.push(
+                                        `  compare: ${result}`,
+                                        `   - Orig file path: ${filePath}`,
+                                        `   - Orig sass path: ${sassPath}`
+                                    );
+
+                                return result;
+                            },
                         ],
                         includeBasePath: true,
                         onlyCounts: true,
@@ -869,6 +939,14 @@ export class AppModel {
                     })
                     .withPromise()) as OnlyCountsOutput
             ).files;
+
+            OutputWindow.Show(OutputLevel.Trace, "Search results", undefined, false);
+
+            searchLogs.forEach((logs, key) => {
+                OutputWindow.Show(OutputLevel.Trace, key, logs, false);
+            });
+
+            OutputWindow.Show(OutputLevel.Trace, null);
 
             // If doesn't include true then it's not been found
             if (searchFileCount > 0) {
@@ -890,13 +968,12 @@ export class AppModel {
     }
 
     private async getSassFiles(
-        queryPattern: string | string[] = "**/[^_]*.s[a|c]ss",
-        isQueryPatternFixed = false,
+        queryPattern?: string | string[],
         isDebugging = false
     ): Promise<string[]> {
         OutputWindow.Show(OutputLevel.Trace, "Getting SASS files", [
             `Query pattern: ${queryPattern}`,
-            `Can be overwritten: ${!isQueryPatternFixed}`,
+            `Can be overwritten: ${queryPattern == undefined}`,
         ]);
 
         const fileList: string[] = [];
@@ -928,7 +1005,7 @@ export class AppModel {
                                     ? ["**/node_modules/**", ".vscode/**"]
                                     : Helper.getConfigSettings<string[]>("excludeList", folder);
 
-                            if (!isQueryPatternFixed && includeItems && includeItems.length) {
+                            if (queryPattern == undefined && includeItems && includeItems.length) {
                                 queryPattern = AppModel.stripAnyLeadingSlashes(includeItems);
 
                                 OutputWindow.Show(OutputLevel.Trace, "Query pattern overwritten", [
@@ -989,21 +1066,28 @@ export class AppModel {
                                 );
                             }
 
-                            const isMatch = picomatch(queryPattern, {
-                                // @ts-ignore ts2322 => string[] doesn't match string (False negative as string[] is allowed)
+                            if (!isDebugging) {
+                                // Add partials to excludedItems
+                                excludedItems.push(
+                                    ...AppModel.stripAnyLeadingSlashes(
+                                        Helper.getConfigSettings<string[]>("partialsList", folder)
+                                    )
+                                );
+                            }
+
+                            const isMatch = picomatch(queryPattern ?? "**/*.s[ac]ss", {
                                 ignore: excludedItems,
                                 dot: true,
+                                nocase: true,
                             });
 
                             return (await new fdir()
                                 .crawlWithOptions(basePath, {
                                     filters: [
                                         (filePath) =>
-                                            filePath.endsWith(".scss") ||
-                                            filePath.endsWith(".sass"),
+                                            filePath.toLowerCase().endsWith(".scss") ||
+                                            filePath.toLowerCase().endsWith(".sass"),
                                         (filePath) => isMatch(path.relative(basePath, filePath)),
-                                        (filePath) =>
-                                            isQueryPatternFixed || this.isSassFile(filePath, false),
                                     ],
                                     includeBasePath: true,
                                     resolvePaths: true,
@@ -1058,7 +1142,7 @@ export class AppModel {
 
             const workspaceFolder = AppModel.getWorkspaceFolder(sassPath);
 
-            if (!this.isSassFile(sassPath, true)) {
+            if (this.confirmSassType(sassPath, workspaceFolder) == SassConfirmationType.NotSass) {
                 OutputWindow.Show(OutputLevel.Critical, "Not a Sass file", [
                     "The file currently open in the editor window isn't a sass file",
                 ]);
@@ -1122,9 +1206,11 @@ export class AppModel {
 
                 await Promise.all(
                     vscode.workspace.workspaceFolders!.map(async (folder, index) => {
-                        outputInfo.push(
+                        const folderOutput: string[] = [];
+
+                        folderOutput.push(
                             "--------------------",
-                            `Checking workspace folder ${index} of ${workspaceCount}`,
+                            `Checking workspace folder ${index + 1} of ${workspaceCount}`,
                             `Path: ${folder.uri.fsPath}`,
                             "--------------------"
                         );
@@ -1134,7 +1220,7 @@ export class AppModel {
                             folder
                         );
 
-                        outputInfo.push(
+                        folderOutput.push(
                             "--------------------",
                             "Current Include/Exclude Settings",
                             "--------------------",
@@ -1147,36 +1233,42 @@ export class AppModel {
                             `Exclude: [ ${exclusionList.join(", ")} ]`
                         );
 
-                        outputInfo.push(
+                        folderOutput.push(
                             "--------------------",
                             "Included SASS Files",
                             "--------------------"
                         );
                         (await this.getSassFiles()).map((file) => {
-                            outputInfo.push(file);
+                            folderOutput.push(file);
                         });
 
-                        outputInfo.push(
+                        folderOutput.push(
                             "--------------------",
                             "Included Partial SASS Files",
                             "--------------------"
                         );
-                        (await this.getSassFiles("**/_*.s[a|c]ss", true)).map((file) => {
-                            outputInfo.push(file);
+                        (
+                            await this.getSassFiles(
+                                Helper.getConfigSettings<string[]>("partialsList", folder)
+                            )
+                        ).map((file) => {
+                            folderOutput.push(file);
                         });
 
-                        outputInfo.push(
+                        folderOutput.push(
                             "--------------------",
                             "Excluded SASS Files",
                             "--------------------"
                         );
                         if (exclusionList.length > 0) {
-                            (await this.getSassFiles(exclusionList, true, true)).map((file) => {
-                                outputInfo.push(file);
+                            (await this.getSassFiles(exclusionList, true)).map((file) => {
+                                folderOutput.push(file);
                             });
                         } else {
-                            outputInfo.push("NONE");
+                            folderOutput.push("NONE");
                         }
+
+                        outputInfo.push(...folderOutput);
                     })
                 );
             }
@@ -1210,8 +1302,8 @@ export class AppModel {
     //#endregion Debugging
 
     private static stripLeadingSlash(partialPath: string): string {
-        return ["\\", "/"].indexOf(partialPath.substr(0, 1)) >= 0
-            ? partialPath.substr(1)
+        return ["\\", "/"].indexOf(partialPath.substring(0, 1)) >= 0
+            ? partialPath.substring(1)
             : partialPath;
     }
 
@@ -1249,4 +1341,10 @@ export class AppModel {
 
         OutputWindow.Show(OutputLevel.Trace, "App model disposed");
     }
+}
+
+enum SassConfirmationType {
+    SassFile,
+    PartialFile,
+    NotSass,
 }

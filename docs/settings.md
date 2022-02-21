@@ -155,6 +155,19 @@ Process only these specified files. Useful for when you deal with only a few sas
 
 ---
 
+### liveSassCompile.settings.partialsList
+>ℹ This setting can vary between workspace folders - [read more][Multi-rootFAQ]
+
+Using glob patterns, specify what files are actually partials - or what folders contain them
+
+**Type:** `string[]`  
+**Default**
+```JSON
+[ "/**/_*.s[ac]ss" ]
+```
+
+---
+
 ### liveSassCompile.settings.generateMap
 >ℹ This setting can vary between workspace folders - [read more][Multi-rootFAQ]
 
@@ -162,8 +175,6 @@ Create a companion map file for each of the compiled files
 
 **Type:** `boolean`  
 **Default:** `true`
-
-</details>
 
 ---
 
