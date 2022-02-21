@@ -22,9 +22,7 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
->These release candidate notes will be consolidated for the official release. Please note that breaking changes can also happen right up until that point too
-
-## [5.2.0-rc.1] - 2022-01-25
+## [5.2.0] - 2022-02-21
 
 ### Added
 - `@warn` and `@debug` lines, as well as other SASS warnings, are now shown in the output window - Closes [#89](https://github.com/glenn2223/vscode-live-sass-compiler/issues/89)
@@ -36,7 +34,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Stopped returning false negatives when checking if a file should trigger compilation thanks to a bump to `fdir` - Closes [#145](https://github.com/glenn2223/vscode-live-sass-compiler/issues/145)
-  - **_Awaiting confirmation of fix_**
+- Use actual saved file rather that finding active file (helps with Live Share compatibility) - Partial fix for [#151](https://github.com/glenn2223/vscode-live-sass-compiler/issues/151)
 - Workspace loop numbering outputs the correct figure
 - Update broken reference link in settings documentation - thanks @dawidmachon
 - Source maps would add duplicates, mostly with incorrect paths - Fixes [#135](https://github.com/glenn2223/vscode-live-sass-compiler/issues/135)
@@ -57,7 +55,7 @@ All notable changes to this project will be documented in this file.
   - Other changes *(nothing user facing)*
 - `postcss` from `8.3.9` to `8.4.5`
   - Various changes *(nothing user facing)*
-- `sass` from `1.37.5` to `1.49.0`
+- `sass` from `1.37.5` to `1.49.8`
   - *Potentially breaking bug fix:* Change the default value of the `separator` parameter for `new SassArgumentList()` to `','` rather than `null`. This matches the API specification.
   - *Potentially breaking bug fix:* Properly parse custom properties in `@supports` conditions. Note that this means that SassScript expressions on the right-hand side of custom property `@supports` queries now need to be interpolated, as per https://sass-lang.com/d/css-vars.
   - *Potentially breaking bug fix:* Fix a bug where `inspect()` was not properly printing nested, empty, bracketed lists.
@@ -445,8 +443,7 @@ The new commands are:
 | 0.0.1 | 11.07.17 | Initial Preview Release with following key features. <br> – Live SASS & SCSS Compile. <br> – Customizable file location of exported CSS. <br> – Customizable exported CSS Style (`expanded`, `compact`, `compressed`, `nested`.)<br> – Quick Status bar control.<br> – Live Reload to browser (`Live Server` extension dependency). |
 
 
-[Unreleased]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.2...HEAD
-[5.2.0-rc.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.1...v5.2.0-rc.1
+[5.2.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.1...v5.2.0
 [5.1.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.0...v5.1.1
 [5.1.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.4...v5.1.0
 [5.0.4]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.3...v5.0.4
