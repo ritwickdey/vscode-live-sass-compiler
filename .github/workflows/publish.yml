@@ -46,7 +46,7 @@ jobs:
       run: echo ::set-output name=tag::${GITHUB_REF#refs/tags/v}
 
     - name: Install vsce
-      run: npm i vsce -g
+      run: npm i vsce@2.5.3 -g
 
     - name: Package
       run: vsce package --yarn
