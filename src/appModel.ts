@@ -266,13 +266,9 @@ export class AppModel {
     /**
      * Compiles the file that has just been saved
      */
-    async compileOnSave(): Promise<void> {
+    async compileOnSave(textDocument: vscode.TextDocument): Promise<void> {
         try {
-            const currentFile = vscode.window.activeTextEditor?.document.fileName;
-
-            if (!currentFile) {
-                return;
-            }
+            const currentFile = textDocument.fileName;
 
             const workspaceFolder = AppModel.getWorkspaceFolder(currentFile),
                 sassFileType = this.confirmSassType(currentFile, workspaceFolder);

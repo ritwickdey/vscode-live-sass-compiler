@@ -169,12 +169,12 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
                     await Helper.updateOutputLogLevel(OutputLevel.Critical);
                 }
             ),
-            disposableOnDidSave = vscode.workspace.onDidSaveTextDocument(async () => {
+            disposableOnDidSave = vscode.workspace.onDidSaveTextDocument(async (textDocument) => {
                 OutputWindow.Show(OutputLevel.Trace, 'VS Code event: "onDidSaveTextDocument"');
 
                 // TODO: ADD - once autoprefixer can stop caching browserslist
                 //await appModel.browserslistChecks();
-                await appModel.compileOnSave();
+                await appModel.compileOnSave(textDocument);
             });
 
         context.subscriptions.push(
