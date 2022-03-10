@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
   
 ### Other
 - Document changes to reflect the changes made in this release
+- Showed correct message for disabling autoprefix setting (was `null`, supposed to be `false`)
 
 ## [5.2.0] - 2022-02-21
 
