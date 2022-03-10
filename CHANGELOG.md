@@ -22,6 +22,16 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [5.2.1] - 2022-03-10
+
+### Added
+- Made changes for easier migration from the original extension - Closes [#159](https://github.com/glenn2223/vscode-live-sass-compiler/issues/159)
+  - Re-added `showOutputWindow` as a deprecated setting. Then when `false` is provided it only outputs at `Warning` and above
+  - Allowed `null` in the `autoprefixer` setting. This works the same as providing `false`
+  
+### Other
+- Document changes to reflect the changes made in this release
+
 ## [5.2.0] - 2022-02-21
 
 ### Added

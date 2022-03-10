@@ -261,10 +261,11 @@
                 "liveSassCompile.settings.autoprefix": {
                     "type": [
                         "array",
-                        "boolean"
+                        "boolean",
+                        "null"
                     ],
                     "default": "defaults",
-                    "description": "Automatically add vendor prefixes to unsupported CSS properties (e. g. transform -> -ms-transform). Specify what browsers to target with an array of strings (uses [Browserslist](https://github.com/ai/browserslist)). Pass `null` to turn off.",
+                    "description": "Automatically add vendor prefixes to unsupported CSS properties (e. g. transform -> -ms-transform). Specify what browsers to target with an array of strings (uses [Browserslist](https://github.com/ai/browserslist)). Pass `false` to turn off.",
                     "items": {
                         "type": "string"
                     },
@@ -292,6 +293,15 @@
                     ],
                     "default": "Information",
                     "description": "Set the level of logging that is recorded and shown to you.\nDefault is `Information`"
+                },
+                "liveSassCompile.settings.showOutputWindow": {
+                    "type": [
+                        "bool",
+                        "null"
+                    ],
+                    "deprecationMessage": "Please use showOutputWindowOn instead",
+                    "default": null,
+                    "description": "Backwards compatible setting for those migrating from the original extension"
                 },
                 "liveSassCompile.settings.forceBaseDirectory": {
                     "type": [

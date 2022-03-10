@@ -39,8 +39,13 @@ export class Helper {
                 return OutputLevel.Critical;
 
             case "Information":
-            default:
-                return OutputLevel.Information;
+            default: {
+                const oldSetting = this.configSettings().get("showOutputWindow") as boolean | null;
+
+                return oldSetting == false
+                    ? OutputLevel.Warning
+                    : OutputLevel.Information;
+            }
         }
     }
 

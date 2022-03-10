@@ -194,6 +194,8 @@ Autoprefix unsupported CSS properties (e.g. `transform` will also add `-ms-trans
 
     If neither of these are found then Autoprefixer will use `"defaults"`
 
+**Note:** for backwards compatibility with the original extension `null` is permitted. This has the same result as providing `false`
+
 ---
 
 ### liveSassCompile.settings.showOutputWindowOn
@@ -231,6 +233,18 @@ Set the logging level at which errors will be shown in the output window. *There
   - A lot of sub-process by sub-process details of progress
 
 </details>
+
+---
+
+### liveSassCompile.settings.showOutputWindow
+>ℹ This setting is deprecated in favour of `showOutputWindowOn`. However, it will likely never be removed
+
+This setting exists for backwards compatibility with the original extension
+
+When `true` the extension will output all `Information` level messages (from above setting). When `false` it will report all `Warning` level messages (from above setting).
+
+**Type:** `boolean?`
+**Default:** `null`
 
 ---
 
