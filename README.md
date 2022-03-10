@@ -1,4 +1,14 @@
-_[I'm sorry but I'm now super busy, If you want to be a maintainer of the project please feel me to contact me! You've to be passionate about programming]_
+
+-------
+❗IMPORTANT: This extenison has been deprecated.
+
+Please install this [extension](https://marketplace.visualstudio.com/items?itemName=glenn2223.live-sass). 
+
+Maintained by [Glenn](https://github.com/glenn2223). 
+A big thank you to [Glenn](https://github.com/glenn2223).  
+Repo: https://github.com/glenn2223/vscode-live-sass-compiler
+
+-----
 
 # Live Sass Compiler
 
