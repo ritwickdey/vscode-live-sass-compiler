@@ -1324,12 +1324,13 @@ export class AppModel {
 
     private static getWorkspaceFolder(filePath: string) {
         const workspaceFolder = vscode.workspace.getWorkspaceFolder(vscode.Uri.file(filePath));
+        const filename = filePath.toLowerCase();
 
         if (workspaceFolder) {
             OutputWindow.Show(OutputLevel.Trace, "Found the workspace folder", [
                 `Workspace Name: ${workspaceFolder.name}`,
             ]);
-        } else {
+        } else if (filename.endsWith(".sass") || filename.endsWith(".scss")) {
             OutputWindow.Show(OutputLevel.Warning, "Warning: File is not in a workspace", [
                 `Path: ${filePath}`,
             ]);

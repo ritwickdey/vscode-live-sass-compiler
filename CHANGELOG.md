@@ -22,7 +22,10 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [5.2.1] - 2022-03-10
+## [5.2.1] - 2022-03-11
+
+### Fixed
+- Stopped outputting a workspace warning when saving a none SASS file - Closes [#160](https://github.com/glenn2223/vscode-live-sass-compiler/issues/160)
 
 ### Added
 - Made changes for easier migration from the original extension - Closes [#159](https://github.com/glenn2223/vscode-live-sass-compiler/issues/159)
