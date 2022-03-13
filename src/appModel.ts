@@ -406,12 +406,13 @@ export class AppModel {
         ]);
 
         const generateMap = Helper.getConfigSettings<boolean>("generateMap", folder),
-            autoprefixerTarget = Helper.getConfigSettings<Array<string> | boolean>(
-                "autoprefix",
-                folder
-            ),
             compileResult = SassHelper.compileOne(sassPath, targetCssUri, mapFileUri, options),
             promises: Promise<IFileResolver>[] = [];
+        
+        let autoprefixerTarget = Helper.getConfigSettings<Array<string> | boolean | null>(
+                "autoprefix",
+                folder
+            );
 
         if (compileResult.errorString !== null) {
             OutputWindow.Show(OutputLevel.Error, "Compilation Error", [compileResult.errorString]);
@@ -433,6 +434,10 @@ export class AppModel {
             StatusBarUi.compilationError(this.isWatching);
 
             return false;
+        }
+
+        if (autoprefixerTarget === null) {
+            autoprefixerTarget = false;
         }
 
         if (autoprefixerTarget != false) {
@@ -1319,12 +1324,13 @@ export class AppModel {
 
     private static getWorkspaceFolder(filePath: string) {
         const workspaceFolder = vscode.workspace.getWorkspaceFolder(vscode.Uri.file(filePath));
+        const filename = filePath.toLowerCase();
 
         if (workspaceFolder) {
             OutputWindow.Show(OutputLevel.Trace, "Found the workspace folder", [
                 `Workspace Name: ${workspaceFolder.name}`,
             ]);
-        } else {
+        } else if (filename.endsWith(".sass") || filename.endsWith(".scss")) {
             OutputWindow.Show(OutputLevel.Warning, "Warning: File is not in a workspace", [
                 `Path: ${filePath}`,
             ]);
