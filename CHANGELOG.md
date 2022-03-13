@@ -22,7 +22,7 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [5.2.1] - 2022-03-13
+## [5.3.0] - 2022-03-13
 
 ### Fixed
 - Stopped outputting a workspace warning when saving a none SASS file - Closes [#160](https://github.com/glenn2223/vscode-live-sass-compiler/issues/160)
@@ -457,6 +457,7 @@ The new commands are:
 | 0.0.1 | 11.07.17 | Initial Preview Release with following key features. <br> – Live SASS & SCSS Compile. <br> – Customizable file location of exported CSS. <br> – Customizable exported CSS Style (`expanded`, `compact`, `compressed`, `nested`.)<br> – Quick Status bar control.<br> – Live Reload to browser (`Live Server` extension dependency). |
 
 
+[5.3.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.2.0...v5.3.0
 [5.2.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.1...v5.2.0
 [5.1.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.0...v5.1.1
 [5.1.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.0.4...v5.1.0
