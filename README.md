@@ -48,6 +48,12 @@ All settings are now listed here  [Settings Docs](./docs/settings.md).
 ## FAQ
 *All FAQs are now listed here [FAQ Docs](./docs/faqs.md)*
 
+* **`liveSassCompile.settings.watchOnLaunch` :** Set this to `true` if you want Live Sass Compiler to automatically start watching your .sass or .scss file when you open an applicable workspace.
+    * *Default value is `false`*
+
+    <hr>
+
+
 ## Extension Dependency 
 This extension has dependency on _[Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)_ extension for live browser reload.
 
