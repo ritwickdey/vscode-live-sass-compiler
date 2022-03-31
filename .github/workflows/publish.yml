@@ -69,6 +69,7 @@ jobs:
     - name: Upload asset
       uses: softprops/action-gh-release@v0.1.14
       with:
-        files: /*.vsix
+        files: |
+          **/*.vsix
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
