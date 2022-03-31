@@ -22,6 +22,25 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [5.3.1] - 2022-03-31
+
+### Updated
+- `autoprefixer` from `10.4.2` to `10.4.4`
+  - Other changes *(nothing user facing)*
+- `postcss` from `8.4.5` to `8.4.12`
+  - Various changes *(nothing user facing)*
+- `sass` from `1.49.8` to `1.49.10`
+  - Quiet deps mode now silences compiler warnings in mixins and functions that are defined in dependencies even if they're invoked from application stylesheets.
+  - In expanded mode, Sass will now emit colors using `rgb()`, `rbga()`, `hsl()`, and `hsla()` function notation if they were defined using the corresponding notation. As per our browser support policy, this change was only done once 95% of browsers were confirmed to support this output format, and so is not considered a breaking change.  
+    _Note that this output format is intended for human readability and not for interoperability with other tools. As always, Sass targets the CSS specification, and any tool that consumes Sass's output should parse all colors that are supported by the CSS spec._
+  - Fix a bug in which a color written using the four- or eight-digit hex format could be emitted as a hex color rather than a format with higher browser compatibility.
+  - Calculations are no longer simplified within supports declarations
+  - Various changes *(nothing user facing)*
+- Various dev dependency updates *(nothing user facing)*
+
+### Other
+- Tweaked the publish action to allow easier publishing
+
 ## [5.3.0] - 2022-03-13
 
 ### Fixed
@@ -457,6 +476,7 @@ The new commands are:
 | 0.0.1 | 11.07.17 | Initial Preview Release with following key features. <br> – Live SASS & SCSS Compile. <br> – Customizable file location of exported CSS. <br> – Customizable exported CSS Style (`expanded`, `compact`, `compressed`, `nested`.)<br> – Quick Status bar control.<br> – Live Reload to browser (`Live Server` extension dependency). |
 
 
+[5.3.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.3.0...v5.3.1
 [5.3.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.2.0...v5.3.0
 [5.2.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.1...v5.2.0
 [5.1.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.0...v5.1.1

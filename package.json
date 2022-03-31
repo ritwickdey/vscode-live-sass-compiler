@@ -2,7 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime.",
-    "version": "5.3.0",
+    "version": "5.3.1",
     "publisher": "glenn2223",
     "author": {
         "name": "Glenn Marks",
@@ -336,11 +336,11 @@
         "lint": "eslint -c .eslintrc.js --ext .ts ./src/"
     },
     "dependencies": {
-        "autoprefixer": "^10.4.2",
+        "autoprefixer": "^10.4.4",
         "fdir": "^5.2.0",
         "picomatch": "^2.3.1",
-        "postcss": "^8.4.6",
-        "sass": "^1.49.8"
+        "postcss": "^8.4.12",
+        "sass": "^1.49.10"
     },
     "devDependencies": {
         "@types/glob": "^7.2.0",
@@ -348,19 +348,19 @@
         "@types/node": "^15.14.9",
         "@types/picomatch": "^2.3.0",
         "@types/vscode": "^1.52.0",
-        "@typescript-eslint/eslint-plugin": "^5.12.1",
-        "@typescript-eslint/parser": "^5.12.1",
-        "eslint": "^8.9.0",
-        "mocha": "^9.2.1",
+        "@typescript-eslint/eslint-plugin": "^5.17.0",
+        "@typescript-eslint/parser": "^5.17.0",
+        "eslint": "^8.12.0",
+        "mocha": "^9.2.2",
         "terser-webpack-plugin": "^5.3.1",
-        "ts-loader": "^9.2.6",
-        "typescript": "^4.5.5",
+        "ts-loader": "^9.2.8",
+        "typescript": "^4.6.3",
         "vscode-test": "^1.6.1",
-        "webpack": "^5.69.1",
+        "webpack": "^5.70.0",
         "webpack-cli": "^4.9.2"
     },
     "announcement": {
-        "onVersion": "5.3.0",
-        "message": "SassCompiler v5.3.0: Bug fixes and easier migration from original extension"
+        "onVersion": "5.3.1",
+        "message": "SassCompiler v5.3.1: Dependency bumps"
     }
 }
