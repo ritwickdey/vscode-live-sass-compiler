@@ -12,14 +12,15 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
-        include:
-          - os: macos-latest
-            target: darwin-x64 darwin-arm64
-          - os: ubuntu-latest
-            target: linux-x64 linux-arm64 linux-armhf alpine-x64 alpine-arm64
-          - os: windows-latest
-            target: win32-x64 win32-ia32 win32-arm64
+        os: [ubuntu-latest]
+#        os: [macos-latest, ubuntu-latest, windows-latest]
+#        include:
+#          - os: macos-latest
+#            target: darwin-x64 darwin-arm64
+#          - os: ubuntu-latest
+#            target: linux-x64 linux-arm64 linux-armhf alpine-x64 alpine-arm64
+#          - os: windows-latest
+#            target: win32-x64 win32-ia32 win32-arm64
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout
@@ -47,11 +48,11 @@ jobs:
 
     - name: Package - vsce (for asset upload)
       if: success()
-      run: vsce package --target ${{ matrix.target }}
+      run: vsce package #--target ${{ matrix.target }}
 
     - name: Publish - vsce
       if: success() && !github.event.release.prerelease
-      run: vsce publish --target ${{ matrix.target }}
+      run: vsce publish #--target ${{ matrix.target }}
       env:
         VSCE_PAT: ${{ secrets.VSCE_PAT }}
 
@@ -68,7 +69,6 @@ jobs:
     - name: Upload asset
       uses: softprops/action-gh-release@v0.1.14
       with:
-        files: |
-          **.vsix
+        files: /*.vsix
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
