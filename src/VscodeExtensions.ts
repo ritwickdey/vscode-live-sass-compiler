@@ -87,7 +87,9 @@ export class ErrorLogger {
 
         await env.openExternal(
             Uri.parse(
-                "https://github.com/glenn2223/vscode-live-sass-compiler/issues/new?title=Unexpected+Error%3A+SUMMARY+HERE&body=%3C%21--+Highlight+this+line+and+then+paste+(Ctrl+%2B+V+%7C+Command+%2B+V)+--%3E"
+                "https://github.com/glenn2223/vscode-live-sass-compiler/issues/new" 
+                    + `?title=${lastError === null ? "Issue+Report" : "Unexpected+Error"}%3A+SUMMARY+HERE`
+                    + "&body=%3C%21--+Highlight+this+line+and+then+paste+(Ctrl+%2B+V+%7C+Command+%2B+V)+--%3E"
             )
         );
 
