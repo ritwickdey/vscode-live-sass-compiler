@@ -2,7 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime.",
-    "version": "5.3.1",
+    "version": "5.4.0-alpha.2",
     "publisher": "glenn2223",
     "author": {
         "name": "Glenn Marks",
@@ -313,6 +313,12 @@
                     "patternErrorMessage": "Must start with a path separator (`/` or `\\`) and must not end with one",
                     "description": "Defines a subdirectory to search from (no directory outside of this will be search)",
                     "scope": "resource"
+                },
+                "liveSassCompile.settings.rootIsWorkspace": {
+                    "type": "bool",
+                    "default": false,
+                    "description": "A leading slash is relative to the workspace, not the drive (e.g C://)",
+                    "scope": "resource"
                 }
             }
         }
@@ -356,11 +362,10 @@
         "ts-loader": "^9.2.8",
         "typescript": "^4.6.3",
         "vscode-test": "^1.6.1",
-        "webpack": "^5.70.0",
-        "webpack-cli": "^4.9.2"
+        "webpack": "^5.70.0"
     },
     "announcement": {
-        "onVersion": "5.3.1",
-        "message": "SassCompiler v5.3.1: Dependency bumps"
+        "onVersion": "5.4.0-alpha.2",
+        "message": "SassCompiler v5.4-alpha.2: New `rootIsWorkspace` option"
     }
 }
