@@ -1,10 +1,22 @@
 import { Memento, extensions, window, commands, Uri } from "vscode";
+import { Helper } from "../helper";
 import { OutputLevel, OutputWindow } from "../VscodeExtensions";
 
 const SETUP_STRING = "liveSassCompiler.setup.version";
 
 export async function checkNewAnnouncement(memento: Memento): Promise<void> {
-    OutputWindow.Show(OutputLevel.Trace, "Checking for an unread announcement");
+    OutputWindow.Show(OutputLevel.Trace, "Call to check for new announcement");
+
+    const showAnnoucement = Helper.getConfigSettings<boolean>("showAnnouncements");
+
+    OutputWindow.Show(OutputLevel.Trace, "Checking `showAnnouncements` setting");
+
+    if (showAnnoucement !== true) {
+        OutputWindow.Show(OutputLevel.Trace, "`showAnnouncements` not true, exiting announcemnet check");
+        return;
+    }
+
+    OutputWindow.Show(OutputLevel.Trace, "`showAnnouncements` is true so checking for an unread announcement");
 
     const packageJSON = extensions.getExtension("glenn2223.live-sass")!.packageJSON;
     const announment = packageJSON.announcement;
@@ -29,7 +41,7 @@ export async function checkNewAnnouncement(memento: Memento): Promise<void> {
             choice = await window.showInformationMessage(announment.message, showMore);
 
         if (choice === showMore) {
-            const url = announment.url || "https://github.com/glenn2223/vscode-live-sass-compiler/";
+            const url = announment.url || "https://github.com/glenn2223/vscode-live-sass-compiler/releases";
             commands.executeCommand("vscode.open", Uri.parse(url));
         }
     } else {
