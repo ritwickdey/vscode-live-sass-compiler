@@ -280,6 +280,25 @@ If the path is wrong then nothing will be found nor compiled
 
 >**⚠ This setting effects the root path for `includeItems` and `excludeList`**. So, a setting of `/Assets` means that `includeItems` and `excludeList` are both relative to `/Assets` and not `/` (the root of the workspace folder)
 
+---
+
+### liveSassCompile.settings.rootIsWorkspace
+>ℹ This setting can vary between workspace folders - [read more][Multi-rootFAQ]
+
+Tells the compiler that a leading slash is relative to the workspace root rather than the drive root.
+
+**Type:** `boolean`  
+**Default:** `false`
+
+---
+
+### liveSassCompile.settings.showAnnouncements
+
+Stop announcements each time a new version is installed.
+
+**Type:** `boolean`  
+**Default:** `true`
+
 ## Commands
 To use any command, start by pressing <kbd>F1</kbd> OR (<kbd>Ctrl</kbd>/<kbd>Cmd</kbd>) + <kbd>Shift</kbd> + <kbd>P</kbd>. You can then enter a `name` for any of the commands below.
 
