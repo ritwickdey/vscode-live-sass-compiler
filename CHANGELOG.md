@@ -22,6 +22,36 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [5.4.0] - 2022-05-16
+
+### Added 
+- New `liveSassCompile.settings.rootIsWorkspace` setting
+  - Treat a leading slash as relative to the workspace, not the drive root
+- New `liveSassCompile.settings.showAnnouncements` setting
+  - Don't show announcement when a new version is installed
+- Reference a node module with a leading tilde `~`
+  - Instead of trailing back to your node modules folder you can now reference one directly with `~myModule` or `~/myModule`
+
+### Changes
+- When running the `liveSass.command.createIssue` command, the issue title reflects whether a known error occurred or not
+- Details the under the bonnet workings - Closes [#176](https://github.com/glenn2223/vscode-live-sass-compiler/issues/176
+- Simplified read me
+- Documented new settings
+- Added our [open source commitment](./README.md#our-open-source-commitment))
+
+### Updated
+- `autoprefixer` from `10.4.4` to `10.4.7`
+  - Fixed `print-color-adjust` support
+  - Other changes *(nothing user facing)*
+- `postcss` from `8.4.12` to `8.4.14`
+  - Other changes *(nothing user facing)*
+- `sass` from `1.49.10` to `1.51.0`
+  - `@extend` now treats `:where()` the same as `:is()`
+  - **Potentially breaking change:** Change the order of maps returned by `map.deep-merge()` to match those returned b`y map.merge()`. All keys that appeared in the first map will now be listed first in the same order they appeared in that map, followed by any new keys added from the second map.
+  - Other changes *(nothing user facing)*
+- Various dev dependency updates *(nothing user facing)*
+
+
 ## [5.3.1] - 2022-03-31
 
 ### Updated
@@ -476,6 +506,7 @@ The new commands are:
 | 0.0.1 | 11.07.17 | Initial Preview Release with following key features. <br> – Live SASS & SCSS Compile. <br> – Customizable file location of exported CSS. <br> – Customizable exported CSS Style (`expanded`, `compact`, `compressed`, `nested`.)<br> – Quick Status bar control.<br> – Live Reload to browser (`Live Server` extension dependency). |
 
 
+[5.4.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.3.1...v5.4.0
 [5.3.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.3.0...v5.3.1
 [5.3.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.2.0...v5.3.0
 [5.2.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.1.1...v5.2.0
