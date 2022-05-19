@@ -2,6 +2,9 @@ import { Helper, IFormat } from "./helper";
 import { OutputWindow, OutputLevel } from "./VscodeExtensions";
 import { LegacyException } from "sass";
 import * as compiler from "sass";
+import { workspace } from "vscode";
+import { existsSync } from "fs";
+import path from "path";
 
 export class SassHelper {
     static toSassOptions(format: IFormat): compiler.LegacyFileOptions<"sync"> {
@@ -11,6 +14,50 @@ export class SassHelper {
             linefeed: format.linefeed,
             indentType: format.indentType,
             indentWidth: format.indentWidth,
+            importer: (url) => {
+                if (workspace.workspaceFolders) {
+                    const normalisedUrl = url.replace(/\\/g, "/"),
+                        urlParts = normalisedUrl
+                            .substring(1)
+                            .split("/")
+                            .filter((x) => x.length > 0);
+
+                    if (normalisedUrl.startsWith("~") && normalisedUrl.indexOf("/") > -1) {
+                        for (let i = 0; i < workspace.workspaceFolders.length; i++) {
+                            const workingPath = [
+                                workspace.workspaceFolders[i].uri.fsPath,
+                                "node_modules",
+                            ]
+                                .concat(...urlParts.slice(0, -1))
+                                .join("/");
+
+                            if (existsSync(workingPath)) {
+                                return {
+                                    file: workingPath + path.sep + urlParts.slice(1).join(path.sep),
+                                };
+                            }
+                        }
+                    } else if (normalisedUrl.startsWith("/")) {
+                        for (let i = 0; i < workspace.workspaceFolders.length; i++) {
+                            const folder = workspace.workspaceFolders[i],
+                                rootIsWorkspace = Helper.getConfigSettings<boolean>("rootIsWorkspace", folder);
+
+                            if (rootIsWorkspace) {
+                                const filePath = [
+                                    folder.uri.fsPath,
+                                    normalisedUrl.substring(1),
+                                ].join("/");
+
+                                if (existsSync(filePath.substring(0, filePath.lastIndexOf("/")))) {
+                                    return { file: filePath };
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return null;
+            },
         };
     }
 

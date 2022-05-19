@@ -2,7 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime.",
-    "version": "5.3.1",
+    "version": "5.4.0",
     "publisher": "glenn2223",
     "author": {
         "name": "Glenn Marks",
@@ -313,6 +313,17 @@
                     "patternErrorMessage": "Must start with a path separator (`/` or `\\`) and must not end with one",
                     "description": "Defines a subdirectory to search from (no directory outside of this will be search)",
                     "scope": "resource"
+                },
+                "liveSassCompile.settings.rootIsWorkspace": {
+                    "type": "bool",
+                    "default": false,
+                    "description": "A leading slash is relative to the workspace, not the drive (e.g C://)",
+                    "scope": "resource"
+                },
+                "liveSassCompile.settings.showAnnouncements": {
+                    "type": "bool",
+                    "default": true,
+                    "description": "Show the announcement whenever a new version is installed"
                 }
             }
         }
@@ -336,31 +347,30 @@
         "lint": "eslint -c .eslintrc.js --ext .ts ./src/"
     },
     "dependencies": {
-        "autoprefixer": "^10.4.4",
+        "autoprefixer": "^10.4.7",
         "fdir": "^5.2.0",
         "picomatch": "^2.3.1",
-        "postcss": "^8.4.12",
-        "sass": "^1.49.10"
+        "postcss": "^8.4.14",
+        "sass": "^1.51.0"
     },
     "devDependencies": {
         "@types/glob": "^7.2.0",
         "@types/mocha": "^9.1.0",
-        "@types/node": "^15.14.9",
+        "@types/node": "^17.0.35",
         "@types/picomatch": "^2.3.0",
         "@types/vscode": "^1.52.0",
-        "@typescript-eslint/eslint-plugin": "^5.17.0",
-        "@typescript-eslint/parser": "^5.17.0",
+        "@typescript-eslint/eslint-plugin": "^5.25.0",
+        "@typescript-eslint/parser": "^5.25.0",
         "eslint": "^8.12.0",
-        "mocha": "^9.2.2",
+        "mocha": "^10.0.0",
         "terser-webpack-plugin": "^5.3.1",
         "ts-loader": "^9.2.8",
         "typescript": "^4.6.3",
         "vscode-test": "^1.6.1",
-        "webpack": "^5.70.0",
-        "webpack-cli": "^4.9.2"
+        "webpack": "^5.70.0"
     },
     "announcement": {
-        "onVersion": "5.3.1",
-        "message": "SassCompiler v5.3.1: Dependency bumps"
+        "onVersion": "5.4.0",
+        "message": "SassCompiler v5.4.0: new settings and feature. Doc changes and dependancy bumps"
     }
 }
