@@ -1,13 +1,13 @@
 # Settings & Commands
 
-## Contents
+**Contents**
 - [Settings](#Settings)
 - [Commands](#Commands)
 - [Notes](#Notes)
 
-## Settings
+# Settings
 
-### liveSassCompile.settings.formats
+## liveSassCompile.settings.formats
 >ℹ This setting can vary between workspace folders - [read more][Multi-rootFAQ]
 
 An array of formats. Allows you save to multiple locations, with a customisable format and extension for each
@@ -17,11 +17,15 @@ Properties | Type | Default | Notes
 format | `expanded` OR `compressed` | `expanded` | The output style of the generated file
 extensionName | `.css` OR `.min.css` | `.css` | The extension appended to the outputted file
 savePath | `string?` | `null` | See [save path notes]
-savePathSegmentKeys | `string[]?` | `null` | See [save path notes]
-savePathReplaceSegmentsWith | `string?` | `null` | See [save path notes]
-linefeed | `cr` OR `crlf` OR `lf` OR `lfcr` | `lf` | The linefeed terminator to use
-indentType | `space` OR `tab` | `space` | The indentation to use for the `expanded` format
-indentWidth | `number` | `2` | The indentation width used for the `expanded` format
+savePathReplacementPairs | `Record<string, string>?` | `null` | See [save path notes]
+_⚠ savePathSegmentKeys_ | `string[]?` | `null` | See [save path notes]
+_⚠savePathReplaceSegmentsWith_ | `string?` | `null` | See [save path notes]
+<sup>Ŧ</sup>_linefeed_ | `cr` OR `crlf` OR `lf` OR `lfcr` | `lf` | The linefeed terminator to use
+<sup>Ŧ</sup>_indentType_ | `space` OR `tab` | `space` | The indentation to use for the `expanded` format
+<sup>Ŧ</sup>_indentWidth+ | `number` | `2` | The indentation width used for the `expanded` format
+
+<small>⚠ These will be removed in the next major release</small>  
+<small><sup>Ŧ</sup> These will be removed in SASS v2.0</small>
 
 <details>
 <summary>Examples</summary>
@@ -35,8 +39,7 @@ indentWidth | `number` | `2` | The indentation width used for the `expanded` for
 
         // null for all three -> denotes the same path as the SASS file
         "savePath": null,
-        "savePathSegmentKeys": null,
-        "savePathReplaceSegmentsWith": null
+        "savePathReplacementPairs": null
     },
     // You can add more
     {
@@ -60,24 +63,22 @@ indentWidth | `number` | `2` | The indentation width used for the `expanded` for
         "format": "compressed",
         "extensionName": ".min.css",
 
-        // "/Assets/SCSS/main.scss" -> translates to "/Assets/Style/main.css"
-        // "/Assets/_SASS/main.sass" -> translates to "/Assets/Style/main.css"
-        "savePathSegmentKeys": [
-            "SCSS",
-            "_SASS"
-        ],
-        "savePathReplaceSegmentsWith": "Style",
-    // Segment replacement ONLY applied if "savePath" is null
+        // "/Assets/SCSS/main.scss" => "/Assets/Style/main.css"
+        // "/Assets/_SASS/main.sass" => "/Assets/Style/main.css"
+        "savePathReplacementPairs": {
+            "/SCSS/": "/Style/",
+            "/_SASS/": "/Style/"
+        }
+    // Segment replacement can work with relative `savePath`s
     {
         "format": "compressed",
         "extensionName": ".min.css",
 
-        // "/Assets/SCSS/main.scss" -> translates to "/dist/css/main.css" NOT "/Assets/Style/main.css"
-        "savePath": "/dist/css",
-        "savePathSegmentKeys": [
-            "SCSS"
-        ],
-        "savePathReplaceSegmentsWith": "Style"
+        // "/src/sass/Homepage/AHH/main.scss" => "/dist/css/Homepage/main.css"
+        "savePath": "~/..",
+        "savePathReplacementPairs": {
+            "/src/sass": "/dist/css/"
+        }
     }
 ]
 ```
@@ -86,7 +87,7 @@ indentWidth | `number` | `2` | The indentation width used for the `expanded` for
 
 ---
 
-### liveSassCompile.settings.excludeList
+## liveSassCompile.settings.excludeList
 >ℹ This setting can vary between workspace folders - [read more][Multi-rootFAQ]
 
 Use an array of various glob patterns to exclude files or entire folders. All matching SASS/SCSS files or matching folders will be ignored.
@@ -131,7 +132,7 @@ Match alphas, alpha numerics, words and [more][Full POSIX List]
 
 ---
 
-### liveSassCompile.settings.includeItems
+## liveSassCompile.settings.includeItems
 >ℹ This setting can vary between workspace folders - [read more][Multi-rootFAQ]
 
 Process only these specified files. Useful for when you deal with only a few sass files.
@@ -155,7 +156,7 @@ Process only these specified files. Useful for when you deal with only a few sas
 
 ---
 
-### liveSassCompile.settings.partialsList
+## liveSassCompile.settings.partialsList
 >ℹ This setting can vary between workspace folders - [read more][Multi-rootFAQ]
 
 Using glob patterns, specify what files are actually partials - or what folders contain them
@@ -168,7 +169,7 @@ Using glob patterns, specify what files are actually partials - or what folders 
 
 ---
 
-### liveSassCompile.settings.generateMap
+## liveSassCompile.settings.generateMap
 >ℹ This setting can vary between workspace folders - [read more][Multi-rootFAQ]
 
 Create a companion map file for each of the compiled files
@@ -178,7 +179,7 @@ Create a companion map file for each of the compiled files
 
 ---
 
-### liveSassCompile.settings.autoprefix
+## liveSassCompile.settings.autoprefix
 >ℹ This setting can vary between workspace folders - [read more][Multi-rootFAQ]
 
 Autoprefix unsupported CSS properties (e.g. `transform` will also add `-ms-transform`). Uses [Browserslist] for browser selection
@@ -198,7 +199,7 @@ Autoprefix unsupported CSS properties (e.g. `transform` will also add `-ms-trans
 
 ---
 
-### liveSassCompile.settings.showOutputWindowOn
+## liveSassCompile.settings.showOutputWindowOn
 Set the logging level at which errors will be shown in the output window. *There is also a [command](#livesasscommandopenoutputwindow)*.
 
 **Type:** `Trace`, `Debug`, `Information`, `Warning`, `Error` or `None`  
@@ -236,7 +237,7 @@ Set the logging level at which errors will be shown in the output window. *There
 
 ---
 
-### liveSassCompile.settings.showOutputWindow
+## liveSassCompile.settings.showOutputWindow
 >ℹ This setting is deprecated in favour of `showOutputWindowOn`. However, it will likely never be removed
 
 This setting exists for backwards compatibility with the original extension
@@ -248,7 +249,7 @@ When `true` the extension will output all `Information` level messages (from abo
 
 ---
 
-### liveSassCompile.settings.watchOnLaunch
+## liveSassCompile.settings.watchOnLaunch
 Defines whether Live Sass should watch immediately over waiting to be started 
 
 **Type:** `boolean`  
@@ -256,7 +257,7 @@ Defines whether Live Sass should watch immediately over waiting to be started
 
 ---
 
-### liveSassCompile.settings.compileOnWatch
+## liveSassCompile.settings.compileOnWatch
 Defines whether Live Sass should compile all files when it starts watching
 
 **Type:** `boolean`  
@@ -264,7 +265,7 @@ Defines whether Live Sass should compile all files when it starts watching
 
 ---
 
-### liveSassCompile.settings.forceBaseDirectory
+## liveSassCompile.settings.forceBaseDirectory
 >ℹ This setting can vary between workspace folders - [read more][Multi-rootFAQ]
 
 Defines a subdirectory to search from. Add a small performance gain by targeting just your SASS folder.
@@ -282,7 +283,7 @@ If the path is wrong then nothing will be found nor compiled
 
 ---
 
-### liveSassCompile.settings.rootIsWorkspace
+## liveSassCompile.settings.rootIsWorkspace
 >ℹ This setting can vary between workspace folders - [read more][Multi-rootFAQ]
 
 Tells the compiler that a leading slash is relative to the workspace root rather than the drive root.
@@ -292,73 +293,73 @@ Tells the compiler that a leading slash is relative to the workspace root rather
 
 ---
 
-### liveSassCompile.settings.showAnnouncements
+## liveSassCompile.settings.showAnnouncements
 
 Stop announcements each time a new version is installed.
 
 **Type:** `boolean`  
 **Default:** `true`
 
-## Commands
+# Commands
 To use any command, start by pressing <kbd>F1</kbd> OR (<kbd>Ctrl</kbd>/<kbd>Cmd</kbd>) + <kbd>Shift</kbd> + <kbd>P</kbd>. You can then enter a `name` for any of the commands below.
 
-### liveSass.command.watchMySass
+## liveSass.command.watchMySass
 Start watching for SASS/SCSS changes
 
 **Names:** `Live SASS: Watch Sass`, `liveSass.command.watchMySass`
 
 ---
 
-### liveSass.command.donotWatchMySass
+## liveSass.command.donotWatchMySass
 Stop watching for SASS/SCSS changes
 
 **Names:** `Live SASS: Stop Watching`, `liveSass.command.donotWatchMySass`
 
 ---
 
-### liveSass.command.compileCurrentSass
+## liveSass.command.compileCurrentSass
 Compile the currently opened SASS/SCSS file
 
 **Names:** `Live SASS: Compile Current Sass File`, `liveSass.command.compileCurrentSass`
 
 ---
 
-### liveSass.command.oneTimeCompileSass
+## liveSass.command.oneTimeCompileSass
 Perform a one time compilation of all SASS/SCSS files, regardless of whether we're watching or not
 
 **Names:** `Live SASS: Compile Sass - Without Watch Mode`, `liveSass.command.oneTimeCompileSass`
 
 ---
 
-### liveSass.command.openOutputWindow
+## liveSass.command.openOutputWindow
 Open the Live SASS output window
 
 **Names:** `Live SASS: Open Live Sass Output Window`, `liveSass.command.openOutputWindow`
 
 ---
 
-### liveSass.command.createIssue
+## liveSass.command.createIssue
 When an alert pops up in the bottom right corner, you can report that issue directly by running this command. You can use it for general errors, however it will not include details of your specific issue, you will have to include the details yourself
 
 **Names:** `Live SASS: Report an issue`, `liveSass.command.createIssue`
 
 ---
 
-### liveSass.command.debugInclusion
+## liveSass.command.debugInclusion
 Check if the current file will be included, based on your current settings. A good start to debug any glob pattern issues that might stop the current file from compiling
 
 **Names:** `Live SASS: Check file will be included`, `liveSass.command.debugInclusion`
 
 ---
 
-### liveSass.command.debugFileList
+## liveSass.command.debugFileList
 Get a full list of files that are included, any partials that will trigger compilation of all files and also any excluded files. Helpful to debug any glob pattern issue's you're having
 
 **Names:** `Live SASS: Get all included files`, `liveSass.command.debugFileList`
 
 ---
 
-### liveSass.command.showOutputOn...
+## liveSass.command.showOutputOn...
 This heading actually applies to 6 different commands. However, they all share the same prefix. I have highlighted each command in the list below.
 
 Applying this command will change the output logging level that is used by this extension.
@@ -376,9 +377,9 @@ Applying this command will change the output logging level that is used by this 
 - **None:**
   - **Names:** `Live SASS: Show Output On: None`, `liveSass.command.showOutputOn.none`
 
-## Notes
+# Notes
 
-### Multi-root workspaces
+## Multi-root workspaces
 Settings that can be applied at a workspace level and at root level will have a heading like the one below  
 >ℹ This setting can vary between workspace folders - [read more][Multi-rootFAQ]
 
@@ -387,14 +388,16 @@ Not sure what a multi-root workspace is, then [why not read more][multi-root wor
 To summarise; these settings can be applied at the `.code-workspace` level .However, they can be overridden by settings in a `\.vscode\settings.json` file in any workspace root folder.  
 For example, if a `.code-workspace` setting is `/src/Sass` but a `settings.json` is `/Assets/Style` then `/Assets/Style` would be used
 
-### Save path notes
+## Save path notes
 The final save path is dependant on three settings: `savePath`, `savePathSegmentKeys` and `savePathReplaceSegmentsWith`. However, `savePath` takes precedence over all three.
 
 - Using `savePath`
   - Starting with `/` or `\` means the path is relative to the workspace root
   - Starting with `~/` or `~\` means that it's relative to the file being processed
-- Using `savePathSegmentKeys` and `savePathReplaceSegmentsWith`
-  - Any `savePathSegmentKeys` that are found will be replaced with the `savePathReplaceSegmentsWith`. The `savePathSegmentKeys` is an exact folder, this means you can not do `"Folder 1/Folder 2"`
+- Using `savePathReplacementPairs`
+  - Any keys that are found will be directly replaced with its' value. To save false matches, I'd recommend starting and ending with a slash
+- Using `savePathSegmentKeys` and `savePathReplaceSegmentsWith` **_(deprecated)_**
+  - Any `savePathSegmentKeys` that are found will be replaced with the `savePathReplaceSegmentsWith`. The `savePathSegmentKeys` is an exact folder, this means `"Folder 1/Folder 2"` will not replace anything
 
 [save path notes]: #save-path-notes
 [Full POSIX List]: https://github.com/micromatch/picomatch#posix-brackets
