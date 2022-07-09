@@ -2,7 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime.",
-    "version": "5.4.0",
+    "version": "5.5.0",
     "publisher": "glenn2223",
     "author": {
         "name": "Glenn Marks",
@@ -115,8 +115,7 @@
                             "format": "expanded",
                             "extensionName": ".css",
                             "savePath": null,
-                            "savePathSegmentKeys": null,
-                            "savePathReplaceSegmentsWith": null
+                            "savePathReplacementPairs": null
                         }
                     ],
                     "minItems": 1,
@@ -151,6 +150,14 @@
                                 "patternErrorMessage": "Must start with any of:\n`/` or `\\` (for workspace root)\n`~/` or `~\\` for relative to the file being processed. Must not end with a path separator (`/` or `\\`)",
                                 "default": null
                             },
+                            "savePathReplacementPairs": {
+                                "description": "A set of key value pairs. When a key is found in the save path it is replaced with the value. (Note: this step happens after savePath has been applied)",
+                                "type": [
+                                    "object",
+                                    "null"
+                                ],
+                                "default": null
+                            },
                             "savePathSegmentKeys": {
                                 "description": "Segment keys that, if found in the file path, will be replaced with `savePathReplaceSegmentsWith`. (Note: Only applied if `savePath` is null).",
                                 "type": [
@@ -160,7 +167,9 @@
                                 "default": null,
                                 "items": {
                                     "type": "string"
-                                }
+                                },
+                                "markdownDeprecationMessage": "**Deprecated**: Please use `liveSassCompile.settings.format[].savePathReplacementPairs` instead.",
+                                "deprecationMessage": "Deprecated: Please use liveSassCompile.settings.format[].savePathReplacementPairs instead."
                             },
                             "savePathReplaceSegmentsWith": {
                                 "description": "The value that will replace any segement keys found in the save path. (Note: Only applied if `savePath` is null).",
@@ -170,7 +179,9 @@
                                 ],
                                 "pattern": "[^\\/]",
                                 "patternErrorMessage": "Must not contain any path separators (`/` or `\\`)",
-                                "default": null
+                                "default": null,
+                                "markdownDeprecationMessage": "**Deprecated**: Please use `liveSassCompile.settings.format[].savePathReplacementPairs` instead.",
+                                "deprecationMessage": "Deprecated: Please use liveSassCompile.settings.format[].savePathReplacementPairs instead."
                             },
                             "linefeed": {
                                 "description": "Choose the linefeed terminator to use in the CSS output",
@@ -181,7 +192,9 @@
                                     "lf",
                                     "lfcr"
                                 ],
-                                "default": "lf"
+                                "default": "lf",
+                                "markdownDeprecationMessage": "**BEWARE**: This setting will be removed in [sass v2.0](https://github.com/sass/dart-sass/issues/1585)",
+                                "deprecationMessage": "BEWARE: This setting will be removed in sass v2.0"
                             },
                             "indentType": {
                                 "description": "Choose the indent type to use in the CSS ouput (for `expanded` formats only)",
@@ -190,14 +203,18 @@
                                     "space",
                                     "tab"
                                 ],
-                                "default": "space"
+                                "default": "space",
+                                "markdownDeprecationMessage": "**BEWARE**: This setting will be removed in [sass v2.0](https://github.com/sass/dart-sass/issues/1585)",
+                                "deprecationMessage": "BEWARE: This setting will be removed in sass v2.0"
                             },
                             "indentWidth": {
                                 "description": "Choose the indent width to use in the CSS ouput (for `expanded` formats only)",
                                 "type": "number",
                                 "default": 2,
                                 "minimum": 0,
-                                "maximum": 10
+                                "maximum": 10,
+                                "markdownDeprecationMessage": "**BEWARE**: This setting will be removed in [sass v2.0](https://github.com/sass/dart-sass/issues/1585)",
+                                "deprecationMessage": "BEWARE: This setting will be removed in sass v2.0"
                             }
                         },
                         "additionalProperties": false,
@@ -351,7 +368,7 @@
         "fdir": "^5.2.0",
         "picomatch": "^2.3.1",
         "postcss": "^8.4.14",
-        "sass": "^1.51.0"
+        "sass": "^1.53.0"
     },
     "devDependencies": {
         "@types/glob": "^7.2.0",
@@ -359,19 +376,19 @@
         "@types/node": "^17.0.35",
         "@types/picomatch": "^2.3.0",
         "@types/vscode": "^1.52.0",
-        "@typescript-eslint/eslint-plugin": "^5.25.0",
-        "@typescript-eslint/parser": "^5.25.0",
-        "eslint": "^8.12.0",
+        "@typescript-eslint/eslint-plugin": "^5.30.4",
+        "@typescript-eslint/parser": "^5.30.4",
+        "eslint": "^8.19.0",
         "mocha": "^10.0.0",
-        "terser-webpack-plugin": "^5.3.1",
-        "ts-loader": "^9.2.8",
-        "typescript": "^4.6.3",
+        "terser-webpack-plugin": "^5.3.3",
+        "ts-loader": "^9.3.1",
+        "typescript": "^4.7.4",
         "vscode-test": "^1.6.1",
-        "webpack": "^5.70.0",
-        "webpack-cli": "^4.9.2"
+        "webpack": "^5.73.0",
+        "webpack-cli": "^4.10.0"
     },
     "announcement": {
-        "onVersion": "5.4.0",
-        "message": "SassCompiler v5.4.0: new settings and feature. Doc changes and dependancy bumps"
+        "onVersion": "5.5.0",
+        "message": "SassCompiler v5.5.0: new setting and feature. Doc changes and dependancy bumps"
     }
 }

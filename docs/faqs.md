@@ -1,9 +1,10 @@
 # FAQs
-
-## Q. I'm migrating from Ritwick Dey's extension, what do I need to know?
+Click a question to reveal its answer
 
 <details>
-<summary>Answer</summary>
+<summary>
+  <h2>I'm migrating from Ritwick Dey's extension, what do I need to know?</h2>
+</summary>
 
 Well, **lots of things**.
 
@@ -20,7 +21,7 @@ Here's some of the most important changes:
     - When `true` we will find a `.browserslistrc` file or `browserslist` in your `package.json`. No more duplicating settings!
   - `showOutputWindow` is now `showOutputWindowOn` and uses log values (`Debug`, `Error`, etc.). It's default log level is `Information` - at this level it will output the same information that the original extension does
 - Some settings are new!
-  - `formats[].savePathSegmentKeys` and `formats[].savePathReplaceSegmentsWith`: when used in combination you can choose to replace folder segments in the save path
+  - `formats[].savePathReplacementPairs`: replace segments in the output path
   - `formats[].linefeed`: control the line terminator used
   - `formats[].indentType`: control whether indents are spaces or tabs
   - `formats[].indentWidth`: control the width of the indentation
@@ -44,12 +45,10 @@ Here are some things you probably won't care about as much
 
 </details>
 
----
-
-## Q. How do I change the settings?
-
 <details>
-<summary>Answer</summary>
+<summary>
+  <h2>How do I change the settings?</h2>
+</summary>
 
 Create a `.vscode` folder in the root of your project. Inside the `.vscode` folder create a JSON file named `settings.json`.
 
@@ -82,25 +81,23 @@ Open the `settings.json` file and type following key-value pairs. *By the way, y
 
 </details>
 
----
-
-## Q. Why isn't it starting?
-
 <details>
-<summary>Answer</summary>
+<summary>
+  <h2>Why isn't it starting?</h2>
+</summary>
 
 If the extension doesn't activate (show up in the status bar), then it's most likely that you don't have any `.scss` or`.sass` files in your project.
-
+  
 Just create a SASS file, or open one, and the extension will activate
+  
+Alternatively, if you're working with `.sass` files, you may not have the [SASS extension](https://marketplace.visualstudio.com/items?itemName=Syler.sass-indented) installed. Install it so VS Code can identify `.sass` files and activate the extension.
 
 </details>
 
----
-
-## Q. Why isn't it compiling my files?
-
 <details>
-<summary>Answers</summary>
+<summary>
+  <h2>Why are my files not compiling?</h2>
+</summary>
 
 A common issue is incorrectly configured glob patterns used in the include/exclude settings. You can check your glob patterns [here](https://globster.xyz/) (*be aware that this site doesn't match all [picomatch expressions](https://github.com/micromatch/picomatch#library-comparisons)*).
 
@@ -118,13 +115,10 @@ Still no luck?
 
 </details>
 
----
-
-
-## Q. So... about multi-root workspaces?
-
 <details>
-<summary>Answers</summary>
+<summary>
+  <h2>So... about multi-root workspaces?</h2>
+</summary>
 
 ### What is it?
 

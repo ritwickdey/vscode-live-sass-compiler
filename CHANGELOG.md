@@ -22,6 +22,33 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [5.5.0] - 2022-07-09
+
+### Added
+- `liveSassCompile.settings.format[].savePathReplacementPairs` - Closes [#189](https://github.com/glenn2223/vscode-live-sass-compiler/issues/187)
+- You can now apply `savePath` and then key replacement (`savePathReplacementPairs`) to get to your desired save location - Closes [#184](https://github.com/glenn2223/vscode-live-sass-compiler/issues/184), [#187](https://github.com/glenn2223/vscode-live-sass-compiler/issues/187),
+
+### Deprecated
+- The new method for replacing segments in the save path is `savePathReplacementPairs`
+  - `liveSassCompile.settings.format[].savePathSegmentKeys`
+  - `liveSassCompile.settings.format[].savePathReplaceSegmentsWith`
+- When SASS v2 is released these settings will be removed, adding deprecation warning now so it can be implemented sooner
+  - `liveSassCompile.settings.format[].linefeed`
+  - `liveSassCompile.settings.format[].indentType`
+  - `liveSassCompile.settings.format[].indentWidth`
+
+### Fixed
+- Stopped output if not watching and working on a single SASS file
+- The status bar now only updates once when working on many files. This means that the result shows the overall outcome, rather than the status of the last file
+
+### Updated
+- `sass` from `1.51.10` to `1.53.0`
+  - Preserve location of trailing loud comments (`/* ... */`) instead of pushing the comment to the next line
+  - Add support for calling `var()` with an empty second argument, such as `var(--side, )`
+  - Fix a bug where `meta.load-css()` would sometimes resolve relative URLs incorrectly when called from a mixin using the legacy JS API
+  - Other changes *(nothing user facing)*
+- Various dev dependency updates *(nothing user facing)*
+
 ## [5.4.0] - 2022-05-19
 
 ### Added 
@@ -506,6 +533,7 @@ The new commands are:
 | 0.0.1 | 11.07.17 | Initial Preview Release with following key features. <br> – Live SASS & SCSS Compile. <br> – Customizable file location of exported CSS. <br> – Customizable exported CSS Style (`expanded`, `compact`, `compressed`, `nested`.)<br> – Quick Status bar control.<br> – Live Reload to browser (`Live Server` extension dependency). |
 
 
+[5.5.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.4.0...v5.5.0
 [5.4.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.3.1...v5.4.0
 [5.3.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.3.0...v5.3.1
 [5.3.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.2.0...v5.3.0

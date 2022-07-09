@@ -18,7 +18,7 @@ import postcss from "postcss";
 import { LegacyFileOptions } from "sass";
 
 export class AppModel {
-    private isWatching: boolean;
+    isWatching: boolean;
     private _logger: ErrorLogger;
 
     constructor(workplaceState: vscode.Memento) {
@@ -208,35 +208,39 @@ export class AppModel {
                 `Path: ${sassPath}`,
             ]);
 
-            const formats = Helper.getConfigSettings<IFormat[]>("formats", workspaceFolder);
-            const result = await Promise.all(
-                formats.map(async (format, index) => {
-                    OutputWindow.Show(
-                        OutputLevel.Trace,
-                        `Starting format ${index + 1} of ${formats.length}`,
-                        [`Settings: ${JSON.stringify(format)}`]
-                    );
-
-                    // Each format
-                    const options = this.getSassOptions(format),
-                        pathData = await this.generateCssAndMapUri(
-                            sassPath,
-                            format,
-                            workspaceFolder
+            const formats = Helper.getConfigSettings<IFormat[]>("formats", workspaceFolder),
+                results = await Promise.all(
+                    formats.map(async (format, index) => {
+                        OutputWindow.Show(
+                            OutputLevel.Trace,
+                            `Starting format ${index + 1} of ${formats.length}`,
+                            [`Settings: ${JSON.stringify(format)}`]
                         );
 
-                    return await this.GenerateCssAndMap(
-                        workspaceFolder,
-                        sassPath,
-                        pathData.css,
-                        pathData.map,
-                        options
-                    );
-                })
-            );
+                        // Each format
+                        const options = this.getSassOptions(format),
+                            pathData = await this.generateCssAndMapUri(
+                                sassPath,
+                                format,
+                                workspaceFolder
+                            );
 
-            if (result.indexOf(false) < 0) {
+                        if (pathData) {
+                            return await this.GenerateCssAndMap(
+                                workspaceFolder,
+                                sassPath,
+                                pathData.css,
+                                pathData.map,
+                                options
+                            );
+                        }
+                    })
+                );
+
+            if (results.every((r) => r)) {
                 StatusBarUi.compilationSuccess(this.isWatching);
+            } else if (results.length) {
+                StatusBarUi.compilationError(this.isWatching);
             }
         } catch (err) {
             const sassPath = vscode.window.activeTextEditor
@@ -270,7 +274,7 @@ export class AppModel {
         try {
             const currentFile = textDocument.fileName;
 
-            const workspaceFolder = AppModel.getWorkspaceFolder(currentFile),
+            const workspaceFolder = AppModel.getWorkspaceFolder(currentFile, !this.isWatching),
                 sassFileType = this.confirmSassType(currentFile, workspaceFolder);
 
             if (sassFileType == SassConfirmationType.NotSass) {
@@ -298,6 +302,7 @@ export class AppModel {
                 return;
             }
 
+            StatusBarUi.working();
             OutputWindow.Show(
                 OutputLevel.Information,
                 "Change detected - " + new Date().toLocaleString(),
@@ -310,33 +315,40 @@ export class AppModel {
                     `Path: ${currentFile}`,
                 ]);
 
-                const formats = Helper.getConfigSettings<IFormat[]>("formats", workspaceFolder);
-
-                await Promise.all(
-                    formats.map(async (format, index) => {
-                        OutputWindow.Show(
-                            OutputLevel.Trace,
-                            `Starting format ${index + 1} of ${formats.length}`,
-                            [`Settings: ${JSON.stringify(format)}`]
-                        );
-
-                        // Each format
-                        const options = this.getSassOptions(format),
-                            cssMapUri = await this.generateCssAndMapUri(
-                                currentFile,
-                                format,
-                                workspaceFolder
+                const formats = Helper.getConfigSettings<IFormat[]>("formats", workspaceFolder),
+                    results = await Promise.all(
+                        formats.map(async (format, index) => {
+                            OutputWindow.Show(
+                                OutputLevel.Trace,
+                                `Starting format ${index + 1} of ${formats.length}`,
+                                [`Settings: ${JSON.stringify(format)}`]
                             );
 
-                        await this.GenerateCssAndMap(
-                            workspaceFolder,
-                            currentFile,
-                            cssMapUri.css,
-                            cssMapUri.map,
-                            options
-                        );
-                    })
-                );
+                            // Each format
+                            const options = this.getSassOptions(format),
+                                cssMapUri = await this.generateCssAndMapUri(
+                                    currentFile,
+                                    format,
+                                    workspaceFolder
+                                );
+
+                            if (cssMapUri) {
+                                return await this.GenerateCssAndMap(
+                                    workspaceFolder,
+                                    currentFile,
+                                    cssMapUri.css,
+                                    cssMapUri.map,
+                                    options
+                                );
+                            }
+                        })
+                    );
+
+                if (results.every((r) => r)) {
+                    StatusBarUi.compilationSuccess(this.isWatching);
+                } else if (results.length) {
+                    StatusBarUi.compilationError(this.isWatching);
+                }
             } else {
                 // Partial
                 await this.GenerateAllCssAndMap();
@@ -408,16 +420,14 @@ export class AppModel {
         const generateMap = Helper.getConfigSettings<boolean>("generateMap", folder),
             compileResult = SassHelper.compileOne(sassPath, targetCssUri, mapFileUri, options),
             promises: Promise<IFileResolver>[] = [];
-        
+
         let autoprefixerTarget = Helper.getConfigSettings<Array<string> | boolean | null>(
-                "autoprefix",
-                folder
-            );
+            "autoprefix",
+            folder
+        );
 
         if (compileResult.errorString !== null) {
             OutputWindow.Show(OutputLevel.Error, "Compilation Error", [compileResult.errorString]);
-
-            StatusBarUi.compilationError(this.isWatching);
 
             return false;
         }
@@ -430,8 +440,6 @@ export class AppModel {
                 "There was no CSS output from sass/sass",
                 `Sass error: ${compileResult.errorString ?? "NONE"}`,
             ]);
-
-            StatusBarUi.compilationError(this.isWatching);
 
             return false;
         }
@@ -479,8 +487,6 @@ export class AppModel {
 
         const fileResolvers = await Promise.all(promises);
 
-        StatusBarUi.compilationSuccess(this.isWatching);
-
         OutputWindow.Show(OutputLevel.Information, "Generated:", null, false);
 
         fileResolvers.forEach((fileResolver) => {
@@ -518,33 +524,40 @@ export class AppModel {
                 );
 
                 const workspaceFolder = AppModel.getWorkspaceFolder(sassPath),
-                    formats = Helper.getConfigSettings<IFormat[]>("formats", workspaceFolder);
-
-                await Promise.all(
-                    formats.map(async (format, formatIndex) => {
-                        OutputWindow.Show(
-                            OutputLevel.Trace,
-                            `Starting format ${formatIndex + 1} of ${formats.length}`,
-                            [`Settings: ${JSON.stringify(format)}`]
-                        );
-
-                        // Each format
-                        const options = this.getSassOptions(format),
-                            cssMapUri = await this.generateCssAndMapUri(
-                                sassPath,
-                                format,
-                                workspaceFolder
+                    formats = Helper.getConfigSettings<IFormat[]>("formats", workspaceFolder),
+                    results = await Promise.all(
+                        formats.map(async (format, formatIndex) => {
+                            OutputWindow.Show(
+                                OutputLevel.Trace,
+                                `Starting format ${formatIndex + 1} of ${formats.length}`,
+                                [`Settings: ${JSON.stringify(format)}`]
                             );
 
-                        await this.GenerateCssAndMap(
-                            workspaceFolder,
-                            sassPath,
-                            cssMapUri.css,
-                            cssMapUri.map,
-                            options
-                        );
-                    })
-                );
+                            // Each format
+                            const options = this.getSassOptions(format),
+                                cssMapUri = await this.generateCssAndMapUri(
+                                    sassPath,
+                                    format,
+                                    workspaceFolder
+                                );
+
+                            if (cssMapUri) {
+                                return await this.GenerateCssAndMap(
+                                    workspaceFolder,
+                                    sassPath,
+                                    cssMapUri.css,
+                                    cssMapUri.map,
+                                    options
+                                );
+                            }
+                        })
+                    );
+
+                if (results.every((r) => r)) {
+                    StatusBarUi.compilationSuccess(this.isWatching);
+                } else if (results.length) {
+                    StatusBarUi.compilationError(this.isWatching);
+                }
             })
         );
     }
@@ -564,6 +577,7 @@ export class AppModel {
         ]);
 
         const extensionName = format.extensionName || ".css";
+        let applyKeyReplacement = true;
 
         if (workspaceRoot) {
             OutputWindow.Show(OutputLevel.Trace, "No workspace provided", [
@@ -606,9 +620,13 @@ export class AppModel {
                     generatedUri = path.join(workspacePath, format.savePath);
                 }
 
-                OutputWindow.Show(OutputLevel.Trace, `New path: ${generatedUri}`);
+                if (format.savePathReplacementPairs && format.savePath.startsWith("~")) {
+                    OutputWindow.Show(OutputLevel.Trace, `New path: ${generatedUri}`);
+                } else {
+                    OutputWindow.Show(OutputLevel.Trace, `Path to continue with: ${generatedUri}`);
 
-                FileHelper.MakeDirIfNotAvailable(generatedUri);
+                    FileHelper.MakeDirIfNotAvailable(generatedUri);
+                }
 
                 filePath = path.join(generatedUri, path.basename(filePath));
             } else if (
@@ -618,7 +636,7 @@ export class AppModel {
             ) {
                 OutputWindow.Show(
                     OutputLevel.Trace,
-                    "Using segment replacement",
+                    "Using deprecated segment replacement",
                     [
                         `Keys: [${format.savePathSegmentKeys.join(", ")}] - Replacement: ${
                             format.savePathReplaceSegmentsWith
@@ -627,6 +645,8 @@ export class AppModel {
                     ],
                     false
                 );
+
+                applyKeyReplacement = false;
 
                 generatedUri = path.join(
                     workspacePath,
@@ -647,6 +667,63 @@ export class AppModel {
                 FileHelper.MakeDirIfNotAvailable(generatedUri);
 
                 filePath = path.join(generatedUri, path.basename(filePath));
+            }
+
+            if (
+                format.savePathReplacementPairs &&
+                applyKeyReplacement &&
+                (format.savePath == null || format.savePath.startsWith("~"))
+            ) {
+                OutputWindow.Show(
+                    OutputLevel.Trace,
+                    "Using segment replacement",
+                    [`Original path: ${filePath}`],
+                    false
+                );
+
+                generatedUri =
+                    "/" +
+                    path.relative(workspacePath, path.dirname(filePath)).replace(/\\/g, "/") +
+                    "/";
+
+                for (const key in format.savePathReplacementPairs) {
+                    if (
+                        Object.prototype.hasOwnProperty.hasOwnProperty.call(
+                            format.savePathReplacementPairs,
+                            key
+                        )
+                    ) {
+                        const value = format.savePathReplacementPairs[key];
+
+                        if (typeof value === "string" || value instanceof String) {
+                            OutputWindow.Show(
+                                OutputLevel.Trace,
+                                `Applying: ${key} => ${value}`,
+                                null,
+                                false
+                            );
+
+                            generatedUri = generatedUri.replace(
+                                key.replace(/\\/g, "/"),
+                                value.toString().replace(/\\/g, "/")
+                            );
+                        } else {
+                            OutputWindow.Show(
+                                OutputLevel.Error,
+                                "Error: Invalid type passed to savePathReplacementPairs",
+                                [`The key "${key}" must have a string value, not "${typeof value}"`]
+                            );
+
+                            return null;
+                        }
+                    }
+                }
+
+                FileHelper.MakeDirIfNotAvailable(generatedUri);
+
+                OutputWindow.Show(OutputLevel.Trace, `New path: ${generatedUri}`);
+
+                filePath = path.join(workspacePath, generatedUri, path.basename(filePath));
             }
         }
 
@@ -1322,18 +1399,21 @@ export class AppModel {
         });
     }
 
-    private static getWorkspaceFolder(filePath: string) {
+    private static getWorkspaceFolder(filePath: string, suppressOutput = false) {
         const workspaceFolder = vscode.workspace.getWorkspaceFolder(vscode.Uri.file(filePath));
-        const filename = filePath.toLowerCase();
 
-        if (workspaceFolder) {
-            OutputWindow.Show(OutputLevel.Trace, "Found the workspace folder", [
-                `Workspace Name: ${workspaceFolder.name}`,
-            ]);
-        } else if (filename.endsWith(".sass") || filename.endsWith(".scss")) {
-            OutputWindow.Show(OutputLevel.Warning, "Warning: File is not in a workspace", [
-                `Path: ${filePath}`,
-            ]);
+        if (!suppressOutput) {
+            const filename = filePath.toLowerCase();
+
+            if (workspaceFolder) {
+                OutputWindow.Show(OutputLevel.Trace, "Found the workspace folder", [
+                    `Workspace Name: ${workspaceFolder.name}`,
+                ]);
+            } else if (filename.endsWith(".sass") || filename.endsWith(".scss")) {
+                OutputWindow.Show(OutputLevel.Warning, "Warning: File is not in a workspace", [
+                    `Path: ${filePath}`,
+                ]);
+            }
         }
 
         return workspaceFolder;

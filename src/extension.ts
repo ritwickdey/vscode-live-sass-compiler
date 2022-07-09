@@ -170,7 +170,9 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
                 }
             ),
             disposableOnDidSave = vscode.workspace.onDidSaveTextDocument(async (textDocument) => {
-                OutputWindow.Show(OutputLevel.Trace, 'VS Code event: "onDidSaveTextDocument"');
+                if (appModel.isWatching) {
+                    OutputWindow.Show(OutputLevel.Trace, 'VS Code event: "onDidSaveTextDocument"');
+                }
 
                 // TODO: ADD - once autoprefixer can stop caching browserslist
                 //await appModel.browserslistChecks();
