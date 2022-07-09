@@ -49,22 +49,22 @@ All notable changes to this project will be documented in this file.
   - Other changes *(nothing user facing)*
 - Various dev dependency updates *(nothing user facing)*
 
-## [5.4.0] - 2022-05-16
+## [5.4.0] - 2022-05-19
 
 ### Added 
 - New `liveSassCompile.settings.rootIsWorkspace` setting
-  - Treat a leading slash as relative to the workspace, not the drive root
+  - Treat a leading slash in imports as relative to the workspace, not the drive root
 - New `liveSassCompile.settings.showAnnouncements` setting
-  - Don't show announcement when a new version is installed
+  - Toggle whether or not to show announcements when a new version is installed
 - Reference a node module with a leading tilde `~`
   - Instead of trailing back to your node modules folder you can now reference one directly with `~myModule` or `~/myModule`
 
 ### Changes
 - When running the `liveSass.command.createIssue` command, the issue title reflects whether a known error occurred or not
-- Details the under the bonnet workings - Closes [#176](https://github.com/glenn2223/vscode-live-sass-compiler/issues/176
+- Details the under the bonnet workings - Closes [#176](https://github.com/glenn2223/vscode-live-sass-compiler/issues/176)
 - Simplified read me
 - Documented new settings
-- Added our [open source commitment](./README.md#our-open-source-commitment))
+- Added our [open source commitment](./README.md#our-open-source-commitment)
 
 ### Updated
 - `autoprefixer` from `10.4.4` to `10.4.7`
@@ -74,7 +74,7 @@ All notable changes to this project will be documented in this file.
   - Other changes *(nothing user facing)*
 - `sass` from `1.49.10` to `1.51.0`
   - `@extend` now treats `:where()` the same as `:is()`
-  - **Potentially breaking change:** Change the order of maps returned by `map.deep-merge()` to match those returned b`y map.merge()`. All keys that appeared in the first map will now be listed first in the same order they appeared in that map, followed by any new keys added from the second map.
+  - **Potentially breaking change:** Change the order of maps returned by `map.deep-merge()` to match those returned by `map.merge()`. All keys that appeared in the first map will now be listed first in the same order they appeared in that map, followed by any new keys added from the second map.
   - Other changes *(nothing user facing)*
 - Various dev dependency updates *(nothing user facing)*
 
