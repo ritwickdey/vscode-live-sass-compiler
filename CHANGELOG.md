@@ -25,7 +25,7 @@ All notable changes to this project will be documented in this file.
 ## [5.5.1] - 2022-07-11
 
 ### Fixed
-- Can now create required directory when using `savePathReplacementPairs` - Closes: [#200](https://github.com/glenn2223/vscode-live-sass-compiler/issues/200)
+- Can now create required output directories when using `savePathReplacementPairs` - Closes: [#200](https://github.com/glenn2223/vscode-live-sass-compiler/issues/200)
 
 ## [5.5.0] - 2022-07-09
 
