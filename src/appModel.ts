@@ -719,7 +719,7 @@ export class AppModel {
                     }
                 }
 
-                FileHelper.MakeDirIfNotAvailable(generatedUri);
+                FileHelper.MakeDirIfNotAvailable(path.join(workspacePath, generatedUri));
 
                 OutputWindow.Show(OutputLevel.Trace, `New path: ${generatedUri}`);
 
