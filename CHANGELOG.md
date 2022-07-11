@@ -22,10 +22,15 @@ Types of changes
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [5.5.1] - 2022-07-11
+
+### Fixed
+- Can now create required output directories when using `savePathReplacementPairs` - Closes: [#200](https://github.com/glenn2223/vscode-live-sass-compiler/issues/200)
+
 ## [5.5.0] - 2022-07-09
 
 ### Added
-- `liveSassCompile.settings.format[].savePathReplacementPairs` - Closes [#189](https://github.com/glenn2223/vscode-live-sass-compiler/issues/187)
+- `liveSassCompile.settings.format[].savePathReplacementPairs` - Closes [#189](https://github.com/glenn2223/vscode-live-sass-compiler/issues/189)
 - You can now apply `savePath` and then key replacement (`savePathReplacementPairs`) to get to your desired save location - Closes [#184](https://github.com/glenn2223/vscode-live-sass-compiler/issues/184), [#187](https://github.com/glenn2223/vscode-live-sass-compiler/issues/187),
 
 ### Deprecated
@@ -533,6 +538,7 @@ The new commands are:
 | 0.0.1 | 11.07.17 | Initial Preview Release with following key features. <br> – Live SASS & SCSS Compile. <br> – Customizable file location of exported CSS. <br> – Customizable exported CSS Style (`expanded`, `compact`, `compressed`, `nested`.)<br> – Quick Status bar control.<br> – Live Reload to browser (`Live Server` extension dependency). |
 
 
+[5.5.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.5.0...v5.5.1
 [5.5.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.4.0...v5.5.0
 [5.4.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.3.1...v5.4.0
 [5.3.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.3.0...v5.3.1

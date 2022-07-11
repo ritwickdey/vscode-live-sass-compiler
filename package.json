@@ -2,7 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime.",
-    "version": "5.5.0",
+    "version": "5.5.1",
     "publisher": "glenn2223",
     "author": {
         "name": "Glenn Marks",
@@ -388,7 +388,7 @@
         "webpack-cli": "^4.10.0"
     },
     "announcement": {
-        "onVersion": "5.5.0",
-        "message": "SassCompiler v5.5.0: new setting and feature. Doc changes and dependancy bumps"
+        "onVersion": "5.5.1",
+        "message": "SassCompiler v5.5.1: Fixed directory creation issue with new settings"
     }
 }
