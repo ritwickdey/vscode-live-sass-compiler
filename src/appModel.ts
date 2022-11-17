@@ -971,7 +971,11 @@ export class AppModel {
                 );
             }
 
-            const isMatch = picomatch(fileList, { ignore: excludeItems, dot: true, nocase: true });
+            const isMatch = picomatch(fileList, {
+                ignore: excludeItems,
+                dot: true,
+                nocase: true,
+            });
 
             OutputWindow.Show(OutputLevel.Trace, "Searching folder", null, false);
 
@@ -1087,7 +1091,11 @@ export class AppModel {
                                     ? ["**/node_modules/**", ".vscode/**"]
                                     : Helper.getConfigSettings<string[]>("excludeList", folder);
 
-                            if (queryPattern == undefined && includeItems && includeItems.length) {
+                            if (queryPattern) {
+                                queryPattern = AppModel.stripAnyLeadingSlashes(
+                                    Array.isArray(queryPattern) ? queryPattern : [queryPattern]
+                                );
+                            } else if (includeItems && includeItems.length) {
                                 queryPattern = AppModel.stripAnyLeadingSlashes(includeItems);
 
                                 OutputWindow.Show(OutputLevel.Trace, "Query pattern overwritten", [
@@ -1331,7 +1339,8 @@ export class AppModel {
                         );
                         (
                             await this.getSassFiles(
-                                Helper.getConfigSettings<string[]>("partialsList", folder)
+                                Helper.getConfigSettings<string[]>("partialsList", folder),
+                                true
                             )
                         ).map((file) => {
                             folderOutput.push(file);
