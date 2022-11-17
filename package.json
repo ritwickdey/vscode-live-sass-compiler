@@ -364,27 +364,26 @@
         "lint": "eslint -c .eslintrc.js --ext .ts ./src/"
     },
     "dependencies": {
-        "autoprefixer": "^10.4.7",
-        "fdir": "^5.2.0",
+        "autoprefixer": "^10.4.13",
+        "fdir": "^5.3.0",
         "picomatch": "^2.3.1",
-        "postcss": "^8.4.14",
-        "sass": "^1.53.0"
+        "postcss": "^8.4.19",
+        "sass": "^1.56.1"
     },
     "devDependencies": {
-        "@types/glob": "^7.2.0",
-        "@types/mocha": "^9.1.0",
+        "@types/mocha": "^10.0.0",
         "@types/node": "^17.0.35",
         "@types/picomatch": "^2.3.0",
         "@types/vscode": "^1.52.0",
-        "@typescript-eslint/eslint-plugin": "^5.30.4",
-        "@typescript-eslint/parser": "^5.30.4",
-        "eslint": "^8.19.0",
-        "mocha": "^10.0.0",
-        "terser-webpack-plugin": "^5.3.3",
-        "ts-loader": "^9.3.1",
-        "typescript": "^4.7.4",
+        "@typescript-eslint/eslint-plugin": "^5.43.0",
+        "@typescript-eslint/parser": "^5.43.0",
+        "eslint": "^8.27.0",
+        "mocha": "^10.1.0",
+        "terser-webpack-plugin": "^5.3.6",
+        "ts-loader": "^9.4.1",
+        "typescript": "^4.9.3",
         "vscode-test": "^1.6.1",
-        "webpack": "^5.73.0",
+        "webpack": "^5.75.0",
         "webpack-cli": "^4.10.0"
     },
     "announcement": {
