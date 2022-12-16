@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { OutputLevel } from "./VscodeExtensions";
+import { OutputLevel } from "./OutputLevel";
 
 export interface IFormat {
     format: "compressed" | "expanded";

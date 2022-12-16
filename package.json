@@ -275,6 +275,14 @@
                     "description": "Set to `false` if you don't want a `.map` file for each compiled CSS.\nDefault is `true`",
                     "scope": "resource"
                 },
+                "liveSassCompile.settings.useNewCompiler": {
+                    "type": [
+                        "boolean"
+                    ],
+                    "default": false,
+                    "description": "Set to `true` to use new SASS' new `compile` function",
+                    "scope": "resource"
+                },
                 "liveSassCompile.settings.autoprefix": {
                     "type": [
                         "array",

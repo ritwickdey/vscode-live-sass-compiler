@@ -1,5 +1,6 @@
 import { env, extensions, Memento, OutputChannel, Uri, version, window } from "vscode";
 import { Helper } from "./helper";
+import { OutputLevel } from "./OutputLevel";
 
 const _errorLogPath = "liveSassCompiler.ErrorInfo";
 
@@ -181,13 +182,4 @@ export class WindowPopout {
     static Alert(message: string): void {
         window.showErrorMessage(message);
     }
-}
-
-export enum OutputLevel {
-    Trace = 1,
-    Debug = 2,
-    Information = 3,
-    Warning = 4,
-    Error = 5,
-    Critical = 6,
 }
