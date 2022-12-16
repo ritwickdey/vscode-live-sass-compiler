@@ -2,7 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime.",
-    "version": "5.5.1",
+    "version": "5.5.2-alpha.1",
     "publisher": "glenn2223",
     "author": {
         "name": "Glenn Marks",
@@ -356,35 +356,37 @@
     },
     "homepage": "https://glenn2223.github.io/vscode-live-sass-compiler/",
     "scripts": {
-        "vscode:prepublish": "webpack --mode production",
-        "webpack": "webpack --mode development",
-        "webpack-dev": "webpack --mode development --watch",
-        "pretest": "npm run webpack && tsc -p ./src/test/",
+        "vscode:prepublish": "rollup --mode production",
+        "pretest": "npm run rollup && tsc -p ./src/test/",
         "test": "node ./out/test/runTest.js",
-        "lint": "eslint -c .eslintrc.js --ext .ts ./src/"
+        "lint": "eslint -c .eslintrc.js --ext .ts ./src/",
+        "rollup": "rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript",
+        "webpack": "webpack --mode production"
     },
     "dependencies": {
         "autoprefixer": "^10.4.13",
         "fdir": "^5.3.0",
         "picomatch": "^2.3.1",
-        "postcss": "^8.4.19",
-        "sass": "^1.56.1"
+        "postcss": "^8.4.20",
+        "sass": "^1.56.2"
     },
     "devDependencies": {
-        "@types/mocha": "^10.0.0",
-        "@types/node": "^17.0.35",
+        "@rollup/plugin-commonjs": "^23.0.5",
+        "@rollup/plugin-json": "^5.0.2",
+        "@rollup/plugin-node-resolve": "^14.1.0",
+        "@rollup/plugin-terser": "^0.2.0",
+        "@rollup/plugin-typescript": "^8.5.0",
+        "@types/mocha": "^10.0.1",
+        "@types/node": "^17.0.45",
         "@types/picomatch": "^2.3.0",
-        "@types/vscode": "^1.52.0",
-        "@typescript-eslint/eslint-plugin": "^5.43.0",
-        "@typescript-eslint/parser": "^5.43.0",
-        "eslint": "^8.27.0",
-        "mocha": "^10.1.0",
-        "terser-webpack-plugin": "^5.3.6",
-        "ts-loader": "^9.4.1",
-        "typescript": "^4.9.3",
-        "vscode-test": "^1.6.1",
-        "webpack": "^5.75.0",
-        "webpack-cli": "^4.10.0"
+        "@types/vscode": "^1.74.0",
+        "@typescript-eslint/eslint-plugin": "^5.46.1",
+        "@typescript-eslint/parser": "^5.46.1",
+        "eslint": "^8.29.0",
+        "mocha": "^10.2.0",
+        "rollup": "^2.79.1",
+        "typescript": "^4.9.4",
+        "vscode-test": "^1.6.1"
     },
     "announcement": {
         "onVersion": "5.5.1",
