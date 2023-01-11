@@ -473,10 +473,6 @@ export class AppModel {
         >("autoprefix", folder);
 
         if (compileResult.errorString !== null) {
-            WindowPopout.Alert(
-                "Compiler error:\r\n" + compileResult.errorString
-            );
-
             OutputWindow.Show(OutputLevel.Error, "Compilation Error", [
                 compileResult.errorString,
             ]);
