@@ -280,7 +280,7 @@
                         "boolean"
                     ],
                     "default": false,
-                    "description": "Set to `true` to use new SASS' new `compile` function",
+                    "description": "Set to `true` to use new SASS's new `compile` function",
                     "scope": "resource"
                 },
                 "liveSassCompile.settings.autoprefix": {
@@ -364,7 +364,7 @@
     },
     "homepage": "https://glenn2223.github.io/vscode-live-sass-compiler/",
     "scripts": {
-        "vscode:prepublish": "rollup --mode production",
+        "vscode:prepublish": "npm run rollup -- --mode production",
         "pretest": "npm run rollup && tsc -p ./src/test/",
         "test": "node ./out/test/runTest.js",
         "lint": "eslint -c .eslintrc.js --ext .ts ./src/",
@@ -387,7 +387,7 @@
         "@types/mocha": "^10.0.1",
         "@types/node": "^17.0.45",
         "@types/picomatch": "^2.3.0",
-        "@types/vscode": "^1.74.0",
+        "@types/vscode": "^1.52.0",
         "@typescript-eslint/eslint-plugin": "^5.46.1",
         "@typescript-eslint/parser": "^5.46.1",
         "eslint": "^8.29.0",
