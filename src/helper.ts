@@ -6,8 +6,6 @@ export interface IFormat {
     extensionName: string;
     savePath?: string;
     savePathReplacementPairs?: Record<string, unknown>,
-    savePathSegmentKeys?: string[];
-    savePathReplaceSegmentsWith?: string;
     linefeed: "cr" | "crlf" | "lf" | "lfcr";
     indentType: "space" | "tab";
     indentWidth: number;

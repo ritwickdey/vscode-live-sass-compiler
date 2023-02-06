@@ -8,7 +8,7 @@ import { Helper, IFormat } from "./helper";
 import { fdir, OnlyCountsOutput, PathsOutput } from "fdir";
 import { SassHelper } from "./SassCompileHelper";
 import { StatusBarUi } from "./StatusbarUi";
-import { ErrorLogger, OutputWindow, WindowPopout } from "./VscodeExtensions";
+import { ErrorLogger, OutputWindow } from "./VscodeExtensions";
 import { OutputLevel } from "./OutputLevel";
 
 import autoprefixer from "autoprefixer";
@@ -649,7 +649,6 @@ export class AppModel {
         ]);
 
         const extensionName = format.extensionName || ".css";
-        let applyKeyReplacement = true;
 
         if (workspaceRoot) {
             OutputWindow.Show(OutputLevel.Trace, "No workspace provided", [
@@ -717,56 +716,10 @@ export class AppModel {
                 }
 
                 filePath = path.join(generatedUri, path.basename(filePath));
-            } else if (
-                format.savePathSegmentKeys &&
-                format.savePathSegmentKeys.length &&
-                format.savePathReplaceSegmentsWith
-            ) {
-                OutputWindow.Show(
-                    OutputLevel.Trace,
-                    "Using deprecated segment replacement",
-                    [
-                        `Keys: [${format.savePathSegmentKeys.join(
-                            ", "
-                        )}] - Replacement: ${
-                            format.savePathReplaceSegmentsWith
-                        }`,
-                        `Original path: ${filePath}`,
-                    ],
-                    false
-                );
-
-                applyKeyReplacement = false;
-
-                generatedUri = path.join(
-                    workspacePath,
-                    path
-                        .dirname(filePath)
-                        .substring(workspacePath.length + 1)
-                        .split(path.sep)
-                        .map((folder) => {
-                            return format.savePathSegmentKeys!.indexOf(
-                                folder
-                            ) >= 0
-                                ? format.savePathReplaceSegmentsWith
-                                : folder;
-                        })
-                        .join(path.sep)
-                );
-
-                OutputWindow.Show(
-                    OutputLevel.Trace,
-                    `New path: ${generatedUri}`
-                );
-
-                FileHelper.MakeDirIfNotAvailable(generatedUri);
-
-                filePath = path.join(generatedUri, path.basename(filePath));
             }
 
             if (
                 format.savePathReplacementPairs &&
-                applyKeyReplacement &&
                 (format.savePath == null || format.savePath.startsWith("~"))
             ) {
                 OutputWindow.Show(
