@@ -12,12 +12,12 @@ export default {
         {
             file: "out/extension.js",
             format: "cjs",
-            sourcemap: true,
+            sourcemap: false,
             compact: true,
         },
     ],
     plugins: [
-        typescript(),
+        typescript({ sourceMap: false }),
         json(),
         terser({ format: { comments: false } }),
         commonjs({

@@ -7,5 +7,12 @@
         "out": true // set this to false to include "out" folder in search results
     },
     "editor.formatOnPaste": true,
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "files.associations": {
+        "CHANGELOG.md": "NoFormat"
+    },
+    "[NoFormat]": {
+        "editor.formatOnPaste": false,
+        "editor.formatOnSave": false
+    }
 }
