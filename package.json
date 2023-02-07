@@ -2,14 +2,14 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime.",
-    "version": "5.5.1",
+    "version": "6.0.0",
     "publisher": "glenn2223",
     "author": {
         "name": "Glenn Marks",
         "url": "https://github.com/glenn2223/"
     },
     "engines": {
-        "vscode": "^1.52.0"
+        "vscode": "^1.74.0"
     },
     "keywords": [
         "SASS",
@@ -158,31 +158,6 @@
                                 ],
                                 "default": null
                             },
-                            "savePathSegmentKeys": {
-                                "description": "Segment keys that, if found in the file path, will be replaced with `savePathReplaceSegmentsWith`. (Note: Only applied if `savePath` is null).",
-                                "type": [
-                                    "array",
-                                    "null"
-                                ],
-                                "default": null,
-                                "items": {
-                                    "type": "string"
-                                },
-                                "markdownDeprecationMessage": "**Deprecated**: Please use `liveSassCompile.settings.format[].savePathReplacementPairs` instead.",
-                                "deprecationMessage": "Deprecated: Please use liveSassCompile.settings.format[].savePathReplacementPairs instead."
-                            },
-                            "savePathReplaceSegmentsWith": {
-                                "description": "The value that will replace any segement keys found in the save path. (Note: Only applied if `savePath` is null).",
-                                "type": [
-                                    "string",
-                                    "null"
-                                ],
-                                "pattern": "[^\\/]",
-                                "patternErrorMessage": "Must not contain any path separators (`/` or `\\`)",
-                                "default": null,
-                                "markdownDeprecationMessage": "**Deprecated**: Please use `liveSassCompile.settings.format[].savePathReplacementPairs` instead.",
-                                "deprecationMessage": "Deprecated: Please use liveSassCompile.settings.format[].savePathReplacementPairs instead."
-                            },
                             "linefeed": {
                                 "description": "Choose the linefeed terminator to use in the CSS output",
                                 "type": "string",
@@ -275,6 +250,14 @@
                     "description": "Set to `false` if you don't want a `.map` file for each compiled CSS.\nDefault is `true`",
                     "scope": "resource"
                 },
+                "liveSassCompile.settings.useNewCompiler": {
+                    "type": [
+                        "boolean"
+                    ],
+                    "default": false,
+                    "description": "Set to `true` to use new SASS's new `compile` function",
+                    "scope": "resource"
+                },
                 "liveSassCompile.settings.autoprefix": {
                     "type": [
                         "array",
@@ -356,39 +339,40 @@
     },
     "homepage": "https://glenn2223.github.io/vscode-live-sass-compiler/",
     "scripts": {
-        "vscode:prepublish": "webpack --mode production",
-        "webpack": "webpack --mode development",
-        "webpack-dev": "webpack --mode development --watch",
-        "pretest": "npm run webpack && tsc -p ./src/test/",
+        "vscode:prepublish": "npm run rollup",
+        "pretest": "npm run rollup && tsc -p ./src/test/",
         "test": "node ./out/test/runTest.js",
-        "lint": "eslint -c .eslintrc.js --ext .ts ./src/"
+        "lint": "eslint -c .eslintrc.js --ext .ts ./src/",
+        "rollup": "rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript",
+        "webpack": "webpack --mode production"
     },
     "dependencies": {
-        "autoprefixer": "^10.4.7",
-        "fdir": "^5.2.0",
+        "autoprefixer": "^10.4.13",
+        "fdir": "^5.3.0",
         "picomatch": "^2.3.1",
-        "postcss": "^8.4.14",
-        "sass": "^1.53.0"
+        "postcss": "^8.4.21",
+        "sass": "^1.58.0"
     },
     "devDependencies": {
-        "@types/glob": "^7.2.0",
-        "@types/mocha": "^9.1.0",
-        "@types/node": "^17.0.35",
+        "@rollup/plugin-commonjs": "^24.0.1",
+        "@rollup/plugin-json": "^6.0.0",
+        "@rollup/plugin-node-resolve": "^15.0.1",
+        "@rollup/plugin-terser": "^0.4.0",
+        "@rollup/plugin-typescript": "^11.0.0",
+        "@types/mocha": "^10.0.1",
+        "@types/node": "^17.0.45",
         "@types/picomatch": "^2.3.0",
-        "@types/vscode": "^1.52.0",
-        "@typescript-eslint/eslint-plugin": "^5.30.4",
-        "@typescript-eslint/parser": "^5.30.4",
-        "eslint": "^8.19.0",
-        "mocha": "^10.0.0",
-        "terser-webpack-plugin": "^5.3.3",
-        "ts-loader": "^9.3.1",
-        "typescript": "^4.7.4",
-        "vscode-test": "^1.6.1",
-        "webpack": "^5.73.0",
-        "webpack-cli": "^4.10.0"
+        "@types/vscode": "^1.74.0",
+        "@typescript-eslint/eslint-plugin": "^5.51.0",
+        "@typescript-eslint/parser": "^5.51.0",
+        "eslint": "^8.33.0",
+        "mocha": "^10.2.0",
+        "rollup": "^3.14.0",
+        "typescript": "^4.9.5",
+        "vscode-test": "^1.6.1"
     },
     "announcement": {
-        "onVersion": "5.5.1",
-        "message": "SassCompiler v5.5.1: Fixed directory creation issue with new settings"
+        "onVersion": "6.0.0",
+        "message": "SassCompiler v6.0.0: try out the SASS 2.0 compiler with a new setting. Plus bug fixes and dependancy bumps"
     }
 }

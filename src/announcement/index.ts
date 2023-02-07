@@ -1,6 +1,7 @@
 import { Memento, extensions, window, commands, Uri } from "vscode";
 import { Helper } from "../helper";
-import { OutputLevel, OutputWindow } from "../VscodeExtensions";
+import { OutputWindow } from "../VscodeExtensions";
+import { OutputLevel } from "../OutputLevel";
 
 const SETUP_STRING = "liveSassCompiler.setup.version";
 

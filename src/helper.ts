@@ -1,13 +1,11 @@
 import * as vscode from "vscode";
-import { OutputLevel } from "./VscodeExtensions";
+import { OutputLevel } from "./OutputLevel";
 
 export interface IFormat {
     format: "compressed" | "expanded";
     extensionName: string;
     savePath?: string;
     savePathReplacementPairs?: Record<string, unknown>,
-    savePathSegmentKeys?: string[];
-    savePathReplaceSegmentsWith?: string;
     linefeed: "cr" | "crlf" | "lf" | "lfcr";
     indentType: "space" | "tab";
     indentWidth: number;

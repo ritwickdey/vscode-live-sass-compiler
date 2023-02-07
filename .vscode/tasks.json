@@ -18,7 +18,7 @@
         {
             "label": "pack",
             "type": "npm",
-            "script": "webpack",
+            "script": "rollup",
             // show the output window only if unrecognized errors occur.
             "presentation": {
                 "echo": true,
