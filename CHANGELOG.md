@@ -32,18 +32,19 @@ All notable changes to this project will be documented in this file.
 -   The following deprecated settings have been removed:
     -   `liveSassCompile.settings.formats[].savePathSegmentKeys`
     -   `liveSassCompile.settings.formats[].savePathReplaceSegmentsWith`
-    -   _**Note:** other deprecated settings will remain in place to maintain backwards compatibility or until SASS2.0_
+    -   _**Note:** other deprecated settings will remain in place to maintain backwards compatibility, or until SASS2.0_
 -   Requires VS Code v1.74 or later
 
 ### Added
 
--   New `liveSassCompile.settings.useNewCompiler` to try SASS's new `compile` function - before it becomes mandatory
+-   New `liveSassCompile.settings.useNewCompiler` setting. Use it to try the SASS 2.0 compiler - before it becomes mandatory
 
 ### Fixed
 
--   `debugFileList` command now includes files falling under the excluded and partial patterns
--   Node module paths are correctly resolved (when utilising the `~/[node module name]/file_path` feature)
--   Any output (`Information` or higher) is saved in the output window - it still only pops up depending on your setting. _This is to match the original extension._
+-   `debugFileList` command now correctly includes the files that fall under the excluded and partial patterns
+-   All node module paths are now resolved correctly (when utilising the `~/[node module name]/file_path` feature)
+-   Any output (`Information` or higher) is saved in the output window. **It still only pops up depending on your setting.**  
+    _This is to match the original extension._
 
 ### Updated
 
