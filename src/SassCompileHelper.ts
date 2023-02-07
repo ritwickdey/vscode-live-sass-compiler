@@ -36,7 +36,7 @@ export class SassHelper {
                         return cb(
                             workingPath +
                                 path.sep +
-                                urlParts.slice(1).join(path.sep)
+                                urlParts.slice(-1).join(path.sep)
                         );
                     }
                 }
@@ -102,13 +102,13 @@ export class SassHelper {
     static toSassOptions<T extends boolean>(
         format: IFormat,
         useNew: T
-    ): T extends true ? compiler.LegacyFileOptions<"sync"> : compiler.Options<"sync">;
+    ): T extends true
+        ? compiler.LegacyFileOptions<"sync">
+        : compiler.Options<"sync">;
     static toSassOptions(
         format: IFormat,
         useNew: boolean
     ): compiler.LegacyFileOptions<"sync"> | compiler.Options<"sync"> {
-
-
         if (useNew) {
             const options: compiler.Options<"sync"> = {
                 style: format.format,
