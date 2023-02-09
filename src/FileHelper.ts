@@ -9,43 +9,39 @@ export interface IFileResolver {
 }
 
 export class FileHelper {
-    static writeToOneFile(targetFileUri: string, data: string): Promise<IFileResolver> {
+    static async writeToOneFile(
+        targetFileUri: string,
+        data: string
+    ): Promise<IFileResolver> {
         OutputWindow.Show(OutputLevel.Trace, `Saving file`, [
             "Saving a file to the system",
             `Target: ${targetFileUri}`,
         ]);
-        
-        return new Promise<IFileResolver>((resolve) => {
-            fs.writeFile(targetFileUri, data, "utf8", (err) => {
+
+        return new Promise<IFileResolver>((resolve) =>
+            fs.writeFile(targetFileUri, data, "utf8", (err) =>
                 resolve({
                     FileUri: targetFileUri,
                     Exception: err,
-                });
-            });
-        });
-    }
-
-    static writeToMultipleFile(targetFileUris: string[], data: string[]): Promise<IFileResolver[]> {
-        return new Promise<IFileResolver[]>((resolve) => {
-            const promises: Promise<IFileResolver>[] = [];
-
-            for (let i = 0; i < targetFileUris.length; i++) {
-                promises.push(this.writeToOneFile(targetFileUris[i], data[i]));
-            }
-
-            Promise.all(promises).then((errList) => resolve(errList));
-        });
+                })
+            )
+        );
     }
 
     static MakeDirIfNotAvailable(dir: string): void {
-        OutputWindow.Show(OutputLevel.Trace, "Checking directory exists", [
-            `Directory: ${dir}`,
-        ],
-        false);
+        OutputWindow.Show(
+            OutputLevel.Trace,
+            "Checking directory exists",
+            [`Directory: ${dir}`],
+            false
+        );
 
         if (fs.existsSync(dir)) {
-            OutputWindow.Show(OutputLevel.Trace, "Directory exists, no action required");
-            
+            OutputWindow.Show(
+                OutputLevel.Trace,
+                "Directory exists, no action required"
+            );
+
             return;
         }
 
@@ -56,8 +52,11 @@ export class FileHelper {
 
             this.MakeDirIfNotAvailable(path.dirname(dir));
         }
-        
-        OutputWindow.Show(OutputLevel.Trace, "Directory doesn't exist, creating it");
+
+        OutputWindow.Show(
+            OutputLevel.Trace,
+            "Directory doesn't exist, creating it"
+        );
 
         fs.mkdirSync(dir);
     }
