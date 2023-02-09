@@ -313,7 +313,7 @@ Tells the compiler that a leading slash is relative to the workspace root rather
 
 > ℹ This setting can vary between workspace folders - [read more][multi-rootfaq]
 
-SASS have introduced a new entry point in their JS API. This new API is designed to be more idiomatic, performant, and usable than the old one. But you'll only care about "performant". Go on, kick the tyres on this new entry point (before it comes mandatory in SASS 2.0).
+SASS have introduced a new entry point in their JS API. This new API is designed to be more performant than the old one. Go on, kick the tyres on this new entry point (before it comes mandatory in SASS 2.0).
 
 > **Warning**  
 > This method does not apply any of the following settings (and never will <sup>[[ref]](https://github.com/sass/dart-sass/issues/1585#issuecomment-1005184692)</sup>)
