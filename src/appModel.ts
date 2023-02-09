@@ -1018,49 +1018,65 @@ export class AppModel {
                 string[]
             >();
 
-            const searchFileCount = (
-                await new fdir({
-                    includeBasePath: true,
-                    onlyCounts: true,
-                    resolvePaths: true,
-                    suppressErrors: true,
-                })
-                    .globWithOptions(fileList, {
-                        ignore: excludeItems,
-                        dot: true,
-                        nocase: true,
+            const isMatch = picomatch(fileList, {
+                    ignore: excludeItems,
+                    dot: true,
+                    nocase: true,
+                }),
+                searchFileCount = (
+                    await new fdir({
+                        includeBasePath: true,
+                        onlyCounts: true,
+                        resolvePaths: true,
+                        suppressErrors: true,
                     })
-                    .filter(
-                        (filePath) =>
-                            filePath.toLowerCase().endsWith(".scss") ||
-                            filePath.toLowerCase().endsWith(".sass")
-                    )
-                    .filter((filePath) => {
-                        const result =
-                            path
-                                .toNamespacedPath(filePath)
-                                .localeCompare(
-                                    path.toNamespacedPath(sassPath),
-                                    undefined,
-                                    {
-                                        sensitivity: "accent",
-                                    }
-                                ) === 0;
-
-                        searchLogs
-                            .get(`Path: ${filePath}`)
-                            ?.push(
-                                `  compare: ${result}`,
-                                `   - Orig file path: ${filePath}`,
-                                `   - Orig sass path: ${sassPath}`
+                        .filter(
+                            (filePath) =>
+                                filePath.toLowerCase().endsWith(".scss") ||
+                                filePath.toLowerCase().endsWith(".sass")
+                        )
+                        .filter((filePath) => {
+                            const result = isMatch(
+                                path.relative(basePath, filePath)
                             );
 
-                        return result;
-                    })
-                    .onlyCounts()
-                    .crawl(basePath)
-                    .withPromise()
-            ).files;
+                            searchLogs.set(`Path: ${filePath}`, [
+                                `  isMatch: ${result}`,
+                                `   - Base path: ${basePath}`,
+                                `   - Rela path: ${path.relative(
+                                    basePath,
+                                    filePath
+                                )}`,
+                            ]);
+
+                            return result;
+                        })
+                        .filter((filePath) => {
+                            const result =
+                                path
+                                    .toNamespacedPath(filePath)
+                                    .localeCompare(
+                                        path.toNamespacedPath(sassPath),
+                                        undefined,
+                                        {
+                                            sensitivity: "accent",
+                                        }
+                                    ) === 0;
+
+                            searchLogs
+                                .get(`Path: ${filePath}`)
+                                ?.push(
+                                    `  compare: ${result}`,
+                                    `   - Orig file path: ${filePath}`,
+                                    `   - Orig sass path: ${sassPath}`
+                                );
+
+                            return result;
+                        })
+                        .onlyCounts()
+                        .crawl(basePath)
+                        .withPromise()
+                ).files;
 
             OutputWindow.Show(
                 OutputLevel.Trace,
@@ -1243,25 +1259,29 @@ export class AppModel {
                                 );
                             }
 
+                            const isMatch = picomatch(
+                                queryPattern || ["**/*.s[ac]ss"],
+                                {
+                                    ignore: excludedItems,
+                                    dot: true,
+                                    nocase: true,
+                                }
+                            );
+
                             return new fdir({
                                 includeBasePath: true,
                                 resolvePaths: true,
                                 suppressErrors: true,
                             })
-                                .globWithOptions(
-                                    queryPattern || ["**/*.s[ac]ss"],
-                                    {
-                                        ignore: excludedItems,
-                                        dot: true,
-                                        nocase: true,
-                                    }
-                                )
                                 .filter(
                                     (filePath) =>
                                         filePath
                                             .toLowerCase()
                                             .endsWith(".scss") ||
                                         filePath.toLowerCase().endsWith(".sass")
+                                )
+                                .filter((filePath) =>
+                                    isMatch(path.relative(basePath, filePath))
                                 )
                                 .withBasePath()
                                 .crawl(basePath)
