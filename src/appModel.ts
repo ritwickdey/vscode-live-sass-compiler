@@ -5,7 +5,7 @@ import * as vscode from "vscode";
 
 import { FileHelper, IFileResolver } from "./FileHelper";
 import { Helper, IFormat } from "./helper";
-import { fdir, OnlyCountsOutput, PathsOutput } from "fdir";
+import { fdir } from "fdir";
 import { SassHelper } from "./SassCompileHelper";
 import { StatusBarUi } from "./StatusbarUi";
 import { ErrorLogger, OutputWindow } from "./VscodeExtensions";
@@ -1006,12 +1006,6 @@ export class AppModel {
                 );
             }
 
-            const isMatch = picomatch(fileList, {
-                ignore: excludeItems,
-                dot: true,
-                nocase: true,
-            });
-
             OutputWindow.Show(
                 OutputLevel.Trace,
                 "Searching folder",
@@ -1025,57 +1019,47 @@ export class AppModel {
             >();
 
             const searchFileCount = (
-                (await new fdir()
-                    .crawlWithOptions(basePath, {
-                        filters: [
-                            (filePath) =>
-                                filePath.toLowerCase().endsWith(".scss") ||
-                                filePath.toLowerCase().endsWith(".sass"),
-                            (filePath) => {
-                                const result = isMatch(
-                                    path.relative(basePath, filePath)
-                                );
-
-                                searchLogs.set(`Path: ${filePath}`, [
-                                    `  isMatch: ${result}`,
-                                    `   - Base path: ${basePath}`,
-                                    `   - Rela path: ${path.relative(
-                                        basePath,
-                                        filePath
-                                    )}`,
-                                ]);
-
-                                return result;
-                            },
-                            (filePath) => {
-                                const result =
-                                    path
-                                        .toNamespacedPath(filePath)
-                                        .localeCompare(
-                                            path.toNamespacedPath(sassPath),
-                                            undefined,
-                                            {
-                                                sensitivity: "accent",
-                                            }
-                                        ) === 0;
-
-                                searchLogs
-                                    .get(`Path: ${filePath}`)
-                                    ?.push(
-                                        `  compare: ${result}`,
-                                        `   - Orig file path: ${filePath}`,
-                                        `   - Orig sass path: ${sassPath}`
-                                    );
-
-                                return result;
-                            },
-                        ],
-                        includeBasePath: true,
-                        onlyCounts: true,
-                        resolvePaths: true,
-                        suppressErrors: true,
+                await new fdir({
+                    includeBasePath: true,
+                    onlyCounts: true,
+                    resolvePaths: true,
+                    suppressErrors: true,
+                })
+                    .globWithOptions(fileList, {
+                        ignore: excludeItems,
+                        dot: true,
+                        nocase: true,
                     })
-                    .withPromise()) as OnlyCountsOutput
+                    .filter(
+                        (filePath) =>
+                            filePath.toLowerCase().endsWith(".scss") ||
+                            filePath.toLowerCase().endsWith(".sass")
+                    )
+                    .filter((filePath) => {
+                        const result =
+                            path
+                                .toNamespacedPath(filePath)
+                                .localeCompare(
+                                    path.toNamespacedPath(sassPath),
+                                    undefined,
+                                    {
+                                        sensitivity: "accent",
+                                    }
+                                ) === 0;
+
+                        searchLogs
+                            .get(`Path: ${filePath}`)
+                            ?.push(
+                                `  compare: ${result}`,
+                                `   - Orig file path: ${filePath}`,
+                                `   - Orig sass path: ${sassPath}`
+                            );
+
+                        return result;
+                    })
+                    .onlyCounts()
+                    .crawl(basePath)
+                    .withPromise()
             ).files;
 
             OutputWindow.Show(
@@ -1120,7 +1104,7 @@ export class AppModel {
     }
 
     private async getSassFiles(
-        queryPattern?: string | string[],
+        queryPattern?: string[],
         isDebugging = false
     ): Promise<string[]> {
         OutputWindow.Show(OutputLevel.Trace, "Getting SASS files", [
@@ -1137,7 +1121,7 @@ export class AppModel {
             (
                 await Promise.all(
                     vscode.workspace.workspaceFolders.map(
-                        async (folder, index): Promise<PathsOutput | null> => {
+                        async (folder, index) => {
                             OutputWindow.Show(
                                 OutputLevel.Trace,
                                 `Checking folder ${index + 1} of ${
@@ -1259,38 +1243,29 @@ export class AppModel {
                                 );
                             }
 
-                            const isMatch = picomatch(
-                                queryPattern ?? "**/*.s[ac]ss",
-                                {
-                                    ignore: excludedItems,
-                                    dot: true,
-                                    nocase: true,
-                                }
-                            );
-
-                            return (await new fdir()
-                                .crawlWithOptions(basePath, {
-                                    filters: [
-                                        (filePath) =>
-                                            filePath
-                                                .toLowerCase()
-                                                .endsWith(".scss") ||
-                                            filePath
-                                                .toLowerCase()
-                                                .endsWith(".sass"),
-                                        (filePath) =>
-                                            isMatch(
-                                                path.relative(
-                                                    basePath,
-                                                    filePath
-                                                )
-                                            ),
-                                    ],
-                                    includeBasePath: true,
-                                    resolvePaths: true,
-                                    suppressErrors: true,
-                                })
-                                .withPromise()) as PathsOutput;
+                            return new fdir({
+                                includeBasePath: true,
+                                resolvePaths: true,
+                                suppressErrors: true,
+                            })
+                                .globWithOptions(
+                                    queryPattern || ["**/*.s[ac]ss"],
+                                    {
+                                        ignore: excludedItems,
+                                        dot: true,
+                                        nocase: true,
+                                    }
+                                )
+                                .filter(
+                                    (filePath) =>
+                                        filePath
+                                            .toLowerCase()
+                                            .endsWith(".scss") ||
+                                        filePath.toLowerCase().endsWith(".sass")
+                                )
+                                .withBasePath()
+                                .crawl(basePath)
+                                .withPromise();
                         }
                     )
                 )
