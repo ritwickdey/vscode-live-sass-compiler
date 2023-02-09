@@ -343,8 +343,7 @@
         "pretest": "npm run rollup && tsc -p ./src/test/",
         "test": "node ./out/test/runTest.js",
         "lint": "eslint -c .eslintrc.js --ext .ts ./src/",
-        "rollup": "rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript",
-        "rollup-dev": "rollup --config rollup.dev.config.ts --configPlugin @rollup/plugin-typescript"
+        "rollup": "rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript"
     },
     "dependencies": {
         "autoprefixer": "^10.4.13",
