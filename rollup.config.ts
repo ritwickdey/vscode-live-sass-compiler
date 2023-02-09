@@ -22,6 +22,7 @@ export default {
         terser({ format: { comments: false } }),
         commonjs({
             ignoreDynamicRequires: true,
+            sourceMap: false,
         }),
         nodeResolve(),
     ],
