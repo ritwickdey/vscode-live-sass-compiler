@@ -219,47 +219,7 @@ export class AppModel {
                 [`Path: ${sassPath}`]
             );
 
-            const formats = Helper.getConfigSettings<IFormat[]>(
-                    "formats",
-                    workspaceFolder
-                ),
-                useCompile = Helper.getConfigSettings<boolean>(
-                    "useNewCompiler",
-                    workspaceFolder
-                ),
-                results = await Promise.all(
-                    formats.map(async (format, index) => {
-                        OutputWindow.Show(
-                            OutputLevel.Trace,
-                            `Starting format ${index + 1} of ${formats.length}`,
-                            [`Settings: ${JSON.stringify(format)}`]
-                        );
-
-                        // Each format
-                        const options = this.getSassOptions(format, useCompile),
-                            pathData = await this.generateCssAndMapUri(
-                                sassPath,
-                                format,
-                                workspaceFolder
-                            );
-
-                        if (pathData) {
-                            return await this.GenerateCssAndMap(
-                                workspaceFolder,
-                                sassPath,
-                                pathData.css,
-                                pathData.map,
-                                options
-                            );
-                        }
-                    })
-                );
-
-            if (results.every((r) => r)) {
-                StatusBarUi.compilationSuccess(this.isWatching);
-            } else if (results.length) {
-                StatusBarUi.compilationError(this.isWatching);
-            }
+            await this.handleSingleFile(workspaceFolder, sassPath);
         } catch (err) {
             const sassPath = vscode.window.activeTextEditor
                 ? vscode.window.activeTextEditor.document.fileName
@@ -339,52 +299,7 @@ export class AppModel {
                     `Path: ${currentFile}`,
                 ]);
 
-                const formats = Helper.getConfigSettings<IFormat[]>(
-                        "formats",
-                        workspaceFolder
-                    ),
-                    useCompile = Helper.getConfigSettings<boolean>(
-                        "useNewCompiler",
-                        workspaceFolder
-                    ),
-                    results = await Promise.all(
-                        formats.map(async (format, index) => {
-                            OutputWindow.Show(
-                                OutputLevel.Trace,
-                                `Starting format ${index + 1} of ${
-                                    formats.length
-                                }`,
-                                [`Settings: ${JSON.stringify(format)}`]
-                            );
-
-                            // Each format
-                            const options = this.getSassOptions(
-                                    format,
-                                    useCompile
-                                ),
-                                cssMapUri = await this.generateCssAndMapUri(
-                                    currentFile,
-                                    format,
-                                    workspaceFolder
-                                );
-
-                            if (cssMapUri) {
-                                return await this.GenerateCssAndMap(
-                                    workspaceFolder,
-                                    currentFile,
-                                    cssMapUri.css,
-                                    cssMapUri.map,
-                                    options
-                                );
-                            }
-                        })
-                    );
-
-                if (results.every((r) => r)) {
-                    StatusBarUi.compilationSuccess(this.isWatching);
-                } else if (results.length) {
-                    StatusBarUi.compilationError(this.isWatching);
-                }
+                await this.handleSingleFile(workspaceFolder, currentFile);
             } else {
                 // Partial
                 await this.GenerateAllCssAndMap();
@@ -429,6 +344,69 @@ export class AppModel {
     //#endregion Public
 
     //#region Private
+
+    private async processSingleFile(
+        workspaceFolder: vscode.WorkspaceFolder | undefined,
+        sassPath: string
+    ) {
+        const formats = Helper.getConfigSettings<IFormat[]>(
+                "formats",
+                workspaceFolder
+            ),
+            useCompile = Helper.getConfigSettings<boolean>(
+                "useNewCompiler",
+                workspaceFolder
+            ),
+            paths = await Promise.all(
+                formats.map((format, index) => {
+                    OutputWindow.Show(
+                        OutputLevel.Trace,
+                        `Starting format ${index + 1} of ${formats.length}`,
+                        [`Settings: ${JSON.stringify(format)}`]
+                    );
+
+                    // Each format
+                    const options = this.getSassOptions(format, useCompile);
+                    return {
+                        options,
+                        pathData: this.generateCssAndMapUri(
+                            sassPath,
+                            format,
+                            workspaceFolder
+                        ),
+                    };
+                })
+            );
+
+        return Promise.all(
+            paths.map((data) => {
+                return data.pathData.then((result) =>
+                    result
+                        ? this.GenerateCssAndMap(
+                              workspaceFolder,
+                              sassPath,
+                              result.css,
+                              result.map,
+                              data.options
+                          )
+                        : false
+                );
+            })
+        );
+    }
+
+    private async handleSingleFile(
+        workspaceFolder: vscode.WorkspaceFolder | undefined,
+        sassPath: string
+    ) {
+        const results = await this.processSingleFile(workspaceFolder, sassPath);
+
+        if (results.every((r) => r)) {
+            StatusBarUi.compilationSuccess(this.isWatching);
+        } else if (results.length) {
+            StatusBarUi.compilationError(this.isWatching);
+        }
+    }
 
     private getSassOptions(
         format: IFormat,
@@ -575,63 +553,26 @@ export class AppModel {
             sassPaths
         );
 
-        await Promise.all(
-            sassPaths.map(async (sassPath, pathIndex) => {
+        const results = await Promise.all(
+            sassPaths.map((sassPath, pathIndex) => {
                 OutputWindow.Show(
                     OutputLevel.Trace,
                     `Starting file ${pathIndex + 1} of ${sassPaths.length}`,
                     [`Path: ${sassPath}`]
                 );
 
-                const workspaceFolder = AppModel.getWorkspaceFolder(sassPath),
-                    formats = Helper.getConfigSettings<IFormat[]>(
-                        "formats",
-                        workspaceFolder
-                    ),
-                    useCompile = Helper.getConfigSettings<boolean>(
-                        "useNewCompiler",
-                        workspaceFolder
-                    ),
-                    results = await Promise.all(
-                        formats.map(async (format, formatIndex) => {
-                            OutputWindow.Show(
-                                OutputLevel.Trace,
-                                `Starting format ${formatIndex + 1} of ${
-                                    formats.length
-                                }`,
-                                [`Settings: ${JSON.stringify(format)}`]
-                            );
-
-                            // Each format
-                            const options = this.getSassOptions(
-                                    format,
-                                    useCompile
-                                ),
-                                cssMapUri = await this.generateCssAndMapUri(
-                                    sassPath,
-                                    format,
-                                    workspaceFolder
-                                );
-
-                            if (cssMapUri) {
-                                return await this.GenerateCssAndMap(
-                                    workspaceFolder,
-                                    sassPath,
-                                    cssMapUri.css,
-                                    cssMapUri.map,
-                                    options
-                                );
-                            }
-                        })
-                    );
-
-                if (results.every((r) => r)) {
-                    StatusBarUi.compilationSuccess(this.isWatching);
-                } else if (results.length) {
-                    StatusBarUi.compilationError(this.isWatching);
-                }
+                return this.processSingleFile(
+                    AppModel.getWorkspaceFolder(sassPath),
+                    sassPath
+                );
             })
         );
+
+        if (results.every((r) => r.every((s) => s))) {
+            StatusBarUi.compilationSuccess(this.isWatching);
+        } else if (results.length) {
+            StatusBarUi.compilationError(this.isWatching);
+        }
     }
 
     /**
