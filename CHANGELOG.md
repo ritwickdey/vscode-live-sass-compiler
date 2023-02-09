@@ -23,6 +23,20 @@ Types of changes
 
 All notable changes to this project will be documented in this file.
 
+## [6.0.1] - 2023-02-09
+
+<small>[Compare to previous release][comp:6.0.1]</small>
+
+### Changed
+
+-   Corrected information about the new `liveSassCompile.settings.useNewCompiler` setting
+-   Updated the docs: fixed a link and also corrected references to the new minimum VS Code version (1.74)
+-   Tweaked some code to make it slightly more performant when processing many workspaces or many files
+
+### Updated
+
+-   `fdir` to `6.0.1` [Changelog][cl:fd]
+
 ## [6.0.0] - 2023-02-07
 
 <small>[Compare to previous release][comp:6.0.0]</small>
@@ -37,7 +51,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
--   New `liveSassCompile.settings.useNewCompiler` setting. Use it to try the SASS 2.0 compiler - before it becomes mandatory
+-   New `liveSassCompile.settings.useNewCompiler` setting.
+    Try the new, more performant, SASS compiler - go on, kick the tyres on this new entry point. **Note:** `lineFeed`, `indentType` and `indentWidth` do not work in this new compiler (and never will <sup>[[ref]](https://github.com/sass/dart-sass/issues/1585#issuecomment-1005184692)</sup>)
 
 ### Fixed
 
@@ -630,7 +645,9 @@ All notable changes to this project will be documented in this file.
 | 0.0.2   | 11.07.17   | Small description updated.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | 0.0.1   | 11.07.17   | Initial Preview Release with following key features. <br> – Live SASS & SCSS Compile. <br> – Customizable file location of exported CSS. <br> – Customizable exported CSS Style (`expanded`, `compact`, `compressed`, `nested`.)<br> – Quick Status bar control.<br> – Live Reload to browser (`Live Server` extension dependency).                                                                                                                                                                                                                                                                                                                                                                          |
 
-[6.0.0]: https://github.com/glenn2223/vscode-live-sass-compiler/release/tag/v6.0.0
+[6.0.1]: https://github.com/glenn2223/vscode-live-sass-compiler/releases/tag/v6.0.1
+[comp:6.0.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v6.0.0...v6.0.1
+[6.0.0]: https://github.com/glenn2223/vscode-live-sass-compiler/releases/tag/v6.0.0
 [comp:6.0.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.5.1...v6.0.0
 [5.5.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.5.0...v5.5.1
 [5.5.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v5.4.0...v5.5.0

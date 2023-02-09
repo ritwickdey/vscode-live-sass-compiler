@@ -2,7 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime.",
-    "version": "6.0.0",
+    "version": "6.0.1",
     "publisher": "glenn2223",
     "author": {
         "name": "Glenn Marks",
@@ -255,7 +255,7 @@
                         "boolean"
                     ],
                     "default": false,
-                    "description": "Set to `true` to use new SASS's new `compile` function",
+                    "description": "Set to `true` to use new SASS's new `compile` function. It's more performant!",
                     "scope": "resource"
                 },
                 "liveSassCompile.settings.autoprefix": {
@@ -344,11 +344,11 @@
         "test": "node ./out/test/runTest.js",
         "lint": "eslint -c .eslintrc.js --ext .ts ./src/",
         "rollup": "rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript",
-        "webpack": "webpack --mode production"
+        "rollup-dev": "rollup --config rollup.dev.config.ts --configPlugin @rollup/plugin-typescript"
     },
     "dependencies": {
         "autoprefixer": "^10.4.13",
-        "fdir": "^5.3.0",
+        "fdir": "^6.0.1",
         "picomatch": "^2.3.1",
         "postcss": "^8.4.21",
         "sass": "^1.58.0"
@@ -372,7 +372,7 @@
         "vscode-test": "^1.6.1"
     },
     "announcement": {
-        "onVersion": "6.0.0",
-        "message": "SassCompiler v6.0.0: try out the SASS 2.0 compiler with a new setting. Plus bug fixes and dependancy bumps"
+        "onVersion": "6.0.1",
+        "message": "SassCompiler v6.0.1: try out a speedier compiler with the new `useNewCompiler` setting. Plus doc changes and dependancy bumps"
     }
 }
