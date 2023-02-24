@@ -6,7 +6,7 @@ import * as compiler from "sass";
 import { workspace } from "vscode";
 import { existsSync } from "fs";
 import path from "path";
-import { pathToFileURL } from "url";
+import { fileURLToPath, pathToFileURL } from "url";
 
 export class SassHelper {
     private static parsePath<T>(
@@ -121,6 +121,8 @@ export class SassHelper {
                     },
                 ],
                 logger: SassHelper.loggerProperty,
+                sourceMap: true,
+                sourceMapIncludeSources: true,
             };
 
             return options;
@@ -175,6 +177,16 @@ export class SassHelper {
             }
 
             const compileResult = compiler.compile(SassPath, options);
+
+            if (compileResult.sourceMap) {
+                compileResult.sourceMap.sources =
+                    compileResult.sourceMap.sources.map((sourcePath) =>
+                        path.relative(
+                            path.join(targetCssUri, "../"),
+                            fileURLToPath(sourcePath)
+                        )
+                    );
+            }
 
             return {
                 result: {
