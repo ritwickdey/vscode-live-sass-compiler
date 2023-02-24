@@ -1014,11 +1014,10 @@ export class AppModel {
             );
 
             const searchLogs: Map<string, string[]> = new Map<
-                string,
-                string[]
-            >();
-
-            const isMatch = picomatch(fileList, {
+                    string,
+                    string[]
+                >(),
+                isMatch = picomatch(fileList, {
                     ignore: excludeItems,
                     dot: true,
                     nocase: true,
