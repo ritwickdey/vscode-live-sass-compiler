@@ -2,7 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime.",
-    "version": "6.0.3",
+    "version": "6.0.4",
     "publisher": "glenn2223",
     "author": {
         "name": "Glenn Marks",
@@ -371,7 +371,7 @@
         "vscode-test": "^1.6.1"
     },
     "announcement": {
-        "onVersion": "6.0.3",
-        "message": "SassCompiler v6.0.3: try out a speedier compiler with the new `useNewCompiler` setting. Bug fixes and dependency bumps"
+        "onVersion": "6.0.4",
+        "message": "SassCompiler v6.0.4: try out a speedier compiler with the new `useNewCompiler` setting. Bug fixes and dependency bumps"
     }
 }
