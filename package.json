@@ -146,7 +146,7 @@
                                     "string",
                                     "null"
                                 ],
-                                "pattern": "^(?:\\\\|/|~/|~\\\\).+[^\\\\/]$",
+                                "pattern": "^(?:\\\\|/|~/|~\\\\)(?:.+[^\\\\/]$|$)",
                                 "patternErrorMessage": "Must start with any of:\n`/` or `\\` (for workspace root)\n`~/` or `~\\` for relative to the file being processed. Must not end with a path separator (`/` or `\\`)",
                                 "default": null
                             },
@@ -346,11 +346,11 @@
         "rollup": "rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript"
     },
     "dependencies": {
-        "autoprefixer": "^10.4.13",
+        "autoprefixer": "^10.4.14",
         "fdir": "^6.0.1",
         "picomatch": "^2.3.1",
         "postcss": "^8.4.21",
-        "sass": "^1.58.3"
+        "sass": "^1.60.0"
     },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^24.0.1",
@@ -361,13 +361,13 @@
         "@types/mocha": "^10.0.1",
         "@types/node": "^17.0.45",
         "@types/picomatch": "^2.3.0",
-        "@types/vscode": "^1.74.0",
-        "@typescript-eslint/eslint-plugin": "^5.53.0",
-        "@typescript-eslint/parser": "^5.53.0",
-        "eslint": "^8.34.0",
+        "@types/vscode": "1.74",
+        "@typescript-eslint/eslint-plugin": "^5.57.0",
+        "@typescript-eslint/parser": "^5.57.0",
+        "eslint": "^8.36.0",
         "mocha": "^10.2.0",
-        "rollup": "^3.17.2",
-        "typescript": "^4.9.5",
+        "rollup": "^3.20.2",
+        "typescript": "^5.0.2",
         "vscode-test": "^1.6.1"
     },
     "announcement": {
