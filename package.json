@@ -2,7 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime.",
-    "version": "6.0.4",
+    "version": "6.0.5",
     "publisher": "glenn2223",
     "author": {
         "name": "Glenn Marks",
@@ -146,7 +146,7 @@
                                     "string",
                                     "null"
                                 ],
-                                "pattern": "^(?:\\\\|/|~/|~\\\\)(?:.?[^\\\\/]$|$)",
+                                "pattern": "^(?:\\\\|/|~/|~\\\\)(?:.*[^\\\\/]$|$)",
                                 "patternErrorMessage": "Must start with any of:\n`/` or `\\` (for workspace root)\n`~/` or `~\\` for relative to the file being processed. Must not end with a path separator (`/` or `\\`)",
                                 "default": null
                             },
@@ -350,28 +350,28 @@
         "fdir": "^6.0.1",
         "picomatch": "^2.3.1",
         "postcss": "^8.4.21",
-        "sass": "^1.60.0"
+        "sass": "^1.61.0"
     },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^24.0.1",
         "@rollup/plugin-json": "^6.0.0",
-        "@rollup/plugin-node-resolve": "^15.0.1",
+        "@rollup/plugin-node-resolve": "^15.0.2",
         "@rollup/plugin-terser": "^0.4.0",
-        "@rollup/plugin-typescript": "^11.0.0",
+        "@rollup/plugin-typescript": "^11.1.0",
         "@types/mocha": "^10.0.1",
         "@types/node": "^17.0.45",
         "@types/picomatch": "^2.3.0",
         "@types/vscode": "1.74",
-        "@typescript-eslint/eslint-plugin": "^5.57.0",
-        "@typescript-eslint/parser": "^5.57.0",
-        "eslint": "^8.36.0",
+        "@typescript-eslint/eslint-plugin": "^5.57.1",
+        "@typescript-eslint/parser": "^5.57.1",
+        "eslint": "^8.38.0",
         "mocha": "^10.2.0",
         "rollup": "^3.20.2",
-        "typescript": "^5.0.2",
+        "typescript": "^5.0.4",
         "vscode-test": "^1.6.1"
     },
     "announcement": {
-        "onVersion": "6.0.4",
-        "message": "SassCompiler v6.0.4: try out a speedier compiler with the new `useNewCompiler` setting. Bug fixes and dependency bumps"
+        "onVersion": "6.0.5",
+        "message": "SassCompiler v6.0.5: try out a speedier compiler with the new `useNewCompiler` setting. Bug fixes and dependency bumps"
     }
 }

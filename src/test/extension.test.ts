@@ -10,7 +10,7 @@ suite("Extension Tests", function () {
         assert.ok(vscode.extensions.getExtension("glenn2223.live-sass").isActive);
     });
 
-    test("should register all live server commands", async () => {
+    test("should register all live sass commands", async () => {
         const commands = await vscode.commands.getCommands(true);
         const COMMANDS = [
             "liveSass.command.watchMySass",
@@ -44,8 +44,12 @@ suite("Extension Tests", function () {
                     vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, file.path).path
             ),
             doc = await vscode.workspace.openTextDocument(
-                (await vscode.workspace.findFiles("css/**"))[0]
+                (
+                    await vscode.workspace.findFiles("css/**")
+                )[0]
             );
+
+        await vscode.commands.executeCommand("liveSass.command.watchMySass");
 
         if (!(await doc.save())) {
             assert.ok(false, "Save failed");

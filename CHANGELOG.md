@@ -23,6 +23,19 @@ Types of changes
 
 All notable changes to this project will be documented in this file.
 
+## [6.0.5] - 2023-04-09
+
+<small>[Compare to previous release][comp:6.0.5]</small>
+
+### Fixed
+
+-   Fix for a `formats[].savePath` bug introduced in 6.0.4
+
+### Updated
+
+-   `sass` to `1.61.0` [Changelog][cl:sa]
+-   Various dev dependency updates _(nothing user facing)_
+
 ## [6.0.4] - 2023-03-28
 
 <small>[Compare to previous release][comp:6.0.4]</small>
@@ -680,6 +693,8 @@ All notable changes to this project will be documented in this file.
 | 0.0.2   | 11.07.17   | Small description updated.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | 0.0.1   | 11.07.17   | Initial Preview Release with following key features. <br> – Live SASS & SCSS Compile. <br> – Customizable file location of exported CSS. <br> – Customizable exported CSS Style (`expanded`, `compact`, `compressed`, `nested`.)<br> – Quick Status bar control.<br> – Live Reload to browser (`Live Server` extension dependency).                                                                                                                                                                                                                                                                                                                                                                          |
 
+[6.0.5]: https://github.com/glenn2223/vscode-live-sass-compiler/releases/tag/v6.0.5
+[comp:6.0.5]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v6.0.4...v6.0.5
 [6.0.4]: https://github.com/glenn2223/vscode-live-sass-compiler/releases/tag/v6.0.4
 [comp:6.0.4]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v6.0.3...v6.0.4
 [6.0.3]: https://github.com/glenn2223/vscode-live-sass-compiler/releases/tag/v6.0.3
