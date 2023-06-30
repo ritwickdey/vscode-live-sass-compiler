@@ -20,14 +20,11 @@ An array of formats. Allows you save to multiple locations, with a customisable 
 | extensionName                  | `.css` OR `.min.css`             | `.css`     | The extension appended to the outputted file         |
 | savePath                       | `string?`                        | `null`     | See [save path notes]                                |
 | savePathReplacementPairs       | `Record<string, string>?`        | `null`     | See [save path notes]                                |
-| _⚠ savePathSegmentKeys_        | `string[]?`                      | `null`     | See [save path notes]                                |
-| _⚠savePathReplaceSegmentsWith_ | `string?`                        | `null`     | See [save path notes]                                |
 | <sup>Ŧ</sup>_linefeed_         | `cr` OR `crlf` OR `lf` OR `lfcr` | `lf`       | The linefeed terminator to use                       |
 | <sup>Ŧ</sup>_indentType_       | `space` OR `tab`                 | `space`    | The indentation to use for the `expanded` format     |
 | <sup>Ŧ</sup>_indentWidth_      | `number`                         | `2`        | The indentation width used for the `expanded` format |
 
-<small>⚠ These will be removed in the next major release</small>  
-<small><sup>Ŧ</sup> These will be removed in SASS v2.0</small>
+<small><sup>Ŧ</sup> These will be removed in SASS v2.0 and are currently unavailable when `liveSassCompile.settings.useNewCompiler` is `true`</small>
 
 <details>
 <summary>Examples</summary>
@@ -436,7 +433,7 @@ For example, if a `.code-workspace` setting is `/src/Sass` but a `settings.json`
 
 ## Save path notes
 
-The final save path is dependant on three settings: `savePath`, `savePathSegmentKeys` and `savePathReplaceSegmentsWith`. However, `savePath` takes precedence over all three.
+The final save path is dependant on two settings: `savePath` and `savePathReplacementPairs`. They can be stacked, but `savePath` is applied first.
 
 -   Using `savePath`
     -   Starting with `/` or `\` means the path is relative to the workspace root
