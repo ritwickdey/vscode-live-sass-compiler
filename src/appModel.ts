@@ -39,8 +39,7 @@ export class AppModel {
     }
 
     async StartWatching(): Promise<void> {
-        const compileOnWatch =
-            Helper.getConfigSettings<boolean>("compileOnWatch");
+        const compileOnWatch = Helper.getConfigSettings<boolean>("compileOnWatch");
 
         if (!this.isWatching) {
             this.isWatching = !this.isWatching;
@@ -150,10 +149,7 @@ export class AppModel {
      * Compiles the currently active file
      */
     async compileCurrentFile(): Promise<void> {
-        OutputWindow.Show(
-            OutputLevel.Trace,
-            "Starting to compile current file"
-        );
+        OutputWindow.Show(OutputLevel.Trace, "Starting to compile current file");
 
         try {
             if (!vscode.window.activeTextEditor) {
@@ -178,13 +174,9 @@ export class AppModel {
 
             switch (sassFileType) {
                 case SassConfirmationType.PartialFile:
-                    OutputWindow.Show(
-                        OutputLevel.Debug,
-                        "Can't process partial Sass",
-                        [
-                            "The file currently open in the editor window is a partial sass file, these aren't processed singly",
-                        ]
-                    );
+                    OutputWindow.Show(OutputLevel.Debug, "Can't process partial Sass", [
+                        "The file currently open in the editor window is a partial sass file, these aren't processed singly",
+                    ]);
 
                     StatusBarUi.customMessage(
                         "Can't process partial Sass",
@@ -213,11 +205,9 @@ export class AppModel {
             }
 
             StatusBarUi.working("Processing single file...");
-            OutputWindow.Show(
-                OutputLevel.Debug,
-                "Processing the current file",
-                [`Path: ${sassPath}`]
-            );
+            OutputWindow.Show(OutputLevel.Debug, "Processing the current file", [
+                `Path: ${sassPath}`,
+            ]);
 
             await this.handleSingleFile(workspaceFolder, sassPath);
         } catch (err) {
@@ -252,14 +242,8 @@ export class AppModel {
         try {
             const currentFile = textDocument.fileName;
 
-            const workspaceFolder = AppModel.getWorkspaceFolder(
-                    currentFile,
-                    !this.isWatching
-                ),
-                sassFileType = this.confirmSassType(
-                    currentFile,
-                    workspaceFolder
-                );
+            const workspaceFolder = AppModel.getWorkspaceFolder(currentFile, !this.isWatching),
+                sassFileType = this.confirmSassType(currentFile, workspaceFolder);
 
             if (sassFileType == SassConfirmationType.NotSass) {
                 return;
@@ -349,14 +333,8 @@ export class AppModel {
         workspaceFolder: vscode.WorkspaceFolder | undefined,
         sassPath: string
     ) {
-        const formats = Helper.getConfigSettings<IFormat[]>(
-                "formats",
-                workspaceFolder
-            ),
-            useCompile = Helper.getConfigSettings<boolean>(
-                "useNewCompiler",
-                workspaceFolder
-            ),
+        const formats = Helper.getConfigSettings<IFormat[]>("formats", workspaceFolder),
+            useCompile = Helper.getConfigSettings<boolean>("useNewCompiler", workspaceFolder),
             paths = await Promise.all(
                 formats.map((format, index) => {
                     OutputWindow.Show(
@@ -369,11 +347,7 @@ export class AppModel {
                     const options = this.getSassOptions(format, useCompile);
                     return {
                         options,
-                        pathData: this.generateCssAndMapUri(
-                            sassPath,
-                            format,
-                            workspaceFolder
-                        ),
+                        pathData: this.generateCssAndMapUri(sassPath, format, workspaceFolder),
                     };
                 })
             );
@@ -434,26 +408,17 @@ export class AppModel {
             `Path: ${sassPath}`,
         ]);
 
-        const generateMap = Helper.getConfigSettings<boolean>(
-                "generateMap",
-                folder
-            ),
-            compileResult = SassHelper.compileOne(
-                sassPath,
-                targetCssUri,
-                mapFileUri,
-                options
-            ),
+        const generateMap = Helper.getConfigSettings<boolean>("generateMap", folder),
+            compileResult = SassHelper.compileOne(sassPath, targetCssUri, mapFileUri, options),
             promises: Promise<IFileResolver>[] = [];
 
-        let autoprefixerTarget = Helper.getConfigSettings<
-            Array<string> | boolean | null
-        >("autoprefix", folder);
+        let autoprefixerTarget = Helper.getConfigSettings<Array<string> | string | boolean | null>(
+            "autoprefix",
+            folder
+        );
 
         if (compileResult.errorString !== null) {
-            OutputWindow.Show(OutputLevel.Error, "Compilation Error", [
-                compileResult.errorString,
-            ]);
+            OutputWindow.Show(OutputLevel.Error, "Compilation Error", [compileResult.errorString]);
 
             return false;
         }
@@ -475,11 +440,9 @@ export class AppModel {
         }
 
         if (autoprefixerTarget != false) {
-            OutputWindow.Show(
-                OutputLevel.Trace,
-                "Autoprefixer isn't false, applying to file",
-                [`Path: ${sassPath}`]
-            );
+            OutputWindow.Show(OutputLevel.Trace, "Autoprefixer isn't false, applying to file", [
+                `Path: ${sassPath}`,
+            ]);
 
             try {
                 const autoprefixerResult = await this.autoprefix(
@@ -520,19 +483,13 @@ export class AppModel {
         fileResolvers.forEach((fileResolver) => {
             if (fileResolver.Exception) {
                 OutputWindow.Show(OutputLevel.Error, "Error:", [
-                    fileResolver.Exception.errno?.toString() ??
-                        "UNKNOWN ERR NUMBER",
+                    fileResolver.Exception.errno?.toString() ?? "UNKNOWN ERR NUMBER",
                     fileResolver.Exception.path ?? "UNKNOWN PATH",
                     fileResolver.Exception.message,
                 ]);
                 console.error("error :", fileResolver);
             } else {
-                OutputWindow.Show(
-                    OutputLevel.Information,
-                    null,
-                    [fileResolver.FileUri],
-                    false
-                );
+                OutputWindow.Show(OutputLevel.Information, null, [fileResolver.FileUri], false);
             }
         });
 
@@ -547,11 +504,7 @@ export class AppModel {
     private async GenerateAllCssAndMap() {
         const sassPaths = await this.getSassFiles();
 
-        OutputWindow.Show(
-            OutputLevel.Debug,
-            "Compiling Sass/Scss Files: ",
-            sassPaths
-        );
+        OutputWindow.Show(OutputLevel.Debug, "Compiling Sass/Scss Files: ", sassPaths);
 
         const results = await Promise.all(
             sassPaths.map((sassPath, pathIndex) => {
@@ -561,10 +514,7 @@ export class AppModel {
                     [`Path: ${sassPath}`]
                 );
 
-                return this.processSingleFile(
-                    AppModel.getWorkspaceFolder(sassPath),
-                    sassPath
-                );
+                return this.processSingleFile(AppModel.getWorkspaceFolder(sassPath), sassPath);
             })
         );
 
@@ -601,14 +551,10 @@ export class AppModel {
 
             // NOTE: If all SavePath settings are `NULL`, CSS Uri will be same location as SASS
             if (format.savePath) {
-                OutputWindow.Show(
-                    OutputLevel.Trace,
-                    "Using `savePath` setting",
-                    [
-                        "This format has a `savePath`, using this (takes precedence if others are present)",
-                        `savePath: ${format.savePath}`,
-                    ]
-                );
+                OutputWindow.Show(OutputLevel.Trace, "Using `savePath` setting", [
+                    "This format has a `savePath`, using this (takes precedence if others are present)",
+                    `savePath: ${format.savePath}`,
+                ]);
 
                 if (format.savePath.startsWith("~")) {
                     OutputWindow.Show(
@@ -621,10 +567,7 @@ export class AppModel {
                         false
                     );
 
-                    generatedUri = path.join(
-                        path.dirname(filePath),
-                        format.savePath.substring(1)
-                    );
+                    generatedUri = path.join(path.dirname(filePath), format.savePath.substring(1));
                 } else {
                     OutputWindow.Show(
                         OutputLevel.Trace,
@@ -639,19 +582,10 @@ export class AppModel {
                     generatedUri = path.join(workspacePath, format.savePath);
                 }
 
-                if (
-                    format.savePathReplacementPairs &&
-                    format.savePath.startsWith("~")
-                ) {
-                    OutputWindow.Show(
-                        OutputLevel.Trace,
-                        `New path: ${generatedUri}`
-                    );
+                if (format.savePathReplacementPairs && format.savePath.startsWith("~")) {
+                    OutputWindow.Show(OutputLevel.Trace, `New path: ${generatedUri}`);
                 } else {
-                    OutputWindow.Show(
-                        OutputLevel.Trace,
-                        `Path to continue with: ${generatedUri}`
-                    );
+                    OutputWindow.Show(OutputLevel.Trace, `Path to continue with: ${generatedUri}`);
 
                     FileHelper.MakeDirIfNotAvailable(generatedUri);
                 }
@@ -672,9 +606,7 @@ export class AppModel {
 
                 generatedUri =
                     "/" +
-                    path
-                        .relative(workspacePath, path.dirname(filePath))
-                        .replace(/\\/g, "/") +
+                    path.relative(workspacePath, path.dirname(filePath)).replace(/\\/g, "/") +
                     "/";
 
                 for (const key in format.savePathReplacementPairs) {
@@ -686,10 +618,7 @@ export class AppModel {
                     ) {
                         const value = format.savePathReplacementPairs[key];
 
-                        if (
-                            typeof value === "string" ||
-                            value instanceof String
-                        ) {
+                        if (typeof value === "string" || value instanceof String) {
                             OutputWindow.Show(
                                 OutputLevel.Trace,
                                 `Applying: ${key} => ${value}`,
@@ -705,9 +634,7 @@ export class AppModel {
                             OutputWindow.Show(
                                 OutputLevel.Error,
                                 "Error: Invalid type passed to savePathReplacementPairs",
-                                [
-                                    `The key "${key}" must have a string value, not "${typeof value}"`,
-                                ]
+                                [`The key "${key}" must have a string value, not "${typeof value}"`]
                             );
 
                             return null;
@@ -715,25 +642,15 @@ export class AppModel {
                     }
                 }
 
-                FileHelper.MakeDirIfNotAvailable(
-                    path.join(workspacePath, generatedUri)
-                );
+                FileHelper.MakeDirIfNotAvailable(path.join(workspacePath, generatedUri));
 
-                OutputWindow.Show(
-                    OutputLevel.Trace,
-                    `New path: ${generatedUri}`
-                );
+                OutputWindow.Show(OutputLevel.Trace, `New path: ${generatedUri}`);
 
-                filePath = path.join(
-                    workspacePath,
-                    generatedUri,
-                    path.basename(filePath)
-                );
+                filePath = path.join(workspacePath, generatedUri, path.basename(filePath));
             }
         }
 
-        const cssUri =
-            filePath.substring(0, filePath.lastIndexOf(".")) + extensionName;
+        const cssUri = filePath.substring(0, filePath.lastIndexOf(".")) + extensionName;
 
         return {
             css: cssUri,
@@ -749,18 +666,14 @@ export class AppModel {
         css: string,
         map: string | undefined,
         savePath: string,
-        browsers: Array<string> | true
+        browsers: string | Array<string> | true
     ): Promise<{ css: string; map: string | null }> {
         OutputWindow.Show(OutputLevel.Trace, "Preparing autoprefixer");
 
-        const generateMap = Helper.getConfigSettings<boolean>(
-                "generateMap",
-                folder
-            ),
+        const generateMap = Helper.getConfigSettings<boolean>("generateMap", folder),
             prefixer = postcss(
                 autoprefixer({
-                    overrideBrowserslist:
-                        browsers === true ? undefined : browsers,
+                    overrideBrowserslist: browsers === true ? undefined : browsers,
                 })
             );
 
@@ -770,11 +683,10 @@ export class AppModel {
         if (browsers === true) {
             process.env.BROWSERSLIST_DISABLE_CACHE = "1";
 
-            OutputWindow.Show(
-                OutputLevel.Trace,
-                "Changing BROWSERSLIST_DISABLE_CACHE setting",
-                [`Was: ${oldBrowserlistCache ?? "UNDEFINED"}`, "Now: 1"]
-            );
+            OutputWindow.Show(OutputLevel.Trace, "Changing BROWSERSLIST_DISABLE_CACHE setting", [
+                `Was: ${oldBrowserlistCache ?? "UNDEFINED"}`,
+                "Now: 1",
+            ]);
         }
 
         try {
@@ -794,18 +706,13 @@ export class AppModel {
                 const body: string[] = [];
 
                 if (warn.node.source?.input.file) {
-                    body.push(
-                        warn.node.source.input.file +
-                            `:${warn.line}:${warn.column}`
-                    );
+                    body.push(warn.node.source.input.file + `:${warn.line}:${warn.column}`);
                 }
 
                 body.push(warn.text);
 
                 OutputWindow.Show(
-                    warn.type === "warning"
-                        ? OutputLevel.Warning
-                        : OutputLevel.Error,
+                    warn.type === "warning" ? OutputLevel.Warning : OutputLevel.Error,
                     `Autoprefix ${warn.type || "error"}`,
                     body
                 );
@@ -823,9 +730,7 @@ export class AppModel {
 
                 OutputWindow.Show(
                     OutputLevel.Trace,
-                    `Restored BROWSERSLIST_DISABLE_CACHE to: ${
-                        oldBrowserlistCache ?? "UNDEFINED"
-                    }`
+                    `Restored BROWSERSLIST_DISABLE_CACHE to: ${oldBrowserlistCache ?? "UNDEFINED"}`
                 );
             }
         }
@@ -886,17 +791,11 @@ export class AppModel {
 
                 const isPartial = picomatch(
                     AppModel.stripAnyLeadingSlashes(
-                        Helper.getConfigSettings<string[]>(
-                            "partialsList",
-                            workspaceFolder
-                        )
+                        Helper.getConfigSettings<string[]>("partialsList", workspaceFolder)
                     ),
                     {
                         ignore: AppModel.stripAnyLeadingSlashes(
-                            Helper.getConfigSettings<string[]>(
-                                "excludeList",
-                                workspaceFolder
-                            )
+                            Helper.getConfigSettings<string[]>("excludeList", workspaceFolder)
                         ),
                         dot: true,
                         nocase: true,
@@ -918,11 +817,9 @@ export class AppModel {
         sassPath: string,
         workspaceFolder?: vscode.WorkspaceFolder
     ): Promise<boolean> {
-        OutputWindow.Show(
-            OutputLevel.Trace,
-            "Checking SASS path isn't excluded",
-            [`Path: ${sassPath}`]
-        );
+        OutputWindow.Show(OutputLevel.Trace, "Checking SASS path isn't excluded", [
+            `Path: ${sassPath}`,
+        ]);
 
         if (workspaceFolder) {
             const includeItems = Helper.getConfigSettings<string[] | null>(
@@ -930,10 +827,7 @@ export class AppModel {
                     workspaceFolder
                 ),
                 excludeItems = AppModel.stripAnyLeadingSlashes(
-                    Helper.getConfigSettings<string[]>(
-                        "excludeList",
-                        workspaceFolder
-                    )
+                    Helper.getConfigSettings<string[]>("excludeList", workspaceFolder)
                 ),
                 forceBaseDirectory = Helper.getConfigSettings<string | null>(
                     "forceBaseDirectory",
@@ -945,10 +839,7 @@ export class AppModel {
             if (includeItems && includeItems.length) {
                 fileList = AppModel.stripAnyLeadingSlashes(
                     includeItems.concat(
-                        Helper.getConfigSettings<string[]>(
-                            "partialsList",
-                            workspaceFolder
-                        )
+                        Helper.getConfigSettings<string[]>("partialsList", workspaceFolder)
                     )
                 );
             }
@@ -961,10 +852,7 @@ export class AppModel {
                     "`forceBaseDirectory` setting found, checking validity"
                 );
 
-                basePath = path.resolve(
-                    basePath,
-                    AppModel.stripLeadingSlash(forceBaseDirectory)
-                );
+                basePath = path.resolve(basePath, AppModel.stripLeadingSlash(forceBaseDirectory));
 
                 try {
                     if (!(await fs.promises.stat(basePath)).isDirectory()) {
@@ -1006,17 +894,9 @@ export class AppModel {
                 );
             }
 
-            OutputWindow.Show(
-                OutputLevel.Trace,
-                "Searching folder",
-                null,
-                false
-            );
+            OutputWindow.Show(OutputLevel.Trace, "Searching folder", null, false);
 
-            const searchLogs: Map<string, string[]> = new Map<
-                    string,
-                    string[]
-                >(),
+            const searchLogs: Map<string, string[]> = new Map<string, string[]>(),
                 isMatch = picomatch(fileList, {
                     ignore: excludeItems,
                     dot: true,
@@ -1035,17 +915,12 @@ export class AppModel {
                                 filePath.toLowerCase().endsWith(".sass")
                         )
                         .filter((filePath) => {
-                            const result = isMatch(
-                                path.relative(basePath, filePath)
-                            );
+                            const result = isMatch(path.relative(basePath, filePath));
 
                             searchLogs.set(`Path: ${filePath}`, [
                                 `  isMatch: ${result}`,
                                 `   - Base path: ${basePath}`,
-                                `   - Rela path: ${path.relative(
-                                    basePath,
-                                    filePath
-                                )}`,
+                                `   - Rela path: ${path.relative(basePath, filePath)}`,
                             ]);
 
                             return result;
@@ -1054,13 +929,9 @@ export class AppModel {
                             const result =
                                 path
                                     .toNamespacedPath(filePath)
-                                    .localeCompare(
-                                        path.toNamespacedPath(sassPath),
-                                        undefined,
-                                        {
-                                            sensitivity: "accent",
-                                        }
-                                    ) === 0;
+                                    .localeCompare(path.toNamespacedPath(sassPath), undefined, {
+                                        sensitivity: "accent",
+                                    }) === 0;
 
                             searchLogs
                                 .get(`Path: ${filePath}`)
@@ -1077,12 +948,7 @@ export class AppModel {
                         .withPromise()
                 ).files;
 
-            OutputWindow.Show(
-                OutputLevel.Trace,
-                "Search results",
-                undefined,
-                false
-            );
+            OutputWindow.Show(OutputLevel.Trace, "Search results", undefined, false);
 
             searchLogs.forEach((logs, key) => {
                 OutputWindow.Show(OutputLevel.Trace, key, logs, false);
@@ -1092,24 +958,15 @@ export class AppModel {
 
             // If doesn't include true then it's not been found
             if (searchFileCount > 0) {
-                OutputWindow.Show(
-                    OutputLevel.Trace,
-                    "File found, not excluded"
-                );
+                OutputWindow.Show(OutputLevel.Trace, "File found, not excluded");
 
                 return false;
             } else {
-                OutputWindow.Show(
-                    OutputLevel.Trace,
-                    "File not found, must be excluded"
-                );
+                OutputWindow.Show(OutputLevel.Trace, "File not found, must be excluded");
                 return true;
             }
         } else {
-            OutputWindow.Show(
-                OutputLevel.Trace,
-                "No workspace folder, checking the current file"
-            );
+            OutputWindow.Show(OutputLevel.Trace, "No workspace folder, checking the current file");
 
             return (
                 path.basename(sassPath).startsWith("_") ||
@@ -1118,10 +975,7 @@ export class AppModel {
         }
     }
 
-    private async getSassFiles(
-        queryPattern?: string[],
-        isDebugging = false
-    ): Promise<string[]> {
+    private async getSassFiles(queryPattern?: string[], isDebugging = false): Promise<string[]> {
         OutputWindow.Show(OutputLevel.Trace, "Getting SASS files", [
             `Query pattern: ${queryPattern}`,
             `Can be overwritten: ${queryPattern == undefined}`,
@@ -1129,103 +983,64 @@ export class AppModel {
 
         const fileList: string[] = [];
 
-        if (
-            vscode.workspace.workspaceFolders &&
-            vscode.workspace.workspaceFolders.length > 0
-        ) {
+        if (vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0) {
             (
                 await Promise.all(
-                    vscode.workspace.workspaceFolders.map(
-                        async (folder, index) => {
-                            OutputWindow.Show(
-                                OutputLevel.Trace,
-                                `Checking folder ${index + 1} of ${
-                                    vscode.workspace.workspaceFolders!.length
-                                }`,
-                                [`Folder: ${folder.name}`]
+                    vscode.workspace.workspaceFolders.map(async (folder, index) => {
+                        OutputWindow.Show(
+                            OutputLevel.Trace,
+                            `Checking folder ${index + 1} of ${
+                                vscode.workspace.workspaceFolders!.length
+                            }`,
+                            [`Folder: ${folder.name}`]
+                        );
+
+                        const includeItems = Helper.getConfigSettings<string[] | null>(
+                                "includeItems",
+                                folder
+                            ),
+                            forceBaseDirectory = Helper.getConfigSettings<string | null>(
+                                "forceBaseDirectory",
+                                folder
                             );
 
-                            const includeItems = Helper.getConfigSettings<
-                                    string[] | null
-                                >("includeItems", folder),
-                                forceBaseDirectory = Helper.getConfigSettings<
-                                    string | null
-                                >("forceBaseDirectory", folder);
+                        let basePath = folder.uri.fsPath,
+                            excludedItems = isDebugging
+                                ? ["**/node_modules/**", ".vscode/**"]
+                                : Helper.getConfigSettings<string[]>("excludeList", folder);
 
-                            let basePath = folder.uri.fsPath,
-                                excludedItems = isDebugging
-                                    ? ["**/node_modules/**", ".vscode/**"]
-                                    : Helper.getConfigSettings<string[]>(
-                                          "excludeList",
-                                          folder
-                                      );
+                        if (queryPattern) {
+                            queryPattern = AppModel.stripAnyLeadingSlashes(
+                                Array.isArray(queryPattern) ? queryPattern : [queryPattern]
+                            );
+                        } else if (includeItems && includeItems.length) {
+                            queryPattern = AppModel.stripAnyLeadingSlashes(includeItems);
 
-                            if (queryPattern) {
-                                queryPattern = AppModel.stripAnyLeadingSlashes(
-                                    Array.isArray(queryPattern)
-                                        ? queryPattern
-                                        : [queryPattern]
-                                );
-                            } else if (includeItems && includeItems.length) {
-                                queryPattern =
-                                    AppModel.stripAnyLeadingSlashes(
-                                        includeItems
-                                    );
+                            OutputWindow.Show(OutputLevel.Trace, "Query pattern overwritten", [
+                                `New pattern(s): "${includeItems.join('" , "')}"`,
+                            ]);
+                        }
 
-                                OutputWindow.Show(
-                                    OutputLevel.Trace,
-                                    "Query pattern overwritten",
-                                    [
-                                        `New pattern(s): "${includeItems.join(
-                                            '" , "'
-                                        )}"`,
-                                    ]
-                                );
-                            }
+                        excludedItems = AppModel.stripAnyLeadingSlashes(excludedItems);
 
-                            excludedItems =
-                                AppModel.stripAnyLeadingSlashes(excludedItems);
+                        if (forceBaseDirectory && forceBaseDirectory.length > 1) {
+                            OutputWindow.Show(
+                                OutputLevel.Trace,
+                                "`forceBaseDirectory` setting found, checking validity"
+                            );
 
-                            if (
-                                forceBaseDirectory &&
-                                forceBaseDirectory.length > 1
-                            ) {
-                                OutputWindow.Show(
-                                    OutputLevel.Trace,
-                                    "`forceBaseDirectory` setting found, checking validity"
-                                );
+                            basePath = path.resolve(
+                                basePath,
+                                AppModel.stripLeadingSlash(forceBaseDirectory)
+                            );
 
-                                basePath = path.resolve(
-                                    basePath,
-                                    AppModel.stripLeadingSlash(
-                                        forceBaseDirectory
-                                    )
-                                );
-
-                                try {
-                                    if (
-                                        !(
-                                            await fs.promises.stat(basePath)
-                                        ).isDirectory()
-                                    ) {
-                                        OutputWindow.Show(
-                                            OutputLevel.Critical,
-                                            "Error with your `forceBaseDirectory` setting",
-                                            [
-                                                `Path is not a folder: ${basePath}`,
-                                                `Setting: "${forceBaseDirectory}"`,
-                                                `Workspace folder: ${folder.name}`,
-                                            ]
-                                        );
-
-                                        return null;
-                                    }
-                                } catch {
+                            try {
+                                if (!(await fs.promises.stat(basePath)).isDirectory()) {
                                     OutputWindow.Show(
                                         OutputLevel.Critical,
                                         "Error with your `forceBaseDirectory` setting",
                                         [
-                                            `Can not find path: ${basePath}`,
+                                            `Path is not a folder: ${basePath}`,
                                             `Setting: "${forceBaseDirectory}"`,
                                             `Workspace folder: ${folder.name}`,
                                         ]
@@ -1233,60 +1048,62 @@ export class AppModel {
 
                                     return null;
                                 }
+                            } catch {
+                                OutputWindow.Show(
+                                    OutputLevel.Critical,
+                                    "Error with your `forceBaseDirectory` setting",
+                                    [
+                                        `Can not find path: ${basePath}`,
+                                        `Setting: "${forceBaseDirectory}"`,
+                                        `Workspace folder: ${folder.name}`,
+                                    ]
+                                );
 
-                                OutputWindow.Show(
-                                    OutputLevel.Trace,
-                                    "No problem with path, changing from workspace folder",
-                                    [`New folder: ${basePath}`]
-                                );
-                            } else {
-                                OutputWindow.Show(
-                                    OutputLevel.Trace,
-                                    "No base folder override found. Keeping workspace folder"
-                                );
+                                return null;
                             }
 
-                            if (!isDebugging) {
-                                // Add partials to excludedItems
-                                excludedItems.push(
-                                    ...AppModel.stripAnyLeadingSlashes(
-                                        Helper.getConfigSettings<string[]>(
-                                            "partialsList",
-                                            folder
-                                        )
-                                    )
-                                );
-                            }
-
-                            const isMatch = picomatch(
-                                queryPattern || ["**/*.s[ac]ss"],
-                                {
-                                    ignore: excludedItems,
-                                    dot: true,
-                                    nocase: true,
-                                }
+                            OutputWindow.Show(
+                                OutputLevel.Trace,
+                                "No problem with path, changing from workspace folder",
+                                [`New folder: ${basePath}`]
                             );
-
-                            return new fdir({
-                                includeBasePath: true,
-                                resolvePaths: true,
-                                suppressErrors: true,
-                            })
-                                .filter(
-                                    (filePath) =>
-                                        filePath
-                                            .toLowerCase()
-                                            .endsWith(".scss") ||
-                                        filePath.toLowerCase().endsWith(".sass")
-                                )
-                                .filter((filePath) =>
-                                    isMatch(path.relative(basePath, filePath))
-                                )
-                                .withBasePath()
-                                .crawl(basePath)
-                                .withPromise();
+                        } else {
+                            OutputWindow.Show(
+                                OutputLevel.Trace,
+                                "No base folder override found. Keeping workspace folder"
+                            );
                         }
-                    )
+
+                        if (!isDebugging) {
+                            // Add partials to excludedItems
+                            excludedItems.push(
+                                ...AppModel.stripAnyLeadingSlashes(
+                                    Helper.getConfigSettings<string[]>("partialsList", folder)
+                                )
+                            );
+                        }
+
+                        const isMatch = picomatch(queryPattern || ["**/*.s[ac]ss"], {
+                            ignore: excludedItems,
+                            dot: true,
+                            nocase: true,
+                        });
+
+                        return new fdir({
+                            includeBasePath: true,
+                            resolvePaths: true,
+                            suppressErrors: true,
+                        })
+                            .filter(
+                                (filePath) =>
+                                    filePath.toLowerCase().endsWith(".scss") ||
+                                    filePath.toLowerCase().endsWith(".sass")
+                            )
+                            .filter((filePath) => isMatch(path.relative(basePath, filePath)))
+                            .withBasePath()
+                            .crawl(basePath)
+                            .withPromise();
+                    })
                 )
             ).forEach((files) => {
                 files?.forEach((file) => {
@@ -1294,10 +1111,7 @@ export class AppModel {
                 });
             });
         } else {
-            OutputWindow.Show(
-                OutputLevel.Trace,
-                "No workspace, must be a single file solution"
-            );
+            OutputWindow.Show(OutputLevel.Trace, "No workspace, must be a single file solution");
 
             if (vscode.window.activeTextEditor) {
                 fileList.push(vscode.window.activeTextEditor.document.fileName);
@@ -1306,10 +1120,7 @@ export class AppModel {
             }
         }
 
-        OutputWindow.Show(
-            OutputLevel.Trace,
-            `Found ${fileList.length} SASS files`
-        );
+        OutputWindow.Show(OutputLevel.Trace, `Found ${fileList.length} SASS files`);
 
         return fileList;
     }
@@ -1321,12 +1132,7 @@ export class AppModel {
     //#region Debugging
 
     async debugInclusion(): Promise<void> {
-        OutputWindow.Show(
-            OutputLevel.Critical,
-            "Checking current file",
-            null,
-            false
-        );
+        OutputWindow.Show(OutputLevel.Critical, "Checking current file", null, false);
 
         try {
             if (!vscode.window.activeTextEditor) {
@@ -1344,27 +1150,18 @@ export class AppModel {
 
             const workspaceFolder = AppModel.getWorkspaceFolder(sassPath);
 
-            if (
-                this.confirmSassType(sassPath, workspaceFolder) ==
-                SassConfirmationType.NotSass
-            ) {
+            if (this.confirmSassType(sassPath, workspaceFolder) == SassConfirmationType.NotSass) {
                 OutputWindow.Show(OutputLevel.Critical, "Not a Sass file", [
                     "The file currently open in the editor window isn't a sass file",
                 ]);
-            } else if (
-                await this.isSassFileExcluded(sassPath, workspaceFolder)
-            ) {
+            } else if (await this.isSassFileExcluded(sassPath, workspaceFolder)) {
                 OutputWindow.Show(OutputLevel.Critical, "File excluded", [
                     "The file is excluded based on your settings, please check your configuration",
                 ]);
             } else {
-                OutputWindow.Show(
-                    OutputLevel.Critical,
-                    "File should get processed",
-                    [
-                        "If the file isn't being processed, run `liveSass.command.debugFileList`",
-                    ]
-                );
+                OutputWindow.Show(OutputLevel.Critical, "File should get processed", [
+                    "If the file isn't being processed, run `liveSass.command.debugFileList`",
+                ]);
             }
         } catch (err) {
             const sassPath = vscode.window.activeTextEditor
@@ -1407,103 +1204,85 @@ export class AppModel {
                 );
             }
 
-            outputInfo.push(
-                "--------------------",
-                "Workspace Folders",
-                "--------------------"
-            );
+            outputInfo.push("--------------------", "Workspace Folders", "--------------------");
             if (workspaceCount === null) {
                 outputInfo.push("No workspaces, must be a single file");
             } else {
                 vscode.workspace.workspaceFolders!.map((folder) => {
-                    outputInfo.push(
-                        `[${folder.index}] ${folder.name}\n${folder.uri.fsPath}`
-                    );
+                    outputInfo.push(`[${folder.index}] ${folder.name}\n${folder.uri.fsPath}`);
                 });
 
                 await Promise.all(
-                    vscode.workspace.workspaceFolders!.map(
-                        async (folder, index) => {
-                            const folderOutput: string[] = [];
+                    vscode.workspace.workspaceFolders!.map(async (folder, index) => {
+                        const folderOutput: string[] = [];
 
-                            folderOutput.push(
-                                "--------------------",
-                                `Checking workspace folder ${
-                                    index + 1
-                                } of ${workspaceCount}`,
-                                `Path: ${folder.uri.fsPath}`,
-                                "--------------------"
-                            );
+                        folderOutput.push(
+                            "--------------------",
+                            `Checking workspace folder ${index + 1} of ${workspaceCount}`,
+                            `Path: ${folder.uri.fsPath}`,
+                            "--------------------"
+                        );
 
-                            const exclusionList = Helper.getConfigSettings<
-                                string[]
-                            >("excludeList", folder);
+                        const exclusionList = Helper.getConfigSettings<string[]>(
+                            "excludeList",
+                            folder
+                        );
 
-                            folderOutput.push(
-                                "--------------------",
-                                "Current Include/Exclude Settings",
-                                "--------------------",
-                                `Include: [ ${
-                                    Helper.getConfigSettings<string[] | null>(
-                                        "includeItems",
-                                        folder
-                                    )?.join(", ") ?? "NULL"
-                                } ]`,
-                                `Exclude: [ ${exclusionList.join(", ")} ]`
-                            );
+                        folderOutput.push(
+                            "--------------------",
+                            "Current Include/Exclude Settings",
+                            "--------------------",
+                            `Include: [ ${
+                                Helper.getConfigSettings<string[] | null>(
+                                    "includeItems",
+                                    folder
+                                )?.join(", ") ?? "NULL"
+                            } ]`,
+                            `Exclude: [ ${exclusionList.join(", ")} ]`
+                        );
 
-                            folderOutput.push(
-                                "--------------------",
-                                "Included SASS Files",
-                                "--------------------"
-                            );
-                            (await this.getSassFiles()).map((file) => {
+                        folderOutput.push(
+                            "--------------------",
+                            "Included SASS Files",
+                            "--------------------"
+                        );
+                        (await this.getSassFiles()).map((file) => {
+                            folderOutput.push(file);
+                        });
+
+                        folderOutput.push(
+                            "--------------------",
+                            "Included Partial SASS Files",
+                            "--------------------"
+                        );
+                        (
+                            await this.getSassFiles(
+                                Helper.getConfigSettings<string[]>("partialsList", folder),
+                                true
+                            )
+                        ).map((file) => {
+                            folderOutput.push(file);
+                        });
+
+                        folderOutput.push(
+                            "--------------------",
+                            "Excluded SASS Files",
+                            "--------------------"
+                        );
+                        if (exclusionList.length > 0) {
+                            (await this.getSassFiles(exclusionList, true)).map((file) => {
                                 folderOutput.push(file);
                             });
-
-                            folderOutput.push(
-                                "--------------------",
-                                "Included Partial SASS Files",
-                                "--------------------"
-                            );
-                            (
-                                await this.getSassFiles(
-                                    Helper.getConfigSettings<string[]>(
-                                        "partialsList",
-                                        folder
-                                    ),
-                                    true
-                                )
-                            ).map((file) => {
-                                folderOutput.push(file);
-                            });
-
-                            folderOutput.push(
-                                "--------------------",
-                                "Excluded SASS Files",
-                                "--------------------"
-                            );
-                            if (exclusionList.length > 0) {
-                                (
-                                    await this.getSassFiles(exclusionList, true)
-                                ).map((file) => {
-                                    folderOutput.push(file);
-                                });
-                            } else {
-                                folderOutput.push("NONE");
-                            }
-
-                            outputInfo.push(...folderOutput);
+                        } else {
+                            folderOutput.push("NONE");
                         }
-                    )
+
+                        outputInfo.push(...folderOutput);
+                    })
                 );
             }
 
-            OutputWindow.Show(
-                OutputLevel.Critical,
-                "Extension Info",
-                outputInfo
-            );
+            OutputWindow.Show(OutputLevel.Critical, "Extension Info", outputInfo);
         } catch (err) {
             const sassPath = vscode.window.activeTextEditor
                 ? vscode.window.activeTextEditor.document.fileName
@@ -1537,9 +1316,7 @@ export class AppModel {
             : partialPath;
     }
 
-    private static stripAnyLeadingSlashes(
-        stringArray: string[] | null
-    ): string[] {
+    private static stripAnyLeadingSlashes(stringArray: string[] | null): string[] {
         if (!stringArray) {
             return [];
         }
@@ -1549,32 +1326,20 @@ export class AppModel {
         });
     }
 
-    private static getWorkspaceFolder(
-        filePath: string,
-        suppressOutput = false
-    ) {
-        const workspaceFolder = vscode.workspace.getWorkspaceFolder(
-            vscode.Uri.file(filePath)
-        );
+    private static getWorkspaceFolder(filePath: string, suppressOutput = false) {
+        const workspaceFolder = vscode.workspace.getWorkspaceFolder(vscode.Uri.file(filePath));
 
         if (!suppressOutput) {
             const filename = filePath.toLowerCase();
 
             if (workspaceFolder) {
-                OutputWindow.Show(
-                    OutputLevel.Trace,
-                    "Found the workspace folder",
-                    [`Workspace Name: ${workspaceFolder.name}`]
-                );
-            } else if (
-                filename.endsWith(".sass") ||
-                filename.endsWith(".scss")
-            ) {
-                OutputWindow.Show(
-                    OutputLevel.Warning,
-                    "Warning: File is not in a workspace",
-                    [`Path: ${filePath}`]
-                );
+                OutputWindow.Show(OutputLevel.Trace, "Found the workspace folder", [
+                    `Workspace Name: ${workspaceFolder.name}`,
+                ]);
+            } else if (filename.endsWith(".sass") || filename.endsWith(".scss")) {
+                OutputWindow.Show(OutputLevel.Warning, "Warning: File is not in a workspace", [
+                    `Path: ${filePath}`,
+                ]);
             }
         }
 
