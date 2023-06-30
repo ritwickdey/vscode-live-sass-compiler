@@ -261,6 +261,7 @@
                 "liveSassCompile.settings.autoprefix": {
                     "type": [
                         "array",
+                        "string",
                         "boolean",
                         "null"
                     ],
@@ -296,7 +297,7 @@
                 },
                 "liveSassCompile.settings.showOutputWindow": {
                     "type": [
-                        "bool",
+                        "boolean",
                         "null"
                     ],
                     "deprecationMessage": "Please use showOutputWindowOn instead",
@@ -315,13 +316,13 @@
                     "scope": "resource"
                 },
                 "liveSassCompile.settings.rootIsWorkspace": {
-                    "type": "bool",
+                    "type": "boolean",
                     "default": false,
                     "description": "A leading slash is relative to the workspace, not the drive (e.g C://)",
                     "scope": "resource"
                 },
                 "liveSassCompile.settings.showAnnouncements": {
-                    "type": "bool",
+                    "type": "boolean",
                     "default": true,
                     "description": "Show the announcement whenever a new version is installed"
                 }
@@ -349,25 +350,25 @@
         "autoprefixer": "^10.4.14",
         "fdir": "^6.0.1",
         "picomatch": "^2.3.1",
-        "postcss": "^8.4.21",
-        "sass": "^1.61.0"
+        "postcss": "^8.4.24",
+        "sass": "^1.63.6"
     },
     "devDependencies": {
-        "@rollup/plugin-commonjs": "^24.0.1",
+        "@rollup/plugin-commonjs": "^25.0.2",
         "@rollup/plugin-json": "^6.0.0",
-        "@rollup/plugin-node-resolve": "^15.0.2",
-        "@rollup/plugin-terser": "^0.4.0",
-        "@rollup/plugin-typescript": "^11.1.0",
+        "@rollup/plugin-node-resolve": "^15.1.0",
+        "@rollup/plugin-terser": "^0.4.3",
+        "@rollup/plugin-typescript": "^11.1.2",
         "@types/mocha": "^10.0.1",
         "@types/node": "^17.0.45",
         "@types/picomatch": "^2.3.0",
         "@types/vscode": "1.74",
-        "@typescript-eslint/eslint-plugin": "^5.57.1",
-        "@typescript-eslint/parser": "^5.57.1",
-        "eslint": "^8.38.0",
+        "@typescript-eslint/eslint-plugin": "^5.60.1",
+        "@typescript-eslint/parser": "^5.60.1",
+        "eslint": "^8.43.0",
         "mocha": "^10.2.0",
-        "rollup": "^3.20.2",
-        "typescript": "^5.0.4",
+        "rollup": "^3.26.0",
+        "typescript": "^5.1.6",
         "vscode-test": "^1.6.1"
     },
     "announcement": {
