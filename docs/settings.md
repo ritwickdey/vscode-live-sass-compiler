@@ -197,7 +197,7 @@ Autoprefix unsupported CSS properties (e.g. `transform` will also add `-ms-trans
 -   When `false` Autoprefixer is disabled
 -   When `true` we will try and search for either:
 
-    -   a `.browserlistsrc` file or,
+    -   a `.browserslistrc` file or,
     -   `"browserslist": [ string[] ]` in your `package.json` file
 
         If neither of these are found then Autoprefixer will use `"defaults"`
