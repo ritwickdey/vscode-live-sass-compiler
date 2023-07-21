@@ -350,11 +350,11 @@
         "autoprefixer": "^10.4.14",
         "fdir": "^6.0.1",
         "picomatch": "^2.3.1",
-        "postcss": "^8.4.24",
-        "sass": "^1.63.6"
+        "postcss": "^8.4.26",
+        "sass": "^1.62.1"
     },
     "devDependencies": {
-        "@rollup/plugin-commonjs": "^25.0.2",
+        "@rollup/plugin-commonjs": "^25.0.3",
         "@rollup/plugin-json": "^6.0.0",
         "@rollup/plugin-node-resolve": "^15.1.0",
         "@rollup/plugin-terser": "^0.4.3",
@@ -363,11 +363,11 @@
         "@types/node": "^17.0.45",
         "@types/picomatch": "^2.3.0",
         "@types/vscode": "1.74",
-        "@typescript-eslint/eslint-plugin": "^5.60.1",
-        "@typescript-eslint/parser": "^5.60.1",
-        "eslint": "^8.43.0",
+        "@typescript-eslint/eslint-plugin": "^5.62.0",
+        "@typescript-eslint/parser": "^5.62.0",
+        "eslint": "^8.45.0",
         "mocha": "^10.2.0",
-        "rollup": "^3.26.0",
+        "rollup": "^3.26.3",
         "typescript": "^5.1.6",
         "vscode-test": "^1.6.1"
     },
