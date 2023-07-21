@@ -1,5 +1,8 @@
 # FAQs
 
+> ℹ️ **Struggling with something?**  
+> There's a video with an intro, preview and overview of settings. Watch it on [YouTube](https://youtu.be/6Wo3mYBLNyA) now!
+
 Click a question to reveal its answer
 
 <details>
@@ -72,10 +75,7 @@ Open the `settings.json` file and type following key-value pairs. _By the way, y
             "savePath": "/dist/css"
         }
     ],
-    "liveSassCompile.settings.excludeList": [
-        "**/node_modules/**",
-        ".vscode/**"
-    ],
+    "liveSassCompile.settings.excludeList": ["**/node_modules/**", ".vscode/**"],
     "liveSassCompile.settings.generateMap": true,
     "liveSassCompile.settings.autoprefix": ["defaults"]
 }
