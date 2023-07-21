@@ -1,75 +1,75 @@
 name: Publish CI
 
 on:
-  release:
-    types:
-    - published
+    release:
+        types:
+            - published
 
-  # ALLOW MANUAL RUNS
-  workflow_dispatch:
+    # ALLOW MANUAL RUNS
+    workflow_dispatch:
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-#        os: [macos-latest, ubuntu-latest, windows-latest]
-#        include:
-#          - os: macos-latest
-#            target: darwin-x64 darwin-arm64
-#          - os: ubuntu-latest
-#            target: linux-x64 linux-arm64 linux-armhf alpine-x64 alpine-arm64
-#          - os: windows-latest
-#            target: win32-x64 win32-ia32 win32-arm64
-    runs-on: ${{ matrix.os }}
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
- 
-    - name: Install Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: 14.x
-        
-    - name: Install the package dependencies
-      run: npm install
-    
-#   TESTS ARE FAILING - DOING MORE RESEARCH
-#    - run: xvfb-run -a npm test
-#      if: runner.os == 'Linux'
-#      name: Test extension
-      
-#    - run: npm test
-#      if: runner.os != 'Linux'
-#      name: Test extension
+    build:
+        strategy:
+            matrix:
+                os: [ubuntu-latest]
+        #        os: [macos-latest, ubuntu-latest, windows-latest]
+        #        include:
+        #          - os: macos-latest
+        #            target: darwin-x64 darwin-arm64
+        #          - os: ubuntu-latest
+        #            target: linux-x64 linux-arm64 linux-armhf alpine-x64 alpine-arm64
+        #          - os: windows-latest
+        #            target: win32-x64 win32-ia32 win32-arm64
+        runs-on: ${{ matrix.os }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
 
-    - name: Install vsce
-      run: npm i vsce -g
+            - name: Install Node.js
+              uses: actions/setup-node@v1
+              with:
+                  node-version: 16.x
 
-    - name: Package - vsce (for asset upload)
-      if: success()
-      run: vsce package #--target ${{ matrix.target }}
+            - name: Install the package dependencies
+              run: npm install
 
-    - name: Publish - vsce
-      if: success() && !github.event.release.prerelease
-      run: vsce publish #--target ${{ matrix.target }}
-      env:
-        VSCE_PAT: ${{ secrets.VSCE_PAT }}
+            #   TESTS ARE FAILING - DOING MORE RESEARCH
+            #    - run: xvfb-run -a npm test
+            #      if: runner.os == 'Linux'
+            #      name: Test extension
 
-    - name: Install ovsx
-      if: success() && matrix.os == 'ubuntu-latest' && !github.event.release.prerelease
-      run: npm i ovsx -g
-      
-    - name: Publish - ovsx
-      if: success() && matrix.os == 'ubuntu-latest' && !github.event.release.prerelease
-      run: ovsx publish
-      env:
-        OVSX_PAT: ${{ secrets.OVSX_PAT }}
-        
-    - name: Upload asset
-      uses: softprops/action-gh-release@v0.1.14
-      with:
-        files: |
-          **/*.vsix
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            #    - run: npm test
+            #      if: runner.os != 'Linux'
+            #      name: Test extension
+
+            - name: Install vsce
+              run: npm i vsce -g
+
+            - name: Package - vsce (for asset upload)
+              if: success()
+              run: vsce package #--target ${{ matrix.target }}
+
+            - name: Publish - vsce
+              if: success() && !github.event.release.prerelease
+              run: vsce publish #--target ${{ matrix.target }}
+              env:
+                  VSCE_PAT: ${{ secrets.VSCE_PAT }}
+
+            - name: Install ovsx
+              if: success() && matrix.os == 'ubuntu-latest' && !github.event.release.prerelease
+              run: npm i ovsx -g
+
+            - name: Publish - ovsx
+              if: success() && matrix.os == 'ubuntu-latest' && !github.event.release.prerelease
+              run: ovsx publish
+              env:
+                  OVSX_PAT: ${{ secrets.OVSX_PAT }}
+
+            - name: Upload asset
+              uses: actions/upload-artifact@v3.1.2
+              with:
+                  path: |
+                      **/*.vsix
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
