@@ -19,7 +19,9 @@ Here's some of the most important changes:
 -   We now require VS Code version 1.74
 -   We are no longer dependant on `ritwickdey.LiveServer`. You can manually add this package to VS Code, if you need it
 -   Some settings have been changed
-    -   `formats[].format` only accepts `compressed` or `expanded`
+    -   `formats[]`:
+        -   `format` only accepts `compressed` or `expanded`
+        -   `extensionName` allows any string that ends in `.css` - and contains no path separators - meaning that `-min.css` is now valid
     -   `autoprefix`:
         -   The default is `defaults`
         -   `null` is no longer accepted, use `false` instead
@@ -36,7 +38,7 @@ Here's some of the most important changes:
     -   `compileOnWatch`: state if files should be compiled upon watching
     -   `forceBaseDirectory`: state the base directory of all you SASS files. Aids in reducing wasted resources while searching for files
     -   `partialsList`: specify what files are actually partials (or which folders contain them)
-    -   `useNewCompiler`: use the latest version of the JS SASS compiler (which has been built to address some issues and has a modern, idiomatic API)
+    -   `useNewCompiler`: use the latest version of the JS SASS compiler. It's quicker, and addresses some issues; but mainly, IT'S QUICKER!
 
 Here are some things you probably won't care about as much
 

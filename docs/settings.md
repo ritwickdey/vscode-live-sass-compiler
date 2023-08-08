@@ -17,16 +17,16 @@
 
 An array of formats. Allows you save to multiple locations, with a customisable format and extension for each
 
-| Properties                | Type                             | Default    | Notes                                                |
-| ------------------------- | -------------------------------- | ---------- | ---------------------------------------------------- |
-| format                    | `expanded` OR `compressed`       | `expanded` | The output style of the generated file               |
-| extensionName             | `.css` OR `.min.css`             | `.css`     | The extension appended to the outputted file         |
-| savePath                  | `string?`                        | `null`     | See [save path notes]                                |
-| savePathReplacementPairs  | `Record<string, string>?`        | `null`     | See [save path notes]                                |
-| generateMap               | `boolean?`                       | `null`     | Choose to output maps at a format level instead      |
-| <sup>Ŧ</sup>_linefeed_    | `cr` OR `crlf` OR `lf` OR `lfcr` | `lf`       | The linefeed terminator to use                       |
-| <sup>Ŧ</sup>_indentType_  | `space` OR `tab`                 | `space`    | The indentation to use for the `expanded` format     |
-| <sup>Ŧ</sup>_indentWidth_ | `number`                         | `2`        | The indentation width used for the `expanded` format |
+| Properties                | Type                             | Default    | Notes                                                                |
+| ------------------------- | -------------------------------- | ---------- | -------------------------------------------------------------------- |
+| format                    | `expanded` OR `compressed`       | `expanded` | The output style of the generated file                               |
+| extensionName             | `string`                         | `.css`     | The extension suffix added to the output file (must end with `.css`) |
+| savePath                  | `string?`                        | `null`     | See [save path notes]                                                |
+| savePathReplacementPairs  | `Record<string, string>?`        | `null`     | See [save path notes]                                                |
+| generateMap               | `boolean?`                       | `null`     | Choose to output maps at a format level instead                      |
+| <sup>Ŧ</sup>_linefeed_    | `cr` OR `crlf` OR `lf` OR `lfcr` | `lf`       | The linefeed terminator to use                                       |
+| <sup>Ŧ</sup>_indentType_  | `space` OR `tab`                 | `space`    | The indentation to use for the `expanded` format                     |
+| <sup>Ŧ</sup>_indentWidth_ | `number`                         | `2`        | The indentation width used for the `expanded` format                 |
 
 <small><sup>Ŧ</sup> These will be removed in SASS v2.0 and are currently unavailable when `liveSassCompile.settings.useNewCompiler` is `true`</small>
 
@@ -56,7 +56,7 @@ An array of formats. Allows you save to multiple locations, with a customisable 
     // (See issue 26: https://github.com/ritwickdey/vscode-live-sass-compiler/issues/26)
     {
         "format": "compressed",
-        "extensionName": ".min.css",
+        "extensionName": ".m.css",
 
         // ~ -> denotes relative to each sass file
         "savePath": "~/../css/"
@@ -66,8 +66,8 @@ An array of formats. Allows you save to multiple locations, with a customisable 
         "format": "compressed",
         "extensionName": ".min.css",
 
-        // "/Assets/SCSS/main.scss" => "/Assets/Style/main.css"
-        // "/Assets/_SASS/main.sass" => "/Assets/Style/main.css"
+        // "/Assets/SCSS/main.scss" => "/Assets/Style/main.min.css"
+        // "/Assets/_SASS/main.sass" => "/Assets/Style/main.min.css"
         "savePathReplacementPairs": {
             "/SCSS/": "/Style/",
             "/_SASS/": "/Style/"
@@ -78,9 +78,9 @@ An array of formats. Allows you save to multiple locations, with a customisable 
     // Segment replacement can work with relative `savePath`s
     {
         "format": "compressed",
-        "extensionName": ".min.css",
+        "extensionName": "-min.css",
 
-        // "/src/sass/Homepage/AHH/main.scss" => "/dist/css/Homepage/main.css"
+        // "/src/sass/Homepage/AHH/main.scss" => "/dist/css/Homepage/main-min.css"
         "savePath": "~/..",
         "savePathReplacementPairs": {
             "/src/sass": "/dist/css/"
