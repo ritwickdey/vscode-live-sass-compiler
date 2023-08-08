@@ -134,10 +134,8 @@
                             "extensionName": {
                                 "description": "Extension Name of exported css",
                                 "type": "string",
-                                "enum": [
-                                    ".css",
-                                    ".min.css"
-                                ],
+                                "pattern": "^[^\\/\\\\]*\\.css$",
+                                "patternErrorMessage": "Must end with `.css` and not contain `/` or `\\`",
                                 "default": ".css"
                             },
                             "savePath": {
