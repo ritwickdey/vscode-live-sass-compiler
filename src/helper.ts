@@ -5,7 +5,8 @@ export interface IFormat {
     format: "compressed" | "expanded";
     extensionName: string;
     savePath?: string;
-    savePathReplacementPairs?: Record<string, unknown>,
+    savePathReplacementPairs?: Record<string, unknown>;
+    generateMap?: boolean;
     linefeed: "cr" | "crlf" | "lf" | "lfcr";
     indentType: "space" | "tab";
     indentWidth: number;
@@ -41,9 +42,7 @@ export class Helper {
             default: {
                 const oldSetting = this.configSettings().get("showOutputWindow") as boolean | null;
 
-                return oldSetting == false
-                    ? OutputLevel.Warning
-                    : OutputLevel.Information;
+                return oldSetting == false ? OutputLevel.Warning : OutputLevel.Information;
             }
         }
     }
