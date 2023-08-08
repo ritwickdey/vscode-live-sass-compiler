@@ -348,6 +348,7 @@ export class AppModel {
                     return {
                         options,
                         pathData: this.generateCssAndMapUri(sassPath, format, workspaceFolder),
+                        generateMap: format.generateMap,
                     };
                 })
             );
@@ -361,7 +362,8 @@ export class AppModel {
                               sassPath,
                               result.css,
                               result.map,
-                              data.options
+                              data.options,
+                              data.generateMap
                           )
                         : false
                 );
@@ -401,14 +403,16 @@ export class AppModel {
         sassPath: string,
         targetCssUri: string,
         mapFileUri: string,
-        options: LegacyFileOptions<"sync"> | Options<"sync">
+        options: LegacyFileOptions<"sync"> | Options<"sync">,
+        formatGenerateMap: boolean | undefined
     ) {
         OutputWindow.Show(OutputLevel.Trace, "Starting compilation", [
             "Starting compilation of file",
             `Path: ${sassPath}`,
         ]);
 
-        const generateMap = Helper.getConfigSettings<boolean>("generateMap", folder),
+        const generateMap =
+                formatGenerateMap ?? Helper.getConfigSettings<boolean>("generateMap", folder),
             compileResult = SassHelper.compileOne(sassPath, targetCssUri, mapFileUri, options),
             promises: Promise<IFileResolver>[] = [];
 
@@ -450,7 +454,8 @@ export class AppModel {
                     css,
                     map,
                     targetCssUri,
-                    autoprefixerTarget
+                    autoprefixerTarget,
+                    generateMap
                 );
                 css = autoprefixerResult.css;
                 map = autoprefixerResult.map;
@@ -666,16 +671,16 @@ export class AppModel {
         css: string,
         map: string | undefined,
         savePath: string,
-        browsers: string | Array<string> | true
+        browsers: string | Array<string> | true,
+        generateMap: boolean
     ): Promise<{ css: string; map: string | null }> {
         OutputWindow.Show(OutputLevel.Trace, "Preparing autoprefixer");
 
-        const generateMap = Helper.getConfigSettings<boolean>("generateMap", folder),
-            prefixer = postcss(
-                autoprefixer({
-                    overrideBrowserslist: browsers === true ? undefined : browsers,
-                })
-            );
+        const prefixer = postcss(
+            autoprefixer({
+                overrideBrowserslist: browsers === true ? undefined : browsers,
+            })
+        );
 
         // TODO: REMOVE - when autoprefixer can stop caching the browsers
         const oldBrowserlistCache = process.env.BROWSERSLIST_DISABLE_CACHE;

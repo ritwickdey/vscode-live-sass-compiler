@@ -23,6 +23,7 @@ An array of formats. Allows you save to multiple locations, with a customisable 
 | extensionName             | `string`                         | `.css`     | The extension suffix added to the output file (must end with `.css`) |
 | savePath                  | `string?`                        | `null`     | See [save path notes]                                                |
 | savePathReplacementPairs  | `Record<string, string>?`        | `null`     | See [save path notes]                                                |
+| generateMap               | `boolean?`                       | `null`     | Choose to output maps at a format level instead                      |
 | <sup>Ŧ</sup>_linefeed_    | `cr` OR `crlf` OR `lf` OR `lfcr` | `lf`       | The linefeed terminator to use                                       |
 | <sup>Ŧ</sup>_indentType_  | `space` OR `tab`                 | `space`    | The indentation to use for the `expanded` format                     |
 | <sup>Ŧ</sup>_indentWidth_ | `number`                         | `2`        | The indentation width used for the `expanded` format                 |
@@ -70,7 +71,10 @@ An array of formats. Allows you save to multiple locations, with a customisable 
         "savePathReplacementPairs": {
             "/SCSS/": "/Style/",
             "/_SASS/": "/Style/"
-        }
+        },
+
+        // Don't create a map file for this "production" output
+        "generateMap": false
     // Segment replacement can work with relative `savePath`s
     {
         "format": "compressed",

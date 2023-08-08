@@ -28,10 +28,12 @@ Here's some of the most important changes:
         -   When `true` we will find a `.browserslistrc` file or `browserslist` in your `package.json`. No more duplicating settings!
     -   `showOutputWindow` is now `showOutputWindowOn` and uses log values (`Debug`, `Error`, etc.). It's default log level is `Information` - at this level it will output the same information that the original extension does
 -   Some settings are new!
-    -   `formats[].savePathReplacementPairs`: replace segments in the output path
-    -   `formats[].linefeed`: control the line terminator used
-    -   `formats[].indentType`: control whether indents are spaces or tabs
-    -   `formats[].indentWidth`: control the width of the indentation
+    -   `formats[]`:
+        -   `savePathReplacementPairs`: replace segments in the output path
+        -   `generateMap`: generate map files at a format level (overwriting the top-tier setting of the same name)
+        -   `linefeed`: control the line terminator used
+        -   `indentType`: control whether indents are spaces or tabs
+        -   `indentWidth`: control the width of the indentation
     -   `watchOnLaunch`: state whether you want to watch files upon launch
     -   `compileOnWatch`: state if files should be compiled upon watching
     -   `forceBaseDirectory`: state the base directory of all you SASS files. Aids in reducing wasted resources while searching for files

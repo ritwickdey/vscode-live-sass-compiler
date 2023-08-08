@@ -156,6 +156,14 @@
                                 ],
                                 "default": null
                             },
+                            "generateMap": {
+                                "description": "Generate a map for this particular output. Note: `null` uses the top level setting (of the same name)",
+                                "type": [
+                                    "boolean",
+                                    "null"
+                                ],
+                                "default": null
+                            },
                             "linefeed": {
                                 "description": "Choose the linefeed terminator to use in the CSS output",
                                 "type": "string",
