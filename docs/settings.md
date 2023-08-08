@@ -17,15 +17,15 @@
 
 An array of formats. Allows you save to multiple locations, with a customisable format and extension for each
 
-| Properties                | Type                             | Default    | Notes                                                               |
-| ------------------------- | -------------------------------- | ---------- | ------------------------------------------------------------------- |
-| format                    | `expanded` OR `compressed`       | `expanded` | The output style of the generated file                              |
-| extensionName             | `string`                         | `.css`     | The extension appended to the outputted file (must end with `.css`) |
-| savePath                  | `string?`                        | `null`     | See [save path notes]                                               |
-| savePathReplacementPairs  | `Record<string, string>?`        | `null`     | See [save path notes]                                               |
-| <sup>Ŧ</sup>_linefeed_    | `cr` OR `crlf` OR `lf` OR `lfcr` | `lf`       | The linefeed terminator to use                                      |
-| <sup>Ŧ</sup>_indentType_  | `space` OR `tab`                 | `space`    | The indentation to use for the `expanded` format                    |
-| <sup>Ŧ</sup>_indentWidth_ | `number`                         | `2`        | The indentation width used for the `expanded` format                |
+| Properties                | Type                             | Default    | Notes                                                                |
+| ------------------------- | -------------------------------- | ---------- | -------------------------------------------------------------------- |
+| format                    | `expanded` OR `compressed`       | `expanded` | The output style of the generated file                               |
+| extensionName             | `string`                         | `.css`     | The extension suffix added to the output file (must end with `.css`) |
+| savePath                  | `string?`                        | `null`     | See [save path notes]                                                |
+| savePathReplacementPairs  | `Record<string, string>?`        | `null`     | See [save path notes]                                                |
+| <sup>Ŧ</sup>_linefeed_    | `cr` OR `crlf` OR `lf` OR `lfcr` | `lf`       | The linefeed terminator to use                                       |
+| <sup>Ŧ</sup>_indentType_  | `space` OR `tab`                 | `space`    | The indentation to use for the `expanded` format                     |
+| <sup>Ŧ</sup>_indentWidth_ | `number`                         | `2`        | The indentation width used for the `expanded` format                 |
 
 <small><sup>Ŧ</sup> These will be removed in SASS v2.0 and are currently unavailable when `liveSassCompile.settings.useNewCompiler` is `true`</small>
 
