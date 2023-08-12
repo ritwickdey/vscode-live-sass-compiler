@@ -2,11 +2,11 @@
 
 [![VSCode Marketplace Badge](https://img.shields.io/vscode-marketplace/v/glenn2223.live-sass.svg?label=VSCode%20Marketplace&style=flat-square)](https://marketplace.visualstudio.com/items?itemName=glenn2223.live-sass) [![Total Install](https://img.shields.io/vscode-marketplace/d/glenn2223.live-sass.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=glenn2223.live-sass) [![Average Rating Badge](https://img.shields.io/vscode-marketplace/r/glenn2223.live-sass.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=glenn2223.live-sass) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/glenn2223/vscode-live-sass-compiler/)
 
-[<img align="right" style="width:50%" src="./images/thumbnail-v6.0.png" title="Watch the YouTube video">](https://youtu.be/6Wo3mYBLNyA)
+[<img align="right" style="width:50%" src="./images/thumbnail-quick-guide.png" title="Watch the YouTube video">](https://youtu.be/9J__JAgQbS0)
 
 _**Like it?** [Leave a review](https://marketplace.visualstudio.com/items?itemName=glenn2223.live-sass#review-details) (please)  
 **Something wrong?** [Report an issue](https://github.com/glenn2223/vscode-live-sass-compiler/issues/new)  
-**New hear?** Watch the [YouTube video](https://youtu.be/6Wo3mYBLNyA)_
+**New hear?** Watch the [YouTube quick guide](https://youtu.be/9J__JAgQbS0)_
 
 A VSCode Extension that help you to compile/transpile your SASS/SCSS files to CSS at real-time.
 
