@@ -184,7 +184,8 @@ Using glob patterns, specify what files are actually partials - or what folders 
 
 > ℹ This setting can vary between workspace folders - [read more][multi-rootfaq]
 
-Create a companion map file for each of the compiled files
+Create a companion map file for each of the compiled files  
+**Note:** this can be overwritten in the `formats[].generateMap` setting
 
 **Type:** `boolean`  
 **Default:** `true`
