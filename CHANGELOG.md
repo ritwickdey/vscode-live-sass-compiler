@@ -29,12 +29,12 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
--   New 'formats[].generateMap' setting allows you to decide on map output on a format basis  
+-   New `formats[].generateMap` setting allows you to decide on map output on a format basis  
     The `liveSassCompile.settings.generateMap` is applied if this setting is `null` (its default).
 
 ### Changes
 
--   'formats[].extensionName' now allows any string ending with `.css` without throwing a warning.
+-   `formats[].extensionName` now allows any string ending with `.css` without throwing a warning.
 -   Tweaks to docs, reflecting the settings changes and correcting outdated info too
 
 ### Updated
