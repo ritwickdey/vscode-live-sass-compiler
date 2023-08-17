@@ -2,7 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime.",
-    "version": "6.1.0",
+    "version": "6.1.1",
     "publisher": "glenn2223",
     "author": {
         "name": "Glenn Marks",
@@ -353,33 +353,33 @@
         "rollup": "rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript"
     },
     "dependencies": {
-        "autoprefixer": "^10.4.14",
-        "fdir": "^6.0.2",
+        "autoprefixer": "^10.4.15",
+        "fdir": "^6.1.0",
         "picomatch": "^2.3.1",
-        "postcss": "^8.4.27",
-        "sass": "^1.65.1"
+        "postcss": "^8.4.28",
+        "sass": "^1.66.0"
     },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^25.0.4",
         "@rollup/plugin-json": "^6.0.0",
-        "@rollup/plugin-node-resolve": "^15.1.0",
+        "@rollup/plugin-node-resolve": "^15.2.0",
         "@rollup/plugin-terser": "^0.4.3",
         "@rollup/plugin-typescript": "^11.1.2",
         "@types/mocha": "^10.0.1",
         "@types/node": "^17.0.45",
         "@types/picomatch": "^2.3.0",
         "@types/vscode": "1.74",
-        "@typescript-eslint/eslint-plugin": "^6.3.0",
-        "@typescript-eslint/parser": "^6.3.0",
+        "@typescript-eslint/eslint-plugin": "^6.4.0",
+        "@typescript-eslint/parser": "^6.4.0",
         "eslint": "^8.47.0",
         "mocha": "^10.2.0",
-        "rollup": "^3.27.2",
+        "rollup": "^3.28.0",
         "tslib": "^2.6.1",
         "typescript": "^5.1.6",
         "vscode-test": "^1.6.1"
     },
     "announcement": {
-        "onVersion": "6.1.0",
-        "message": "SassCompiler v6.1.0: generateMap at formats level, extensionName easing and more! Yes, there's a YouTube video too!"
+        "onVersion": "6.1.1",
+        "message": "SassCompiler v6.1.1: rollback of CSS Values and Units 4 support. Yes, there's helpful [YouTube videos](https://www.youtube.com/playlist?list=PLhdDmC4kQ8MqhX3RtLqfIwz8oaLut1m5X) too!"
     }
 }

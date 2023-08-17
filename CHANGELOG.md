@@ -23,6 +23,27 @@ Types of changes
 
 All notable changes to this project will be documented in this file.
 
+## [6.1.1] - 2023-08-18
+
+<small>[Compare to previous release][comp:6.1.1]</small>
+
+### Changes
+
+-   Updated sass to v1.66.0 to revert breaking change  
+    "_Drop support for the additional CSS calculations defined in CSS Values
+    and Units 4. Custom Sass functions whose names overlapped with these new
+    CSS functions were being parsed as CSS calculations instead, causing an
+    unintentional breaking change outside our normal compatibility policy
+    for CSS compatibility changes_"
+
+### Updated
+
+-   `sass` to `1.66.0` [Changelog][cl:sa]
+-   `fdir` to `6.1.0` [Changelog][cl:fd]
+-   `postcss` to `8.4.28` [Changelog][cl:pc]
+-   `autoprefixer` to `10.4.15` [Changelog][cl:ap]
+-   Various dev dependency updates _(nothing user facing)_
+
 ## [6.1.0] - 2023-08-12
 
 <small>[Compare to previous release][comp:6.1.0]</small>
@@ -732,6 +753,8 @@ All notable changes to this project will be documented in this file.
 | 0.0.2   | 11.07.17   | Small description updated.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | 0.0.1   | 11.07.17   | Initial Preview Release with following key features. <br> – Live SASS & SCSS Compile. <br> – Customizable file location of exported CSS. <br> – Customizable exported CSS Style (`expanded`, `compact`, `compressed`, `nested`.)<br> – Quick Status bar control.<br> – Live Reload to browser (`Live Server` extension dependency).                                                                                                                                                                                                                                                                                                                                                                          |
 
+[6.1.1]: https://github.com/glenn2223/vscode-live-sass-compiler/releases/tag/v6.1.1
+[comp:6.1.1]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v6.1.0...v6.1.1
 [6.1.0]: https://github.com/glenn2223/vscode-live-sass-compiler/releases/tag/v6.1.0
 [comp:6.1.0]: https://github.com/glenn2223/vscode-live-sass-compiler/compare/v6.0.6...v6.1.0
 [6.0.6]: https://github.com/glenn2223/vscode-live-sass-compiler/releases/tag/v6.0.6
