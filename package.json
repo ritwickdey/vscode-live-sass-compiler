@@ -354,8 +354,8 @@
     },
     "dependencies": {
         "autoprefixer": "^10.4.15",
-        "fdir": "^6.1.0",
-        "picomatch": "^2.3.1",
+        "fdir": "^6.1.1",
+        "picomatch": "^3.0.1",
         "postcss": "^8.4.28",
         "sass": "^1.66.0"
     },

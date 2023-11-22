@@ -23,6 +23,17 @@ Types of changes
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Fixed
+
+-   Fix for a network file-resolution bug introduced in v6.1.1. Closes [#322](https://github.com/glenn2223/vscode-live-sass-compiler/issues/322)
+
+### Updated
+
+-   `fdir` to `6.1.1` [Changelog][cl:fd]
+-   `picomatch` to `3.0.1` [Changelog][cl:pm]
+
 ## [6.1.1] - 2023-08-18
 
 <small>[Compare to previous release][comp:6.1.1]</small>
@@ -798,4 +809,5 @@ All notable changes to this project will be documented in this file.
 [cl:ap]: https://github.com/postcss/autoprefixer/blob/main/CHANGELOG.md
 [cl:fd]: https://github.com/thecodrr/fdir/releases
 [cl:pc]: https://github.com/postcss/postcss/blob/main/CHANGELOG.md
+[cl:pm]: https://github.com/micromatch/picomatch/blob/master/CHANGELOG.md
 [cl:sa]: https://github.com/sass/dart-sass/blob/main/CHANGELOG.md
