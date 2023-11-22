@@ -2,7 +2,7 @@
     "name": "live-sass",
     "displayName": "Live Sass Compiler",
     "description": "Compile Sass or Scss to CSS at realtime.",
-    "version": "6.1.1",
+    "version": "6.1.2",
     "publisher": "glenn2223",
     "author": {
         "name": "Glenn Marks",
@@ -353,33 +353,33 @@
         "rollup": "rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript"
     },
     "dependencies": {
-        "autoprefixer": "^10.4.15",
+        "autoprefixer": "^10.4.16",
         "fdir": "^6.1.1",
         "picomatch": "^3.0.1",
-        "postcss": "^8.4.28",
-        "sass": "^1.66.0"
+        "postcss": "^8.4.31",
+        "sass": "^1.69.5"
     },
     "devDependencies": {
-        "@rollup/plugin-commonjs": "^25.0.4",
-        "@rollup/plugin-json": "^6.0.0",
-        "@rollup/plugin-node-resolve": "^15.2.0",
-        "@rollup/plugin-terser": "^0.4.3",
-        "@rollup/plugin-typescript": "^11.1.2",
-        "@types/mocha": "^10.0.1",
+        "@rollup/plugin-commonjs": "^25.0.7",
+        "@rollup/plugin-json": "^6.0.1",
+        "@rollup/plugin-node-resolve": "^15.2.3",
+        "@rollup/plugin-terser": "^0.4.4",
+        "@rollup/plugin-typescript": "^11.1.5",
+        "@types/mocha": "^10.0.6",
         "@types/node": "^17.0.45",
-        "@types/picomatch": "^2.3.0",
+        "@types/picomatch": "^2.3.3",
         "@types/vscode": "1.74",
-        "@typescript-eslint/eslint-plugin": "^6.4.0",
-        "@typescript-eslint/parser": "^6.4.0",
-        "eslint": "^8.47.0",
+        "@typescript-eslint/eslint-plugin": "^6.12.0",
+        "@typescript-eslint/parser": "^6.12.0",
+        "eslint": "^8.54.0",
         "mocha": "^10.2.0",
-        "rollup": "^3.28.0",
-        "tslib": "^2.6.1",
-        "typescript": "^5.1.6",
+        "rollup": "^3.29.4",
+        "tslib": "^2.6.2",
+        "typescript": "^5.3.2",
         "vscode-test": "^1.6.1"
     },
     "announcement": {
-        "onVersion": "6.1.1",
-        "message": "SassCompiler v6.1.1: rollback of CSS Values and Units 4 support. Yes, there's helpful [YouTube videos](https://www.youtube.com/playlist?list=PLhdDmC4kQ8MqhX3RtLqfIwz8oaLut1m5X) too!"
+        "onVersion": "6.1.2",
+        "message": "SassCompiler v6.1.2: Bug fix and dependency bumps. Yes, there's helpful [YouTube videos](https://www.youtube.com/playlist?list=PLhdDmC4kQ8MqhX3RtLqfIwz8oaLut1m5X) too!"
     }
 }
