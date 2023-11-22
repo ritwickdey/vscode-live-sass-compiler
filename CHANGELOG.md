@@ -27,7 +27,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
--   File resolution in network drives on windows is working again; after break in v6.1.1. Closes [#323](https://github.com/glenn2223/vscode-live-sass-compiler/issues/323)
+-   Fix for a network file-resolution bug introduced in v6.1.1. Closes [#322](https://github.com/glenn2223/vscode-live-sass-compiler/issues/322)
 
 ### Updated
 
